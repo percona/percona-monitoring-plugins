@@ -1,0 +1,3 @@
+ LV       VG         Attr   LSize Origin Snap%  Move Log Copy%  Convert
+ LogVol00 VolGroup00 -wi-ao 5.88G                                      
+ LogVol01 VolGroup00 -wi-ao 2.00G  

@@ -1,0 +1,161 @@
+#!/bin/sh
+
+# ########################################################################
+# This program is part of $PROJECT_NAME$
+# License: GPL License (see COPYING)
+# Authors:
+#  Baron Schwartz
+# ########################################################################
+
+# Set up constants, etc.
+STATE_OK=0
+STATE_WARNING=1
+STATE_CRITICAL=2
+STATE_UNKNOWN=3
+STATE_DEPENDENT=4
+EXITSTATUS=$STATE_OK
+
+# ########################################################################
+# Run the program.
+# ########################################################################
+main() {
+   # Get command-line options
+   for o; do
+      case "${o}" in
+         -c)        shift; OPT_CRIT="${1}"; shift; ;;
+         -H)        shift; OPT_HOST="${1}"; shift; ;;
+         -l)        shift; OPT_USER="${1}"; shift; ;;
+         -p)        shift; OPT_PASS="${1}"; shift; ;;
+         -P)        shift; OPT_PORT="${1}"; shift; ;;
+         -S)        shift; OPT_SOCK="${1}"; shift; ;;
+         -w)        shift; OPT_WARN="${1}"; shift; ;;
+         --version) grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
+         --help)    perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
+         -*)        echo "Unknown command-line option ${o}.  Try --help." >&2; exit 1; ;;
+      esac
+   done
+
+   # Get replication status into a temp file. TODO: move this into a subroutine
+   # and test it.
+   local TEMP=$(mktemp "/tmp/$(basename "$0").XXXX") || exit $?
+   trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
+   mysql_exec 'SHOW SLAVE STATUS\G' > "${TEMP}"
+   if [ $? = 0 ]; then
+      NOTE=$(awk '$1 ~ /_Running:|Last_Error:/{print substr($0, 1, 100)}' "${TEMP}")
+      if grep 'Last_Error: .' >/dev/null 2>&1 "${TEMP}" then
+         EXITSTATUS=$STATE_CRITICAL
+         NOTE="CRIT $NOTE"
+      elif grep '_Running: No' >/dev/null 2>&1 "${TEMP}" then
+         if [ "${OPT_CRIT}" ]; then
+            EXITSTATUS=$STATE_CRITICAL
+            NOTE="CRIT $NOTE"
+         else
+            EXITSTATUS=$STATE_WARNING
+            NOTE="WARN $NOTE"
+         fi
+      fi
+   else
+      EXITSTATUS=$STATE_UNKNOWN
+      NOTE="UNK could not determine replication status"
+   fi
+
+   echo $NOTE
+   exit $EXITSTATUS
+}
+
+# ########################################################################
+# Execute a MySQL command.
+# ########################################################################
+mysql_exec() {
+   mysql ${OPT_HOST:+-h"${OPT_HOST}"} ${OPT_USER:+-u"${OPT_USER}"} \
+      ${OPT_PASS:+-p"${OPT_PASS}"} ${OPT_SOCK:+-S"${OPT_SOCK}"} ${OPT_PORT:+-P"${OPT_PORT}"} \
+      -ss -e "$1"
+}
+
+# ########################################################################
+# Execute the program if it was not included from another file.
+# This makes it possible to include without executing, and thus test.
+# ########################################################################
+if    [ "$(basename -- "$0")" = "pmp-check-mysql-replication-running" ] \
+   || [ "$(basename -- "$0")" = "bash" -a "$_" = "$0" ]; then
+   main "$@"
+fi
+
+# ############################################################################
+# Documentation
+# ############################################################################
+: <<'DOCUMENTATION'
+=pod
+
+=head1 NAME
+
+pmp-check-mysql-replication-running - Alert when MySQL replication stops.
+
+=head1 SYNOPSIS
+
+  Usage: pmp-check-mysql-replication-running [OPTIONS]
+  Options:
+    -c CRIT     Critical threshold; makes non-error failures critical.
+    -H HOST     MySQL hostname.
+    -l USER     MySQL username.
+    -p PASS     MySQL password.
+    -P PORT     MySQL port.
+    -S SOCKET   MySQL socket file.
+    -w WARN     Warning threshold; ignored.
+    --help      Print help and exit.
+    --version   Print version and exit.
+  Use perldoc to read embedded documentation with more details.
+
+=head1 DESCRIPTION
+
+This Nagios plugin examines whether replication is running. It is separate from
+the check for delay because it is confusing or impossible to handle all of the
+combinations of replication errors and delays correctly, and provide an
+appropriate type of alert, in a single program.
+
+By default, this plugin treats it as critical when the either thread stops with
+an error, and a warning when threads are stopped with no error.  You can provide
+critical and warning thresholds with the -c and -w options, for compatibility
+with Nagios plugin conventions, but they don't work as thresholds.  Instead, if
+you specify a critical threshold, this plugin will treat it as critical if
+either thread is stopped with or without an error. The warning threshold is
+entirely ignored.
+
+If SHOW SLAVE STATUS produces no output, then this plugin will report that
+replication is healthy.
+
+=head1 DOWNLOADING
+
+Visit L<http://www.percona.com/software/percona-monitoring-plugins/> to download
+the latest release of Percona Monitoring Plugins.
+
+=head1 AUTHORS
+
+Baron Schwartz
+
+=head1 COPYRIGHT, LICENSE, AND WARRANTY
+
+This program is copyright 2012 Baron Schwartz, 2012 Percona Inc.
+Feedback and improvements are welcome.
+
+THIS PROGRAM IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, version 2; OR the Perl Artistic License.  On UNIX and similar
+systems, you can issue `man perlgpl' or `man perlartistic' to read these
+licenses.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place, Suite 330, Boston, MA  02111-1307  USA.
+
+=head1 VERSION
+
+Percona Monitoring Plugins pmp-check-mysql-replication-running 1.0.0
+
+=cut
+
+DOCUMENTATION

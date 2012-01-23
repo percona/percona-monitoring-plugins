@@ -1,0 +1,154 @@
+#!/bin/sh
+
+# ########################################################################
+# This program is part of $PROJECT_NAME$
+# License: GPL License (see COPYING)
+# Authors:
+#  Baron Schwartz
+# ########################################################################
+
+# Set up constants, etc.
+STATE_OK=0
+STATE_WARNING=1
+STATE_CRITICAL=2
+STATE_UNKNOWN=3
+STATE_DEPENDENT=4
+EXITSTATUS=$STATE_OK
+
+# ########################################################################
+# Run the program.
+# ########################################################################
+main() {
+   # Get command-line options
+   for o; do
+      case "${o}" in
+         -c)        shift; OPT_CRIT="${1}"; shift; ;;
+         -H)        shift; OPT_HOST="${1}"; shift; ;;
+         -l)        shift; OPT_USER="${1}"; shift; ;;
+         -p)        shift; OPT_PASS="${1}"; shift; ;;
+         -P)        shift; OPT_PORT="${1}"; shift; ;;
+         -S)        shift; OPT_SOCK="${1}"; shift; ;;
+         -w)        shift; OPT_WARN="${1}"; shift; ;;
+         --version) grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
+         --help)    perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
+         -*)        echo "Unknown command-line option ${o}.  Try --help." >&2; exit 1; ;;
+      esac
+   done
+   OPT_WARN=${OPT_WARN:-60}
+   OPT_CRIT=${OPT_CRIT:-600}
+   
+   LEVEL=$(mysql_exec "
+      SELECT COALESCE(MAX(IF(p.command = 'Sleep', p.time, 0)), 0) AS idle_in_trx
+      FROM       INFORMATION_SCHEMA.INNODB_LOCK_WAITS AS w
+      INNER JOIN INFORMATION_SCHEMA.INNODB_TRX        AS b ON  b.trx_id = w.blocking_trx_id
+      INNER JOIN INFORMATION_SCHEMA.INNODB_TRX        AS r ON  r.trx_id = w.requesting_trx_id
+      LEFT JOIN  INFORMATION_SCHEMA.PROCESSLIST       AS p ON  p.id     = b.trx_mysql_thread_id")
+   if [ $? = 0 ]; then
+      NOTE="longest blocking idle transaction sleeps for ${LEVEL:-UNKNOWN} seconds"
+      if [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
+         EXITSTATUS=$STATE_CRITICAL
+         NOTE="CRIT $NOTE"
+      elif [ "${LEVEL:-0}" -gt "${OPT_WARN}" ]; then
+         EXITSTATUS=$STATE_WARNING
+         NOTE="WARN $NOTE"
+      else
+         NOTE="OK $NOTE"
+      fi
+   else
+      EXITSTATUS=$STATE_UNKNOWN
+      NOTE="UNK could not find long-running transactions"
+   fi
+   echo $NOTE
+   exit $EXITSTATUS
+}
+
+# ########################################################################
+# Execute a MySQL command.
+# ########################################################################
+mysql_exec() {
+   mysql ${OPT_HOST:+-h"${OPT_HOST}"} ${OPT_USER:+-u"${OPT_USER}"} \
+      ${OPT_PASS:+-p"${OPT_PASS}"} ${OPT_SOCK:+-S"${OPT_SOCK}"} ${OPT_PORT:+-P"${OPT_PORT}"} \
+      -ss -e "$1"
+}
+
+# ########################################################################
+# Execute the program if it was not included from another file.
+# This makes it possible to include without executing, and thus test.
+# ########################################################################
+if    [ "$(basename -- "$0")" = "pmp-check-mysql-idle-transactions" ] \
+   || [ "$(basename -- "$0")" = "bash" -a "$_" = "$0" ]; then
+   main "$@"
+fi
+
+# ############################################################################
+# Documentation
+# ############################################################################
+: <<'DOCUMENTATION'
+=pod
+
+=head1 NAME
+
+pmp-check-mysql-idle-transactions - Alert when blocking transactions are idle too long.
+
+=head1 SYNOPSIS
+
+  Usage: pmp-check-mysql-idle-transactions [OPTIONS]
+  Options:
+    -c CRIT     Critical threshold; default 600.
+    -H HOST     MySQL hostname.
+    -l USER     MySQL username.
+    -p PASS     MySQL password.
+    -P PORT     MySQL port.
+    -S SOCKET   MySQL socket file.
+    -w WARN     Warning threshold; default 60.
+    --help      Print help and exit.
+    --version   Print version and exit.
+  Use perldoc to read embedded documentation with more details.
+
+=head1 DESCRIPTION
+
+This Nagios plugin examines the INFORMATION_SCHEMA tables included with InnoDB
+version 1.0 and newer, and determines whether any idle transactions are blocking
+other transactions. The alert threshold is based on how long the transaction has
+been idle.  Long-running idle transactions that have acquired locks but not
+released them are a frequent cause of application downtime due to lock wait
+timeouts and rollbacks, especially because applications are often not designed
+to handle such errors correctly.  The problem is usually due to another error
+that causes a transaction not to be committed, such as performing very long
+tasks in the application while holding the transaction open.
+
+=head1 DOWNLOADING
+
+Visit L<http://www.percona.com/software/percona-monitoring-plugins/> to download
+the latest release of Percona Monitoring Plugins.
+
+=head1 AUTHORS
+
+Baron Schwartz
+
+=head1 COPYRIGHT, LICENSE, AND WARRANTY
+
+This program is copyright 2012 Baron Schwartz, 2012 Percona Inc.
+Feedback and improvements are welcome.
+
+THIS PROGRAM IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, version 2; OR the Perl Artistic License.  On UNIX and similar
+systems, you can issue `man perlgpl' or `man perlartistic' to read these
+licenses.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place, Suite 330, Boston, MA  02111-1307  USA.
+
+=head1 VERSION
+
+Percona Monitoring Plugins pmp-check-mysql-idle-transactions 1.0.0
+
+=cut
+
+DOCUMENTATION
