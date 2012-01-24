@@ -19,27 +19,39 @@ EXITSTATUS=$STATE_OK
 # Run the program.
 # ########################################################################
 main() {
-
    # Get command-line options
    for o; do
       case "${o}" in
-         -w)        shift; OPT_WARN="${1}"; shift; ;;
          -c)        shift; OPT_CRIT="${1}"; shift; ;;
+         -H)        shift; OPT_HOST="${1}"; shift; ;;
+         -l)        shift; OPT_USER="${1}"; shift; ;;
+         -p)        shift; OPT_PASS="${1}"; shift; ;;
+         -P)        shift; OPT_PORT="${1}"; shift; ;;
+         -S)        shift; OPT_SOCK="${1}"; shift; ;;
+         -t)        shift; OPT_TMPDIR="${1}"; shift; ;;
+         -w)        shift; OPT_WARN="${1}"; shift; ;;
          --version) grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
          --help)    perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
          -*)        echo "Unknown command-line option ${o}.  Try --help." >&2; exit 1; ;;
       esac
    done
-   OPT_WARN=${OPT_WARN:-90}
-   OPT_CRIT=${OPT_CRIT:-95}
 
+   # If any connection option was given, then try to log in to find the server's
+   # tmpdir.
+   if [ "${OPT_HOST}${OPT_USER}${OPT_PASS}${OPT_PORT}${OPT_SOCK}" ]; then
+      OPT_TMPDIR=$(mysql_exec "SELECT @@tmpdir") || exit $?
+   elif [ -z "${OPT_TMPDIR}" ]; then
+      OPT_TMPDIR="${TMPDIR:-/tmp/}"
+   fi
+
+   # TODO: We could auto-check every running instance, not just one.
    local NOTE="OK no deleted files"
    local PROC_ID=$(_pidof mysqld | head -n1)
    if [ "${PROC_ID}" ]; then
       local TEMP=$(mktemp "/tmp/$(basename "$0").XXXX") || exit $?
       trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
       _lsof "${PROC_ID}" > "${TEMP}" || exit $?
-      local FILES=$(check_deleted_files "${TEMP}")
+      local FILES=$(check_deleted_files "${TEMP}" "${OPT_TMPDIR}")
       if [ "${FILES}" -a -z "${OPT_WARN}" ]; then
          NOTE="CRIT open but deleted files: ${FILES}"
          EXITSTATUS=$STATE_CRITICAL
@@ -66,6 +78,15 @@ _pidof() {
 }
 
 # ########################################################################
+# Execute a MySQL command.
+# ########################################################################
+mysql_exec() {
+   mysql ${OPT_HOST:+-h"${OPT_HOST}"} ${OPT_USER:+-u"${OPT_USER}"} \
+      ${OPT_PASS:+-p"${OPT_PASS}"} ${OPT_SOCK:+-S"${OPT_SOCK}"} ${OPT_PORT:+-P"${OPT_PORT}"} \
+      -ss -e "$1"
+}
+
+# ########################################################################
 # A wrapper around lsof, which might not exist. The first argument is the
 # process ID to match.  This is Linux-centric; the fallback of listing
 # /proc/pid/fd will probably only work on Linux.
@@ -80,10 +101,11 @@ _lsof() {
 # Generate a list of file handles that MySQL has open, but which are deleted,
 # and are not temp files such as /tmp/ib* files (InnoDB) or /tmp/ML* files
 # (binary logging).  The first argument is a file containing the output of lsof
-# or ls -l for the open files.
+# or ls -l for the open files.  The second argument is the server's tmpdir.
 # ########################################################################
 check_deleted_files() {
-   awk '/\(deleted\)/ { if ( $0 !~ /\/tmp\// ) {
+   awk -v tmpdir="${2}" '
+   /\(deleted\)/ { if ( index($0, tmpdir) > 0 ) {
       if ( $NF ~ /deleted/ ) {
          lf=NF-1;
       }
@@ -118,7 +140,12 @@ pmp-check-mysql-deleted-files - Alert when MySQL's files are deleted.
   Usage: pmp-check-mysql-deleted-files [OPTIONS]
   Options:
     -c CRIT     Critical threshold; ignored.
-    -w WARN     Warning threshold; ignored.
+    -H HOST     MySQL hostname.
+    -l USER     MySQL username.
+    -p PASS     MySQL password.
+    -P PORT     MySQL port.
+    -S SOCKET   MySQL socket file.
+    -w WARN     Warning threshold; changes the alert to WARN instead of CRIT.
     --help      Print help and exit.
     --version   Print version and exit.
    Use perldoc to read embedded documentation with more details.
@@ -134,9 +161,23 @@ fill up the disk invisibly.  If the file is the server's log, it might mean that
 logging is effectively broken and any problems the server experiences could be
 undiagnosable.
 
-If there is more than one mysqld executing on the system, then only the first
-process's files are checked.  This plugin probably works best on Linux, though
-it might work on other operating systems.
+The plugin accepts the -w and -c options for compatibility with standard Nagios
+plugin conventions, but they are not based on a threshold. Instead, the plugin
+raises a critical alert by default, and if the -w option is given, it raises a
+warning instead, regardless of the option's value.
+
+This plugin doesn't alert about deleted temporary files, which are not a
+problem.  By default, this plugin assumes that the server's temporary directory
+is either the TMPDIR environment variable, or if that is not set, then /tmp/.
+If you specify MySQL authentication options, the value will log into the
+specified MySQL instance and look at the C<tmpdir> variable to find the
+temporary directory.
+
+This plugin looks at the first running instance of MySQL, as found in the
+system process table, so it will not work on systems that have multiple
+instances running. It probably works best on Linux, though it might work on
+other operating systems. It relies on either lsof or the ability to list the
+files in the process's /proc/pid/fd directory.
 
 =head1 DOWNLOADING
 

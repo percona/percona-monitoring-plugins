@@ -5,6 +5,7 @@
 # License: GPL License (see COPYING)
 # Authors:
 #  Baron Schwartz
+# Depends-on: pt-heartbeat
 # ########################################################################
 
 # Set up constants, etc.
