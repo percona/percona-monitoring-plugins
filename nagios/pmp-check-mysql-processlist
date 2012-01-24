@@ -122,7 +122,7 @@ fi
 
 =head1 NAME
 
-pmp-check-mysql-processlist - Alert when MySQL processlist has dangerous patterns
+pmp-check-mysql-processlist - Alert when MySQL processlist has dangerous patterns.
 
 =head1 SYNOPSIS
 
