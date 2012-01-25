@@ -1,0 +1,78 @@
+MongoDB shell version: 1.4.0
+url: test
+connecting to: test
+type "help" for help
+> db._adminCommand({serverStatus:1})
+{
+	"uptime" : 288777,
+	"localTime" : "Mon Mar 29 2010 20:41:27 GMT-0700 (PDT)",
+	"globalLock" : {
+		"totalTime" : 288777173126,
+		"lockTime" : 1366671934,
+		"ratio" : 0.0047326176068760465
+	},
+	"mem" : {
+		"resident" : 15287,
+		"virtual" : 62425,
+		"supported" : true,
+		"mapped" : 61971
+	},
+	"connections" : {
+		"current" : 3,
+		"available" : 19997
+	},
+	"extra_info" : {
+		"note" : "fields vary by platform",
+		"heap_usage_bytes" : 3050496,
+		"page_faults" : 11759
+	},
+	"indexCounters" : {
+		"btree" : {
+			"accesses" : 1589814,
+			"hits" : 1589814,
+			"misses" : 0,
+			"resets" : 0,
+			"missRatio" : 0
+		}
+	},
+	"backgroundFlushing" : {
+		"flushes" : 4883,
+		"total_ms" : 2309034,
+		"average_ms" : 472.87200491501125,
+		"last_ms" : 36,
+		"last_finished" : "Mon Mar 29 2010 20:41:26 GMT-0700 (PDT)"
+	},
+  "repl" : {
+    "ismaster" : 0,
+    "msg" : "not paired",
+    "sources" : [
+      {
+        "host" : "192.168.1.230",
+        "syncedTo" : {
+          "time" : "Wed Mar 31 2010 11:25:58 GMT-0700 (PDT)",
+          "inc" : 1
+        },
+        "masterFirst" : "Wed Mar 17 2010 16:25:45 GMT-0700 (PDT)",
+        "masterLast" : "Wed Mar 31 2010 11:25:58 GMT-0700 (PDT)",
+        "lagSeconds" : 0
+      }
+    ]
+  },
+	"opcounters" : {
+		"insert" : 1584705,
+		"query" : 145518,
+		"update" : 2521129,
+		"delete" : 601,
+		"getmore" : 2268817,
+		"command" : 17810
+	},
+	"asserts" : {
+		"regular" : 0,
+		"warning" : 0,
+		"msg" : 0,
+		"user" : 164,
+		"rollovers" : 0
+	},
+	"ok" : 1
+}
+> bye

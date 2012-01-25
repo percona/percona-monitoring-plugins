@@ -1,0 +1,162 @@
+=====================================
+091014 11:26:14 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 53 seconds
+----------
+BACKGROUND THREAD
+----------
+fsync callers: 16682440 buffer pool, 41778 other, 333 checkpoint, 2091594 log aio, 518724684 log sync, 0 archive
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 2134839230, signal count 1197641159
+Mutex spin waits 0, rounds 247280272495, OS waits 316513438
+RW-shared spins 5508526926, OS waits 1141749537; RW-excl spins 2808729952, OS waits 504617703
+------------
+TRANSACTIONS
+------------
+Trx id counter 0 1170664159
+Purge done for trx's n:o < 0 1170663853 undo n:o < 0 0
+History list length 9
+Total number of lock structs in row lock hash table 0
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 0 0, not started, process no 7889, OS thread id 1210878272
+MySQL thread id 5967916, query id 4131846186 10.1.16.206 root
+show innodb status
+---TRANSACTION 0 1170660174, not started, process no 7889, OS thread id 1312581952
+MySQL thread id 5967721, query id 4131819493 10.1.251.101 lmt_app
+---TRANSACTION 0 1170654263, not started, process no 7889, OS thread id 1217268032
+MySQL thread id 5967748, query id 4131786762 10.1.251.101 cmt_app
+---TRANSACTION 0 1170663944, not started, process no 7889, OS thread id 1190111552
+MySQL thread id 5967734, query id 4131844301 10.1.251.101 ymp_app
+---TRANSACTION 0 1170664031, not started, process no 7889, OS thread id 1300068672
+MySQL thread id 5967727, query id 4131845537 10.1.251.101 vm2_app
+---TRANSACTION 0 1170663599, not started, process no 7889, OS thread id 1231644992
+MySQL thread id 5967691, query id 4131841495 10.1.251.101 ymp_app
+---TRANSACTION 0 1170644738, not started, process no 7889, OS thread id 1215670592
+MySQL thread id 5967611, query id 4131729493 10.1.251.101 emt_app
+---TRANSACTION 0 1170643809, not started, process no 7889, OS thread id 1183721792
+MySQL thread id 5967394, query id 4131723938 10.1.251.101 flex_app
+---TRANSACTION 0 1170663967, not started, process no 7889, OS thread id 1195702592
+MySQL thread id 5967380, query id 4131844514 10.1.251.101 cmt_app
+---TRANSACTION 0 1170663481, not started, process no 7889, OS thread id 1287555392
+MySQL thread id 5967387, query id 4131840082 10.1.251.101 fmt_app
+---TRANSACTION 0 1170653763, not started, process no 7889, OS thread id 1282763072
+MySQL thread id 5967386, query id 4131783996 10.1.251.101 fmt_app
+---TRANSACTION 0 1170664148, not started, process no 7889, OS thread id 1179994432
+MySQL thread id 5967289, query id 4131846137 10.1.251.101 vm2_app
+---TRANSACTION 0 1170663536, not started, process no 7889, OS thread id 1206085952
+MySQL thread id 5967270, query id 4131841407 10.1.251.101 vm2_app
+---TRANSACTION 0 1170663091, not started, process no 7889, OS thread id 1302198592
+MySQL thread id 5967269, query id 4131836456 10.1.251.101 vm2_app
+---TRANSACTION 0 1170663097, not started, process no 7889, OS thread id 1220196672
+MySQL thread id 5967075, query id 4131841102 10.1.251.101 vm2_app
+---TRANSACTION 0 1170662217, not started, process no 7889, OS thread id 1255872832
+MySQL thread id 5966946, query id 4131827855 10.1.251.101 yahooski
+---TRANSACTION 0 1170649857, not started, process no 7889, OS thread id 1216469312
+MySQL thread id 5966815, query id 4131767248 10.1.251.101 vm2_app
+---TRANSACTION 0 1170663591, not started, process no 7889, OS thread id 1092000064
+MySQL thread id 5966593, query id 4131841497 10.1.251.101 ymp_app
+---TRANSACTION 0 1170663884, not started, process no 7889, OS thread id 1211144512
+MySQL thread id 5966384, query id 4131843860 10.1.251.101 yep_app
+---TRANSACTION 0 1170645873, not started, process no 7889, OS thread id 1212209472
+MySQL thread id 5965502, query id 4131738766 10.1.251.101 ymp_app
+---TRANSACTION 0 1170663576, not started, process no 7889, OS thread id 1217800512
+MySQL thread id 5965441, query id 4131841329 10.1.251.101 ymp_app
+---TRANSACTION 0 1170663849, not started, process no 7889, OS thread id 1205553472
+MySQL thread id 5963783, query id 4131843608 10.1.251.101 ld2_app
+---TRANSACTION 0 1170650430, not started, process no 7889, OS thread id 1193838912
+MySQL thread id 5961381, query id 4131773840 10.1.251.101 ymp_app
+---TRANSACTION 0 1170657187, not started, process no 7889, OS thread id 1182923072
+MySQL thread id 5960177, query id 4131800107 10.1.251.101 vm2_app
+---TRANSACTION 0 1170664136, not started, process no 7889, OS thread id 1211943232
+MySQL thread id 5957474, query id 4131845956 10.1.250.26 yep_app
+---TRANSACTION 0 1170664121, not started, process no 7889, OS thread id 1289951552
+MySQL thread id 5956738, query id 4131845829 10.1.251.101 yep_app
+---TRANSACTION 0 1170664144, not started, process no 7889, OS thread id 1225787712
+MySQL thread id 5955518, query id 4131846027 10.1.250.25 yep_app
+---TRANSACTION 0 1170664158, not started, process no 7889, OS thread id 1203956032
+MySQL thread id 5954456, query id 4131846185 10.1.250.10 yep_app
+---TRANSACTION 0 1170663961, not started, process no 7889, OS thread id 1232976192
+MySQL thread id 5950374, query id 4131844467 10.1.251.101 vm2_app
+---TRANSACTION 0 1170657660, not started, process no 7889, OS thread id 1207949632
+MySQL thread id 5949056, query id 4131802709 10.1.251.101 ymp_app
+---TRANSACTION 0 1170661173, not started, process no 7889, OS thread id 1218332992
+MySQL thread id 5945489, query id 4131823919 10.1.251.101 ymp_app
+---TRANSACTION 0 1170663826, not started, process no 7889, OS thread id 1099589952
+MySQL thread id 5945482, query id 4131843490 10.1.251.101 ymp_app
+---TRANSACTION 0 1170660203, not started, process no 7889, OS thread id 1211410752
+MySQL thread id 5938286, query id 4131819719 10.1.251.101 ymp_app
+---TRANSACTION 0 1170663906, not started, process no 7889, OS thread id 1278503232
+MySQL thread id 5931734, query id 4131844035 10.1.251.101 vm2_app
+---TRANSACTION 0 1170663891, not started, process no 7889, OS thread id 1280633152
+MySQL thread id 5928117, query id 4131843917 10.1.251.101 vm2_app
+---TRANSACTION 0 1071941045, not started, process no 7889, OS thread id 1214339392
+MySQL thread id 5481167, query id 3591322911 Has read all relay log; waiting for the slave I/O thread to update it
+--------
+FILE I/O
+--------
+I/O thread 0 state: waiting for i/o request (insert buffer thread)
+I/O thread 1 state: waiting for i/o request (log thread)
+I/O thread 2 state: waiting for i/o request (read thread)
+I/O thread 3 state: waiting for i/o request (write thread)
+Pending normal aio reads: 0, aio writes: 0,
+ ibuf aio reads: 1, log i/o's: 2, sync i/o's: 3
+Pending flushes (fsync) log: 0; buffer pool: 0
+5985113 OS file reads, 633045221 OS file writes, 537534629 OS fsyncs
+0 pending preads, 1 pending pwrites
+0.09 reads/s, 16384 avg bytes/read, 23.21 writes/s, 18.40 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf: size 1, free list len 4634, seg size 4636,
+19817685 inserts, 19817684 merged recs, 3552620 merges
+Hash table size 23374853, used cells 21238151, node heap has 82473 buffer(s)
+4419.31 hash searches/s, 2135.43 non-hash searches/s
+---
+LOG
+---
+Log sequence number 125 3934414864
+Log flushed up to   125 3934414864
+Last checkpoint at  125 3934293461
+Max checkpoint age  433682474
+Modified age        109792
+Checkpoint age      121403
+0 pending log writes, 0 pending chkp writes
+520835887 log i/o's done, 17.28 log i/o's/second, 518724686 syncs, 2980893 checkpoints
+log sync callers: 154670870 buffer pool, background 32963147 sync and 0 async, 17692 internal, checkpoint 2980893 sync and 0 async, 0 archive, commit 516580620 sync and 0 async
+log sync syncers: 992611 buffer pool, background 1381173 sync and 0 async, 0 internal, checkpoint 1 sync and 0 async, 0 archive, commit 516350901 sync and 0 async
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total memory allocated 13102052218; in additional pool allocated 1048576
+Internal hash tables (constant factor + variable factor)
+    Adaptive hash index 1538240664 	(186998824 + 1351241840)
+    Page hash           11688584
+    Dictionary cache    145525560 	(140250984 + 5274576)
+    File system         313848 	(82672 + 231176)
+    Lock system         29232616 	(29219368 + 13248)
+    Recovery system     1 	(1 + 0)
+    Threads             409336 	(406936 + 2400)
+    innodb_io_pattern   1 	(1 + 0)
+Buffer pool size        720896
+Buffer pool size, bytes 11811160064
+Free buffers            0
+Database pages          638423
+Modified db pages       118
+Pending reads 0
+Pending writes: LRU 0, flush list 34, single page 0
+Pages read 28593890, created 5375161, written 154670836
+0.09 reads/s, 0.25 creates/s, 7.49 writes/s
+Buffer pool hit rate 1000 / 1000
+--------------
+ROW OPERATIONS
+--------------
+0 queries inside InnoDB, 0 queries in queue
+1 read views open inside InnoDB
+Main thread process no. 7889, id 1173338432, state: flushing buffer pool pages
+Number of rows inserted 544159502, updated 355138902, deleted 50580680, read 1911833505287
+9.28 inserts/s, 0.17 updates/s, 0.00 deletes/s, 5194.07 reads/s
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================

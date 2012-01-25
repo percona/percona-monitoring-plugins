@@ -1,0 +1,80 @@
+=====================================
+060818 21:25:38 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 1 seconds
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 25852795, signal count 25040646
+--Thread 1568861104 has waited at btr0cur.c line 424 for 0.00 seconds the semaphore:
+S-lock on RW-latch at 0x654e0088 created in file buf0buf.c line 490
+a writer (thread id 1568861104) has reserved it in mode  exclusive
+number of readers 0, waiters flag 1
+Last time read locked in file btr0cur.c line 424
+Last time write locked in file buf0buf.c line 1693
+Mutex spin waits 1472567303, rounds 1361479798, OS waits 10761956
+RW-shared spins 28507164, OS waits 11626439; RW-excl spins 20124203, OS waits 2147828
+------------
+TRANSACTIONS
+------------
+Trx id counter 0 133408350
+Purge done for trx's n:o < 0 133408332 undo n:o < 0 0
+History list length 0
+Total number of lock structs in row lock hash table 79453
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 0 0, not started, process no 6080, OS thread id 1548745648
+MySQL thread id 127564, query id 1251173802 kenya 192.168.0.8 baron
+SHOW /*!5 ENGINE */ INNODB STATUS
+--------
+FILE I/O
+--------
+I/O thread 0 state: waiting for i/o request (insert buffer thread)
+I/O thread 1 state: waiting for i/o request (log thread)
+I/O thread 2 state: doing file i/o (read thread) ev set
+I/O thread 3 state: waiting for i/o request (write thread)
+Pending normal aio reads: 45, aio writes: 0,
+ ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
+Pending flushes (fsync) log: 0; buffer pool: 0
+45418933 OS file reads, 35217570 OS file writes, 28236603 OS fsyncs
+1 pending preads, 0 pending pwrites
+42.96 reads/s, 75823 avg bytes/read, 0.00 writes/s, 0.00 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf for space 0: size 1, free list len 14, seg size 16, is empty
+Ibuf for space 0: size 1, free list len 14, seg size 16,
+27146584 inserts, 27146584 merged recs, 2778819 merges
+Hash table size 5312557, used cells 4557942, node heap has 10145 buffer(s)
+9493.51 hash searches/s, 2038.96 non-hash searches/s
+---
+LOG
+---
+Log sequence number 476 3871193896
+Log flushed up to   476 3871193896
+Last checkpoint at  476 3870845161
+0 pending log writes, 0 pending chkp writes
+24755286 log i/o's done, 0.00 log i/o's/second
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total memory allocated 1466180702; in additional pool allocated 9271040
+Buffer pool size   81920
+Free buffers       0
+Database pages     71206
+Modified db pages  127
+Pending reads 64
+Pending writes: LRU 0, flush list 0, single page 0
+Pages read 193076880, created 6774244, written 30675418
+205.79 reads/s, 0.00 creates/s, 0.00 writes/s
+Buffer pool hit rate 995 / 1000
+--------------
+ROW OPERATIONS
+--------------
+2 queries inside InnoDB, 0 queries in queue
+1 read views open inside InnoDB
+Main thread process no. 6080, id 1596521392, state: sleeping
+Number of rows inserted 366123974, updated 347070333, deleted 135232886, read 2210469195
+0.00 inserts/s, 0.00 updates/s, 0.00 deletes/s, 11224.78 reads/s
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================

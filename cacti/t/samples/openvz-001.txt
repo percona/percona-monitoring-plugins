@@ -1,0 +1,28 @@
+Version: 2.5
+       uid  resource                     held              maxheld              barrier                limit              failcnt
+      200:  kmemsize                  8906701             25288727            147901640            147901640                    0
+            lockedpages                     0                    0                  256                  256                    0
+            privvmpages                 39695                61719               262144               262144                    0
+            shmpages                      688                 1392                21504                21504                    0
+            dummy                           0                    0                    0                    0                    0
+            numproc                        32                   58                  240                  240                    0
+            physpages                   11101                18217                    0  9223372036854775807                    0
+            vmguarpages                     0                    0                33792  9223372036854775807                    0
+            oomguarpages                11101                18217                26112  9223372036854775807                    0
+            numtcpsock                      6                   32                  360                  360                    0
+            numflock                        6                    8                  188                  206                    0
+            numpty                          1                    1                   16                   16                    0
+            numsiginfo                      0                   20                  256                  256                    0
+            tcpsndbuf                  338656               375920             27033600             27033600                    0
+            tcprcvbuf                   98304               218448              1720320              2703360                    0
+            othersockbuf                 9280                31136              1126080              2097152                    0
+            dgramrcvbuf                     0                 9760               262144               262144                    0
+            numothersock                    9                   26                  360                  360                    0
+            dcachesize                      0                    0              3409920              3624960                    0
+            numfile                       788                 1298                 9312                 9312                    0
+            dummy                           0                    0                    0                    0                    0
+            dummy                           0                    0                    0                    0                    0
+            dummy                           0                    0                    0                    0                    0
+            numiptent                      10                   10                  128                  128                    0
+
+

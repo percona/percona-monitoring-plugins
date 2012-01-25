@@ -1,0 +1,114 @@
+=====================================
+070915 16:54:00 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 16 seconds
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 17, signal count 17
+Mutex spin waits 0, rounds 220, OS waits 2
+RW-shared spins 30, OS waits 15; RW-excl spins 1, OS waits 0
+------------
+TRANSACTIONS
+------------
+Trx id counter 0 3411
+Purge done for trx's n:o < 0 3400 undo n:o < 0 0
+History list length 19
+Total number of lock structs in row lock hash table 5
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 0 3410, ACTIVE 236 sec, process no 5202, OS thread id 1141287232 starting index read
+mysql tables in use 1, locked 1
+LOCK WAIT 4 lock struct(s), heap size 1216
+MySQL thread id 14, query id 253 localhost root Sending data
+select * from t1 for update
+Trx read view will not see trx with id >= 0 3411, sees < 0 3409
+------- TRX HAS BEEN WAITING 32 SEC FOR THIS LOCK TO BE GRANTED:
+RECORD LOCKS space id 9 page no 3 n bits 72 index `PRIMARY` of table `test/t1` trx id 0 3410 lock_mode X waiting
+Record lock, heap no 2 PHYSICAL RECORD: n_fields 3; compact format; info bits 0
+ 0: len 4; hex 80000001; asc     ;; 1: len 6; hex 000000000d35; asc      5;; 2: len 7; hex 800000002d0110; asc     -  ;;
+
+------------------
+TABLE LOCK table `test/t1` trx id 0 3410 lock mode IX
+TABLE LOCK table `test/innodb_lock_monitor` trx id 0 3410 lock mode IX
+RECORD LOCKS space id 13 page no 3 n bits 72 index `GEN_CLUST_INDEX` of table `test/innodb_lock_monitor` trx id 0 3410 lock_mode X
+Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
+ 0: len 8; hex 73757072656d756d; asc supremum;;
+
+RECORD LOCKS space id 9 page no 3 n bits 72 index `PRIMARY` of table `test/t1` trx id 0 3410 lock_mode X waiting
+Record lock, heap no 2 PHYSICAL RECORD: n_fields 3; compact format; info bits 0
+ 0: len 4; hex 80000001; asc     ;; 1: len 6; hex 000000000d35; asc      5;; 2: len 7; hex 800000002d0110; asc     -  ;;
+
+---TRANSACTION 0 3409, ACTIVE 253 sec, process no 5202, OS thread id 1141152064
+5 lock struct(s), heap size 1216
+MySQL thread id 13, query id 250 localhost root
+TABLE LOCK table `test/t1` trx id 0 3409 lock mode IX
+RECORD LOCKS space id 9 page no 3 n bits 72 index `PRIMARY` of table `test/t1` trx id 0 3409 lock_mode X
+Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
+ 0: len 8; hex 73757072656d756d; asc supremum;;
+
+Record lock, heap no 2 PHYSICAL RECORD: n_fields 3; compact format; info bits 0
+ 0: len 4; hex 80000001; asc     ;; 1: len 6; hex 000000000d35; asc      5;; 2: len 7; hex 800000002d0110; asc     -  ;;
+
+TABLE LOCK table `test/t2` trx id 0 3409 lock mode IX
+RECORD LOCKS space id 10 page no 4 n bits 72 index `a` of table `test/t2` trx id 0 3409 lock_mode X
+Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
+ 0: len 8; hex 73757072656d756d; asc supremum;;
+
+Record lock, heap no 2 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 4; hex 80000001; asc     ;; 1: len 6; hex 000000000203; asc       ;;
+
+RECORD LOCKS space id 10 page no 3 n bits 72 index `GEN_CLUST_INDEX` of table `test/t2` trx id 0 3409 lock_mode X locks rec but not gap
+Record lock, heap no 2 PHYSICAL RECORD: n_fields 4; compact format; info bits 0
+ 0: len 6; hex 000000000203; asc       ;; 1: len 6; hex 000000000d3e; asc      >;; 2: len 7; hex 800000002d0110; asc     -  ;; 3: len 4; hex 80000001; asc     ;;
+
+--------
+FILE I/O
+--------
+I/O thread 0 state: waiting for i/o request (insert buffer thread)
+I/O thread 1 state: waiting for i/o request (log thread)
+I/O thread 2 state: waiting for i/o request (read thread)
+I/O thread 3 state: waiting for i/o request (write thread)
+Pending normal aio reads: 0, aio writes: 0,
+ ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
+Pending flushes (fsync) log: 0; buffer pool: 0
+42 OS file reads, 168 OS file writes, 149 OS fsyncs
+0.00 reads/s, 0 avg bytes/read, 0.00 writes/s, 0.00 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf: size 1, free list len 0, seg size 2,
+0 inserts, 0 merged recs, 0 merges
+Hash table size 17393, used cells 0, node heap has 1 buffer(s)
+0.00 hash searches/s, 0.00 non-hash searches/s
+---
+LOG
+---
+Log sequence number 0 103216
+Log flushed up to   0 103216
+Last checkpoint at  0 103216
+0 pending log writes, 0 pending chkp writes
+72 log i/o's done, 0.00 log i/o's/second
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total memory allocated 20557306; in additional pool allocated 744704
+Buffer pool size   512
+Free buffers       476
+Database pages     35
+Modified db pages  0
+Pending reads 0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages read 33, created 48, written 148
+0.00 reads/s, 0.00 creates/s, 0.00 writes/s
+Buffer pool hit rate 1000 / 1000
+--------------
+ROW OPERATIONS
+--------------
+0 queries inside InnoDB, 0 queries in queue
+2 read views open inside InnoDB
+Main thread process no. 5202, id 1140881728, state: waiting for server activity
+Number of rows inserted 5, updated 0, deleted 0, read 10
+0.00 inserts/s, 0.00 updates/s, 0.00 deletes/s, 0.00 reads/s
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================

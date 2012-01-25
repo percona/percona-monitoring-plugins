@@ -1,0 +1,178 @@
+=====================================
+091104  9:59:58 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 7 seconds
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 216, signal count 215
+Mutex spin waits 0, rounds 1682, OS waits 39
+RW-shared spins 326, OS waits 163; RW-excl spins 9, OS waits 8
+------------
+TRANSACTIONS
+------------
+Trx id counter 0 8799060
+Purge done for trx's n:o < 0 8799032 undo n:o < 0 0
+History list length 9
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 0 0, not started, OS thread id 7452
+MySQL thread id 5920, query id 418870 zbc-can-003.ir.local 192.168.22.112 someone
+SHOW /*!50000 ENGINE*/ INNODB STATUS
+---TRANSACTION 0 8799058, not started, OS thread id 6400
+MySQL thread id 5895, query id 418779 zbc-plan-002.ir.local 192.168.22.131 someone
+---TRANSACTION 0 8799004, not started, OS thread id 6268
+MySQL thread id 5890, query id 413315 zbc-plan-003.ir.local 192.168.22.118 someone
+---TRANSACTION 0 8798989, not started, OS thread id 8160
+MySQL thread id 5731, query id 413207 zbc-plan-003.ir.local 192.168.22.118 someone
+---TRANSACTION 0 8799053, not started, OS thread id 3084
+MySQL thread id 5873, query id 418709 zbc-app-009.ir.local 192.168.22.161 someone
+---TRANSACTION 0 8798961, not started, OS thread id 4924
+MySQL thread id 5869, query id 412194 zbc-dep-901b.ir.local 192.168.22.27 someone
+---TRANSACTION 0 8799050, not started, OS thread id 5776
+MySQL thread id 5855, query id 417370 zbc-plan-002.ir.local 192.168.22.131 someone
+---TRANSACTION 0 0, not started, OS thread id 6852
+MySQL thread id 5819, query id 394360 192.168.22.176 someone
+---TRANSACTION 0 8799026, not started, OS thread id 6956
+MySQL thread id 5807, query id 414963 zbc-dep-f02.ir.local 192.168.22.26 someone
+---TRANSACTION 0 8798983, not started, OS thread id 5100
+MySQL thread id 5751, query id 418842 zbc-away-004.ir.local 192.168.22.178 someone
+---TRANSACTION 0 8798707, not started, OS thread id 6976
+MySQL thread id 5739, query id 418777 192.168.22.176 someone
+---TRANSACTION 0 8799016, not started, OS thread id 7576
+MySQL thread id 5730, query id 413392 zbc-plan-003.ir.local 192.168.22.118 someone
+---TRANSACTION 0 8798696, not started, OS thread id 5728
+MySQL thread id 5732, query id 369718 zbc-plan-003.ir.local 192.168.22.118 someone
+---TRANSACTION 0 0, not started, OS thread id 7460
+MySQL thread id 5682, query id 418834 zbc-away-004.ir.local 192.168.22.178 someone
+---TRANSACTION 0 8798653, not started, OS thread id 5744
+MySQL thread id 5710, query id 418776 192.168.22.176 someone
+---TRANSACTION 0 0, not started, OS thread id 2264
+MySQL thread id 4907, query id 418825 zbc-dep-502.ir.local 192.168.22.125 someone
+---TRANSACTION 0 8798905, not started, OS thread id 5256
+MySQL thread id 5685, query id 418837 zbc-away-004.ir.local 192.168.22.178 someone
+---TRANSACTION 0 8798924, not started, OS thread id 7888
+MySQL thread id 5683, query id 418835 zbc-away-004.ir.local 192.168.22.178 someone
+---TRANSACTION 0 8799056, not started, OS thread id 5228
+MySQL thread id 5675, query id 418718 zbc-app-b01.ir.local 192.168.22.130 someone
+---TRANSACTION 0 8798570, not started, OS thread id 592
+MySQL thread id 5650, query id 418711 zbc-app-009.ir.local 192.168.22.161 someone
+---TRANSACTION 0 0, not started, OS thread id 5904
+MySQL thread id 5635, query id 353470 zbc-plan-002.ir.local 192.168.22.131 someone
+---TRANSACTION 0 8798516, not started, OS thread id 6180
+MySQL thread id 5627, query id 350986 zbc-app-009.ir.local 192.168.22.161 someone
+---TRANSACTION 0 8799032, not started, OS thread id 5872
+MySQL thread id 5598, query id 418832 192.168.22.176 someone
+---TRANSACTION 0 8799037, not started, OS thread id 3200
+MySQL thread id 5589, query id 416415 zbc-rd-014.ir.local 192.168.22.156 someone
+---TRANSACTION 0 8798912, not started, OS thread id 5536
+MySQL thread id 5516, query id 418817 zbc-plan-003.ir.local 192.168.22.118 someone
+---TRANSACTION 0 8798862, not started, OS thread id 7296
+MySQL thread id 5535, query id 418743 zbc-plan-003.ir.local 192.168.22.118 someone
+---TRANSACTION 0 0, not started, OS thread id 3740
+MySQL thread id 5462, query id 418784 zbc-away-mon.ir.local 192.168.22.145 someone
+---TRANSACTION 0 8798930, not started, OS thread id 2712
+MySQL thread id 5460, query id 418782 zbc-away-mon.ir.local 192.168.22.145 someone
+---TRANSACTION 0 0, not started, OS thread id 6164
+MySQL thread id 5118, query id 418760 zbc-SALES-005 192.168.22.179 someone
+---TRANSACTION 0 8798261, not started, OS thread id 5852
+MySQL thread id 5355, query id 311508 zbc-dep-702a.ir.local 192.168.22.138 someone
+---TRANSACTION 0 8798230, not started, OS thread id 6228
+MySQL thread id 5121, query id 418763 zbc-SALES-005 192.168.22.179 someone
+---TRANSACTION 0 8799059, not started, OS thread id 6896
+MySQL thread id 5119, query id 418804 zbc-SALES-005 192.168.22.179 someone
+---TRANSACTION 0 8798368, not started, OS thread id 7516
+MySQL thread id 5061, query id 335204 zbc-refurb-220.ir.local 192.168.22.108 someone
+---TRANSACTION 0 8798992, not started, OS thread id 3656
+MySQL thread id 5004, query id 418833 zbc-away-nick.ir.local 192.168.22.169 someone
+---TRANSACTION 0 0, not started, OS thread id 4992
+MySQL thread id 5011, query id 296638 zbc-away-nick.ir.local 192.168.22.169 someone
+---TRANSACTION 0 0, not started, OS thread id 884
+MySQL thread id 4837, query id 418701 iridian-668d32e.ir.local 192.168.22.115 someone
+---TRANSACTION 0 0, not started, OS thread id 7496
+MySQL thread id 4901, query id 282744 zbc-dep-502.ir.local 192.168.22.125 someone
+---TRANSACTION 0 0, not started, OS thread id 3708
+MySQL thread id 4852, query id 277103 iridian-668d32e.ir.local 192.168.22.115 someone
+---TRANSACTION 0 0, not started, OS thread id 2252
+MySQL thread id 4849, query id 277081 zbc-app-b01.ir.local 192.168.22.130 someone
+---TRANSACTION 0 0, not started, OS thread id 6324
+MySQL thread id 4811, query id 418719 zbc-app-b01.ir.local 192.168.22.130 someone
+---TRANSACTION 0 0, not started, OS thread id 5448
+MySQL thread id 4529, query id 418843 zbc-post-712.ir.local 192.168.22.111 someone
+---TRANSACTION 0 8798309, not started, OS thread id 8168
+MySQL thread id 4812, query id 418720 zbc-app-b01.ir.local 192.168.22.130 someone
+---TRANSACTION 0 8798936, not started, OS thread id 7500
+MySQL thread id 4530, query id 418844 zbc-post-712.ir.local 192.168.22.111 someone
+---TRANSACTION 0 0, not started, OS thread id 2960
+MySQL thread id 4425, query id 254919 zbc-DEP-003 192.168.22.146 someone
+---TRANSACTION 0 0, not started, OS thread id 5600
+MySQL thread id 4375, query id 249711 zbc-dep-002.ir.local 192.168.22.222 someone
+---TRANSACTION 0 8797914, not started, OS thread id 7904
+MySQL thread id 4280, query id 418851 zbc-prod-003.ir.local 192.168.22.227 someone
+---TRANSACTION 0 8798824, not started, OS thread id 8104
+MySQL thread id 4282, query id 418853 zbc-prod-003.ir.local 192.168.22.227 someone
+---TRANSACTION 0 8798934, not started, OS thread id 7232
+MySQL thread id 4281, query id 418852 zbc-prod-003.ir.local 192.168.22.227 someone
+---TRANSACTION 0 0, not started, OS thread id 6048
+MySQL thread id 3907, query id 320094 zbc-post-602.ir.local 192.168.22.181 someone
+---TRANSACTION 0 8798299, not started, OS thread id 6720
+MySQL thread id 3904, query id 321277 zbc-post-602.ir.local 192.168.22.181 someone
+---TRANSACTION 0 8797808, not started, OS thread id 1236
+MySQL thread id 3668, query id 190953 192.168.22.129 someone
+---TRANSACTION 0 8797814, not started, OS thread id 3732
+MySQL thread id 3665, query id 191269 192.168.22.129 someone
+---TRANSACTION 0 0, not started, OS thread id 5532
+MySQL thread id 3615, query id 186725 zbc-dep-801b.ir.local 192.168.22.28 someone
+---TRANSACTION 0 8795969, not started, OS thread id 7368
+MySQL thread id 122, query id 418814 zbc-prod-jac.ir.local 192.168.22.127 someone
+--------
+FILE I/O
+--------
+I/O thread 0 state: wait Windows aio (insert buffer thread)
+I/O thread 1 state: wait Windows aio (log thread)
+I/O thread 2 state: wait Windows aio (read thread)
+I/O thread 3 state: wait Windows aio (write thread)
+Pending normal aio reads: 0, aio writes: 0,
+ ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
+Pending flushes (fsync) log: 0; buffer pool: 0
+2158 OS file reads, 1530 OS file writes, 992 OS fsyncs
+0.00 reads/s, 0 avg bytes/read, 0.00 writes/s, 0.00 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf: size 1, free list len 0, seg size 2,
+6 inserts, 6 merged recs, 6 merges
+Hash table size 1155127, node heap has 81 buffer(s)
+38.85 hash searches/s, 173.83 non-hash searches/s
+---
+LOG
+---
+Log sequence number 0 3068940702
+Log flushed up to   0 3068940702
+Last checkpoint at  0 3068940702
+0 pending log writes, 0 pending chkp writes
+686 log i/o's done, 0.00 log i/o's/second
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total memory allocated 288139706; in additional pool allocated 2118912
+Dictionary memory allocated 184368
+Buffer pool size   16000
+Free buffers       13771
+Database pages     2148
+Modified db pages  0
+Pending reads 0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages read 2148, created 0, written 694
+0.00 reads/s, 0.00 creates/s, 0.00 writes/s
+Buffer pool hit rate 1000 / 1000
+--------------
+ROW OPERATIONS
+--------------
+0 queries inside InnoDB, 0 queries in queue
+1 read views open inside InnoDB
+Main thread id 2744, state: sleeping
+Number of rows inserted 169, updated 336, deleted 4, read 3713963
+0.00 inserts/s, 0.00 updates/s, 0.00 deletes/s, 211.11 reads/s
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================

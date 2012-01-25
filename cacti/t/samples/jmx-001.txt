@@ -1,0 +1,14 @@
+heap_memory_used: 52685256
+heap_memory_committed: 205979648
+heap_memory_max: 1864171520
+non_heap_memory_used: 55160928
+non_heap_memory_committed: 61603840
+non_heap_memory_max: 318767104
+open_file_descriptors: 60
+max_file_descriptors: 1024
+current_threads_busy: 7
+current_thread_count: 172
+max_threads: 200
+
+BUILD SUCCESSFUL
+Total time: 0 seconds

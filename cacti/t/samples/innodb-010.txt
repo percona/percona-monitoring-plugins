@@ -1,0 +1,10 @@
+=====================================
+060606  9:15:20 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 22 seconds
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 6863603, signal count 6213866
+Mutex spin waits 453110184, rounds 526682897, OS waits 3676843
+RW-shared spins 8301816, OS waits 2289645; RW-excl spins 10020839, OS waits 297503

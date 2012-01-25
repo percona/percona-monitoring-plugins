@@ -1,0 +1,98 @@
+=====================================
+091027 21:13:23 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 17 seconds
+----------
+BACKGROUND THREAD
+----------
+srv_master_thread loops: 1 1_second, 1 sleeps, 0 10_second, 2 background, 2 flush
+srv_master_thread log flush and writes: 1  log writes only: 5
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 2, signal count 2
+Mutex spin waits 0, rounds 0, OS waits 0
+RW-shared spins 3, OS waits 1; RW-excl spins 0, OS waits 0
+Spin rounds per wait: 0.00 mutex, 30.00 RW-shared, 0.00 RW-excl
+--------
+FILE I/O
+--------
+I/O thread 0 state: waiting for i/o request (insert buffer thread)
+I/O thread 1 state: waiting for i/o request (log thread)
+I/O thread 2 state: waiting for i/o request (read thread)
+I/O thread 3 state: waiting for i/o request (read thread)
+I/O thread 4 state: waiting for i/o request (read thread)
+I/O thread 5 state: waiting for i/o request (read thread)
+I/O thread 6 state: waiting for i/o request (write thread)
+I/O thread 7 state: waiting for i/o request (write thread)
+I/O thread 8 state: waiting for i/o request (write thread)
+I/O thread 9 state: waiting for i/o request (write thread)
+Pending normal aio reads: 0, aio writes: 0,
+ ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
+Pending flushes (fsync) log: 0; buffer pool: 0
+26 OS file reads, 7 OS file writes, 7 OS fsyncs
+0.00 reads/s, 0 avg bytes/read, 0.00 writes/s, 0.00 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf: size 1, free list len 0, seg size 2,
+0 inserts, 0 merged recs, 0 merges
+Hash table size 276671, node heap has 0 buffer(s)
+0.00 hash searches/s, 0.00 non-hash searches/s
+---
+LOG
+---
+Log sequence number 44254
+Log flushed up to   44254
+Last checkpoint at  44254
+Max checkpoint age  7782360
+Modified age        0
+Checkpoint age      0
+0 pending log writes, 0 pending chkp writes
+10 log i/o's done, 0.00 log i/o's/second
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total memory allocated 137625600; in additional pool allocated 0
+Internal hash tables (constant factor + variable factor)
+    Adaptive hash index 2217576 	(2213368 + 4208)
+    Page hash           139112
+    Dictionary cache    584488 	(554768 + 29720)
+    File system         83520 	(82672 + 848)
+    Lock system         333240 	(332872 + 368)
+    Recovery system     0 	(0 + 0)
+    Threads             83016 	(82696 + 320)
+Dictionary memory allocated 29720
+Buffer pool size        8191
+Buffer pool size, bytes 134201344
+Free buffers            8176
+Database pages          15
+Modified db pages       0
+Pending reads 0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages read 16, created 0, written 1
+0.00 reads/s, 0.00 creates/s, 0.00 writes/s
+No buffer pool page gets since the last printout
+LRU len: 15, unzip_LRU len: 0
+I/O sum[0]:cur[0], unzip sum[0]:cur[0]
+--------------
+ROW OPERATIONS
+--------------
+0 queries inside InnoDB, 0 queries in queue
+1 read views open inside InnoDB
+Main thread process no. 2173, id 1191237952, state: waiting for server activity
+Number of rows inserted 0, updated 0, deleted 0, read 0
+0.00 inserts/s, 0.00 updates/s, 0.00 deletes/s, 0.00 reads/s
+------------
+TRANSACTIONS
+------------
+Trx id counter 501
+Purge done for trx's n:o < 0 undo n:o < 0
+History list length 0
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 0, not started, process no 2173, OS thread id 1191770432
+MySQL thread id 1, query id 2 localhost root
+show innodb status
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================

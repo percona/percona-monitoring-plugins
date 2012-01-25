@@ -1,0 +1,23 @@
+STAT pid 2120
+STAT uptime 32314
+STAT time 1261775864
+STAT version 1.2.2
+STAT pointer_size 32
+STAT rusage_user 0.396024
+STAT rusage_system 1.956122
+STAT curr_items 0
+STAT total_items 0
+STAT bytes 0
+STAT curr_connections 1
+STAT total_connections 5
+STAT connection_structures 2
+STAT cmd_get 0
+STAT cmd_set 0
+STAT get_hits 0
+STAT get_misses 0
+STAT evictions 0
+STAT bytes_read 45
+STAT bytes_written 942
+STAT limit_maxbytes 67108864
+STAT threads 1
+END

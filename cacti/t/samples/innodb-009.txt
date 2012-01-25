@@ -1,0 +1,161 @@
+=====================================
+070623 16:17:09 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 7 seconds
+----------
+BACKGROUND THREAD
+----------
+srv_master_thread loops: 16243 1_second, 16242 sleeps, 1624 10_second, 0 background, 0 flush
+srv_master_thread log flush: 16283 sync, 1664 async
+fsync callers: 9770 buffer pool, 0 other, 11 checkpoint, 1535 log aio, 16325 log sync, 0 archive
+----------
+SEMAPHORES
+----------
+Lock wait timeouts 0
+OS WAIT ARRAY INFO: reservation count 34135, signal count 31043
+Mutex spin waits 794941, rounds 3373874, OS waits 21689
+RW-shared spins 17136, OS waits 7918; RW-excl spins 8803, OS waits 2994
+--------
+FILE I/O
+--------
+I/O thread 0 state: waiting for i/o request (insert buffer thread) reads 0 writes 0 requests 0 io secs 0.000000 io msecs/request 0.000000 max_io_wait 0.000000
+I/O thread 1 state: waiting for i/o request (log thread) reads 0 writes 1528 requests 1528 io secs 0.010483 io msecs/request 0.006861 max_io_wait 0.027000
+I/O thread 2 state: waiting for i/o request (read thread) reads 30857 writes 0 requests 14002 io secs 126.370735 io msecs/request 9.025192 max_io_wait 161.586000
+I/O thread 3 state: waiting for i/o request (read thread) reads 16999 writes 0 requests 7979 io secs 72.610741 io msecs/request 9.100231 max_io_wait 156.309000
+I/O thread 4 state: waiting for i/o request (read thread) reads 14180 writes 0 requests 6658 io secs 61.282585 io msecs/request 9.204353 max_io_wait 149.164000
+I/O thread 5 state: waiting for i/o request (read thread) reads 12690 writes 0 requests 6103 io secs 55.881265 io msecs/request 9.156360 max_io_wait 161.298000
+I/O thread 6 state: waiting for i/o request (read thread) reads 11871 writes 0 requests 5685 io secs 53.666005 io msecs/request 9.439931 max_io_wait 160.487000
+I/O thread 7 state: waiting for i/o request (read thread) reads 11563 writes 0 requests 5489 io secs 51.701108 io msecs/request 9.419040 max_io_wait 161.135000
+I/O thread 8 state: waiting for i/o request (read thread) reads 11039 writes 0 requests 5284 io secs 49.634792 io msecs/request 9.393413 max_io_wait 149.591000
+I/O thread 9 state: waiting for i/o request (read thread) reads 10980 writes 0 requests 5304 io secs 50.317586 io msecs/request 9.486724 max_io_wait 161.720000
+I/O thread 10 state: waiting for i/o request (write thread) reads 0 writes 185439 requests 162898 io secs 4.820036 io msecs/request 0.029589 max_io_wait 9.558000
+I/O thread 11 state: waiting for i/o request (write thread) reads 0 writes 90595 requests 80475 io secs 3.201714 io msecs/request 0.039785 max_io_wait 9.739000
+Pending normal aio reads: 0, aio writes: 0,
+ ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
+Pending flushes (fsync) log: 0; buffer pool: 0
+1516536 OS file reads, 268607 OS file writes, 27641 OS fsyncs
+57.85 reads/s, 17273 avg bytes/read, 34.71 writes/s, 2.29 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf for space 0: size 9909, free list len 36366, seg size 46276,
+403495 inserts, 391709 merged recs, 94372 merges
+Hash table size 24902177, used cells 12151667, node heap has 24584 buffer(s)
+1455.65 hash searches/s, 2672.33 non-hash searches/s
+---
+LOG
+---
+Log sequence number 126 167307111
+Log flushed up to   126 167307111
+Last checkpoint at  125 4175748013
+0 pending log writes, 0 pending chkp writes
+19521 log i/o's done, 1.29 log i/o's/second, 16324 syncs, 1626 checkpoints
+log sync callers: 276034 buffer pool, background 16283 sync and 1664 async, 0 internal, checkpoint 1626 sync and 0 async, 0 archive, commit 0 sync and 0 async
+log sync syncers: 80 buffer pool, background 16243 sync and 0 async, 0 internal, checkpoint 1 sync and 0 async, 0 archive, commit 0 sync and 0 async
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total memory allocated 13711864112; in additional pool allocated 5884416
+Buffer pool size   768000
+Free buffers       60
+Database pages     743356
+Modified db pages  177204
+Pending reads 2
+Pending writes: LRU 0, flush list 0, single page 0
+Pages read 1580077, created 7462, written 276034
+61.42 reads/s, 0.00 creates/s, 19.00 writes/s
+Buffer pool hit rate 995 / 1000
+--------------
+ROW OPERATIONS
+--------------
+3 queries inside InnoDB, 0 queries in queue
+Main thread process no. 30147, id 1199630672, state: sleeping
+Number of rows inserted 430539, updated 251931, deleted 257631, read 83306576
+15.28 inserts/s, 10.43 updates/s, 0.57 deletes/s, 3051.42 reads/s
+------------
+TRANSACTIONS
+------------
+Trx id counter 0 4106483684
+Purge done for trx's n:o < 0 4106482391 undo n:o < 0 2
+Total number of lock structs in row lock hash table 0
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 0 0, not started, process no 30147, OS thread id 1230338384
+MySQL thread id 2229122, query id 33031230 localhost root
+show innodb status
+---TRANSACTION 0 4106483642, not started, process no 30147, OS thread id 1200232784
+MySQL thread id 3, query id 33031068 Has read all relay log; waiting for the I/O slave thread to update it
+---TRANSACTION 0 4106483683, ACTIVE 0 sec, process no 30147, OS thread id 1210468688
+MySQL thread id 2317587, query id 33031527 10.0.2.124 wikiuser cleaning up
+/* RandomPage::selectRandomPageFromDB 64.7.12.33 */ SELECT page_title
+                        FROM `page` FORCE INDEX (page_random)
+                        WHERE page_namespace = 0
+                        AND page_is_redirect = 0
+                        AND page_random >= 0.682164995612
+
+                        ORDER BY page_random LIMIT 1
+Trx read view will not see trx with id >= 0 4106483684, sees < 0 4106482326
+---TRANSACTION 0 4106483682, ACTIVE 0 sec, process no 30147, OS thread id 1224517968
+MySQL thread id 2317586, query id 33031516 10.0.2.39 wikiuser
+Trx read view will not see trx with id >= 0 4106483683, sees < 0 4106482326
+---TRANSACTION 0 4106483681, ACTIVE 0 sec, process no 30147, OS thread id 1208863056
+MySQL thread id 2317585, query id 33031507 10.0.2.103 wikiuser
+Trx read view will not see trx with id >= 0 4106483682, sees < 0 4106482326
+---TRANSACTION 0 4106483679, ACTIVE 0 sec, process no 30147, OS thread id 1219701072
+MySQL thread id 2317473, query id 33031477 10.0.2.107 wikiuser
+Trx read view will not see trx with id >= 0 4106483680, sees < 0 4106482326
+---TRANSACTION 0 4106483675, ACTIVE 0 sec, process no 30147, OS thread id 1218496848
+MySQL thread id 2317569, query id 33031520 10.0.2.108 wikiuser
+Trx read view will not see trx with id >= 0 4106483676, sees < 0 4106482326
+---TRANSACTION 0 4106483674, ACTIVE 0 sec, process no 30147, OS thread id 1204648272
+MySQL thread id 2317580, query id 33031501 10.0.2.44 wikiuser cleaning up
+/* Revision::fetchRow 203.23.104.164 */ SELECT  page_namespace,page_title,page_latest,rev_id,rev_page,rev_text_id,rev_comment,rev_user_text,rev_user,rev_minor_edit,rev_timestamp,rev_deleted,rev_len  FROM `page`,`revision`  WHERE (page_id=rev_page) AND rev_id = '126046091'  LIMIT 1
+Trx read view will not see trx with id >= 0 4106483675, sees < 0 4106482326
+---TRANSACTION 0 4106483671, ACTIVE 0 sec, process no 30147, OS thread id 1216690512
+MySQL thread id 2317576, query id 33031504 10.0.2.113 wikiuser
+Trx read view will not see trx with id >= 0 4106483672, sees < 0 4106482326
+---TRANSACTION 0 4106483670, ACTIVE 0 sec, process no 30147, OS thread id 1222310224
+MySQL thread id 2317570, query id 33031522 10.0.2.124 wikiuser cleaning up
+/* Revision::loadText 65.128.14.2 */ SELECT  old_text,old_flags  FROM `text`  WHERE old_id = '127037272'  LIMIT 1
+Trx read view will not see trx with id >= 0 4106483671, sees < 0 4106482326
+---TRANSACTION 0 4106483661, ACTIVE 0 sec, process no 30147, OS thread id 1214081360
+MySQL thread id 2317565, query id 33031485 10.0.2.58 wikiuser
+Trx read view will not see trx with id >= 0 4106483662, sees < 0 4106482326
+---TRANSACTION 0 4106483659, ACTIVE 0 sec, process no 30147, OS thread id 1204447568
+MySQL thread id 2317564, query id 33031409 10.0.2.138 wikiuser
+Trx read view will not see trx with id >= 0 4106483660, sees < 0 4106482326
+---TRANSACTION 0 4106483629, ACTIVE 0 sec, process no 30147, OS thread id 1205651792
+MySQL thread id 2317544, query id 33031513 10.0.2.128 wikiuser
+Trx read view will not see trx with id >= 0 4106483630, sees < 0 4106482326
+---TRANSACTION 0 4106483623, ACTIVE 0 sec, process no 30147, OS thread id 1223313744
+MySQL thread id 2317539, query id 33030883 10.0.2.36 wikiuser
+Trx read view will not see trx with id >= 0 4106483624, sees < 0 4106482326
+---TRANSACTION 0 4106483600, ACTIVE 0 sec, process no 30147, OS thread id 1220303184
+MySQL thread id 2317525, query id 33031523 10.0.2.89 wikiuser
+Trx read view will not see trx with id >= 0 4106483601, sees < 0 4106482326
+---TRANSACTION 0 4106483597, ACTIVE 0 sec, process no 30147, OS thread id 1225521488
+MySQL thread id 2317519, query id 33031384 10.0.2.70 wikiuser
+Trx read view will not see trx with id >= 0 4106483598, sees < 0 4106482326
+---TRANSACTION 0 4106483584, ACTIVE 0 sec, process no 30147, OS thread id 1226725712
+MySQL thread id 2317511, query id 33031526 10.0.2.130 wikiuser
+Trx read view will not see trx with id >= 0 4106483585, sees < 0 4106482326
+---TRANSACTION 0 4106483551, ACTIVE 0 sec, process no 30147, OS thread id 1206053200
+MySQL thread id 2317486, query id 33031486 10.0.2.124 wikiuser
+Trx read view will not see trx with id >= 0 4106483552, sees < 0 4106482326
+---TRANSACTION 0 4106483444, ACTIVE 1 sec, process no 30147, OS thread id 1205852496
+MySQL thread id 2317398, query id 33031130 10.0.2.116 wikiuser
+Trx read view will not see trx with id >= 0 4106483445, sees < 0 4106482326
+---TRANSACTION 0 4106483268, ACTIVE 1 sec, process no 30147, OS thread id 1220503888
+MySQL thread id 2317271, query id 33030183 10.0.2.109 wikiuser
+Trx read view will not see trx with id >= 0 4106483269, sees < 0 4106482326
+---TRANSACTION 0 4106483073, ACTIVE 2 sec, process no 30147, OS thread id 1203444048
+MySQL thread id 2317137, query id 33025159 10.0.2.44 wikiuser
+Trx read view will not see trx with id >= 0 4106483074, sees < 0 4106482326
+---TRANSACTION 0 4106482517, ACTIVE 5 sec, process no 30147, OS thread id 1212475728
+MySQL thread id 2316736, query id 33031227 10.0.2.100 wikiuser
+Trx read view will not see trx with id >= 0 4106482518, sees < 0 4106482326
+---TRANSACTION 0 4106482326, ACTIVE 6 sec, process no 30147, OS thread id 1206655312
+MySQL thread id 2316595, query id 33018555 10.0.2.107 wikiuser
+Trx read view will not see trx with id >= 0 4106482327, sees < 0 4106481806
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================
