@@ -485,7 +485,7 @@ my @opt_spec = (
    { s => 'lint_check',     d => 'Complain about unused data found in the script' },
    { s => 'mpds=H',         d => 'Comma-separated list of input method options'
                               .  ' to make per-data-source' },
-   { s => 'name_prefix=s',  d => 'Template name prefix (default X)' },
+   { s => 'name_prefix=s',  d => 'Template name prefix (default Percona)' },
    { s => 'poll_interval=i',d => 'Polling interval (default 300)' },
    { s => 'smallint',       d => 'Create templates for 32-bit MySQL' },
    { s => 'script=s',       d => 'Command-line script to use (required)' },
