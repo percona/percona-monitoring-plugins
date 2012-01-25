@@ -36,8 +36,6 @@ main() {
       esac
    done
    OPT_CHEK="${OPT_CHEK:-idle_blocker_duration}"
-   OPT_WARN=${OPT_WARN:-60}
-   OPT_CRIT=${OPT_CRIT:-600}
    EXITSTATUS=$STATE_UNKNOWN
    NOTE="UNK could not find information about transactions"
 
@@ -46,6 +44,8 @@ main() {
 
    case "${OPT_CHEK}" in
       idle_blocker_duration)
+         OPT_WARN=${OPT_WARN:-60}
+         OPT_CRIT=${OPT_CRIT:-600}
          LEVEL=$(mysql_exec "
             SELECT COALESCE(MAX(IF(p.command = 'Sleep', p.time, 0)), 0) AS idle_in_trx
             FROM       INFORMATION_SCHEMA.INNODB_LOCK_WAITS AS w
@@ -55,6 +55,8 @@ main() {
          ;;
       waiter_count)
          LEVEL=$(mysql_exec "
+         OPT_WARN=${OPT_WARN:-10}
+         OPT_CRIT=${OPT_CRIT:-25}
             SELECT COUNT(DISTINCT REQUESTING_TRX_ID) AS cnt
             FROM   INFORMATION_SCHEMA.INNODB_LOCK_WAITS AS w" 2>"${TEMP}")
          if grep "Unknown table" "${TEMP}" >/dev/null 2>&1; then
@@ -65,6 +67,8 @@ main() {
          ;;
       max_duration)
          LEVEL=$(mysql_exec "
+         OPT_WARN=${OPT_WARN:-60}
+         OPT_CRIT=${OPT_CRIT:-600}
             SELECT COALESCE(
                      MAX(UNIX_TIMESTAMP() - UNIX_TIMESTAMP(trx_started)),
                    0)
@@ -172,7 +176,7 @@ get_waiter_count() {
 # Execute the program if it was not included from another file.
 # This makes it possible to include without executing, and thus test.
 # ########################################################################
-if    [ "$(basename -- "$0")" = "pmp-check-mysql-transactions" ] \
+if    [ "$(basename -- "$0")" = "pmp-check-mysql-innodb" ] \
    || [ "$(basename -- "$0")" = "bash" -a "$_" = "$0" ]; then
    main "$@"
 fi
@@ -185,27 +189,27 @@ fi
 
 =head1 NAME
 
-pmp-check-mysql-transactions - Alert when blocking transactions are idle too long.
+pmp-check-mysql-innodb - Alert when blocking transactions are idle too long.
 
 =head1 SYNOPSIS
 
-  Usage: pmp-check-mysql-transactions [OPTIONS]
+  Usage: pmp-check-mysql-innodb [OPTIONS]
   Options:
     -C CHECK    What to alert on; default idle_blocker_duration.
-    -c CRIT     Critical threshold; default 600.
+    -c CRIT     Critical threshold; default varies.
     -H HOST     MySQL hostname.
     -l USER     MySQL username.
     -p PASS     MySQL password.
     -P PORT     MySQL port.
     -S SOCKET   MySQL socket file.
-    -w WARN     Warning threshold; default 60.
+    -w WARN     Warning threshold; default varies.
     --help      Print help and exit.
     --version   Print version and exit.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION
 
-This Nagios plugin alerts on long-running transactions in several ways,
+This Nagios plugin alerts on various aspects of InnoDB status in several ways,
 depending on the value of the -C option:
 
 =over
@@ -223,17 +227,19 @@ committed, such as performing very long tasks in the application while holding
 the transaction open.
 
 This check examines the INFORMATION_SCHEMA tables included with InnoDB version
-1.0 and newer.
+1.0 and newer. The default critical level is 600, and warning is 60.
 
 =item waiter_count
 
 Alerts if too many transactions are in LOCK WAIT status. Uses information from
 SHOW ENGINE INNODB STATUS if the INFORMATION_SCHEMA tables are not available.
+The default critical level is 25, and warning is 10.
 
 =item max_duration
 
 Alerts if any transaction is too old.  Uses information from SHOW ENGINE INNODB
-STATUS if the INFORMATION_SCHEMA tables are not available.
+STATUS if the INFORMATION_SCHEMA tables are not available. The default critical
+level is 600, and warning is 60.
 
 =back
 
@@ -267,7 +273,7 @@ Place, Suite 330, Boston, MA  02111-1307  USA.
 
 =head1 VERSION
 
-Percona Monitoring Plugins pmp-check-mysql-transactions 1.0.0
+Percona Monitoring Plugins pmp-check-mysql-innodb 1.0.0
 
 =cut
 
