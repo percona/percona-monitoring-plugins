@@ -37,8 +37,8 @@ $debug      = FALSE; # Define whether you want debugging behavior.
 $debug_log  = FALSE; # If $debug_log is a filename, it'll be used.
 
 # Parameters for specific graphs can be specified here, or in the .cnf file.
-$status_server = 'localhost';             # Which server to query
-$status_url    = '/server-status';        # Where Apache status lives
+$status_server = 'localhost';             # Where to query for HTTP status
+$status_url    = '/server-status';        # The URL path to HTTP status
 $http_user     = '';                      # HTTP authentication
 $http_pass     = '';                      # HTTP authentication
 $http_port     = 80;                      # Which port Apache listens on
@@ -204,7 +204,8 @@ General options:
                      port, redis port, or apache port.
    --server          The server (DNS name or IP address) from which to fetch the
                      desired data after SSHing.  Default is 'localhost' for HTTP
-                     stats and --host for memcached stats.
+                     stats and --host for memcached stats. If you specify
+                     '--use-ssh 0' then default is --host for HTTP stats too.
    --threadpool      Name of ThreadPool in JMX (i.e. http-8080 or jk-8009)
    --type            One of apache, nginx, proc_stat, w, memory, memcached,
                      diskstats, openvz, redis, jmx, mongodb, df, netdev, 
@@ -911,7 +912,13 @@ function apache_cachefile ( $options ) {
 
 function apache_cmdline ( $options ) {
    global $status_server, $status_url, $http_user, $http_pass, $http_port;
-   $srv = isset($options['server']) ? $options['server'] : $status_server;
+   $srv = $status_server;
+   if ( isset($options['server']) ) {
+      $srv = $options['server'];
+   }
+   elseif ( ! $options['use-ssh'] ) {
+      $srv = $options['host'];
+   }
    $url = isset($options['url'])    ? $options['url']    : $status_url;
    $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
    $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
@@ -991,7 +998,13 @@ function nginx_cachefile ( $options ) {
 
 function nginx_cmdline ( $options ) {
    global $status_server, $status_url, $http_user, $http_pass;
-   $srv = isset($options['server']) ? $options['server'] : $status_server;
+   $srv = $status_server;
+   if ( isset($options['server']) ) {
+      $srv = $options['server'];
+   }
+   elseif ( ! $options['use-ssh'] ) {
+      $srv = $options['host'];
+   }
    $url = isset($options['url'])    ? $options['url']    : $status_url;
    $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
    $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
