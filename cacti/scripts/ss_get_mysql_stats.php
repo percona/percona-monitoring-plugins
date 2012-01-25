@@ -845,12 +845,25 @@ function get_innodb_array($text) {
          $results['spin_rounds'][] = to_int($row[5]);
          $results['os_waits'][]    = to_int($row[8]);
       }
-      elseif (strpos($line, 'RW-shared spins') === 0 ) {
+      elseif (strpos($line, 'RW-shared spins') === 0
+            && strpos($line, ';') > 0 ) {
          # RW-shared spins 3859028, OS waits 2100750; RW-excl spins 4641946, OS waits 1530310
          $results['spin_waits'][] = to_int($row[2]);
          $results['spin_waits'][] = to_int($row[8]);
          $results['os_waits'][]   = to_int($row[5]);
          $results['os_waits'][]   = to_int($row[11]);
+      }
+      elseif (strpos($line, 'RW-shared spins') === 0 && strpos($line, '; RW-excl spins') === FALSE) {
+         # Post 5.5.17 SHOW ENGINE INNODB STATUS syntax
+         # RW-shared spins 604733, rounds 8107431, OS waits 241268
+         $results['spin_waits'][] = to_int($row[2]);
+         $results['os_waits'][]   = to_int($row[7]);
+      }
+      elseif (strpos($line, 'RW-excl spins') === 0) {
+         # Post 5.5.17 SHOW ENGINE INNODB STATUS syntax
+         # RW-excl spins 604733, rounds 8107431, OS waits 241268
+         $results['spin_waits'][] = to_int($row[2]);
+         $results['os_waits'][]   = to_int($row[7]);
       }
       elseif (strpos($line, 'seconds the semaphore:') > 0) {
          # --Thread 907205 has waited at handler/ha_innodb.cc line 7156 for 1.00 seconds the semaphore:
@@ -865,7 +878,8 @@ function get_innodb_array($text) {
          # transactions
          # Trx id counter 0 1170664159
          # Trx id counter 861B144C
-         $results['innodb_transactions'] = make_bigint($row[3], $row[4]);
+         $results['innodb_transactions'] = make_bigint(
+            $row[3], (isset($row[4]) ? $row[4] : null));
          $txn_seen = TRUE;
       }
       elseif ( strpos($line, 'Purge done for trx') === 0 ) {
@@ -951,6 +965,16 @@ function get_innodb_array($text) {
          $results['ibuf_used_cells']  = to_int($row[2]);
          $results['ibuf_free_cells']  = to_int($row[6]);
          $results['ibuf_cell_count']  = to_int($row[9]);
+         if (strpos($line, 'merges')) {
+            $results['ibuf_merges']  = to_int($row[10]);
+         }
+      }
+      elseif (strpos($line, ', delete mark ') > 0 && strpos($prev_line, 'merged operations:') === 0 ) {
+         # Output of show engine innodb status has changed in 5.5
+         # merged operations:
+         # insert 593983, delete mark 387006, delete 73092
+         $results['ibuf_inserts'] = to_int($row[1]);
+         $results['ibuf_merged']  = to_int($row[1]) + to_int($row[4]) + to_int($row[6]);
       }
       elseif (strpos($line, ' merged recs, ') > 0 ) {
          # 19817685 inserts, 19817684 merged recs, 3552620 merges
@@ -1087,6 +1111,7 @@ function get_innodb_array($text) {
          $results['queries_inside'] = to_int($row[0]);
          $results['queries_queued'] = to_int($row[4]);
       }
+      $prev_line = $line;
    }
 
    foreach ( array('spin_waits', 'spin_rounds', 'os_waits') as $key ) {
