@@ -64,13 +64,11 @@ main() {
          fi
          ;;
       max_duration)
-         set -x
          LEVEL=$(mysql_exec "
             SELECT COALESCE(
                      MAX(UNIX_TIMESTAMP() - UNIX_TIMESTAMP(trx_started)),
                    0)
             FROM   INFORMATION_SCHEMA.INNODB_TRX" 2>"${TEMP}")
-         cat "${TEMP}"
          if grep "Unknown table" "${TEMP}" >/dev/null 2>&1; then
             # The I_S tables don't exist.
             mysql_exec "SHOW /*!50000 ENGINE*/ INNODB STATUS\G" > "${TEMP}" || exit $?
