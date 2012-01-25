@@ -189,7 +189,7 @@ fi
 
 =head1 NAME
 
-pmp-check-mysql-innodb - Alert when blocking transactions are idle too long.
+pmp-check-mysql-innodb - Alert on problems inside InnoDB.
 
 =head1 SYNOPSIS
 
