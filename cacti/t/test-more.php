@@ -29,6 +29,8 @@
 *                                                                   *
 *  http://search.cpan.org/dist/Test-Simple/lib/Test/More.pm         *
 *                                                                   *
+*  It is customized by Baron Schwartz for the Cacti Template Plugin *
+*                                                                   *
 *********************************************************************
 *                              CREDITS                              *
 *                                                                   *
