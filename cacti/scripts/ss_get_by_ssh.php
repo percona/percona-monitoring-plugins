@@ -815,7 +815,7 @@ function proc_stat_parse ( $options, $output ) {
       if ( preg_match_all('/\w+/', $line, $words) ) {
          $words = $words[0];
          if ( $words[0] == "cpu" ) {
-            for ( $i = 1; $i < count($words) && $i < count($cpu_types); ++$i ) {
+            for ( $i = 1; $i < count($words) && $i <= count($cpu_types); ++$i ) {
                $result[$cpu_types[$i - 1]] = $words[$i];
             }
          }
@@ -903,14 +903,15 @@ function w_parse ( $options, $output ) {
    # Notice on some systems id doesn't show the number of users. It also might
    # be localized: Utilizadores, 1,58 or 1.58
    foreach ( explode("\n", $output) as $line ) {
-      if ( preg_match_all('/(\d+) u.*[s]*/', $line, $words) {
-         $result['STAT_numusers'] = $words[1][0];
-      }
-      else {
+      $line = trim($line);
+      if ( strlen($line) > 0 ) {
          $result['STAT_numusers'] = 0;
-      }
-      if ( preg_match_all('(\d+[,.]\d+)$/', $line, $words) ) {
-         $result['STAT_loadavg']  = $words[1][0];
+         if ( preg_match('/(\d+) u[^ ]*,/', $line, $words) ) {
+            $result['STAT_numusers'] = $words[1];
+         }
+         if ( preg_match('/(\d+[,.]\d+)$/', $line, $words) ) {
+            $result['STAT_loadavg']  = $words[1];
+         }
       }
    }
    return $result;

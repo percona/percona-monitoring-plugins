@@ -152,7 +152,7 @@ is(
       'items'   => 'as,at'
    )),
    'as:1.43 at:2',
-   'main(samples/w-002.txt)'
+   'main(samples/w-001.txt)'
 );
 
 is_deeply(
