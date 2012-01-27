@@ -37,10 +37,11 @@ $debug      = FALSE; # Define whether you want debugging behavior.
 $debug_log  = FALSE; # If $debug_log is a filename, it'll be used.
 
 # Parameters for specific graphs can be specified here, or in the .cnf file.
-$status_server = 'localhost';             # Which server to query
-$status_url    = '/server-status';        # Where Apache status lives
-$http_user     = '';
-$http_pass     = '';
+$status_server = 'localhost';             # Where to query for HTTP status
+$status_url    = '/server-status';        # The URL path to HTTP status
+$http_user     = '';                      # HTTP authentication
+$http_pass     = '';                      # HTTP authentication
+$http_port     = 80;                      # Which port Apache listens on
 $memcache_port = 11211;                   # Which port memcached listens on
 $redis_port    = 6379;                    # Which port redis listens on
                                           # How to get openvz stats
@@ -203,7 +204,8 @@ General options:
                      port, redis port, or apache port.
    --server          The server (DNS name or IP address) from which to fetch the
                      desired data after SSHing.  Default is 'localhost' for HTTP
-                     stats and --host for memcached stats.
+                     stats and --host for memcached stats. If you specify
+                     '--use-ssh 0' then default is --host for HTTP stats too.
    --threadpool      Name of ThreadPool in JMX (i.e. http-8080 or jk-8009)
    --type            One of apache, nginx, proc_stat, w, memory, memcached,
                      diskstats, openvz, redis, jmx, mongodb, df, netdev, 
@@ -294,200 +296,182 @@ function ss_get_by_ssh( $options ) {
    $result = call_user_func($parsing_func, $options, $output);
 
    # Define the variables to output.  I use shortened variable names so maybe
-   # it'll all fit in 1024 bytes for Cactid and Spine's benefit.  This list must
-   # come right after the word MAGIC_VARS_DEFINITIONS.  The Perl script parses
-   # it and uses it as a Perl variable.
+   # it'll all fit in 1024 bytes for Cactid and Spine's benefit.  However, don't
+   # use things that have only hex characters, thus begin with 'g0' to avoid a
+   # bug in Cacti.  This list must come right after the word
+   # MAGIC_VARS_DEFINITIONS.  The Perl script parses it and uses it as a Perl
+   # variable.
    $keys = array(
-      # Apache stuff.  Don't emulate -- the naming convention here lacks a name
-      # prefix, which really ought to be added to all of these.
-      'Requests'               => 'a0',
-      'Bytes_sent'             => 'a1',
-      'Idle_workers'           => 'a2',
-      'Busy_workers'           => 'a3',
-      'CPU_Load'               => 'a4',
-      'Waiting_for_connection' => 'a5',
-      'Starting_up'            => 'a6',
-      'Reading_request'        => 'a7',
-      'Sending_reply'          => 'a8',
-      'Keepalive'              => 'a9',
-      'DNS_lookup'             => 'aa',
-      'Closing_connection'     => 'ab',
-      'Logging'                => 'ac',
-      'Gracefully_finishing'   => 'ad',
-      'Idle_cleanup'           => 'ae',
-      'Open_slot'              => 'af',
-      # /proc/stat stuff
-      'STAT_CPU_user'          => 'ag',
-      'STAT_CPU_nice'          => 'ah',
-      'STAT_CPU_system'        => 'ai',
-      'STAT_CPU_idle'          => 'aj',
-      'STAT_CPU_iowait'        => 'ak',
-      'STAT_CPU_irq'           => 'al',
-      'STAT_CPU_softirq'       => 'am',
-      'STAT_CPU_steal'         => 'an',
-      'STAT_CPU_guest'         => 'ao',
-      'STAT_interrupts'        => 'ap',
-      'STAT_context_switches'  => 'aq',
-      'STAT_forks'             => 'ar',
-      # Stuff from 'w'
-      'STAT_loadavg'           => 'as',
-      'STAT_numusers'          => 'at',
-      # Stuff from 'free'
-      'STAT_memcached'         => 'au',
-      'STAT_membuffer'         => 'av',
-      'STAT_memshared'         => 'aw',
-      'STAT_memfree'           => 'ax',
-      'STAT_memused'           => 'ay',
-      'STAT_memtotal'          => 'dv',
-      # Stuff from Nginx
-      'NGINX_active_connections' => 'az',
-      'NGINX_server_accepts'     => 'b0',
-      'NGINX_server_handled'     => 'b1',
-      'NGINX_server_requests'    => 'b2',
-      'NGINX_reading'            => 'b3',
-      'NGINX_writing'            => 'b4',
-      'NGINX_waiting'            => 'b5',
-      # Stuff from memcached
-      'MEMC_rusage_user'       => 'b6',
-      'MEMC_rusage_system'     => 'b7',
-      'MEMC_curr_items'        => 'b8',
-      'MEMC_total_items'       => 'b9',
-      'MEMC_bytes'             => 'ba',
-      'MEMC_curr_connections'  => 'bb',
-      'MEMC_total_connections' => 'bc',
-      'MEMC_cmd_get'           => 'bd',
-      'MEMC_cmd_set'           => 'be',
-      'MEMC_get_misses'        => 'bf',
-      'MEMC_evictions'         => 'bg',
-      'MEMC_bytes_read'        => 'bh',
-      'MEMC_bytes_written'     => 'bi',
-      # Diskstats stuff
-      'DISK_reads'              => 'bj',
-      'DISK_reads_merged'       => 'bk',
-      'DISK_sectors_read'       => 'bl',
-      'DISK_time_spent_reading' => 'bm',
-      'DISK_writes'             => 'bn',
-      'DISK_writes_merged'      => 'bo',
-      'DISK_sectors_written'    => 'bp',
-      'DISK_time_spent_writing' => 'bq',
-      'DISK_io_ops_in_progress' => 'br',
-      'DISK_io_time'            => 'bs',
-      'DISK_io_time_weighted'   => 'bt',
-      # OpenVZ (/proc/user_beancounters) stuff.
-      'OPVZ_kmemsize_held'        => 'bu',
-      'OPVZ_kmemsize_failcnt'     => 'bv',
-      'OPVZ_lockedpages_held'     => 'bw',
-      'OPVZ_lockedpages_failcnt'  => 'bx',
-      'OPVZ_privvmpages_held'     => 'by',
-      'OPVZ_privvmpages_failcnt'  => 'bz',
-      'OPVZ_shmpages_held'        => 'c0',
-      'OPVZ_shmpages_failcnt'     => 'c1',
-      'OPVZ_numproc_held'         => 'c2',
-      'OPVZ_numproc_failcnt'      => 'c3',
-      'OPVZ_physpages_held'       => 'c4',
-      'OPVZ_physpages_failcnt'    => 'c5',
-      'OPVZ_vmguarpages_held'     => 'c6',
-      'OPVZ_vmguarpages_failcnt'  => 'c7',
-      'OPVZ_oomguarpages_held'    => 'c8',
-      'OPVZ_oomguarpages_failcnt' => 'c9',
-      'OPVZ_numtcpsock_held'      => 'ca',
-      'OPVZ_numtcpsock_failcnt'   => 'cb',
-      'OPVZ_numflock_held'        => 'cc',
-      'OPVZ_numflock_failcnt'     => 'cd',
-      'OPVZ_numpty_held'          => 'ce',
-      'OPVZ_numpty_failcnt'       => 'cf',
-      'OPVZ_numsiginfo_held'      => 'cg',
-      'OPVZ_numsiginfo_failcnt'   => 'ch',
-      'OPVZ_tcpsndbuf_held'       => 'ci',
-      'OPVZ_tcpsndbuf_failcnt'    => 'cj',
-      'OPVZ_tcprcvbuf_held'       => 'ck',
-      'OPVZ_tcprcvbuf_failcnt'    => 'cl',
-      'OPVZ_othersockbuf_held'    => 'cm',
-      'OPVZ_othersockbuf_failcnt' => 'cn',
-      'OPVZ_dgramrcvbuf_held'     => 'co',
-      'OPVZ_dgramrcvbuf_failcnt'  => 'cp',
-      'OPVZ_numothersock_held'    => 'cq',
-      'OPVZ_numothersock_failcnt' => 'cr',
-      'OPVZ_dcachesize_held'      => 'cs',
-      'OPVZ_dcachesize_failcnt'   => 'ct',
-      'OPVZ_numfile_held'         => 'cu',
-      'OPVZ_numfile_failcnt'      => 'cv',
-      'OPVZ_numiptent_held'       => 'cw',
-      'OPVZ_numiptent_failcnt'    => 'cx',
-      # Stuff from redis
-      'REDIS_connected_clients'          => 'cy',
-      'REDIS_connected_slaves'           => 'cz',
-      'REDIS_used_memory'                => 'd0',
-      'REDIS_changes_since_last_save'    => 'd1',
-      'REDIS_total_connections_received' => 'd2',
-      'REDIS_total_commands_processed'   => 'd3',
-      # Stuff from jmx
-      'JMX_heap_memory_used'             => 'd4',
-      'JMX_heap_memory_committed'        => 'd5',
-      'JMX_heap_memory_max'              => 'd6',
-      'JMX_non_heap_memory_used'         => 'd7',
-      'JMX_non_heap_memory_committed'    => 'd8',
-      'JMX_non_heap_memory_max'          => 'd9',
-      'JMX_open_file_descriptors'        => 'da',
-      'JMX_max_file_descriptors'         => 'db',
-      'JMX_current_threads_busy'         => 'el',
-      'JMX_current_thread_count'         => 'em',
-      'JMX_max_threads'                  => 'en',
-      # Stuff from mongodb
-      'MONGODB_connected_clients'        => 'dc',
-      'MONGODB_used_resident_memory'     => 'dd',
-      'MONGODB_used_mapped_memory'       => 'de',
-      'MONGODB_used_virtual_memory'      => 'df',
-      'MONGODB_index_accesses'           => 'dg',
-      'MONGODB_index_hits'               => 'dh',
-      'MONGODB_index_misses'             => 'di',
-      'MONGODB_index_resets'             => 'dj',
-      'MONGODB_back_flushes'             => 'dk',
-      'MONGODB_back_total_ms'            => 'dl',
-      'MONGODB_back_average_ms'          => 'dm',
-      'MONGODB_back_last_ms'             => 'dn',
-      'MONGODB_op_inserts'               => 'do',
-      'MONGODB_op_queries'               => 'dp',
-      'MONGODB_op_updates'               => 'dq',
-      'MONGODB_op_deletes'               => 'dr',
-      'MONGODB_op_getmores'              => 'ds',
-      'MONGODB_op_commands'              => 'dt',
-      'MONGODB_slave_lag'                => 'du',
-      # used by STAT_memtotal            => 'dv',
-      # Stuff from 'df'
-      'DISKFREE_used'                    => 'dw',
-      'DISKFREE_available'               => 'dx',
-      # Stuff from '/proc/net/dev'
-      'NETDEV_rxbytes'                   => 'dy',
-      'NETDEV_rxerrs'                    => 'dz',
-      'NETDEV_rxdrop'                    => 'e0',
-      'NETDEV_rxfifo'                    => 'e1',
-      'NETDEV_rxframe'                   => 'e2',
-      'NETDEV_txbytes'                   => 'e3',
-      'NETDEV_txerrs'                    => 'e4',
-      'NETDEV_txdrop'                    => 'e5',
-      'NETDEV_txfifo'                    => 'e6',
-      'NETDEV_txcolls'                   => 'e7',
-      'NETDEV_txcarrier'                 => 'e8',
-      # Stuff from 'netstat'
-      'NETSTAT_established'              => 'e9',
-      'NETSTAT_syn_sent'                 => 'ea',
-      'NETSTAT_syn_recv'                 => 'eb',
-      'NETSTAT_fin_wait1'                => 'ec',
-      'NETSTAT_fin_wait2'                => 'ed',
-      'NETSTAT_time_wait'                => 'ee',
-      'NETSTAT_close'                    => 'ef',
-      'NETSTAT_close_wait'               => 'eg',
-      'NETSTAT_last_ack'                 => 'eh',
-      'NETSTAT_listen'                   => 'ei',
-      'NETSTAT_closing'                  => 'ej',
-      'NETSTAT_unknown'                  => 'ek',
-      # used by 'JMX_current_threads_busy' => 'el',
-      # used by 'JMX_current_thread_count' => 'em',
-      # used by 'JMX_max_threads'          => 'en',
-      # Stuff from 'vmstat' (swap)
-      'VMSTAT_pswpin'                    => 'eo',
-      'VMSTAT_pswpout'                   => 'ep',
+      'APACHE_Requests'                   =>  'g0',
+      'APACHE_Bytes_sent'                 =>  'g1',
+      'APACHE_Idle_workers'               =>  'g2',
+      'APACHE_Busy_workers'               =>  'g3',
+      'APACHE_CPU_Load'                   =>  'g4',
+      'APACHE_Waiting_for_connection'     =>  'g5',
+      'APACHE_Starting_up'                =>  'g6',
+      'APACHE_Reading_request'            =>  'g7',
+      'APACHE_Sending_reply'              =>  'g8',
+      'APACHE_Keepalive'                  =>  'g9',
+      'APACHE_DNS_lookup'                 =>  'ga',
+      'APACHE_Closing_connection'         =>  'gb',
+      'APACHE_Logging'                    =>  'gc',
+      'APACHE_Gracefully_finishing'       =>  'gd',
+      'APACHE_Idle_cleanup'               =>  'ge',
+      'APACHE_Open_slot'                  =>  'gf',
+      'STAT_CPU_user'                     =>  'gg',
+      'STAT_CPU_nice'                     =>  'gh',
+      'STAT_CPU_system'                   =>  'gi',
+      'STAT_CPU_idle'                     =>  'gj',
+      'STAT_CPU_iowait'                   =>  'gk',
+      'STAT_CPU_irq'                      =>  'gl',
+      'STAT_CPU_softirq'                  =>  'gm',
+      'STAT_CPU_steal'                    =>  'gn',
+      'STAT_CPU_guest'                    =>  'go',
+      'STAT_interrupts'                   =>  'gp',
+      'STAT_context_switches'             =>  'gq',
+      'STAT_forks'                        =>  'gr',
+      'STAT_loadavg'                      =>  'gs',
+      'STAT_numusers'                     =>  'gt',
+      'STAT_memcached'                    =>  'gu',
+      'STAT_membuffer'                    =>  'gv',
+      'STAT_memshared'                    =>  'gw',
+      'STAT_memfree'                      =>  'gx',
+      'STAT_memused'                      =>  'gy',
+      'STAT_memtotal'                     =>  'jv',
+      'NGINX_active_connections'          =>  'gz',
+      'NGINX_server_accepts'              =>  'h0',
+      'NGINX_server_handled'              =>  'h1',
+      'NGINX_server_requests'             =>  'h2',
+      'NGINX_reading'                     =>  'h3',
+      'NGINX_writing'                     =>  'h4',
+      'NGINX_waiting'                     =>  'h5',
+      'MEMC_rusage_user'                  =>  'h6',
+      'MEMC_rusage_system'                =>  'h7',
+      'MEMC_curr_items'                   =>  'h8',
+      'MEMC_total_items'                  =>  'h9',
+      'MEMC_bytes'                        =>  'ha',
+      'MEMC_curr_connections'             =>  'hb',
+      'MEMC_total_connections'            =>  'hc',
+      'MEMC_cmd_get'                      =>  'hd',
+      'MEMC_cmd_set'                      =>  'he',
+      'MEMC_get_misses'                   =>  'hf',
+      'MEMC_evictions'                    =>  'hg',
+      'MEMC_bytes_read'                   =>  'hh',
+      'MEMC_bytes_written'                =>  'hi',
+      'DISK_reads'                        =>  'hj',
+      'DISK_reads_merged'                 =>  'hk',
+      'DISK_sectors_read'                 =>  'hl',
+      'DISK_time_spent_reading'           =>  'hm',
+      'DISK_writes'                       =>  'hn',
+      'DISK_writes_merged'                =>  'ho',
+      'DISK_sectors_written'              =>  'hp',
+      'DISK_time_spent_writing'           =>  'hq',
+      'DISK_io_ops_in_progress'           =>  'hr',
+      'DISK_io_time'                      =>  'hs',
+      'DISK_io_time_weighted'             =>  'ht',
+      'OPVZ_kmemsize_held'                =>  'hu',
+      'OPVZ_kmemsize_failcnt'             =>  'hv',
+      'OPVZ_lockedpages_held'             =>  'hw',
+      'OPVZ_lockedpages_failcnt'          =>  'hx',
+      'OPVZ_privvmpages_held'             =>  'hy',
+      'OPVZ_privvmpages_failcnt'          =>  'hz',
+      'OPVZ_shmpages_held'                =>  'i0',
+      'OPVZ_shmpages_failcnt'             =>  'i1',
+      'OPVZ_numproc_held'                 =>  'i2',
+      'OPVZ_numproc_failcnt'              =>  'i3',
+      'OPVZ_physpages_held'               =>  'i4',
+      'OPVZ_physpages_failcnt'            =>  'i5',
+      'OPVZ_vmguarpages_held'             =>  'i6',
+      'OPVZ_vmguarpages_failcnt'          =>  'i7',
+      'OPVZ_oomguarpages_held'            =>  'i8',
+      'OPVZ_oomguarpages_failcnt'         =>  'i9',
+      'OPVZ_numtcpsock_held'              =>  'ia',
+      'OPVZ_numtcpsock_failcnt'           =>  'ib',
+      'OPVZ_numflock_held'                =>  'ic',
+      'OPVZ_numflock_failcnt'             =>  'id',
+      'OPVZ_numpty_held'                  =>  'ie',
+      'OPVZ_numpty_failcnt'               =>  'if',
+      'OPVZ_numsiginfo_held'              =>  'ig',
+      'OPVZ_numsiginfo_failcnt'           =>  'ih',
+      'OPVZ_tcpsndbuf_held'               =>  'ii',
+      'OPVZ_tcpsndbuf_failcnt'            =>  'ij',
+      'OPVZ_tcprcvbuf_held'               =>  'ik',
+      'OPVZ_tcprcvbuf_failcnt'            =>  'il',
+      'OPVZ_othersockbuf_held'            =>  'im',
+      'OPVZ_othersockbuf_failcnt'         =>  'in',
+      'OPVZ_dgramrcvbuf_held'             =>  'io',
+      'OPVZ_dgramrcvbuf_failcnt'          =>  'ip',
+      'OPVZ_numothersock_held'            =>  'iq',
+      'OPVZ_numothersock_failcnt'         =>  'ir',
+      'OPVZ_dcachesize_held'              =>  'is',
+      'OPVZ_dcachesize_failcnt'           =>  'it',
+      'OPVZ_numfile_held'                 =>  'iu',
+      'OPVZ_numfile_failcnt'              =>  'iv',
+      'OPVZ_numiptent_held'               =>  'iw',
+      'OPVZ_numiptent_failcnt'            =>  'ix',
+      'REDIS_connected_clients'           =>  'iy',
+      'REDIS_connected_slaves'            =>  'iz',
+      'REDIS_used_memory'                 =>  'j0',
+      'REDIS_changes_since_last_save'     =>  'j1',
+      'REDIS_total_connections_received'  =>  'j2',
+      'REDIS_total_commands_processed'    =>  'j3',
+      'JMX_heap_memory_used'              =>  'j4',
+      'JMX_heap_memory_committed'         =>  'j5',
+      'JMX_heap_memory_max'               =>  'j6',
+      'JMX_non_heap_memory_used'          =>  'j7',
+      'JMX_non_heap_memory_committed'     =>  'j8',
+      'JMX_non_heap_memory_max'           =>  'j9',
+      'JMX_open_file_descriptors'         =>  'ja',
+      'JMX_max_file_descriptors'          =>  'jb',
+      'JMX_current_threads_busy'          =>  'kl',
+      'JMX_current_thread_count'          =>  'km',
+      'JMX_max_threads'                   =>  'kn',
+      'MONGODB_connected_clients'         =>  'jc',
+      'MONGODB_used_resident_memory'      =>  'jd',
+      'MONGODB_used_mapped_memory'        =>  'je',
+      'MONGODB_used_virtual_memory'       =>  'jf',
+      'MONGODB_index_accesses'            =>  'jg',
+      'MONGODB_index_hits'                =>  'jh',
+      'MONGODB_index_misses'              =>  'ji',
+      'MONGODB_index_resets'              =>  'jj',
+      'MONGODB_back_flushes'              =>  'jk',
+      'MONGODB_back_total_ms'             =>  'jl',
+      'MONGODB_back_average_ms'           =>  'jm',
+      'MONGODB_back_last_ms'              =>  'jn',
+      'MONGODB_op_inserts'                =>  'jo',
+      'MONGODB_op_queries'                =>  'jp',
+      'MONGODB_op_updates'                =>  'jq',
+      'MONGODB_op_deletes'                =>  'jr',
+      'MONGODB_op_getmores'               =>  'js',
+      'MONGODB_op_commands'               =>  'jt',
+      'MONGODB_slave_lag'                 =>  'ju',
+      'DISKFREE_used'                     =>  'jw',
+      'DISKFREE_available'                =>  'jx',
+      'NETDEV_rxbytes'                    =>  'jy',
+      'NETDEV_rxerrs'                     =>  'jz',
+      'NETDEV_rxdrop'                     =>  'k0',
+      'NETDEV_rxfifo'                     =>  'k1',
+      'NETDEV_rxframe'                    =>  'k2',
+      'NETDEV_txbytes'                    =>  'k3',
+      'NETDEV_txerrs'                     =>  'k4',
+      'NETDEV_txdrop'                     =>  'k5',
+      'NETDEV_txfifo'                     =>  'k6',
+      'NETDEV_txcolls'                    =>  'k7',
+      'NETDEV_txcarrier'                  =>  'k8',
+      'NETSTAT_established'               =>  'k9',
+      'NETSTAT_syn_sent'                  =>  'ka',
+      'NETSTAT_syn_recv'                  =>  'kb',
+      'NETSTAT_fin_wait1'                 =>  'kc',
+      'NETSTAT_fin_wait2'                 =>  'kd',
+      'NETSTAT_time_wait'                 =>  'ke',
+      'NETSTAT_close'                     =>  'kf',
+      'NETSTAT_close_wait'                =>  'kg',
+      'NETSTAT_last_ack'                  =>  'kh',
+      'NETSTAT_listen'                    =>  'ki',
+      'NETSTAT_closing'                   =>  'kj',
+      'NETSTAT_unknown'                   =>  'kk',
+      'VMSTAT_pswpin'                     =>  'ko',
+      'VMSTAT_pswpout'                    =>  'kp',
    );
 
    # Prepare and return the output.  The output we have right now is the whole
@@ -815,7 +799,7 @@ function proc_stat_parse ( $options, $output ) {
       if ( preg_match_all('/\w+/', $line, $words) ) {
          $words = $words[0];
          if ( $words[0] == "cpu" ) {
-            for ( $i = 1; $i < count($words) && $i < count($cpu_types); ++$i ) {
+            for ( $i = 1; $i < count($words) && $i <= count($cpu_types); ++$i ) {
                $result[$cpu_types[$i - 1]] = $words[$i];
             }
          }
@@ -903,14 +887,15 @@ function w_parse ( $options, $output ) {
    # Notice on some systems id doesn't show the number of users. It also might
    # be localized: Utilizadores, 1,58 or 1.58
    foreach ( explode("\n", $output) as $line ) {
-      if ( preg_match_all('/(\d+) u.*[s]*/', $line, $words) {
-         $result['STAT_numusers'] = $words[1][0];
-      }
-      else {
+      $line = trim($line);
+      if ( strlen($line) > 0 ) {
          $result['STAT_numusers'] = 0;
-      }
-      if ( preg_match_all('(\d+[,.]\d+)$/', $line, $words) ) {
-         $result['STAT_loadavg']  = $words[1][0];
+         if ( preg_match('/(\d+) u[^ ]*,/', $line, $words) ) {
+            $result['STAT_numusers'] = $words[1];
+         }
+         if ( preg_match('/(\d+[,.]\d+)$/', $line, $words) ) {
+            $result['STAT_loadavg']  = $words[1];
+         }
       }
    }
    return $result;
@@ -926,39 +911,45 @@ function apache_cachefile ( $options ) {
 }
 
 function apache_cmdline ( $options ) {
-   global $status_server, $status_url, $http_user, $http_pass;
-   $srv = isset($options['server']) ? $options['server'] : $status_server;
+   global $status_server, $status_url, $http_user, $http_pass, $http_port;
+   $srv = $status_server;
+   if ( isset($options['server']) ) {
+      $srv = $options['server'];
+   }
+   elseif ( ! $options['use-ssh'] ) {
+      $srv = $options['host'];
+   }
    $url = isset($options['url'])    ? $options['url']    : $status_url;
    $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
    $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
-   $port = isset($options['port2']) ? ":$options[port2]" : '';
+   $port = isset($options['port2']) ? ":$options[port2]" : ":$http_port";
    $auth = ($user ? "--http-user=$user" : '') . ' ' . ($pass ? "--http-password=$pass" : '');
    return "wget $auth -U Cacti/1.0 -q -O - -T 5 \"http://$srv$port$url?auto\"";
 }
 
 function apache_parse ( $options, $output ) {
    $result = array(
-      'Requests'     => null,
-      'Bytes_sent'   => null,
-      'Idle_workers' => null,
-      'Busy_workers' => null,
-      'CPU_Load'     => null,
+      'APACHE_Requests'     => null,
+      'APACHE_Bytes_sent'   => null,
+      'APACHE_Idle_workers' => null,
+      'APACHE_Busy_workers' => null,
+      'APACHE_CPU_Load'     => null,
       # More are added from $scoreboard below.
    );
 
    # Mapping from Scoreboard statuses to friendly labels
    $scoreboard = array(
-      '_' => 'Waiting_for_connection',
-      'S' => 'Starting_up',
-      'R' => 'Reading_request',
-      'W' => 'Sending_reply',
-      'K' => 'Keepalive',
-      'D' => 'DNS_lookup',
-      'C' => 'Closing_connection',
-      'L' => 'Logging',
-      'G' => 'Gracefully_finishing',
-      'I' => 'Idle_cleanup',
-      '.' => 'Open_slot',
+      '_' => 'APACHE_Waiting_for_connection',
+      'S' => 'APACHE_Starting_up',
+      'R' => 'APACHE_Reading_request',
+      'W' => 'APACHE_Sending_reply',
+      'K' => 'APACHE_Keepalive',
+      'D' => 'APACHE_DNS_lookup',
+      'C' => 'APACHE_Closing_connection',
+      'L' => 'APACHE_Logging',
+      'G' => 'APACHE_Gracefully_finishing',
+      'I' => 'APACHE_Idle_cleanup',
+      '.' => 'APACHE_Open_slot',
    );
    foreach ( $scoreboard as $key => $val ) {
       # These are not null, they are zero, when they aren't in the output.
@@ -967,11 +958,11 @@ function apache_parse ( $options, $output ) {
 
    # Mapping from line prefix to data item name
    $mapping = array (
-      "Total Accesses" => 'Requests',
-      "Total kBytes"   => 'Bytes_sent',
-      "CPULoad"        => 'CPU_Load',
-      "BusyWorkers"    => 'Busy_workers',
-      "IdleWorkers"    => 'Idle_workers',
+      "Total Accesses" => 'APACHE_Requests',
+      "Total kBytes"   => 'APACHE_Bytes_sent',
+      "CPULoad"        => 'APACHE_CPU_Load',
+      "BusyWorkers"    => 'APACHE_Busy_workers',
+      "IdleWorkers"    => 'APACHE_Idle_workers',
    );
 
    foreach ( explode("\n", $output ) as $line ) {
@@ -1007,7 +998,13 @@ function nginx_cachefile ( $options ) {
 
 function nginx_cmdline ( $options ) {
    global $status_server, $status_url, $http_user, $http_pass;
-   $srv = isset($options['server']) ? $options['server'] : $status_server;
+   $srv = $status_server;
+   if ( isset($options['server']) ) {
+      $srv = $options['server'];
+   }
+   elseif ( ! $options['use-ssh'] ) {
+      $srv = $options['host'];
+   }
    $url = isset($options['url'])    ? $options['url']    : $status_url;
    $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
    $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;

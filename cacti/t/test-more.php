@@ -114,7 +114,9 @@ function ok($pass, $test_name = '')
             $line = $caller['1']['line'];
         }
 
-        $file = str_replace($_SERVER['SERVER_ROOT'], 't', $file);
+        if ( isset($_SERVER['SERVER_ROOT']) ) {
+           $file = str_replace($_SERVER['SERVER_ROOT'], 't', $file);
+        }
 
         diag("    Failed test ($file at line $line)");
     }

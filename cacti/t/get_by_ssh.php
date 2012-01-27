@@ -55,10 +55,10 @@ is(
       'file'    => 'samples/proc_stat-001.txt',
       'type'    => 'proc_stat',
       'host'    => 'localhost',
-      'items'   => 'ag,ah,ai,aj,ak,al,am,an,ao,ap,aq,ar'
+      'items'   => 'gg,gh,gi,gj,gk,gl,gm,gn,go,gp,gq,gr'
    )),
-   'ag:24198 ah:0 ai:69614 aj:2630536 ak:558 al:5872 am:1572 an:0 ao:0'
-      . ' ap:339490 aq:697948 ar:11558',
+   'gg:24198 gh:0 gi:69614 gj:2630536 gk:558 gl:5872 gm:1572 gn:0 go:0'
+      . ' gp:339490 gq:697948 gr:11558',
    'main(samples/proc_stat-001.txt)'
 );
 
@@ -93,9 +93,9 @@ is(
       'file'    => 'samples/free-001.txt',
       'type'    => 'memory',
       'host'    => 'localhost',
-      'items'   => 'au,av,aw,ax,ay'
+      'items'   => 'gu,gv,gw,gx,gy'
    )),
-   'au:22106112 av:1531904 aw:0 ax:17928192 ay:21389312',
+   'gu:22106112 gv:1531904 gw:0 gx:17928192 gy:21389312',
    'main(samples/free-001.txt)'
 );
 
@@ -149,10 +149,10 @@ is(
       'file'    => 'samples/w-001.txt',
       'type'    => 'w',
       'host'    => 'localhost',
-      'items'   => 'as,at'
+      'items'   => 'gs,gt'
    )),
-   'as:1.43 at:2',
-   'main(samples/w-002.txt)'
+   'gs:1.43 gt:2',
+   'main(samples/w-001.txt)'
 );
 
 is_deeply(
@@ -201,22 +201,22 @@ is_deeply(
 is_deeply(
    apache_parse( null, file_get_contents('samples/apache-001.txt') ),
    array(
-      'Requests'               => '3452389',
-      'Bytes_sent'             => '23852769280',
-      'Idle_workers'           => '8',
-      'Busy_workers'           => '1',
-      'CPU_Load'               => '.023871',
-      'Waiting_for_connection' => '8',
-      'Starting_up'            => 0,
-      'Reading_request'        => 0,
-      'Sending_reply'          => '1',
-      'Keepalive'              => 0,
-      'DNS_lookup'             => 0,
-      'Closing_connection'     => 0,
-      'Logging'                => 0,
-      'Gracefully_finishing'   => 0,
-      'Idle_cleanup'           => 0,
-      'Open_slot'              => '247',
+      'APACHE_Requests'               => '3452389',
+      'APACHE_Bytes_sent'             => '23852769280',
+      'APACHE_Idle_workers'           => '8',
+      'APACHE_Busy_workers'           => '1',
+      'APACHE_CPU_Load'               => '.023871',
+      'APACHE_Waiting_for_connection' => '8',
+      'APACHE_Starting_up'            => 0,
+      'APACHE_Reading_request'        => 0,
+      'APACHE_Sending_reply'          => '1',
+      'APACHE_Keepalive'              => 0,
+      'APACHE_DNS_lookup'             => 0,
+      'APACHE_Closing_connection'     => 0,
+      'APACHE_Logging'                => 0,
+      'APACHE_Gracefully_finishing'   => 0,
+      'APACHE_Idle_cleanup'           => 0,
+      'APACHE_Open_slot'              => '247',
    ),
    'samples/apache-001.txt'
 );
@@ -224,22 +224,22 @@ is_deeply(
 is_deeply(
    apache_parse( null, file_get_contents('samples/apache-002.txt') ),
    array(
-      'Requests'               => '368',
-      'Bytes_sent'             => 1151 * 1024,
-      'Idle_workers'           => '19',
-      'Busy_workers'           => '1',
-      'CPU_Load'               => '.0284617',
-      'Waiting_for_connection' => '19',
-      'Starting_up'            => 0,
-      'Reading_request'        => 0,
-      'Sending_reply'          => '1',
-      'Keepalive'              => 0,
-      'DNS_lookup'             => 0,
-      'Closing_connection'     => 0,
-      'Logging'                => 0,
-      'Gracefully_finishing'   => 0,
-      'Idle_cleanup'           => 0,
-      'Open_slot'              => '236',
+      'APACHE_Requests'               => '368',
+      'APACHE_Bytes_sent'             => 1151 * 1024,
+      'APACHE_Idle_workers'           => '19',
+      'APACHE_Busy_workers'           => '1',
+      'APACHE_CPU_Load'               => '.0284617',
+      'APACHE_Waiting_for_connection' => '19',
+      'APACHE_Starting_up'            => 0,
+      'APACHE_Reading_request'        => 0,
+      'APACHE_Sending_reply'          => '1',
+      'APACHE_Keepalive'              => 0,
+      'APACHE_DNS_lookup'             => 0,
+      'APACHE_Closing_connection'     => 0,
+      'APACHE_Logging'                => 0,
+      'APACHE_Gracefully_finishing'   => 0,
+      'APACHE_Idle_cleanup'           => 0,
+      'APACHE_Open_slot'              => '236',
    ),
    'samples/apache-001.txt'
 );
@@ -303,11 +303,11 @@ is(
       'file'    => 'samples/diskstats-001.txt',
       'type'    => 'diskstats',
       'host'    => 'localhost',
-      'items'   => 'bj,bk,bl,bm,bn,bo,bp,bq,br,bs,bt',
+      'items'   => 'hj,hk,hl,hm,hn,ho,hp,hq,hr,hs,ht',
       'device'  => 'hda1'
    )),
-   'bj:12043 bk:387 bl:300113 bm:6472 bn:12737 bo:21340 bp:272616 bq:22360 '
-      . 'br:0 bs:12368 bt:28832',
+   'hj:12043 hk:387 hl:300113 hm:6472 hn:12737 ho:21340 hp:272616 hq:22360 '
+      . 'hr:0 hs:12368 ht:28832',
    'main(samples/diskstats-001.txt)'
 );
 
@@ -363,9 +363,9 @@ is(
       'file'    => 'samples/openvz-001.txt',
       'type'    => 'openvz',
       'host'    => 'localhost',
-      'items'   => 'bu,bv,bw,bx,by,bz,c0',
+      'items'   => 'hu,hv,hw,hx,hy,hz,i0',
    )),
-   'bu:8906701 bv:0 bw:0 bx:0 by:39695 bz:0 c0:688',
+   'hu:8906701 hv:0 hw:0 hx:0 hy:39695 hz:0 i0:688',
    'main(samples/openvz-001.txt)'
 );
 
@@ -387,9 +387,9 @@ is(
       'file'    => 'samples/redis-001.txt',
       'type'    => 'redis',
       'host'    => 'localhost',
-      'items'   => 'cy,cz,d0,d1,d2,d3',
+      'items'   => 'iy,iz,j0,j1,j2,j3',
    )),
-   'cy:119 cz:911 d0:412372 d1:4321 d2:3333 d3:5',
+   'iy:119 iz:911 j0:412372 j1:4321 j2:3333 j3:5',
    'main(samples/redis-001.txt)'
 );
 
@@ -417,10 +417,10 @@ is(
          'file'  => 'samples/jmx-001.txt',
          'type'  => 'jmx',
          'host'  => 'localhost',
-         'items' => 'd4,d5,d6,d7,d8,d9,da,db,el,em,en',
+         'items' => 'j4,j5,j6,j7,j8,j9,ja,jb,kl,km,kn',
       )
    ),
-   'd4:52685256 d5:205979648 d6:1864171520 d7:55160928 d8:61603840 d9:318767104 da:60 db:1024 el:7 em:172 en:200',
+   'j4:52685256 j5:205979648 j6:1864171520 j7:55160928 j8:61603840 j9:318767104 ja:60 jb:1024 kl:7 km:172 kn:200',
    'main(samples/jmx-001.txt)'
 );
 
@@ -455,9 +455,9 @@ is(
       'file'    => 'samples/mongodb-001.txt',
       'type'    => 'mongodb',
       'host'    => 'localhost',
-      'items'   => 'dc,dd,de,df,dg,dh,di,dj,dk,dl,dm,dn,do,dp,dq,dr,ds,dt,du',
+      'items'   => 'jc,jd,je,jf,jg,jh,ji,jj,jk,jl,jm,jn,jo,jp,jq,jr,js,jt,ju',
    )),
-   'dc:3 dd:16029581312 de:64981303296 df:65457356800 dg:1589814 dh:1589814 di:0 dj:0 dk:4883 dl:2309034 dm:472 dn:36 do:1584705 dp:145518 dq:2521129 dr:601 ds:2268817 dt:17810 du:0',
+   'jc:3 jd:16029581312 je:64981303296 jf:65457356800 jg:1589814 jh:1589814 ji:0 jj:0 jk:4883 jl:2309034 jm:472 jn:36 jo:1584705 jp:145518 jq:2521129 jr:601 js:2268817 jt:17810 ju:0',
    'main(samples/mongodb-001.txt)'
 );
 
@@ -475,10 +475,10 @@ is(
       'file'    => 'samples/df-001.txt',
       'type'    => 'df',
       'host'    => 'localhost',
-      'items'   => 'dw,dx',
+      'items'   => 'jw,jx',
       'volume'  => '/dev/vzfs',
    )),
-   'dw:4596444160 dx:26860835840',
+   'jw:4596444160 jx:26860835840',
    'main(samples/df-001.txt)'
 );
 
@@ -496,10 +496,10 @@ is(
       'file'    => 'samples/df-002.txt',
       'type'    => 'df',
       'host'    => 'localhost',
-      'items'   => 'dw,dx',
+      'items'   => 'jw,jx',
       'volume'  => '/dev/mapper/vg00-server',
    )),
-   'dw:437121024 dx:3575664640',
+   'jw:437121024 jx:3575664640',
    'main(samples/df-002.txt)'
 );
 
@@ -526,10 +526,10 @@ is(
       'file'    => 'samples/netdev-001.txt',
       'type'    => 'netdev',
       'host'    => 'localhost',
-      'items'   => 'dy,dz,e0,e1,e2,e3,e4,e5,e6,e7,e8',
+      'items'   => 'jy,jz,k0,k1,k2,k3,k4,k5,k6,k7,k8',
       'device'  => 'eth0',
    )),
-   'dy:99704481 dz:0 e0:0 e1:0 e2:0 e3:21749178 e4:0 e5:0 e6:0 e7:0 e8:0',
+   'jy:99704481 jz:0 k0:0 k1:0 k2:0 k3:21749178 k4:0 k5:0 k6:0 k7:0 k8:0',
    'main(samples/netdev-001.txt)'
 );
 
@@ -557,9 +557,9 @@ is(
       'file'    => 'samples/netstat-001.txt',
       'type'    => 'netstat',
       'host'    => 'localhost',
-      'items'   => 'e9,ea,eb,ec,ed,ee,ef,eg,eh,ei,ej,ek',
+      'items'   => 'k9,ka,kb,kc,kd,ke,kf,kg,kh,ki,kj,kk',
    )),
-   'e9:7 ea:0 eb:0 ec:1 ed:27 ee:6412 ef:0 eg:0 eh:0 ei:11 ej:0 ek:0',
+   'k9:7 ka:0 kb:0 kc:1 kd:27 ke:6412 kf:0 kg:0 kh:0 ki:11 kj:0 kk:0',
    'main(samples/netstat-001.txt)'
 );
 
@@ -577,9 +577,9 @@ is(
       'file'    => 'samples/vmstat-001.txt',
       'type'    => 'vmstat',
       'host'    => 'localhost',
-      'items'   => 'eo,ep',
+      'items'   => 'ko,kp',
    )),
-   'eo:32 ep:1274',
+   'ko:32 kp:1274',
    'main(samples/vmstat-001.txt)'
 );
 

@@ -46,9 +46,9 @@ Pending flushes (fsync) log: 0; buffer pool: 0
 -------------------------------------
 INSERT BUFFER AND ADAPTIVE HASH INDEX
 -------------------------------------
-Ibuf: size 1, free list len 0, seg size 2, 0 merges
+Ibuf: size 1, free list len 0, seg size 2, 9 merges
 merged operations:
- insert 0, delete mark 0, delete 0
+ insert 4, delete mark 6, delete 7
 discarded operations:
  insert 0, delete mark 0, delete 0
 Hash table size 276707, node heap has 0 buffer(s)
