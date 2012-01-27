@@ -49,10 +49,10 @@ main() {
    mysql_exec 'SHOW SLAVE STATUS\G' > "${TEMP}"
    if [ $? = 0 ]; then
       NOTE=$(awk '$1 ~ /_Running:|Last_Error:/{print substr($0, 1, 100)}' "${TEMP}")
-      if grep 'Last_Error: .' >/dev/null 2>&1 "${TEMP}" then
+      if grep 'Last_Error: .' "${TEMP}" >/dev/null 2>&1; then
          EXITSTATUS=$STATE_CRITICAL
          NOTE="CRIT $NOTE"
-      elif grep '_Running: No' >/dev/null 2>&1 "${TEMP}" then
+      elif grep '_Running: No' "${TEMP}" >/dev/null 2>&1; then
          if [ "${OPT_CRIT}" ]; then
             EXITSTATUS=$STATE_CRITICAL
             NOTE="CRIT $NOTE"
