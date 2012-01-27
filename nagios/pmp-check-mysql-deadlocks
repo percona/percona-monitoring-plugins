@@ -38,7 +38,7 @@ main() {
          -p)        shift; OPT_PASS="${1}"; shift; ;;
          -P)        shift; OPT_PORT="${1}"; shift; ;;
          -S)        shift; OPT_SOCK="${1}"; shift; ;;
-         -t)        shift; OPT_TABLE="${1}";  shift; ;;
+         -T)        shift; OPT_TABLE="${1}";  shift; ;;
          -w)        shift; OPT_WARN="${1}"; shift; ;;
          --version) grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
          --help)    perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
@@ -109,7 +109,7 @@ pmp-check-mysql-deadlocks - Alert when pt-deadlock-logger has recorded too many 
     -p PASS     MySQL password.
     -P PORT     MySQL port.
     -S SOCKET   MySQL socket file.
-    -t TABLE    The database.table that pt-deadlock-logger uses; default percona.deadlocks.
+    -T TABLE    The database.table that pt-deadlock-logger uses; default percona.deadlocks.
     -w WARN     Warning threshold; default 12.
     --help      Print help and exit.
     --version   Print version and exit.
