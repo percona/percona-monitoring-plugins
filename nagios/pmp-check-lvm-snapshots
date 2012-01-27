@@ -37,14 +37,14 @@ check_lvm_snapshot_fullness() {
 # ########################################################################
 main() {
 
-   # Get command-line options
+   # Get options
    for o; do
       case "${o}" in
          -w)        shift; OPT_WARN="${1}"; shift; ;;
          -c)        shift; OPT_CRIT="${1}"; shift; ;;
          --version) grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
          --help)    perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
-         -*)        echo "Unknown command-line option ${o}.  Try --help."; exit 1; ;;
+         -*)        echo "Unknown option ${o}.  Try --help."; exit 1; ;;
       esac
    done
    OPT_WARN=${OPT_WARN:-90}

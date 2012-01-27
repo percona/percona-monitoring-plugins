@@ -26,7 +26,7 @@ EXITSTATUS=$STATE_OK
 # Run the program.
 # ########################################################################
 main() {
-   # Get command-line options
+   # Get options
    for o; do
       case "${o}" in
          -c)        shift; OPT_CRIT="${1}"; shift; ;;
@@ -38,7 +38,7 @@ main() {
          -w)        shift; OPT_WARN="${1}"; shift; ;;
          --version) grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
          --help)    perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
-         -*)        echo "Unknown command-line option ${o}.  Try --help."; exit 1; ;;
+         -*)        echo "Unknown option ${o}.  Try --help."; exit 1; ;;
       esac
    done
    OPT_CRIT=${OPT_CRIT:-32}
