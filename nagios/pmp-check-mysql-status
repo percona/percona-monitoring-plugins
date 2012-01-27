@@ -30,10 +30,10 @@ main() {
    for o; do
       case "${o}" in
          -c)        shift; OPT_CRIT="${1}"; shift; ;;
+         -C)        shift; OPT_COMP="${1}"; shift; ;;
          -H)        shift; OPT_HOST="${1}"; shift; ;;
          -I)        shift; OPT_INCR="${1}"; shift; ;;
          -l)        shift; OPT_USER="${1}"; shift; ;;
-         -L)        shift; OPT_LESS="1";           ;;
          -o)        shift; OPT_OPER="${1}"; shift; ;;
          -p)        shift; OPT_PASS="${1}"; shift; ;;
          -P)        shift; OPT_PORT="${1}"; shift; ;;
@@ -47,6 +47,8 @@ main() {
          -*)        echo "Unknown option ${o}.  Try --help."; exit 1; ;;
       esac
    done
+   # Set default option values
+   OPT_COMP="${OPT_COMP:->=}"
 
    # Validate the options.
    OPT_ERR=""
@@ -60,9 +62,22 @@ main() {
       OPT_ERR="you specified -y but not -o"
    elif [ "${OPT_TRAN}" -a -z "${OPT_VAR2}" ]; then
       OPT_ERR="you specified -T but not -y"
-   elif [ "${OPT_TRAN}" != "pct" ]; then
-      OPT_ERR="-T must be pct"
+   elif [ "${OPT_TRAN}" ]; then
+      case "${OPT_TRAN}" in
+         pct)
+            ;;
+         *)
+            OPT_ERR="-T must be pct"
+            ;;
+      esac
    fi
+   case "${OPT_COMP}" in
+      '=='|'>='|'>'|'<'|'<=')
+         ;;
+      *)
+         OPT_ERR="Invalid -C option ${OPT_COMP}; use == >= > < <="
+         ;;
+   esac
    if [ "${OPT_OPER}" ]; then
       case "${OPT_OPER}" in
          /|'*'|+|-)
@@ -79,22 +94,36 @@ main() {
    fi
 
    EXITSTATUS=$STATE_UNKNOWN
-   NOTE="UNK could not resolve the query."
+   NOTE="UNK could not evaluate the expression." 
 
+   # TODO: use a cache file? Does it matter?
    # Set up a temporary file
    local TEMP1=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
    local TEMP2=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
    trap 'rm -rf "${TEMP1}" "${TEMP1}" >/dev/null 2>&1' EXIT
 
    if get_status_variables "${TEMP1}" "${TEMP2}" "${OPT_INCR}"; then
-      # TODO
       LEVEL=$(compute_result "${TEMP1}" "${OPT_VAR1}" "${OPT_OPER}" "${OPT_VAR2}" "${OPT_TRAN}")
-      if [ "${LEVEL:-0}" -lt "${OPT_WARN}" ]; then
-         EXITSTATUS=$STATE_WARNING
-         NOTE="WARN $NOTE"
-      else
-         NOTE="OK $NOTE"
+      if [ $? = 0 -a -n "${LEVEL}" ]; then
+         compare_result "${LEVEL}" "${OPT_CRIT}" "${OPT_WARN}" "${OPT_COMP}"
+         EXITSTATUS=$?
+         NOTE="${OPT_VAR1}${OPT_OPER:+ ${OPT_OPER}}${OPT_VAR2:+ ${OPT_VAR2}}${OPT_TRAN:+ (${OPT_TRAN})}"
+         NOTE="${NOTE} = ${LEVEL}"
+         case $EXITSTATUS in
+            $STATE_OK)
+               NOTE="OK $NOTE"
+               ;;
+            $STATE_CRITICAL)
+               NOTE="CRIT $NOTE"
+               ;;
+            $STATE_WARNING)
+               NOTE="WARN $NOTE"
+               ;;
+         esac
       fi
+      set +x
+   else
+      NOTE="UNK could not get MySQL status/variables."
    fi
 
    echo $NOTE
@@ -111,20 +140,14 @@ mysql_exec() {
 }
 
 # ########################################################################
-# Compares the variable to the thresholds. Arguments: VAR CRIT WARN LESS
+# Compares the variable to the thresholds. Arguments: VAR CRIT WARN CMP
 # Returns nothing; exits with OK/WARN/CRIT.
 # ########################################################################
 compare_result() {
    local VAR="${1}"
    local CRIT="${2}"
    local WARN="${3}"
-   local LESS="${4}"
-   if [ "${LESS}" ]; then
-      # TODO: maybe someday we can have an option for strictly greater/less
-      CMP="<="
-   else
-      CMP=">="
-   fi
+   local CMP="${4}"
    echo 1 | awk "END {
       if ( \"${CRIT}\" != \"\" ) {
          if ( ${VAR} ${CMP} ${CRIT:-0} ) {
@@ -181,7 +204,7 @@ compute_result() {
                print val;
             }
             else {
-               print got1, got2 | \"cat 2>&1\";
+               print got1, got2 | \"cat 1>&2\";
                exit 1;
             }
          }
@@ -189,7 +212,24 @@ compute_result() {
    else
       # This is the simplest case. We're just extracting a single variable and
       # returning it.
-      awk -F'\t' -v var1="${VAR1}" '$1 == var1 { print $2 }' "${TEMP}"
+      awk -F'\t' -v var1="${VAR1}" '
+         BEGIN {
+            got = 0;
+         }
+         $1 == var1 {
+            val = $2;
+            got = 1;
+         }
+         END {
+            if ( got == 1 ) {
+               print val;
+            }
+            else {
+               print "Unknown variable", var1 | "cat 1>&2";
+               exit 1;
+            }
+         }
+      ' "${TEMP}"
    fi
 }
 
@@ -201,7 +241,7 @@ compute_result() {
 # ########################################################################
 get_status_variables() {
    if [ "$3" ]; then
-      mysql_exec "SHOW /*!50000 GLOBAL*/ STATUS" > "${2}" || return 1
+      mysql_exec "SHOW /*!50000 GLOBAL*/ STATUS" > "${2}" || exit 1
       sleep "$3"
       # Technically we ought to use another temp file, and check the return
       # status of this mysql_exec, but if the first one worked it's likely that
@@ -219,7 +259,7 @@ get_status_variables() {
          }
          ' > "${1}"
    else
-      mysql_exec "SHOW /*!50000 GLOBAL*/ STATUS" > "${1}" || return 1
+      mysql_exec "SHOW /*!50000 GLOBAL*/ STATUS" > "${1}" || exit 1
    fi
    mysql_exec "SHOW /*!40101 GLOBAL*/ VARIABLES" >> "${1}"
 }
@@ -248,10 +288,10 @@ pmp-check-mysql-status - Check MySQL SHOW GLOBAL STATUS output.
   Usage: pmp-check-mysql-status [OPTIONS]
   Options:
     -c CRIT     Critical threshold.
+    -C COMPARE  Comparison operator to apply to -c and -w; default >=.
     -H HOST     MySQL hostname.
     -I INCR     Make SHOW STATUS incremental over this delay.
     -l USER     MySQL username.
-    -L          Comparisons to -c and -w are less-than.
     -o OPERATOR The operator to apply to -x and -y.
     -p PASS     MySQL password.
     -P PORT     MySQL port.
@@ -272,9 +312,7 @@ MySQL and evaluates expressions against them.  The general syntax is as follows:
   VAR1 [ OPERATOR VAR2 [ TRANSFORM ] ]
 
 The result of evaluating this is compared against the -w and -c options as usual
-to determine whether to raise a warning or critical alert.  You can optionally
-invert the comparison so that the alert is raised if the result is less than the
-threshold, not greater than.
+to determine whether to raise a warning or critical alert.
 
 Note that all of the examples provided below are simply for illustrative
 purposes and are not supposed to be recommendations for what to monitor. You
@@ -286,9 +324,10 @@ and a critical alert if it is 40 or over:
 
   -x Threads_running -w 20 -c 40
 
-The threshold is implemented as greater-or-equals, not strictly greater-than, so
-a value of 20 is a warning and a value of 40 is critical.  You can switch this
-to less-or-equals with the -L option.
+The threshold is implemented as greater-or-equals by default, not strictly
+greater-than, so a value of 20 is a warning and a value of 40 is critical.  You
+can switch this to less-or-equals or other operators with the -C option, which
+accepts the arithmetic comparison operators ==, >, >=, <, and <=.
 
 You can use any variable that is present in SHOW VARIABLES or SHOW STATUS. If
 the variable is not found, there is an error.  To warn if Threads_connected
@@ -312,6 +351,10 @@ tables per second, over a 5-second sampling period:
 
   -x Created_tmp_disk_tables -o / -y Uptime -I 5 -w 10
 
+That is somewhat contrived, because it could also be written as follows:
+
+  -x Created_tmp_disk_tables -I 5 -w 50
+
 The -I option has the side effect of removing any non-numeric SHOW STATUS
 variables.  Be careful not to set the -I option too large, or Nagios will simply
 time the plugin out, usually after about 10 seconds.  
@@ -324,7 +367,12 @@ things; and most of the counters in SHOW STATUS are not useful for actionable
 alerts anyway.  A dubiously useful example for the query cache might be to alert
 if the hit-to-insert ratio falls below 2:1, as follows:
 
-  -x Qcache_hits -o / -y Qcache_inserts -L -w 2
+  -x Qcache_hits -o / -y Qcache_inserts -C '<' -w 2
+
+Some people might suggest that the following is a more useful alert for the
+query cache:
+
+  -x query_cache_size -c 1
 
 =head1 DOWNLOADING
 
