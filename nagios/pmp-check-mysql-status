@@ -121,7 +121,6 @@ main() {
                ;;
          esac
       fi
-      set +x
    else
       NOTE="UNK could not get MySQL status/variables."
    fi
