@@ -1,4 +1,4 @@
-#summary Cacti templates for graphing Nginx
+.. _cacti_nginx_templates:
 
 <wiki:toc max_depth="1" />
 

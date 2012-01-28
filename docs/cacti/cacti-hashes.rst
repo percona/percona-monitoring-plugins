@@ -1,4 +1,4 @@
-#summary How to work with Cacti hashes
+.. _cacti_cacti_hashes:
 
 The Cacti way of identifying things is that when something is created via the interface, it basically generates a GUID.  This has a few characters of metadata: the text `hash_`, the object type, the Cacti version that generated the GUID, and a bunch of randomness.
 

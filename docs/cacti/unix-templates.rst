@@ -1,6 +1,4 @@
-#summary Cacti templates for Unix system statistics
-
-<wiki:toc max_depth="1" />
+.. _cacti_unix_templates:
 
 = Overview =
 

@@ -1,4 +1,4 @@
-#summary Cacti templates for graphing memcached statistics
+.. _cacti_memcached_templates:
 
 <wiki:toc max_depth="1" />
 

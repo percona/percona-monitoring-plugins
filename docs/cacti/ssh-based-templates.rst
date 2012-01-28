@@ -1,4 +1,4 @@
-#summary How to configure your systems to use ssh_get_by_ssh.php
+.. _cacti_ssh_based_templates:
 
 This document explains how to prepare systems for graphing with the SSH-based scripts, which use only standard SSH and Unix commands to gather data from servers.  The example server I want to graph is 192.168.1.107.
 

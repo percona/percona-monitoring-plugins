@@ -1,4 +1,4 @@
-#summary Helper tools for making graphs
+.. _cacti_helper_tools:
 
 Aside from the tools documented elsewhere, there are the following tools:
 

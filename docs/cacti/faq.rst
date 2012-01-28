@@ -1,4 +1,4 @@
-#summary Frequently Asked Questions
+.. _cacti_faq:
 
 Q. My graphs have NaN on them.  What is wrong?
 

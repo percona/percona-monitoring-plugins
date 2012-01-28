@@ -1,4 +1,4 @@
-#summary Cacti templates for graphing JMX
+.. _cacti_jmx_templates:
 
 <wiki:toc max_depth="1" />
 

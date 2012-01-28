@@ -1,4 +1,4 @@
-#summary Cacti templates for graphing Redis
+.. _cacti_redis_templates:
 
 <wiki:toc max_depth="1" />
 

@@ -1,8 +1,7 @@
-#summary How to create new templates or graphs
+.. _cacti_creating_graphs::
 
-<wiki:toc max_depth="1" />
-
-= Introduction =
+Introduction
+============
 
 This document explains how to create Cacti templates simply and reliably.  For this example, we'll assume you are going to add a new set of graphs into the ss_get_by_ssh.php file.  This means you're going to write a command to SSH to a server and collect some data, parsing code to turn that into a list of named values to graph, and graphs to display the result.
 

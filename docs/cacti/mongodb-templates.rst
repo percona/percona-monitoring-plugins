@@ -1,4 +1,4 @@
-#summary Cacti templates for graphing MongoDB
+.. _cacti_mongodb_templates:
 
 = Overview =
 

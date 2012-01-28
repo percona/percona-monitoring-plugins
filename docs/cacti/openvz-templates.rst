@@ -1,4 +1,4 @@
-#summary Cacti templates for graphing OpenVZ
+.. _cacti_openvz_templates:
 
 <wiki:toc max_depth="1" />
 

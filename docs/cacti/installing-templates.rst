@@ -1,4 +1,4 @@
-#summary How to install templates downloaded from this project
+.. _cacti_installing_templates:
 
 <wiki:toc />
 

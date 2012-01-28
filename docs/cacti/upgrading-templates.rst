@@ -1,4 +1,4 @@
-#summary How to upgrade between template versions
+.. _cacti_upgrading_templates:
 
 <wiki:toc />
 

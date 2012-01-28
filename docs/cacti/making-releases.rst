@@ -1,4 +1,4 @@
-#summary How to make a release of the templates
+.. _cacti_making_releases:
 
 Here's how to create a release:
 

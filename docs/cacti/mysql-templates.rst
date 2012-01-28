@@ -1,4 +1,4 @@
-#summary Cacti templates and scripts for graphing MySQL
+.. _cacti_mysql_templates:
 
 This page gives installation instructions specific to the MySQL graph templates, shows examples of graphs in the MySQL template collection, and shows what they do.  You might want to look at http://dev.mysql.com/doc/refman/5.1/en/server-status-variables.html to learn the meaning of the status variables contained in the graphs.
 

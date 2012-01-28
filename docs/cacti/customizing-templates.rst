@@ -1,4 +1,4 @@
-#summary How to generate your own versions of the templates
+.. _cacti_customizing_templates:
 
 <wiki:toc />
 
