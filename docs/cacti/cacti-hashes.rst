@@ -1,19 +1,33 @@
 .. _cacti_cacti_hashes:
 
-The Cacti way of identifying things is that when something is created via the interface, it basically generates a GUID.  This has a few characters of metadata: the text `hash_`, the object type, the Cacti version that generated the GUID, and a bunch of randomness.
+Cacti Hash Identifiers
+======================
 
-This is really annoying, because it means things aren't backwards compatible if you generate something on a newer version of Cacti.  The older version will look at the version string in the hash and fail.
+Cacti generates a type of GUID identifier for each object.  This has a few
+characters of metadata: the text ``hash_``, the object type, the Cacti version
+that generated the GUID, and a random string.  The inclusion of the Cacti
+version number means that graphs aren't backwards compatible if you regenerate
+them on a newer version of Cacti and try to install them on an older version of
+Cacti.  The older version will examine the version string in the hash and
+generate an error.
 
-As a result, the hashes in this system look like this:
+To avoid this problem, this templating system generates hashes that look like this:
 
 {{{
 hash_10_VER_ac260a1434298e088f15f70cd1a5f726
 }}}
 
-The `_VER_` magical variable gets replaced with an appropriate value for whichever version of Cacti you're generating graphs for.  If you need to add another one, look for %hash_version_codes in meta/make-template.pl.  As a result, if you're generating for Cacti 0.8.6g, the value will look like
+The template generation process replaces the ``_VER_`` constant with an
+appropriate value for the target version of Cacti.  As an
+example, if you're generating for Cacti 0.8.6g, the value will look like the
+following:
 
-{{{
-hash_100010ac260a1434298e088f15f70cd1a5f726
-}}}
+``hash_100010ac260a1434298e088f15f70cd1a5f726``
 
-The hashes in mysql_definitions.pl should all be globally unique.  It's kind of a pain to generate them, so you can just copy and paste some stuff and run the result through the unique-hashes.pl script.
+If you need to add support for a newer version, look for ``%hash_version_codes``
+in ``meta/make-template.pl``.
+
+The hashes in the template definition ``.pl`` files should be globally unique.
+It's difficult to generate them manually, so there is a ``unique-hashes.pl``
+helper tool to make this easier.  You can read more about this in
+:ref:`_cacti_creating_graphs`.

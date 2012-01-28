@@ -12,7 +12,7 @@ Installation
 ============
 
 Once the :ref:`cacti_ssh_setup` is working, `configure Apache to report its
-status <http://httpd.apache.org/docs/2.0/mod/mod_status.html>`.  The typical
+status <http://httpd.apache.org/docs/2.0/mod/mod_status.html>`_.  The typical
 setup is to enable status for 127.0.0.1 at the URL ``/server-status``. If you
 decide to use a different URL, you'll have to configure that in the script
 configuration (covered in the general install guide) or pass a command-line
@@ -30,8 +30,7 @@ connecting to.
 Sample Graphs
 =============
 
-The following sample graphs demonstrate how the data collected from Apache is
-presented.
+The following sample graphs demonstrate how the data is presented.
 
 .. figure:: images/apache_bytes.png
 
