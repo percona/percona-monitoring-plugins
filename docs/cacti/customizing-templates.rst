@@ -1,5 +1,8 @@
 .. _cacti_customizing_templates:
 
+Customizing Percona Monitoring Plugins for Cacti
+================================================
+
 The templates that are included in the release packages are generic, designed to
 be suitable for default installations.  However, if they don't meet your needs,
 you can generate your own easily.

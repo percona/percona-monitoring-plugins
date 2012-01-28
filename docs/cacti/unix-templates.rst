@@ -34,68 +34,60 @@ Sample Graphs
 
 The following sample graphs demonstrate how the data is presented.
 
-= Context Switches =
-
-   The number of the number of context switches performed by the server.
-
 .. figure:: images/unix_context_switches.png
 
-= CPU Usage =
-
-.. figure:: images/proc filesystem.  The example shows a server with two CPUs.  The values will increase by 100 with each added CPU.
+   The number of context switches performed by the server.
 
 .. figure:: images/unix_cpu_usage.png
 
-= Forks =
+   The CPU usage.
 
-   The number of the number of new processes created by the system.
+   The example shows a server with two CPUs.  The values will increase by 100 with each added CPU.
 
 .. figure:: images/unix_forks.png
 
-= Interrupts =
-
-   The number of how many interrupts the system handles.
+   The number of new processes created by the system.
 
 .. figure:: images/unix_interrupts.png
 
-= Load Average =
-
-   The number of system load average.  If you're used to looking at a "pretty" load average graph, you might think this one has less information.  Not so!  The standard graph that comes with Cacti is very silly: it shows the same information averaged over three time intervals, which is useless and redundant.  RRDtool can average the number for you just fine.
+   The interrupts the system handles.
 
 .. figure:: images/unix_load_average.png
 
-= Memory =
-
-   The number of the system's memory usage, as reported by the "free" command.
+   The system load average.
+   
+   If you're used to Cacti's standard load average graph, you might think this
+   one has less information.  That is not true; the standard graph that comes
+   with Cacti simply shows the same information averaged over three time
+   intervals, which is redundant.  RRDTool is natively capable of doing that.
 
 .. figure:: images/unix_memory.png
 
-= Number of Users =
-
-   The number of how many users were logged into the system, as reported by the "w" command.
+   The system's memory usage, as reported by the "free" command.
 
 .. figure:: images/unix_number_of_users.png
 
-= Disk Operations =
-
-   The number of how many read and write operations were completed, and how many reads and writes were merged.
+   The number of users that were logged into the system, as reported by the "w" command.
 
 .. figure:: images/disk_operations.png
 
-.. figure:: images/Written =
-
-   The number of how many disk sectors were read and written.
+   The number of read and write operations completed, and how many reads and writes were merged.
 
 .. figure:: images/disk_sectors_read_written.png
 
-.. figure:: images/Write Time (ms) =
-
-   The number of how much time was spent reading and writing.
+   The number of disk sectors read and written.
 
 .. figure:: images/disk_read_write_time.png
 
-= Disk Elapsed IO Time (ms) =
-
-.. figure:: images/O backlog.  The weighted time is the number of requests multiplied by the busy time, so if there are 5 requests that take 1 second, it is 5 seconds.  (If they all happen at the same time, the busy time is only 1 second.)
+   The amount of time spent reading and writing.
 
 .. figure:: images/disk_elapsed_io_time.png
+
+   The disk utilization.
+
+   This graph shows how much time was spent in disk I/O overall (busy time), and
+   how much weighted time was spent doing disk I/O. The latter is a useful
+   indication of I/O backlog. The weighted time is the number of requests
+   multiplied by the busy time, so if there are 5 requests that take 1 second,
+   it is 5 seconds. (If they all happen at the same time, the busy time is only
+   1 second.)

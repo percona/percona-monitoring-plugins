@@ -1,5 +1,8 @@
 .. _cacti_mysql_templates:
 
+Percona MySQL Monitoring Template for Cacti
+===========================================
+
 This page gives installation instructions specific to the MySQL graph templates, shows examples of graphs in the MySQL template collection, and shows what they do.  You might want to look at http://dev.mysql.com/doc/refman/5.1/en/server-status-variables.html to learn the meaning of the status variables contained in the graphs.
 
 This document should be correct and complete as of version 1.1.8 of the graphs.  Please use the issue tracker or the mailing list to report any errors or omissions.  If you have any sample graphs that are better than those shown, please contribute!
