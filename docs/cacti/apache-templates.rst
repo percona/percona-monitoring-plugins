@@ -1,12 +1,11 @@
 .. _cacti_apache_graphs:
 
-Apache Graphs
-=============
+Percona Apache Monitoring Template for Cacti
+============================================
 
 These templates use ``ss_get_by_ssh.php`` to connect to a server via SSH and
 extract statistics from the Apache server running there, by executing the
-``wget`` program with the url ``/server-status``.  This means you don't need to
-install any special tools.  Standard Unix command-line tools are all you need.
+``wget`` program with the url ``/server-status``.
 
 Installation
 ============

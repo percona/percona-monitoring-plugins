@@ -9,7 +9,7 @@ extract statistics from the JMX server.
 Installation
 ============
 
-Set up the SSH-based template script. After that is working, you should make the
+Once the :ref:`cacti_ssh_setup` is working, you need to make the
 Java runtime information available through JMX by adding the JMX system
 properties when you start the program you want to monitor. For a normal Java
 program, you can learn more about this from

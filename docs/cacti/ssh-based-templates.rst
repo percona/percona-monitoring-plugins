@@ -1,14 +1,19 @@
-.. _cacti_ssh_based_templates:
+.. _cacti_ssh_setup:
 
-This document explains how to prepare systems for graphing with the SSH-based scripts, which use only standard SSH and Unix commands to gather data from servers.  The example server I want to graph is 192.168.1.107.
+Installing SSH-Based Templates
+==============================
+
+This document explains how to prepare systems for graphing with the SSH-based
+scripts, which use only standard SSH and Unix commands to gather data from
+servers.  The example server we will graph is 192.168.1.107.
 
 The high-level process is as follows:
 
-  # Set up an SSH keypair for SSH authentication.
-  # Create a Unix user on each server you want to graph.
-  # Install the public key into that user's authorized_keys file.
-  # Install and configure the PHP file.
-  # Test the results.
+* Set up an SSH keypair for SSH authentication.
+* Create a Unix user on each server you want to graph.
+* Install the public key into that user's authorized_keys file.
+* Install and configure the PHP file.
+* Test the results.
 
 = Creating an SSH Key Pair =
 

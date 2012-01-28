@@ -1,41 +1,50 @@
 .. _cacti_mongodb_templates:
 
-= Overview =
+Percona MongoDB Monitoring Template for Cacti
+=============================================
 
-These templates were added in version 1.1.8.  They use ss_get_by_ssh.php to connect to a server via SSH and extract statistics from the MongoDB server running there, by executing the "serverStatus" admin command from the MongoDB shell. This means that the mongo CLI needs to be in $PATH and you must be running version 1.2+ of MongoDB.
+These templates use ``ss_get_by_ssh.php`` to connect to a server via SSH and
+extract statistics from the MongoDB server running there, by executing the
+``serverStatus`` admin command from the MongoDB shell. This means that the
+``mongo`` CLI needs to be in ``$PATH`` and you must be running version 1.2 or
+newer of MongoDB.
 
-This document should be correct and complete as of version 1.1.8 of the graphs. Please use the issue tracker or the mailing list to report any errors or omissions. If you have any sample graphs that are better than those shown, please contribute!
+Installation
+============
 
-= Installation =
+Once the :ref:`cacti_ssh_setup` is working, confirm that you can login to
+MongoDB from with the "mongo" cli tool. From this tool, confirm that the
+``serverStatus`` command is present by running::
 
-Once the [SSHBasedTemplates SSH setup] is working, confirm that you can login to MongoDB from with the "mongo" cli tool. From this tool, confirm that serverStatus command is present by running:
+   db._adminCommand({serverStatus : 1});
 
-{{{
-db._adminCommand({serverStatus : 1});
-}}}
+This should produce quite a bit of output. With all of this confirmed, test one
+of your hosts with the command below. You may need to change some of the example
+values below, such as the cacti username and the hostname you're connecting to::
 
-This should produce quite a bit of output. With all of this confirmed, test one of your hosts with the command below. You may need to change some of the example values below, such as the cacti username and the hostname you're connecting to.
+   su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items jc,jd'
 
-{{{
-su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items dc,dd'
-}}}
+Sample Graphs
+=============
 
-= Background Flushes =
+The following sample graphs demonstrate how the data is presented.
 
-http://mysql-cacti-templates.googlecode.com/svn/data/mongodb_background_flushes.png
+.. figure:: images/mongodb_background_flushes.png
 
-= Commands =
+   Background flushes
 
-http://mysql-cacti-templates.googlecode.com/svn/data/mongodb_commands.png
+.. figure:: images/mongodb_commands.png
 
-= Connections =
+   Commands
 
-http://mysql-cacti-templates.googlecode.com/svn/data/mongodb_connections.png
+.. figure:: images/mongodb_connections.png
 
-= Index Operations =
+   Connections
 
-http://mysql-cacti-templates.googlecode.com/svn/data/mongodb_index_ops.png
+.. figure:: images/mongodb_index_ops.png
 
-= Memory =
+   Index Operations
 
-http://mysql-cacti-templates.googlecode.com/svn/data/mongodb_memory.png
+.. figure:: images/mongodb_memory.png
+
+   Memory

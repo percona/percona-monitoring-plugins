@@ -1,66 +1,61 @@
 .. _cacti_memcached_templates:
 
-<wiki:toc max_depth="1" />
+Percona Apache Monitoring Template for Memcached
+================================================
 
-= Overview =
+These templates use ``ss_get_by_ssh.php`` to connect to a server via SSH and
+extract statistics from the memcached server running there, by executing the
+``nc`` (netcat) program with the command "STAT".  This means you don't need any
+memcached APIs installed.  Standard Unix command-line tools are all you need.
 
-These templates use ss_get_by_ssh.php to connect to a server via SSH and extract statistics from the memcached server running there, by executing the "nc" (netcat) program with the command "STAT".  This means you don't need any memcached APIs installed.  Standard Unix command-line tools are all you need.
+Installation
+============
 
-This document should be correct and complete as of version 1.1.8 of the graphs.  Please use the issue tracker or the mailing list to report any errors or omissions.  If you have any sample graphs that are better than those shown, please contribute!
+Once the :ref:`cacti_ssh_setup` is working, you need to test the memcached
+function.  You may need to change some of the example values below, such as the
+cacti username and the hostname you're connecting to::
 
-= Installation =
+   # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items h6,h7'
 
-Once the [SSHBasedTemplates SSH setup] is working, test one of your hosts like this.  You may need to change some of the example values below, such as the cacti username and the hostname you're connecting to.
+You need ``nc`` on the server.  Some versions of ``nc`` accept different
+command-line options.  You can change the options used by configuring the PHP
+script.  If you don't want to do this for some reason, then you can install a
+version of ``nc`` that conforms to the expectations coded in the script's
+default configuration instead.  On Debian/Ubuntu, ``netcat-openbsd`` does not
+work, so you need the ``netcat-traditional`` package, and you need to switch to
+``/bin/nc.traditional`` with the following command::
 
-{{{
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items b6,b7'
-}}}
+   # update-alternatives --config nc
 
-you must install `nc` on the memcache server, and on Debian/Ubuntu, you need install `netcat-traditional` package, and switch `nc` to `/bin/nc.traditional` with following command (`netcat-openbsd` does not work)
+Sample Graphs
+=============
 
-{{{
-# update-alternatives --config nc
-}}}
+The following sample graphs demonstrate how the data is presented.
 
+.. figure:: images/memcached_additions_and_evictions.png
 
-= Additions and Evictions =
+   Shows how many items were added and evicted.
 
-This graph shows how many items were added and evicted.
+.. figure:: images/memcached_connections.png
 
-http://mysql-cacti-templates.googlecode.com/svn/data/memcached_additions_and_evictions.png
+   Shows how many connections have been made.
 
-= Connections =
+.. figure:: images/memcached_current_items.png
 
-This graph shows how many connections have been made.
+   Shows how many items are stored in the server.
 
-http://mysql-cacti-templates.googlecode.com/svn/data/memcached_connections.png
+.. figure:: images/memcached_memory.png
 
-= Current Items =
+   Shows how much memory the server is using.
 
-This graph shows how many items are stored in the server.
+.. figure:: images/memcached_requests.png
 
-http://mysql-cacti-templates.googlecode.com/svn/data/memcached_current_items.png
+   Shows how many gets and sets have happened, as well as how many of the gets were misses (there was no item in the cache).
 
-= Memory =
+.. figure:: images/memcached_rusage.png
 
-This graph shows how much memory the server is using.
+   Shows the resource usage statistics reported by memcached, in system and user CPU time.
 
-http://mysql-cacti-templates.googlecode.com/svn/data/memcached_memory.png
+.. figure:: images/memcached_traffic.png
 
-= Requests =
-
-This graph shows how many gets and sets have happened, as well as how many of the gets were misses (there was no item in the cache).
-
-http://mysql-cacti-templates.googlecode.com/svn/data/memcached_requests.png
-
-= Rusage =
-
-This graph shows the resource usage statistics reported by memcached, in system and user CPU time.
-
-http://mysql-cacti-templates.googlecode.com/svn/data/memcached_rusage.png
-
-= Traffic =
-
-This graph shows the network traffic in and out of the memcached server.
-
-http://mysql-cacti-templates.googlecode.com/svn/data/memcached_traffic.png
+   Shows the network traffic in and out of the memcached server.
