@@ -764,7 +764,7 @@ function debug($val) {
 # Gets and parses /proc/stat from Linux.
 # Options used: none.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type proc_stat --host 127.0.0.1 --items ag,ah'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type proc_stat --host 127.0.0.1 --items gg,gh'
 # ============================================================================
 function proc_stat_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port'), 'proc_stat');
@@ -821,7 +821,7 @@ function proc_stat_parse ( $options, $output ) {
 # Gets and parses the 'free' command from Linux.
 # Options used: none.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memory --host 127.0.0.1 --items au,av'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memory --host 127.0.0.1 --items gu,gv'
 # ============================================================================
 function memory_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port'), 'memory');
@@ -864,7 +864,7 @@ function memory_parse ( $options, $output ) {
 # used to use 'w' but uptime prints the same thing.
 # Options used: none.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type w --host 127.0.0.1 --items as,at'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type w --host 127.0.0.1 --items gs,gt'
 # ============================================================================
 function w_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port'), 'w');
@@ -904,7 +904,7 @@ function w_parse ( $options, $output ) {
 # ============================================================================
 # Gets and parses /server-status from Apache.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type apache --host 127.0.0.1 --items ae,af'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type apache --host 127.0.0.1 --items ge,gf'
 # ============================================================================
 function apache_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port', 'server'), 'apache');
@@ -990,7 +990,7 @@ function apache_parse ( $options, $output ) {
 # ============================================================================
 # Gets /server-status from Nginx.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type nginx --host 127.0.0.1 --items az,b0'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type nginx --host 127.0.0.1 --items gz,h0'
 # ============================================================================
 function nginx_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port', 'port2', 'server'), 'nginx');
@@ -1048,7 +1048,7 @@ function nginx_parse ( $options, $output ) {
 # ============================================================================
 # Get and parse stats from memcached, using nc (netcat).
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items b6,b7'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items h6,h7'
 # ============================================================================
 function memcached_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port', 'port2', 'server'), 'memcached');
@@ -1082,7 +1082,7 @@ function memcached_parse ( $options, $output ) {
 # ============================================================================
 # Get and parse stats from /proc/diskstats
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type diskstats --device sda4 --host 127.0.0.1 --items bj,bk,bl,bm,bn,bo,bp'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type diskstats --device sda4 --host 127.0.0.1 --items hj,hk,hl,hm,hn,ho,hp'
 # ============================================================================
 function diskstats_cachefile ( $options ) {
    if ( !isset($options['device']) ) {
@@ -1143,7 +1143,7 @@ function diskstats_parse ( $options, $output ) {
 # ============================================================================
 # Get and parse stats from /proc/user_beancounters for openvz graphs
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type openvz --host 127.0.0.1 --items bu,bv,bw,bx,by,bz,c0'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type openvz --host 127.0.0.1 --items hu,hv,hw,hx,hy,hz,i0'
 # ============================================================================
 function openvz_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port'), 'openvz');
@@ -1200,7 +1200,7 @@ function openvz_parse ( $options, $output ) {
 # ============================================================================
 # Get and parse stats from redis, using nc (netcat).
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type redis --host 127.0.0.1 --items cy,cz,d2,d3
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type redis --host 127.0.0.1 --items iy,iz,j2,j3
 # ============================================================================
 function redis_cachefile ( $options ) {
    global $status_server, $redis_port;
@@ -1267,7 +1267,7 @@ function redis_get ( $options ) {
 # ============================================================================
 # Get and parse stats from JMX.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type jmx --host 127.0.0.1 --items d4,d5,d6,d7,d8,d9,da,db
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type jmx --host 127.0.0.1 --items j4,j5,j6,j7,j8,j9,ja,jb
 # ============================================================================
 function jmx_parse ( $options, $output ) {
    $result = array();
@@ -1306,7 +1306,7 @@ function jmx_cmdline ( $options ) {
 # ============================================================================
 # Get and parse stats from mongodb on a given port
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items dc,de,df,dg,dh,di,dj,dk,dl,dm,dn,do,dp,dq,dr,ds,dt,du
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items jc,je,jf,jg,jh,ji,jj,jk,jl,jm,jn,jo,jp,jq,jr,js,jt,ju
 # ============================================================================
 function mongodb_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port2'), 'mongodb');
