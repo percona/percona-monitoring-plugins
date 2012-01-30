@@ -29,22 +29,23 @@ main() {
    # Get options
    for o; do
       case "${o}" in
-         -c)        shift; OPT_CRIT="${1}"; shift; ;;
-         -C)        shift; OPT_COMP="${1}"; shift; ;;
-         -H)        shift; OPT_HOST="${1}"; shift; ;;
-         -I)        shift; OPT_INCR="${1}"; shift; ;;
-         -l)        shift; OPT_USER="${1}"; shift; ;;
-         -o)        shift; OPT_OPER="${1}"; shift; ;;
-         -p)        shift; OPT_PASS="${1}"; shift; ;;
-         -P)        shift; OPT_PORT="${1}"; shift; ;;
-         -S)        shift; OPT_SOCK="${1}"; shift; ;;
-         -T)        shift; OPT_TRAN="${1}"; shift; ;;
-         -w)        shift; OPT_WARN="${1}"; shift; ;;
-         -x)        shift; OPT_VAR1="${1}"; shift; ;;
-         -y)        shift; OPT_VAR2="${1}"; shift; ;;
-         --version) grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
-         --help)    perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
-         -*)        echo "Unknown option ${o}.  Try --help."; exit 1; ;;
+         -c)              shift; OPT_CRIT="${1}"; shift; ;;
+         --defaults-file) shift; OPT_DEFT="${1}"; shift; ;;
+         -C)              shift; OPT_COMP="${1}"; shift; ;;
+         -H)              shift; OPT_HOST="${1}"; shift; ;;
+         -I)              shift; OPT_INCR="${1}"; shift; ;;
+         -l)              shift; OPT_USER="${1}"; shift; ;;
+         -o)              shift; OPT_OPER="${1}"; shift; ;;
+         -p)              shift; OPT_PASS="${1}"; shift; ;;
+         -P)              shift; OPT_PORT="${1}"; shift; ;;
+         -S)              shift; OPT_SOCK="${1}"; shift; ;;
+         -T)              shift; OPT_TRAN="${1}"; shift; ;;
+         -w)              shift; OPT_WARN="${1}"; shift; ;;
+         -x)              shift; OPT_VAR1="${1}"; shift; ;;
+         -y)              shift; OPT_VAR2="${1}"; shift; ;;
+         --version)       grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
+         --help)          perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
+         -*)              echo "Unknown option ${o}.  Try --help."; exit 1; ;;
       esac
    done
    # Set default option values
@@ -94,7 +95,7 @@ main() {
    fi
 
    EXITSTATUS=$STATE_UNKNOWN
-   NOTE="UNK could not evaluate the expression." 
+   NOTE="UNK could not evaluate the expression."
 
    # TODO: use a cache file? Does it matter?
    # Set up a temporary file
@@ -133,7 +134,7 @@ main() {
 # Execute a MySQL command.
 # ########################################################################
 mysql_exec() {
-   mysql ${OPT_HOST:+-h"${OPT_HOST}"} ${OPT_USER:+-u"${OPT_USER}"} \
+   mysql ${OPT_DEFT:+--defaults-file="${OPT_DEFT}"} ${OPT_HOST:+-h"${OPT_HOST}"} ${OPT_USER:+-u"${OPT_USER}"} \
       ${OPT_PASS:+-p"${OPT_PASS}"} ${OPT_SOCK:+-S"${OPT_SOCK}"} ${OPT_PORT:+-P"${OPT_PORT}"} \
       -ss -e "$1"
 }
@@ -286,21 +287,22 @@ pmp-check-mysql-status - Check MySQL SHOW GLOBAL STATUS output.
 
   Usage: pmp-check-mysql-status [OPTIONS]
   Options:
-    -c CRIT     Critical threshold.
-    -C COMPARE  Comparison operator to apply to -c and -w; default >=.
-    -H HOST     MySQL hostname.
-    -I INCR     Make SHOW STATUS incremental over this delay.
-    -l USER     MySQL username.
-    -o OPERATOR The operator to apply to -x and -y.
-    -p PASS     MySQL password.
-    -P PORT     MySQL port.
-    -S SOCKET   MySQL socket file.
-    -T TRANS    Transformation to apply before comparing to -c and -w.
-    -w WARN     Warning threshold.
-    -x VAR1     Required first status or configuration variable.
-    -y VAR2     Optional second status or configuration variable.
-    --help      Print help and exit.
-    --version   Print version and exit.
+    -c CRIT         Critical threshold.
+    --defaults-file FILE Only read default options from the given file.
+    -C COMPARE      Comparison operator to apply to -c and -w; default >=.
+    -H HOST         MySQL hostname.
+    -I INCR         Make SHOW STATUS incremental over this delay.
+    -l USER         MySQL username.
+    -o OPERATOR     The operator to apply to -x and -y.
+    -p PASS         MySQL password.
+    -P PORT         MySQL port.
+    -S SOCKET       MySQL socket file.
+    -T TRANS        Transformation to apply before comparing to -c and -w.
+    -w WARN         Warning threshold.
+    -x VAR1         Required first status or configuration variable.
+    -y VAR2         Optional second status or configuration variable.
+    --help          Print help and exit.
+    --version       Print version and exit.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION
@@ -356,7 +358,7 @@ That is somewhat contrived, because it could also be written as follows:
 
 The -I option has the side effect of removing any non-numeric SHOW STATUS
 variables.  Be careful not to set the -I option too large, or Nagios will simply
-time the plugin out, usually after about 10 seconds.  
+time the plugin out, usually after about 10 seconds.
 
 This plugin does not support arbitrarily complex expressions, such as computing
 the query cache hit ratio and alerting if it is less than some percentage.  If

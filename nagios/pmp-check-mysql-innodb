@@ -29,17 +29,18 @@ main() {
    # Get options
    for o; do
       case "${o}" in
-         -C)        shift; OPT_CHEK="${1}"; shift; ;;
-         -c)        shift; OPT_CRIT="${1}"; shift; ;;
-         -H)        shift; OPT_HOST="${1}"; shift; ;;
-         -l)        shift; OPT_USER="${1}"; shift; ;;
-         -p)        shift; OPT_PASS="${1}"; shift; ;;
-         -P)        shift; OPT_PORT="${1}"; shift; ;;
-         -S)        shift; OPT_SOCK="${1}"; shift; ;;
-         -w)        shift; OPT_WARN="${1}"; shift; ;;
-         --version) grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
-         --help)    perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
-         -*)        echo "Unknown option ${o}.  Try --help."; exit 1; ;;
+         -C)              shift; OPT_CHEK="${1}"; shift; ;;
+         -c)              shift; OPT_CRIT="${1}"; shift; ;;
+         --defaults-file) shift; OPT_DEFT="${1}"; shift; ;;
+         -H)              shift; OPT_HOST="${1}"; shift; ;;
+         -l)              shift; OPT_USER="${1}"; shift; ;;
+         -p)              shift; OPT_PASS="${1}"; shift; ;;
+         -P)              shift; OPT_PORT="${1}"; shift; ;;
+         -S)              shift; OPT_SOCK="${1}"; shift; ;;
+         -w)              shift; OPT_WARN="${1}"; shift; ;;
+         --version)       grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
+         --help)          perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
+         -*)              echo "Unknown option ${o}.  Try --help."; exit 1; ;;
       esac
    done
    OPT_CHEK="${OPT_CHEK:-idle_blocker_duration}"
@@ -122,7 +123,7 @@ main() {
 # Execute a MySQL command.
 # ########################################################################
 mysql_exec() {
-   mysql ${OPT_HOST:+-h"${OPT_HOST}"} ${OPT_USER:+-u"${OPT_USER}"} \
+   mysql ${OPT_DEFT:+--defaults-file="${OPT_DEFT}"} ${OPT_HOST:+-h"${OPT_HOST}"} ${OPT_USER:+-u"${OPT_USER}"} \
       ${OPT_PASS:+-p"${OPT_PASS}"} ${OPT_SOCK:+-S"${OPT_SOCK}"} ${OPT_PORT:+-P"${OPT_PORT}"} \
       -ss -e "$1"
 }
@@ -202,16 +203,17 @@ pmp-check-mysql-innodb - Alert on problems inside InnoDB.
 
   Usage: pmp-check-mysql-innodb [OPTIONS]
   Options:
-    -C CHECK    What to alert on; default idle_blocker_duration.
-    -c CRIT     Critical threshold; default varies.
-    -H HOST     MySQL hostname.
-    -l USER     MySQL username.
-    -p PASS     MySQL password.
-    -P PORT     MySQL port.
-    -S SOCKET   MySQL socket file.
-    -w WARN     Warning threshold; default varies.
-    --help      Print help and exit.
-    --version   Print version and exit.
+    -C CHECK        What to alert on; default idle_blocker_duration.
+    -c CRIT         Critical threshold; default varies.
+    --defaults-file FILE Only read default options from the given file.
+    -H HOST         MySQL hostname.
+    -l USER         MySQL username.
+    -p PASS         MySQL password.
+    -P PORT         MySQL port.
+    -S SOCKET       MySQL socket file.
+    -w WARN         Warning threshold; default varies.
+    --help          Print help and exit.
+    --version       Print version and exit.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION
