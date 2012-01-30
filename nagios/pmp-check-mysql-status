@@ -362,11 +362,9 @@ time the plugin out, usually after about 10 seconds.
 
 This plugin does not support arbitrarily complex expressions, such as computing
 the query cache hit ratio and alerting if it is less than some percentage.  If
-you are trying to do that, you are probably doing it wrong.  Reasonable alerts,
-which are not prone to too many false positives, focus only on a few simple
-things; and most of the counters in SHOW STATUS are not useful for actionable
-alerts anyway.  A dubiously useful example for the query cache might be to alert
-if the hit-to-insert ratio falls below 2:1, as follows:
+you are trying to do that, you might be doing it wrong.  A dubious example for
+the query cache might be to alert if the hit-to-insert ratio falls below 2:1, as
+follows:
 
   -x Qcache_hits -o / -y Qcache_inserts -C '<' -w 2
 
