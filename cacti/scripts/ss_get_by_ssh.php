@@ -50,7 +50,7 @@ $openvz_cmd    = 'cat /proc/user_beancounters';
 # ============================================================================
 # You should not need to change anything below this line.
 # ============================================================================
-$version = '1.0.0';
+$version = '$VERSION$';
 
 # ============================================================================
 # Include settings from an external config file.
