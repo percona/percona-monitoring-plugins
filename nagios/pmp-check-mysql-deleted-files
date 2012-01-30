@@ -218,7 +218,7 @@ Place, Suite 330, Boston, MA  02111-1307  USA.
 
 =head1 VERSION
 
-Percona Monitoring Plugins pmp-check-mysql-deleted-files 1.0.0
+Percona Monitoring Plugins pmp-check-mysql-deleted-files $VERSION$
 
 =cut
 

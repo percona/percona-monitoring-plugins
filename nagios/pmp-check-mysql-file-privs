@@ -229,7 +229,7 @@ Place, Suite 330, Boston, MA  02111-1307  USA.
 
 =head1 VERSION
 
-Percona Monitoring Plugins pmp-check-mysql-file-privs 1.0.0
+Percona Monitoring Plugins pmp-check-mysql-file-privs $VERSION$
 
 =cut
 

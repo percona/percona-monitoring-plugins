@@ -1,5 +1,15 @@
 .. _cacti_ssh_setup:
 
+.. toctree::
+   apache-templates.rst
+   jmx-templates.rst
+   memcached-templates.rst
+   mongodb-templates.rst
+   nginx-templates.rst
+   openvz-templates.rst
+   redis-templates.rst
+   unix-templates.rst
+
 Installing SSH-Based Templates
 ==============================
 
