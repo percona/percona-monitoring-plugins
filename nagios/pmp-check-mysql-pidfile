@@ -188,15 +188,6 @@ server, then you can specify MySQL authentication options.  This will cause the
 plugin to skip examining the Unix processlist, log into MySQL, and examine the
 pid_file variable from SHOW VARIABLES to find the location of the PID file.
 
-=head1 DOWNLOADING
-
-Visit L<http://www.percona.com/software/percona-monitoring-plugins/> to download
-the latest release of Percona Monitoring Plugins.
-
-=head1 AUTHORS
-
-Baron Schwartz
-
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
 This program is copyright 2012 Baron Schwartz, 2012 Percona Inc.
