@@ -48,5 +48,5 @@ The following sample graphs demonstrate how the data is presented.
    The number of Apache processes in each of a variety of statuses.
 
 .. figure:: images/apache_workers.png
-   
+
    The number of worker processes busy or idle at any given time.

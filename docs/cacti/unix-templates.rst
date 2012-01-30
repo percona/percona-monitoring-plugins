@@ -55,7 +55,7 @@ The following sample graphs demonstrate how the data is presented.
 .. figure:: images/unix_load_average.png
 
    The system load average.
-   
+
    If you're used to Cacti's standard load average graph, you might think this
    one has less information.  That is not true; the standard graph that comes
    with Cacti simply shows the same information averaged over three time

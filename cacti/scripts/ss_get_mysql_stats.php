@@ -442,6 +442,10 @@ function ss_get_mysql_stats( $options ) {
          if ( $state == '' ) {
             $state = 'none';
          }
+         # MySQL 5.5 replaces the 'Locked' state with a variety of "Waiting for
+         # X lock" types of statuses.  Wrap these all back into "Locked" because
+         # we don't really care about the type of locking it is.
+         $state = preg_replace('/^(Table lock|Waiting for .*lock)$/', 'Locked', $state);
          $state = str_replace(' ', '_', strtolower($state));
          if ( array_key_exists("State_$state", $status) ) {
             increment($status, "State_$state", 1);

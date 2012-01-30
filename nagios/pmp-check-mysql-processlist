@@ -59,7 +59,7 @@ main() {
       COPYIN=$(count_mysql_processlist "${TEMP}" "State" "opy.*table*")
       STATIS=$(count_mysql_processlist "${TEMP}" "State" "statistics")
       LOCKED=$((${LOCKED1:-0} + ${LOCKED2:-0} + ${LOCKED3:-0}))
-      NOTE="${UNAUTH} unathenticated, ${LOCKED} locked,"
+      NOTE="${UNAUTH} unauthenticated, ${LOCKED} locked,"
       NOTE="${NOTE} ${COPYIN} copy to table, ${STATIS} statistics"
       MAX="$(max "${UNAUTH:-0}" "${LOCKED:-0}" "${COPYIN:-0}" "${STATIS:-0}")"
       if [ "${MAX:-0}" -gt "${OPT_CRIT}" ]; then
