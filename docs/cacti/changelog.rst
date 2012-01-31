@@ -1,4 +1,4 @@
-.. _cacti_changelog::
+.. _cacti_changelog:
 
 Percona Monitoring Plugin Changelog for Cacti
 =============================================

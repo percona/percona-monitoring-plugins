@@ -193,7 +193,7 @@ Next find the data source by clicking into Data Sources.  Now that you've
 specified that this data source should use per-data-source values for the
 username and password, there are text boxes to fill in:
 
-.. figure:: fill-in-data-source-values.png
+.. figure:: images/fill-in-data-source-values.png
 
 Cacti will now pass the given arguments to the PHP script when it executes.
 Here's a snippet from the Cacti log, showing this in action::

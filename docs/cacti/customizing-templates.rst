@@ -68,7 +68,7 @@ If you import the resulting XML file, and then edit a host to bind it to the
 "Percona MySQL Server HT" host template, when you create the graphs you'll be
 prompted to fill in a value for the port:
 
-.. figure:: images/data/create-graphs-input-port.png
+.. figure:: images/create-graphs-input-port.png
 
    Specifying a value for a port
 
