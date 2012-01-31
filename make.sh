@@ -22,6 +22,7 @@ rm -rf release
 # mkdir -p release/{docs/,}{nagios,cacti}
 mkdir release
 cp -R nagios/ docs/ release/
+rm -rf release/nagios/t/
 
 # Update the version number and other important macros in the temporary
 # directory.

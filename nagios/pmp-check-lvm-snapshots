@@ -106,6 +106,20 @@ copy-on-write space, it will fail.  This is also a useful way to detect whether
 some process, such as a backup, failed to release a snapshot volume after
 finishing with it.
 
+=head1 PRIVILEGES
+
+This plugin does not access MySQL.
+
+This plugin executes the following UNIX commands that may need special privileges:
+
+=over
+
+=item *
+
+lvs
+
+=back
+
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
 This program is copyright 2012 Baron Schwartz, 2012 Percona Inc.

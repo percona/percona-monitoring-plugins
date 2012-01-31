@@ -133,6 +133,20 @@ entirely ignored.
 If SHOW SLAVE STATUS produces no output, then this plugin will report that
 replication is healthy.
 
+=head1 PRIVILEGES
+
+This plugin executes the following commands against MySQL:
+
+=over
+
+=item *
+
+C<SHOW SLAVE STATUS>.
+
+=back
+
+This plugin executes no UNIX commands that may need special privileges. 
+
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
 This program is copyright 2012 Baron Schwartz, 2012 Percona Inc.

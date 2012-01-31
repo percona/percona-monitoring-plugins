@@ -188,6 +188,36 @@ instances running. It probably works best on Linux, though it might work on
 other operating systems. It relies on either lsof or the ability to list the
 files in the process's /proc/pid/fd directory.
 
+=head1 PRIVILEGES
+
+This plugin executes the following commands against MySQL:
+
+=over
+
+=item *
+
+C<SELECT> the system variable C<@@tmpdir>.
+
+=back
+
+This plugin executes the following UNIX commands that may need special privileges:
+
+=over
+
+=item *
+
+ps
+
+=item *
+
+lsof
+
+=item *
+
+ls /proc/$pid/fd
+
+=back
+
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
 This program is copyright 2012 Baron Schwartz, 2012 Percona Inc.

@@ -178,6 +178,20 @@ concurrency problems causing query execution plan generation to take too long.
 
 =back
 
+=head1 PRIVILEGES
+
+This plugin executes the following commands against MySQL:
+
+=over
+
+=item *
+
+C<SHOW PROCESSLIST>.
+
+=back
+
+This plugin executes no UNIX commands that may need special privileges. 
+
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
 This program is copyright 2012 Baron Schwartz, 2012 Percona Inc.

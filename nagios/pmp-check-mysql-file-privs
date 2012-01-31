@@ -199,6 +199,32 @@ server, then you can specify MySQL authentication options.  This will cause the
 plugin to skip examining the Unix processlist, log into MySQL, and examine the
 datadir variable from SHOW VARIABLES to find the location of the data directory.
 
+=head1 PRIVILEGES
+
+This plugin executes the following commands against MySQL:
+
+=over
+
+=item *
+
+C<SELECT> the MySQL system variables C<@@datadir> and C<@@basedir>.
+
+=back
+
+This plugin executes the following UNIX commands that may need special privileges:
+
+=over
+
+=item *
+
+ps
+
+=item *
+
+find C<datadir>
+
+=back
+
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
 This program is copyright 2012 Baron Schwartz, 2012 Percona Inc.

@@ -141,6 +141,24 @@ against; otherwise the plugin reports the maximum delay from any server. This
 plugin does not support the legacy mk-heartbeat table format without the
 server_id column.
 
+=head1 PRIVILEGES
+
+This plugin executes the following commands against MySQL:
+
+=over
+
+=item *
+
+C<SHOW SLAVE STATUS>.
+
+=item *
+
+C<SELECT> from the C<pt-heartbeat> table.
+
+=back
+
+This plugin executes no UNIX commands that may need special privileges. 
+
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
 This program is copyright 2012 Baron Schwartz, 2012 Percona Inc.

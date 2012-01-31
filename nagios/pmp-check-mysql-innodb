@@ -62,9 +62,9 @@ main() {
             LEFT  JOIN INFORMATION_SCHEMA.PROCESSLIST       AS p ON  p.id     = b.trx_mysql_thread_id")
          ;;
       waiter_count)
-         LEVEL=$(mysql_exec "
          OPT_WARN=${OPT_WARN:-10}
          OPT_CRIT=${OPT_CRIT:-25}
+         LEVEL=$(mysql_exec "
             SELECT COUNT(DISTINCT REQUESTING_TRX_ID) AS cnt
             FROM   INFORMATION_SCHEMA.INNODB_LOCK_WAITS AS w" 2>"${TEMP}")
          if grep "Unknown table" "${TEMP}" >/dev/null 2>&1; then
@@ -74,9 +74,9 @@ main() {
          fi
          ;;
       max_duration)
-         LEVEL=$(mysql_exec "
          OPT_WARN=${OPT_WARN:-60}
          OPT_CRIT=${OPT_CRIT:-600}
+         LEVEL=$(mysql_exec "
             SELECT COALESCE(
                      MAX(UNIX_TIMESTAMP() - UNIX_TIMESTAMP(trx_started)),
                    0)
@@ -251,6 +251,24 @@ STATUS if the INFORMATION_SCHEMA tables are not available. The default critical
 level is 600, and warning is 60.
 
 =back
+
+=head1 PRIVILEGES
+
+This plugin executes the following commands against MySQL:
+
+=over
+
+=item *
+
+C<SHOW ENGINE INNODB STATUS>.
+
+=item *
+
+C<SELECT> against the C<INFORMATION_SCHEMA> InnoDB transaction and lock tables.
+
+=back
+
+This plugin executes no UNIX commands that may need special privileges. 
 
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
