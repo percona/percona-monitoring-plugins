@@ -35,4 +35,7 @@ for f in release/nagios/pmp-check-*; do
    pod2rst --infile "$f" --outfile "release/docs/nagios/${f##*/}.rst";
 done
 
+# Make the Sphinx documentation into HTML format.
+sphinx-build -N -W -c docs/config/ -b html release/docs/ release/html
+
 # TODO: check that there is an entry for the new version in the Nagios and Cacti changelogs

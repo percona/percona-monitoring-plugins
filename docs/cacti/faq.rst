@@ -20,10 +20,6 @@ Running ``poller.php`` or the PHP script shows the correct output, but I see not
   problem is due to installing or running as root from the command line, not
   realizing that Cacti runs as a different user.
 
-How do I install?
-
-  Please read :ref:`_cacti_installing_templates` for instructions.
-
 The output is truncated when I use Spine.  Why?
 
   This is a Cacti bug.  Use cmd.php for now.
@@ -50,4 +46,4 @@ If I have a host that is both an Apache and MySQL server, should I be creating t
 
 How do I graph a MySQL server that uses a non-standard port?
 
-  See :ref:`_cacti_customizing_templates`.
+  See the documentation on customizing the templates.

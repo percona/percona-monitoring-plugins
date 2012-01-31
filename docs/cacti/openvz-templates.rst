@@ -10,7 +10,7 @@ extract statistics from the OpenVZ container, by concatenating the contents of
 Installation
 ============
 
-Once the :ref:`cacti_ssh_setup` is working, import the OpenVZ template and apply
+Once the SSH connection is working, import the OpenVZ template and apply
 it to your host, then add the graphs.
 
 Depending on your version of OpenVZ or Virtuozzo, the file

@@ -3,7 +3,7 @@
 Percona Monitoring Plugin Changelog for Cacti
 =============================================
 
-For instructions on upgrading templates, see :ref:`_cacti_upgrading_templates`.
+Please also read the documentation on upgrading templates.
 
 2012-02-01: version 1.0.0
 =========================

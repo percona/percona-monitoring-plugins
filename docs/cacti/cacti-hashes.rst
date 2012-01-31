@@ -28,4 +28,4 @@ in ``meta/make-template.pl``.
 The hashes in the template definition ``.pl`` files should be globally unique.
 It's difficult to generate them manually, so there is a ``unique-hashes.pl``
 helper tool to make this easier.  You can read more about this in
-:ref:`_cacti_creating_graphs`.
+the documentation on creating graphs.

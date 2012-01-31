@@ -9,9 +9,9 @@ tools/graph_defs.pl
 ===================
 
 This tool helps you make boilerplate text to plug into a definitions file.  If
-you create the definitions file and add the data input as suggested in
-:ref:`_cacti_creating_graphs`, then you can take the input items and copy them
-into a new file.  Then group them into paragraphs in the order you want the
+you create the definitions file and add the data input as suggested in the
+documentation on creating graphs, then you can take the input items and copy
+them into a new file.  Then group them into paragraphs in the order you want the
 graphs to be created.  Leave one blank line between each paragraph.  For
 example::
 

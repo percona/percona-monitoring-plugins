@@ -11,7 +11,7 @@ graph via SNMP, when SNMP is not available or not desired.
 Installation
 ============
 
-Once the :ref:`cacti_ssh_setup` is working, no special installation is
+Once the SSH connection is working, no special installation is
 necessary for most of the graphs.
 
 *The disk I/O graphs are special*.  Each graph requires that you specify the

@@ -4,8 +4,8 @@ Installing Percona Monitoring Plugins for Cacti
 ===============================================
 
 This page explains how to install and use the pre-built templates that ship with
-this project.  If the templates are not exactly what you need, see
-:ref:`_cacti_customizing_templates`.
+this project.  If the templates are not exactly what you need, see the
+documentation on creating custom templates.
 
 The following instructions assume you have the necessary privileges to make
 changes to your Cacti server.  You probably need to become root on that server.
@@ -27,19 +27,15 @@ then upload them to your Cacti server as well.
 
 Let's assume you have just downloaded version 1.0.0, in
 percona-monitoring-plugins-1.0.0.tar.gz.  Unpack the archive with the following
-command at a command prompt:
+command at a command prompt::
 
-{{{
-root@cactiserver# tar zxf percona-monitoring-plugins-1.0.0.tar.gz
-}}}
+   root@cactiserver# tar zxf percona-monitoring-plugins-1.0.0.tar.gz
 
 Repeat the same process on your local computer.  You should now have a directory
 containing several files.  (The directory name will change with each new
-release).  Change into this directory:
+release).  Change into this directory::
 
-{{{
-root@cactiserver# cd percona-monitoring-plugins-1.0.0/cacti/
-}}}
+   root@cactiserver# cd percona-monitoring-plugins-1.0.0/cacti/
 
 Installing
 ==========
@@ -64,33 +60,31 @@ XML file for the templates you're installing, and submit the form.  In our
 example, the file will be named something like
 ``cacti_host_template_percona_mysql_server_ht_0.8.6i-sver1.1.4.xml``.
 
-Inspect the page that results.  You should see something like the following:
+Inspect the page that results.  You should see something like the following::
 
-{{{
-Cacti has imported the following items:
+   Cacti has imported the following items:
 
-CDEF
-[success] Percona Negate CDEF [new]
+   CDEF
+   [success] Percona Negate CDEF [new]
 
-GPRINT Preset
-[success] Percona MySQL Server Version t1.0.0:s1.0.0 [new]
-[success] Percona Normal [new]
+   GPRINT Preset
+   [success] Percona MySQL Server Version t1.0.0:s1.0.0 [new]
+   [success] Percona Normal [new]
 
-Data Input Method
-[success] Percona Get MySQL Stats/MyISAM Indexes IM [new]
-... snip ...
+   Data Input Method
+   [success] Percona Get MySQL Stats/MyISAM Indexes IM [new]
+   ... snip ...
 
-Data Template
-[success] Percona MyISAM Indexes DT [new]
-... snip ...
+   Data Template
+   [success] Percona MyISAM Indexes DT [new]
+   ... snip ...
 
-Graph Template
-[success] Percona Indexes GT [new]
-... snip ...
+   Graph Template
+   [success] Percona Indexes GT [new]
+   ... snip ...
 
-Host Template
-[success] Percona Server HT [new]
-}}}
+   Host Template
+   [success] Percona Server HT [new]
 
 The above is an abbreviated list.  Every line should show "success" at the beginning, and "new" (or "update" if you're upgrading) at the end.
 
@@ -183,8 +177,6 @@ command-line options when it executes the script.  To do this, you will need to
 do one of two things.  You can customize specific graphs that require
 configuration options, or you can generate your own templates so every graph
 requires you to fill in values for the options.
-
-Generating custom graphs is covered in :ref:`_cacti_customizing_templates`.
 
 Here's how to make specific graphs accept command-line arguments.  From the
 Console tab, click into Data Templates.  Find the desired Data Template and

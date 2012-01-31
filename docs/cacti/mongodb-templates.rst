@@ -12,7 +12,7 @@ newer of MongoDB.
 Installation
 ============
 
-Once the :ref:`cacti_ssh_setup` is working, confirm that you can login to
+Once the SSH connection is working, confirm that you can login to
 MongoDB from with the "mongo" cli tool. From this tool, confirm that the
 ``serverStatus`` command is present by running::
 

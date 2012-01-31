@@ -10,7 +10,7 @@ extract statistics from the Nginx server running there, by executing the
 Installation
 ============
 
-Once the :ref:`cacti_ssh_setup` is working, configure Nginx to report its
+Once the SSH connection is working, configure Nginx to report its
 status.  You can add the following to any server context and restart Nginx::
 
    location /server-status {

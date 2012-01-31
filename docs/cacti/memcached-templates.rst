@@ -11,7 +11,7 @@ memcached APIs installed.  Standard Unix command-line tools are all you need.
 Installation
 ============
 
-Once the :ref:`cacti_ssh_setup` is working, you need to test the memcached
+Once the SSH connection is working, you need to test the memcached
 function.  You may need to change some of the example values below, such as the
 cacti username and the hostname you're connecting to::
 
