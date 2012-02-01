@@ -39,11 +39,9 @@ for f in release/nagios/pmp-check-*; do
    # not what we want for a hierarchical series of documents; we want the
    # program's NAME to be a head1 and the rest to be head2.  This will break if
    # any other heading name starts with N.  Also, we want to replace NAME with
-   # the name of the check plugin.  And finally, plain-text blocks aren't Perl
-   # code, they are plain-text.
-   sed -e '/=head1 [^N]/s/head1/head2/' -e "s/=head1 NAME/=head1 ${f##*/}/" \
-      -e 's/.. code-block:: perl/.. code-block::/' \
-      "$f" | pod2rst --outfile "release/docs/nagios/${f##*/}.rst";
+   # the name of the check plugin.
+   sed -e '/=head1 [^N]/s/head1/head2/' -e "s/=head1 NAME/=head1 ${f##*/}/" "$f" \
+      | util/pod2rst > "release/docs/nagios/${f##*/}.rst";
 done
 
 # Make the Sphinx documentation into HTML format.

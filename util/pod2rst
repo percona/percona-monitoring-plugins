@@ -1,225 +1,67 @@
-#!/usr/bin/perl
-
-eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
-    if 0; # not running under some shell
-
-# Original authors: don
-# $Revision: 1525 $
-
+#!/usr/bin/env perl
 
 use strict;
-use warnings;
-use Carp;
-use Getopt::Long qw(:config no_ignore_case bundling);
+use warnings FATAL => 'all';
 
-use Restructured;
+use English qw(-no_match_vars);
 
-# main
-{
-    # local($SIG{__DIE__}) = sub { &Carp::confess };
-    my $self = bless { };
+my %headings = (
+   '1' => '=',
+   '2' => '-',
+);
+my $list   = 0;
 
-    my $opts = $self->get_options([ "help|h",
-                                    "in_file|infile|in-file|i=s",
-                                    "out_file|outfile|out-file|o=s",
-                                    "title=s",
-                                  ], { });
-    $self->check_options($opts, [ ]); # die's on bad options
-    $self->{opts} = $opts;
-
-    my ($in_fh, $out_fh) = $self->open_files;
-
-    my $conv = Restructured->new;
-    my $output = $conv->convert_file($in_fh, $opts->{title}, $out_fh);
-
-    unless (defined($output)) {
-        print STDERR "\n\nFailed to convert!\n\n";
-        exit 1;
-    }
-
-    exit 0;
+# Skip up until the documentation starts.
+while(<>) {
+   last if m/^=pod/;
 }
 
-exit 0;
+# Read a para at a time
+$RS = "";
 
-###############################################################################
-# Subroutines
+LINE:
+while (<>) {
+   my $line = $_;
+   chomp $line;
 
-sub open_files {
-    my ($self) = @_;
-    my $opts = $self->{opts};
+   if ( $line eq '=cut' ) {
+      last LINE;
+   }
 
-    my $in_fh;
-    my $out_fh;
+   # Headings
+   if ( my ($level, $val) = $line =~ m/^=head(\d)\s+(.*)$/ ) {
+      print $val, "\n";
+      $val =~ s/./$headings{$level}/g;
+      print $val, "\n\n";
+      next LINE;
+   }
 
-    if (defined($opts->{in_file})) {
-        open($in_fh, '<', $opts->{in_file})
-            or die "couldn't open input file $opts->{in_file}: $!";
-    }
-    else {
-        $in_fh = \*STDIN;
-    }
+   if ( $line =~ m/^(\s+)/ ) {
+      print ".. code-block::\n", $line, "\n\n";
+      next LINE;
+   }
 
-    if (defined($opts->{out_file})) {
-        open($out_fh, '>', $opts->{out_file})
-            or die "couldn't open output file $opts->{out_file}: $!";
-    }
-    else {
-        $out_fh = \*STDOUT;
-    }
+   if ( $line =~ m/=over/ ) {
+      $list = 1;
+      next LINE;
+   }
+   elsif ( $line =~ m/=back/ ) {
+      $list = 0;
+      next LINE;
+   }
 
-    return ($in_fh, $out_fh);
+   if ( $list ) {
+      if ( $line =~ m/^=item */ ) {
+         print "*";
+         next LINE;
+      }
+      else {
+         $line =~ s/^/   /gm;
+         $line =~ s/^ //;
+         print $line, "\n\n";
+         next LINE;
+      }
+   }
+
+   print $line, "\n\n";
 }
-
-########## begin option processing ##########
-sub print_usage {
-    print STDERR qq{\nUsage: @{[ ($0 =~ m{\A.*/([^/]+)\Z})[0] || $0 ]} options
-
-    Options:
-        --infile         # filename for the pod to convert (input taken from
-                         # stdin by default)
-        --outfile        # filename for the resulting reStructuredText file
-                         # (output sent to stdout by default)
-        --title          # title for the document (by default an attempt will
-                         # be made to extract the title, assuming that the first
-                         # section is a head1 called NAME)
-        [-h | --help]    # this help msg
-\n};
-}
-
-sub check_options {
-    my ($self, $opts, $required) = @_;
-
-    if (not $opts or $opts->{help}) {
-        $self->print_usage;
-        exit 1;
-    }
-
-    my $opt_ok = 1;
-    $required = [ ] unless $required;
-    foreach my $key (@$required) {
-        if (defined($opts->{$key})) {
-            if (my $v = $opts->{$key}) {
-                if (my $ref = ref($v)) {
-                    if ($ref eq 'ARRAY' ) {
-                        unless (@$v) {
-                            $opt_ok = 0;
-                            warn "missing required option '$key'
-";
-                        }
-                    }
-                }
-            }
-        }
-        else {
-            $opt_ok = 0;
-            warn "missing required option '$key'\n";
-        }
-    }
-
-    unless ($opt_ok) {
-        $self->print_usage;
-        exit 1;
-    }
-
-    return $opt_ok;
-}
-
-sub get_options {
-    my ($self, $spec, $defaults) = @_;
-    my %opts = $defaults ? %$defaults : ();
-    $spec = [ ] unless $spec;
-
-    my $process_opt = sub {
-        my ($key, $val) = @_;
-
-        if (scalar(@_) > 2) {
-            $opts{$key}{$val} = $_[2];
-        }
-        else {
-            if ( exists($opts{$key}) and (my $v = $opts{$key}) ) {
-                if (my $ref = ref($v)) {
-                    if ($ref eq 'ARRAY' ) {
-                        push @{ $opts{$key} }, $val;
-                        return 1;
-                    }
-                }
-            }
-
-            $opts{$key} = $val;
-        }
-    };
-
-    my $opt_rv = Getopt::Long::GetOptions(map { ($_ => $process_opt) } @$spec);
-
-    return $opt_rv ? \%opts : undef;
-}
-########## end option processing ##########
-
-
-=pod
-
-=head1 NAME
-
-pod2rst - convert .pod files to .rst files
-
-=head1 SYNOPSIS
-
-=for pod2rst next-code-block: bash
-
-pod2rst --infile=<name> --outfile=<name> --title=<name>
-
-=head1 DESCRIPTION
-
-Converts files containing POD to reStructuredText format for input to Sphinx.
-
-=head1 ARGUMENTS
-
-C<pod2rst> takes the following arguments:
-
-=over 4
-
-=item infile
-
- --infile=<name>
-
-Specifies the pod file to convert.  Input is taken from stdin by default.
-
-=item outfile
-
- --outfile=<name>
-
-Specifies the reStructuredText file to create.  Output goes to stdout by default.
-
-=item title
-
- --title=<title>
-
-Specifies the section title for the file.
-
-=back
-
-=head1 AUTHOR
-
-Don Owens <don@regexguy.com>
-
-=head1 SEE ALSO
-
-L<Pod::POM::View::Restructured>, L<pod2html>
-
-Sphinx: L<http://sphinx.pocoo.org/>
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright (c) 2010 Don Owens <don@regexguy.com>.  All rights reserved.
-
-This is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.  See perlartistic.
-
-This program is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.
-
-
-=cut
