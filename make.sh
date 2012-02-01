@@ -28,14 +28,25 @@ rm -rf release/nagios/t/
 # directory.
 sed -i'' -e "s/\\\$VERSION\\\$/$VERSION/" \
          -e "s/\\\$PROJECT_NAME\\\$/$PROJECT_NAME/" \
-         release/nagios/pmp* release/cacti/scripts/ss*
+         release/nagios/pmp* \
+         release/docs/config/conf.py
+         # release/cacti/scripts/ss*
 
-# Make the Nagios documentation into Sphinx format
+# Make the Nagios documentation into Sphinx .rst format.  The Cacti docs are
+# already in Sphinx format.
 for f in release/nagios/pmp-check-*; do
-   pod2rst --infile "$f" --outfile "release/docs/nagios/${f##*/}.rst";
+   # The documents have all =head1 sections, which is fine for man pages, but is
+   # not what we want for a hierarchical series of documents; we want the
+   # program's NAME to be a head1 and the rest to be head2.  This will break if
+   # any other heading name starts with N.  Also, we want to replace NAME with
+   # the name of the check plugin.  And finally, plain-text blocks aren't Perl
+   # code, they are plain-text.
+   sed -e '/=head1 [^N]/s/head1/head2/' -e "s/=head1 NAME/=head1 ${f##*/}/" \
+      -e 's/.. code-block:: perl/.. code-block::/' \
+      "$f" | pod2rst --outfile "release/docs/nagios/${f##*/}.rst";
 done
 
 # Make the Sphinx documentation into HTML format.
-sphinx-build -N -W -c docs/config/ -b html release/docs/ release/html
+sphinx-build -N -W -c release/docs/config/ -b html release/docs/ release/html
 
 # TODO: check that there is an entry for the new version in the Nagios and Cacti changelogs
