@@ -1,11 +1,11 @@
 Percona Monitoring Plugins
 ==========================
 
-Percona Monitoring Plugins, are high-quality components to add enterprise-grade
-MySQL capabilities to your existing in-house, on-premises monitoring solutions.
-The components are designed to work well with widely deployed solutions such as
-Nagios and Cacti, and are delivered in the form of templates, plugins, and
-scripts.
+The Percona Monitoring Plugins are high-quality components to add
+enterprise-grade MySQL capabilities to your existing in-house, on-premises
+monitoring solutions.  The components are designed to integrate seamlessly with
+widely deployed solutions such as Nagios and Cacti, and are delivered in the
+form of templates, plugins, and scripts.
 
 At Percona, our experience helping customers with emergencies informs our
 monitoring strategies. We have analyzed a large database of emergency issues,
