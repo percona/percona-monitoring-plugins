@@ -1,5 +1,5 @@
-Percona Monitoring Plugins Documentation
-========================================
+Percona Monitoring Plugins
+==========================
 
 Percona Monitoring Plugins, are high-quality components to add enterprise-grade
 MySQL capabilities to your existing in-house, on-premises monitoring solutions.
@@ -48,16 +48,16 @@ would like help setting up the components, integrating them into your
 environment, choosing alerts, or any other task, Percona consulting and support
 staff can help.
 
-Installing the Percona Monitoring Plugins
-=========================================
+Installing the Plugins
+======================
 
 You can download the Percona Monitoring Plugins from the `Percona Software
 Downloads <http://www.percona.com/downloads/>`_ directory, including our APT and
 Yum repositories.  For specific installation instructions, read the detailed
 documentation on each type of components below.
 
-Percona Monitoring Plugins for Nagios
-=====================================
+Plugins for Nagios
+==================
 
 Nagios is the most widely-used open-source fault-detection system, with advanced
 features such as escalation, dependencies, and flexible notification rules.
@@ -67,13 +67,15 @@ features such as escalation, dependencies, and flexible notification rules.
 
    nagios/index
 
-Percona Monitoring Plugins for Cacti
-====================================
+Plugins for Cacti
+=================
 
 Cacti is a popular PHP- and MySQL-based web front-end to RRDTool, providing
 intuitive point-and-click configuration and browsing of graphs and metrics.
 
 .. toctree::
+   :maxdepth: 1
+
    cacti/index
    cacti/faq
    cacti/changelog

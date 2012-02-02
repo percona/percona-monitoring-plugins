@@ -28,6 +28,7 @@ documentation explains its commandline options and arguments, as well as the
 commands executed and the privileges required.
 
 .. toctree::
+   :maxdepth: 1
    :glob:
 
    pmp-*

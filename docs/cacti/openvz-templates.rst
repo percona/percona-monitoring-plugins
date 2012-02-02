@@ -8,7 +8,7 @@ extract statistics from the OpenVZ container, by concatenating the contents of
 ``/proc/user_beancounters`` to standard output.
 
 Installation
-============
+------------
 
 Once the SSH connection is working, import the OpenVZ template and apply
 it to your host, then add the graphs.
@@ -26,6 +26,6 @@ connecting to::
    # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type openvz --host 127.0.0.1 --items i0,i1'
 
 Sample Graphs
-=============
+-------------
 
 No sample graphs are available yet.

@@ -9,7 +9,7 @@ extract statistics from the memcached server running there, by executing the
 memcached APIs installed.  Standard Unix command-line tools are all you need.
 
 Installation
-============
+------------
 
 Once the SSH connection is working, you need to test the memcached
 function.  You may need to change some of the example values below, such as the
@@ -28,7 +28,7 @@ work, so you need the ``netcat-traditional`` package, and you need to switch to
    # update-alternatives --config nc
 
 Sample Graphs
-=============
+-------------
 
 The following sample graphs demonstrate how the data is presented.
 

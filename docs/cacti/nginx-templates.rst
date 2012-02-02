@@ -8,7 +8,7 @@ extract statistics from the Nginx server running there, by executing the
 ``wget`` program with the url ``/server-status``.
 
 Installation
-============
+------------
 
 Once the SSH connection is working, configure Nginx to report its
 status.  You can add the following to any server context and restart Nginx::
@@ -30,7 +30,7 @@ connecting to::
    # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type nginx --host 127.0.0.1 --items gz,h0'
 
 Sample Graphs
-=============
+-------------
 
 The following sample graphs demonstrate how the data is presented.
 

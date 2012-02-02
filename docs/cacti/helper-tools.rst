@@ -6,7 +6,7 @@ Cacti Template Helper Tools
 Aside from the tools documented elsewhere, there are the following tools:
 
 tools/graph_defs.pl
-===================
+-------------------
 
 This tool helps you make boilerplate text to plug into a definitions file.  If
 you create the definitions file and add the data input as suggested in the

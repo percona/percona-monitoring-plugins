@@ -1,7 +1,7 @@
 .. _cacti_adding_graphs:
 
 Adding Graphs
-=============
+-------------
 
 This document shows you how to add graphs to an existing template.  Much of the technical background is covered in the documentation on creating graphs, so you can treat this page as a quick-reference.
 

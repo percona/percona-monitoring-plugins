@@ -9,7 +9,7 @@ statistics from the Redis server with the `INFO command
 SSH*, but connect directly with TCP sockets to gather the information.
 
 Installation
-============
+------------
 
 Import the Redis template and apply it to your host, then add the graphs.
 
@@ -20,7 +20,7 @@ connecting to::
    # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type redis --host 127.0.0.1 --items j3'
 
 Sample Graphs
-=============
+-------------
 
 The following sample graphs demonstrate how the data is presented.
 

@@ -9,7 +9,7 @@ This is a good substitute for the standard kinds of system metrics one might
 graph via SNMP, when SNMP is not available or not desired.
 
 Installation
-============
+------------
 
 Once the SSH connection is working, no special installation is
 necessary for most of the graphs.
@@ -30,7 +30,7 @@ You should append ``sda`` in every textbox shown in that screenshot, if you want
 to monitor ``/dev/sda``.  Use the device name as it appears in ``/proc/diskstats``.
 
 Sample Graphs
-=============
+-------------
 
 The following sample graphs demonstrate how the data is presented.
 

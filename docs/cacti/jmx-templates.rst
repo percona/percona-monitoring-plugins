@@ -7,7 +7,7 @@ These templates use ``ss_get_by_ssh.php`` to connect to a server via SSH and
 extract statistics from the JMX server.
 
 Installation
-============
+------------
 
 Once the SSH connection is working, you need to make the Java runtime information
 available through JMX by adding the JMX system properties when you start the
@@ -44,7 +44,7 @@ values necessary with ones appropriate for your environment::
    # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type jmx --host 127.0.0.1 --items j4,j5'
 
 Sample Graphs
-=============
+-------------
 
 The following sample graphs demonstrate how the data is presented.
 

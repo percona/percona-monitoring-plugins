@@ -102,7 +102,7 @@ your test passes, and then write similar tests for the other two sample files.
 Now you're done with the parsing code!
 
 Writing the Command Line
-========================
+------------------------
 
 If you've gotten this far, you've collected sample data, and written well-tested
 code to parse it.  This code is contained in a function called
@@ -166,7 +166,7 @@ Now you can specify ``--device sda1`` or similar, and the code can access that
 through ``$options['device']``, as you've seen in the examples above.
 
 Adding a Custom Getter Function
-===============================
+-------------------------------
 
 The ``ss_get_by_ssh.php`` script assumes you're going to write an
 ``XXX_cmdline()`` function that will return the commandline to be executed via
@@ -177,7 +177,7 @@ example of this in the Redis graphs, where sockets are used to get Redis status
 directly instead of via SSH.
 
 Specifying a Short-Name Mapping
-===============================
+-------------------------------
 
 You already created long, descriptive names for the data values you're going to
 graph.  Unfortunately, due to another Cacti limitation, these names can't be
@@ -243,7 +243,7 @@ short names you defined in the mapping array.  This is how Cacti will eventually
 execute the script to gather the data.
 
 Write Another Test
-==================
+------------------
 
 You are now finished editing the PHP, except for one last thing: write another
 test case.  Make it test the integration of all the code you've written, and
@@ -266,7 +266,7 @@ against the ``ss_get_by_ssh()`` function, and emulate that.  For example::
 Now you can go on to defining the graphs.
 
 How the Graph System Works
-==========================
+--------------------------
 
 Cacti's templating system is quite difficult to work with.  It uses cryptic
 values, has a lot of redundant data, and uses randomly generated hashes as
@@ -297,7 +297,7 @@ definition.
 Now that you know this, you are ready to learn about the definition file.
 
 Structure of the Definition File
-================================
+--------------------------------
 
 The definition file is a Perl variable containing nested data structures.  The
 relationship amongst the various types of data looks like this:
@@ -337,7 +337,7 @@ file.  If you do that, the pre-existing hashes will get overwritten with newer
 ones, which is bad.  Later you'll see how to check for this, just in case.
 
 Defining an Input
-=================
+-----------------
 
 The first step is to define your input.  You created a whole new group of data,
 which you can access with ``--type diskstats``.  Create a new input for that by
@@ -445,7 +445,7 @@ The result is that Cacti will permit data entry for ``--device``, it will requir
 it, and it will ask for it to be provided for every graph.
 
 Defining the Graph
-==================
+------------------
 
 Now that you have the definition of the input that you're going to graph, you
 need to specify the graph itself -- how that data should be presented visually.
@@ -597,7 +597,7 @@ If you put it all together, you'll get the full graph definition::
       },
 
 Fix Your Hashes
-===============
+---------------
 
 After you're done with the above steps, you have everything you need to create
 templates. One thing remains: you need to resolve the duplication you created by
@@ -619,7 +619,7 @@ If you are creating a new definitions file based on an existing one, you can use
 the ``--refresh`` option to replace all hashes.
 
 Generate Templates
-==================
+------------------
 
 Now you're ready to generate templates from your definition file.  Here's how::
 
@@ -628,7 +628,7 @@ Now you're ready to generate templates from your definition file.  Here's how::
 At this point, the generated template file should be ready to import and use.
 
 Optional Template Elements
-==========================
+--------------------------
 
 Skip this unless you're an advanced user.
 

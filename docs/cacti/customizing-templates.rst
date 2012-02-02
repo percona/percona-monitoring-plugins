@@ -19,7 +19,7 @@ explain the possible customizations.  All of these are possible simply by
 passing the correct options to the ``make-template.pl`` command-line tool.
 
 Generating Templates
-====================
+--------------------
 
 The process of generating a template is very simple.  You simply execute the
 make-template.pl program and give it the associated script and template
@@ -31,7 +31,7 @@ in the release file::
      definitions/mysql_definitions.pl > mysql-template.xml
 
 Generate Templates for a Specific Cacti Version
-===============================================
+-----------------------------------------------
 
 Cacti templates are version-specific, because the hash identifiers that are used
 as GUIDs have a version number embedded in them.  This can prevent templates
@@ -45,7 +45,7 @@ forwards-compatible, so templates generated for an earlier version of Cacti
 should work on a newer version too.
 
 Accept Input in Each Data Source
-================================
+--------------------------------
 
 If you want to specify command-line options to data sources, you can easily make
 certain command-line options for the script required per-graph.  For example,
@@ -73,7 +73,7 @@ prompted to fill in a value for the port:
    Specifying a value for a port
 
 Specify a Different Graph Width or Height
-=========================================
+-----------------------------------------
 
 The default size of the Cacti graphs is 120 pixels high by 500 pixels wide.  If
 you would like to specify a different size, you can use the ``--graph_height`` and
@@ -84,7 +84,7 @@ you would like to specify a different size, you can use the ``--graph_height`` a
      --graph_height 240 --graph_width 1000 > templates_240x1000.xml
 
 Specify a Different Name Prefix
-===============================
+-------------------------------
 
 The default naming convention for every item created by the templates starts
 with "Percona", the name of the item, and an abbreviation at the end, such as "DT" for
@@ -96,7 +96,7 @@ a larger size, as in the previous example.  Then you'll have templates named
 like "Big MySQL Select Types GT".
 
 Specify a Different Polling Interval
-====================================
+------------------------------------
 
 The default polling interval for most Cacti installations is 5 minutes, or 300
 seconds.  The templates need to match the polling interval, because the RRD
@@ -105,7 +105,7 @@ to use a different interval, you can generate matching templates with the
 ``--poll_interval`` option, which accepts the number of seconds.
 
 Change the Default Maximum Permitted Value in RRD Files
-=======================================================
+-------------------------------------------------------
 
 The default maximum value that the RRD files will recognize as valid is used to
 detect garbage input and prevent spikes in graphs.  By default, it is set to the

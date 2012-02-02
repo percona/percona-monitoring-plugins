@@ -10,7 +10,7 @@ http://dev.mysql.com/doc/refman/5.1/en/server-status-variables.html to learn the
 meaning of the status variables contained in the graphs.
 
 Installation Notes
-==================
+------------------
 
 The MySQL templates work by executing a PHP script that gathers information from
 MySQL servers and returns it to Cacti.  The script makes an ordinary MySQL
@@ -37,7 +37,7 @@ If you want to specify a different MySQL port for various servers, see
 the instructions on how to accept input in each data source.
 
 User Privileges
-===============
+---------------
 
 The suggested user privileges mentioned above are sufficient for the common
 case.  In some cases you might not want or have such access.  The following list
@@ -61,7 +61,7 @@ If you disable significant portions of the functionality, such as the InnoDB
 graphs, then you might want to edit the Host Template to remove unwanted graphs.
 
 Sample Graphs
-=============
+-------------
 
 The following sample graphs demonstrate how the data is presented.
 

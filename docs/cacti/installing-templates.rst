@@ -16,7 +16,7 @@ have hidden password fields you can't see, but the browser will fill in, and
 it'll cause the templates to be configured incorrectly.
 
 Downloading
-===========
+-----------
 
 You can download the templates from `Percona's download server
 <http://www.percona.com/downloads/>`_. Get the latest released version.  You
@@ -38,7 +38,7 @@ release).  Change into this directory::
    root@cactiserver# cd percona-monitoring-plugins-1.0.0/cacti/
 
 Installing
-==========
+----------
 
 Before you install, read the specific instructions for the templates you plan to
 install.  These are linked from this document's table of contents.
@@ -89,7 +89,7 @@ Inspect the page that results.  You should see something like the following::
 The above is an abbreviated list.  Every line should show "success" at the beginning, and "new" (or "update" if you're upgrading) at the end.
 
 Configuring
-===========
+-----------
 
 The templates themselves don't need to be configured, but you might need to
 configure the scripts that they execute to gather their data.  For example, you
@@ -97,7 +97,7 @@ might need to specify a username and password to connect to MySQL and gather
 statistics.  There are several ways to do this.
 
 Embedding Configuration
-=======================
+-----------------------
 
 The simplest way is to embed the configuration options in the script file
 itself.  Open the script file (such as ``scripts/ss_get_mysql_stats.php``) with
@@ -126,7 +126,7 @@ you'll lose your configuration.  And this only works if all of your monitored
 resources need the same configuration parameters.
 
 A Configuration File
-====================
+--------------------
 
 If you don't want to store the configuration options directly into the PHP
 script file, you can create another file with the same name and the filename
@@ -152,7 +152,7 @@ global configuration for every monitored resource.  If you need to specify a
 username and password for each host or each graph, it won't work.
 
 Passing Command-Line Arguments
-==============================
+------------------------------
 
 The above configuration methods make configuration available to the scripts as
 PHP variables, but it is also possible to pass command-line arguments to the
@@ -203,7 +203,7 @@ Here's a snippet from the Cacti log, showing this in action::
       --host 127.0.0.1 --items cv,cx,cy,cz --user root --pass s3cret --port 3306
 
 Creating Graphs
-===============
+---------------
 
 Creating graphs is the easiest step of the process.
 

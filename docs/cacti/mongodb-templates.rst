@@ -10,7 +10,7 @@ extract statistics from the MongoDB server running there, by executing the
 newer of MongoDB.
 
 Installation
-============
+------------
 
 Once the SSH connection is working, confirm that you can login to
 MongoDB from with the "mongo" cli tool. From this tool, confirm that the
@@ -25,7 +25,7 @@ values below, such as the cacti username and the hostname you're connecting to::
    su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items jc,jd'
 
 Sample Graphs
-=============
+-------------
 
 The following sample graphs demonstrate how the data is presented.
 

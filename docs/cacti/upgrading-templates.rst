@@ -20,7 +20,7 @@ Check the installed scripts for their version::
 The following sections explain how to upgrade from each version to the next:
 
 Version 1.0.0
-=============
+-------------
 
 Version 1.0.0 of these templates may not be backwards compatible with the
 *Better Cacti Templates* project from which they are derived, because the short

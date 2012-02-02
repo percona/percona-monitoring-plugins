@@ -149,7 +149,7 @@ This plugin executes no UNIX commands that may need special privileges.
 
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
-This program is copyright 2012 Baron Schwartz, 2012 Percona Inc.
+This program is copyright 2012-$CURRENT_YEAR$ Baron Schwartz, 2012-$CURRENT_YEAR$ Percona Inc.
 Feedback and improvements are welcome.
 
 THIS PROGRAM IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
@@ -164,7 +164,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 
 =head1 VERSION
 
-Percona Monitoring Plugins pmp-check-mysql-replication-running $VERSION$
+$PROJECT_NAME$ pmp-check-mysql-replication-running $VERSION$
 
 =cut
 

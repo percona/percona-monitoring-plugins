@@ -3,6 +3,7 @@
 # ============================================================================
 # This program is part of $PROJECT_NAME$
 # License: GPL License (see COPYING)
+# Copyright 2008-$CURRENT_YEAR$ Baron Schwartz, 2012-$CURRENT_YEAR$ Percona Inc.
 # Authors:
 #  Baron Schwartz
 # ============================================================================

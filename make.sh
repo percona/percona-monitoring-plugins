@@ -29,14 +29,22 @@ rm -rf release
 # mkdir -p release/{docs/,}{nagios,cacti}
 mkdir release
 cp -R nagios docs release
+mkdir release/cacti
+cp -R cacti/scripts release/cacti
 rm -rf release/nagios/t
 
 # Update the version number and other important macros in the temporary
 # directory.
-         # TODO: release/cacti/scripts/ss*
-for f in release/nagios/pmp* release/docs/config/conf.py; do
-   sed -e "s/\\\$PROJECT_NAME\\\$/$PROJECT_NAME/" "$f" > "${TEMPFILE}"
-   sed -e "s/\\\$VERSION\\\$/$VERSION/" "${TEMPFILE}" > "$f"
+YEAR=$(date +%Y)
+for f in release/nagios/pmp* release/docs/config/conf.py release/cacti/scripts/ss* ; do
+   sed -e "s/\\\$PROJECT_NAME\\\$/$PROJECT_NAME/g" "$f" > "${TEMPFILE}"
+   mv "${TEMPFILE}" "$f"
+   sed -e "s/\\\$VERSION\\\$/$VERSION/g" "$f" > "${TEMPFILE}"
+   mv "${TEMPFILE}" "$f"
+   sed -e "s/\\\$CURRENT_YEAR\\\$/${YEAR}/g" "$f" > "${TEMPFILE}"
+   mv "${TEMPFILE}" "$f"
+   sed -e "s/${YEAR}-${YEAR}/${YEAR}/g" "$f" > "${TEMPFILE}"
+   mv "${TEMPFILE}" "$f"
 done
 
 # Make the Nagios documentation into Sphinx .rst format.  The Cacti docs are
@@ -48,7 +56,10 @@ for f in release/nagios/pmp-check-*; do
    # any other heading name starts with N.  Also, we want to replace NAME with
    # the name of the check plugin.
    sed -e '/=head1 [^N]/s/head1/head2/' -e "s/=head1 NAME/=head1 ${f##*/}/" "$f" \
-      | util/pod2rst > "release/docs/nagios/${f##*/}.rst";
+      | util/pod2rst > "${TEMPFILE}"
+   # Also remove the license section.
+   sed -e '/COPYRIGHT, LICENSE/,/Temple Place/d' "${TEMPFILE}" \
+      > "release/docs/nagios/${f##*/}.rst";
 done
 
 # Make the Sphinx documentation into HTML format.
