@@ -1033,6 +1033,13 @@ foreach my $g ( @{ $t->{graphs} } ) {
    my $dt = $g->{dt};
    my $i = $t->{inputs}->{$dt->{input}};
    my @needed = grep { ref($dt->{$_}) eq 'HASH' } keys %$dt;
+   my @missing_short = map { !defined $short_names{$_} } @needed;
+   if ( @missing_short ) {
+      die "Looks like you have a mismatch between a name in the definitions "
+         . "and the magical array in the script.  Can't find short names for "
+         . join(', ', @missing_short)
+         . ' or perhaps ' . join(', ', keys %$dt);
+   }
    my $needed = join(',', sort { $a cmp $b } map { $short_names{$_} } @needed);
 
    # And again, re-generate the hash.
