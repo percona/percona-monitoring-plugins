@@ -16,7 +16,7 @@ example, you should be ready to create quite complex graphs yourself.  We'll
 collect data from ``/proc/diskstats`` on Linux and graph it.
 
 Collecting and Parsing the Data
-===============================
+-------------------------------
 
 Getting the data is quite simple.  The template will SSH to the server
 you're graphing and ``cat /proc/diskstats``.  Then you'll parse the result into

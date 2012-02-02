@@ -10,6 +10,7 @@ my %headings = (
    '2' => '-',
 );
 my $list   = 0;
+my $marker = "";
 
 # Skip up until the documentation starts.
 while(<>) {
@@ -28,6 +29,12 @@ while (<>) {
       last LINE;
    }
 
+   # Take care of inline stylings.
+   $line =~ s/C<(.*?)>/``$1``/gs;
+
+   # Escape special characters that aren't at the beginning of a line.
+   $line =~ s/(?<!^)([*])/\\$1/gm;
+
    # Headings
    if ( my ($level, $val) = $line =~ m/^=head(\d)\s+(.*)$/ ) {
       print $val, "\n";
@@ -36,11 +43,13 @@ while (<>) {
       next LINE;
    }
 
+   # Indented lines are turned into code blocks.
    if ( $line =~ m/^(\s+)/ ) {
-      print ".. code-block::\n", $line, "\n\n";
+      print ".. code-block:: none\n\n", $line, "\n\n";
       next LINE;
    }
 
+   # Lists begin and end.
    if ( $line =~ m/=over/ ) {
       $list = 1;
       next LINE;
@@ -50,14 +59,25 @@ while (<>) {
       next LINE;
    }
 
+   # Paragraphs within a list.
    if ( $list ) {
-      if ( $line =~ m/^=item */ ) {
-         print "*";
+      if ( my ($m) = $line =~ m/^=item \\?(.*)/g ) {
+         $marker = $m;
          next LINE;
       }
       else {
          $line =~ s/^/   /gm;
-         $line =~ s/^ //;
+         # The first paragraph after printing the bullet marker needs to be
+         # prepended with the marker.
+         if ( $marker ) {
+            if ( length($marker) == 1 ) {
+               $line =~ s/\A /$marker/;
+            }
+            else {
+               $line = "$marker\n\n$line";
+            }
+            $marker = "";
+         }
          print $line, "\n\n";
          next LINE;
       }

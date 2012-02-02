@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+set -u
+
 # This script makes a tarball of all of the source code and documentation for
 # both the Cacti templates and the Nagios plugins.  Call it with these
 # arguments:
@@ -16,21 +19,25 @@ fi
 # This will be replaced into the $PROJECT_NAME$ macro.
 PROJECT_NAME="Percona Monitoring Plugins"
 
+# Set up a temp file.
+TEMPFILE=$(mktemp /tmp/${0##*/}.XXXX)
+trap 'rm -rf "$TEMPFILE"' EXIT
+
 # Set up the temporary directory.  Copy things into the temporary directory so
 # we can alter them without messing with stuff that is under source control.
 rm -rf release
 # mkdir -p release/{docs/,}{nagios,cacti}
 mkdir release
-cp -R nagios/ docs/ release/
-rm -rf release/nagios/t/
+cp -R nagios docs release
+rm -rf release/nagios/t
 
 # Update the version number and other important macros in the temporary
 # directory.
-sed -i'' -e "s/\\\$VERSION\\\$/$VERSION/" \
-         -e "s/\\\$PROJECT_NAME\\\$/$PROJECT_NAME/" \
-         release/nagios/pmp* \
-         release/docs/config/conf.py
-         # release/cacti/scripts/ss*
+         # TODO: release/cacti/scripts/ss*
+for f in release/nagios/pmp* release/docs/config/conf.py; do
+   sed -e "s/\\\$PROJECT_NAME\\\$/$PROJECT_NAME/" "$f" > "${TEMPFILE}"
+   sed -e "s/\\\$VERSION\\\$/$VERSION/" "${TEMPFILE}" > "$f"
+done
 
 # Make the Nagios documentation into Sphinx .rst format.  The Cacti docs are
 # already in Sphinx format.

@@ -8,7 +8,7 @@ extract statistics from the Apache server running there, by executing the
 ``wget`` program with the url ``/server-status``.
 
 Installation
-============
+------------
 
 Once the SSH connection is working, `configure Apache to report its
 status <http://httpd.apache.org/docs/2.0/mod/mod_status.html>`_.  The typical
@@ -27,7 +27,7 @@ connecting to.
 ``# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type apache --host 127.0.0.1 --items ge,gf'``
 
 Sample Graphs
-=============
+-------------
 
 The following sample graphs demonstrate how the data is presented.
 

@@ -63,6 +63,8 @@ Nagios is the most widely-used open-source fault-detection system, with advanced
 features such as escalation, dependencies, and flexible notification rules.
 
 .. toctree::
+   :maxdepth: 2
+
    nagios/index
 
 Percona Monitoring Plugins for Cacti
