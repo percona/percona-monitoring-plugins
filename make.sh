@@ -102,3 +102,13 @@ done
 
 # Make the Sphinx documentation into HTML format.
 sphinx-build -N -W -c release-docs/config/ -b html release-docs/ release-docs/html
+
+# Make the release tarball
+
+NAME="percona-monitoring-plugins-${VERSION}"
+mv release "${NAME}"
+tar zcf "${NAME}.tar.gz" "${NAME}"
+
+echo "The documentation is complete in HTML format."
+echo "It is in the release-docs/html directory."
+echo "The release is in ${NAME}.tar.gz"
