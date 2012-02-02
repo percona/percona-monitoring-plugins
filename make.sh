@@ -23,20 +23,21 @@ PROJECT_NAME="Percona Monitoring Plugins"
 TEMPFILE=$(mktemp /tmp/${0##*/}.XXXX)
 trap 'rm -rf "$TEMPFILE"' EXIT
 
-# Set up the temporary directory.  Copy things into the temporary directory so
+# Set up the release directory.  Copy things into the directory so
 # we can alter them without messing with stuff that is under source control.
-rm -rf release
-# mkdir -p release/{docs/,}{nagios,cacti}
+rm -rf release release-docs
 mkdir release
-cp -R nagios docs release
+cp -R nagios release
+cp -R docs release-docs
 mkdir -p release/cacti/templates
-cp -R cacti/scripts cacti/definitions release/cacti
+cp -R cacti/scripts cacti/definitions cacti/tools cacti/misc release/cacti
 rm -rf release/nagios/t
+cp COPYING release
 
 # Update the version number and other important macros in the temporary
 # directory.
 YEAR=$(date +%Y)
-for f in release/nagios/pmp* release/docs/config/conf.py release/cacti/scripts/ss* ; do
+for f in release/nagios/pmp* release-docs/config/conf.py release/cacti/scripts/ss* ; do
    sed -e "s/\\\$PROJECT_NAME\\\$/$PROJECT_NAME/g" "$f" > "${TEMPFILE}"
    mv "${TEMPFILE}" "$f"
    sed -e "s/\\\$VERSION\\\$/$VERSION/g" "$f" > "${TEMPFILE}"
@@ -57,7 +58,7 @@ done
 # documentation to add the MD5 sums there too, which is useful for upgrades; it
 # lets us see whether we need to merge any customizations when upgrading the
 # templates.
-if ! grep "^Version ${VERSION}$" release/docs/cacti/upgrading-templates.rst >/dev/null; then
+if ! grep "^Version ${VERSION}$" release-docs/cacti/upgrading-templates.rst >/dev/null; then
    echo "There doesn't appear to be a changelog entry for $VERSION in " \
         "docs/cacti/upgrading-templates.rst"
    exit 1
@@ -73,16 +74,16 @@ for file in cacti/definitions/*.pl; do
       exit 1
    fi
    SCRIPT=$(awk '/Autobuild/{ print $NF; exit }' "$file");
-   FILE="release/cacti/templates/cacti_host_template_x_${NAME}_server_ht_0.8.6i-sver${VERSION}.xml"
+   FILE="release/cacti/templates/cacti_host_template_percona_${NAME}_server_ht_0.8.6i-sver${VERSION}.xml"
    perl cacti/tools/make-template.pl --script release/cacti/scripts/$SCRIPT "$file" > "${FILE}"
    MD5=$(md5 -q "${FILE}")
    sed -e "s/CUSTOMIZED_XML_TEMPLATE/${MD5}/" "${FILE}" > "${TEMPFILE}"
    mv "${TEMPFILE}" "${FILE}"
 done
-echo >> release/docs/cacti/upgrading-templates.rst
+echo >> release-docs/cacti/upgrading-templates.rst
 grep Checksum release/cacti/templates/*.xml \
    | sed -e 's/^.*<name>//' -e 's/<.name>//' -e 's/^/   /' \
-   >> release/docs/cacti/upgrading-templates.rst
+   >> release-docs/cacti/upgrading-templates.rst
 
 # Make the Nagios documentation into Sphinx .rst format.  The Cacti docs are
 # already in Sphinx format.
@@ -96,10 +97,8 @@ for f in release/nagios/pmp-check-*; do
       | util/pod2rst > "${TEMPFILE}"
    # Also remove the license section.
    sed -e '/COPYRIGHT, LICENSE/,/Temple Place/d' "${TEMPFILE}" \
-      > "release/docs/nagios/${f##*/}.rst";
+      > "release-docs/nagios/${f##*/}.rst";
 done
 
 # Make the Sphinx documentation into HTML format.
-sphinx-build -N -W -c release/docs/config/ -b html release/docs/ release/html
-
-# TODO: check that there is an entry for the new version in the Nagios and Cacti changelogs
+sphinx-build -N -W -c release-docs/config/ -b html release-docs/ release-docs/html
