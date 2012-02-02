@@ -33,13 +33,13 @@
          dt         => {
             hash       => 'hash_01_VER_b126c9d16618d1cd99dc2d4eb27703c3',
             input      => 'Get Apache Stats',
-            Requests => {
+            APACHE_Requests => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_9ab18f7a0cdc99e5a704af15dd0908cc'
             },
          },
          items => [
-            {  item   => 'Requests',
+            {  item   => 'APACHE_Requests',
                color  => '803405',
                task   => 'hash_09_VER_320385532fb7c191c962fdb9a1414479',
                type   => 'AREA',
@@ -58,13 +58,13 @@
          dt         => {
             hash       => 'hash_01_VER_fcd7e3d3cfb9ff2086af3573da16c4bb',
             input      => 'Get Apache Stats',
-            Bytes_sent => {
+            APACHE_Bytes_sent => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_4f32e43daef6ae3e1423c80578c06ce1'
             },
          },
          items => [
-            {  item   => 'Bytes_sent',
+            {  item   => 'APACHE_Bytes_sent',
                color  => '5D868C',
                task   => 'hash_09_VER_f21ce020e6fab43d47cecf785340ab30',
                type   => 'AREA',
@@ -83,13 +83,13 @@
          dt         => {
             hash       => 'hash_01_VER_a6ae963635e330621d67f3c1d680efb0',
             input      => 'Get Apache Stats',
-            CPU_Load => {
+            APACHE_CPU_Load => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_4192deafb5ae488a21ae6cf33999fe82'
             },
          },
          items => [
-            {  item   => 'CPU_Load',
+            {  item   => 'APACHE_CPU_Load',
                color  => '700004',
                task   => 'hash_09_VER_a20147e0e31048d256b063831641b2dc',
                type   => 'AREA',
@@ -100,7 +100,7 @@
                   'hash_10_VER_42fd6384bc247e64271f8a6b3baee61c'
                ],
             },
-            {  item   => 'CPU_Load',
+            {  item   => 'APACHE_CPU_Load',
                color  => '000000',
                task   => 'hash_09_VER_a5ab7839ad06a8b08c10e2eac17f2d46',
                type   => 'LINE1',
@@ -116,17 +116,17 @@
          dt         => {
             hash       => 'hash_01_VER_6e1cc2e3365f385cf934e32b8a204138',
             input      => 'Get Apache Stats',
-            Idle_workers => {
+            APACHE_Idle_workers => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_6aa30e77d556e4f27b78e86d75d240ce'
             },
-            Busy_workers => {
+            APACHE_Busy_workers => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_51669662e5a65025cc33a6963f7d13a5'
             },
          },
          items => [
-            {  item   => 'Idle_workers',
+            {  item   => 'APACHE_Idle_workers',
                color  => 'EEB78E',
                task   => 'hash_09_VER_c607a8fc1798542b45d9db03821f5416',
                type   => 'AREA',
@@ -137,7 +137,7 @@
                   'hash_10_VER_7af8dc449c88a166aae40048350281ff'
                ],
             },
-            {  item   => 'Busy_workers',
+            {  item   => 'APACHE_Busy_workers',
                color  => '47748B',
                task   => 'hash_09_VER_b41cfa6817023350822546893ce286bb',
                type   => 'STACK',
@@ -156,53 +156,53 @@
          dt         => {
             hash       => 'hash_01_VER_5dc334b912c46ab4c6d9af8ba8a62b18',
             input      => 'Get Apache Stats',
-            Waiting_for_connection => {
+            APACHE_Waiting_for_connection => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_37696315ea6d63f72ff4369f8ce9d28f'
             },
-            Starting_up => {
+            APACHE_Starting_up => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_be57013790b1b1f990cd854e915ed011'
             },
-            Reading_request => {
+            APACHE_Reading_request => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_55b42d77e63ae182af5a1accbcb446ba'
             },
-            Sending_reply => {
+            APACHE_Sending_reply => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_7d7d154d9836e010680e178ad01f05e7'
             },
-            Keepalive => {
+            APACHE_Keepalive => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_e5fbb1607fe2e9a06be2c8c6a03655f4'
             },
-            DNS_lookup => {
+            APACHE_DNS_lookup => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_1ca4724e477d5e6a01c9a2e4158715a1'
             },
-            Closing_connection => {
+            APACHE_Closing_connection => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_db20e41c1485c040e6458d82fd2aa1ee'
             },
-            Logging => {
+            APACHE_Logging => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_d1d955999673b9ee52fd04958ce4f69f'
             },
-            Gracefully_finishing => {
+            APACHE_Gracefully_finishing => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_970a7ed0d0685727508fa9cc791a5eec'
             },
-            Idle_cleanup => {
+            APACHE_Idle_cleanup => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_5d906b480bed5be85ddf27b46feb5ba9'
             },
-            Open_slot => {
+            APACHE_Open_slot => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_a8a002b8651f6ec96d58db5c6534c959'
             },
          },
          items => [
-            {  item   => 'Waiting_for_connection',
+            {  item   => 'APACHE_Waiting_for_connection',
                color  => 'DE0056',
                task   => 'hash_09_VER_a80215bf3ff228c0b6c568779f06b85c',
                type   => 'AREA',
@@ -213,7 +213,7 @@
                   'hash_10_VER_0db1a81e909798e42edd1ed9805c2a30'
                ],
             },
-            {  item   => 'Starting_up',
+            {  item   => 'APACHE_Starting_up',
                color  => '784890',
                task   => 'hash_09_VER_6a181d6121b20efdf004a70a8ef47f1c',
                type   => 'STACK',
@@ -224,7 +224,7 @@
                   'hash_10_VER_b67fbc3ae53d866e9dca38c3983aba7f'
                ],
             },
-            {  item   => 'Reading_request',
+            {  item   => 'APACHE_Reading_request',
                color  => 'D1642E',
                task   => 'hash_09_VER_838a522638302fbdfca68eb4d8e8e755',
                type   => 'STACK',
@@ -235,7 +235,7 @@
                   'hash_10_VER_dee2bf79588d24ac22c3960e2a1adfcc'
                ],
             },
-            {  item   => 'Sending_reply',
+            {  item   => 'APACHE_Sending_reply',
                color  => '487860',
                task   => 'hash_09_VER_126a087f7bcae3056b701b0493e0714a',
                type   => 'STACK',
@@ -246,7 +246,7 @@
                   'hash_10_VER_ecf6b2f8603ae2e75e4a9053d0300f43'
                ],
             },
-            {  item   => 'Keepalive',
+            {  item   => 'APACHE_Keepalive',
                color  => '907890',
                task   => 'hash_09_VER_4a39512d24f2023398eedff0dcd399a7',
                type   => 'STACK',
@@ -257,7 +257,7 @@
                   'hash_10_VER_51e655f37c25b6015aaf10eafa5749f1'
                ],
             },
-            {  item   => 'DNS_lookup',
+            {  item   => 'APACHE_DNS_lookup',
                color  => 'DE0056',
                task   => 'hash_09_VER_f99da81cd9ba660c901cdcdbdcbb6bba',
                type   => 'STACK',
@@ -268,7 +268,7 @@
                   'hash_10_VER_41b645619a517cc7ba9b8cd8f7edace1'
                ],
             },
-            {  item   => 'Closing_connection',
+            {  item   => 'APACHE_Closing_connection',
                color  => '1693A7',
                task   => 'hash_09_VER_cf8485ee4bb76ed6c8538c77abd7b310',
                type   => 'STACK',
@@ -279,7 +279,7 @@
                   'hash_10_VER_5a44212b067eb73c8170ff88b1b1c829'
                ],
             },
-            {  item   => 'Logging',
+            {  item   => 'APACHE_Logging',
                color  => 'FF7D00',
                task   => 'hash_09_VER_aac162da0dc535a0ea28291194658b85',
                type   => 'STACK',
@@ -290,7 +290,7 @@
                   'hash_10_VER_14616b47b80629a31cf649885a7523a0'
                ],
             },
-            {  item   => 'Gracefully_finishing',
+            {  item   => 'APACHE_Gracefully_finishing',
                color  => 'B83A04',
                task   => 'hash_09_VER_6626c31745e227ee7799add9014e86a1',
                type   => 'STACK',
@@ -301,7 +301,7 @@
                   'hash_10_VER_594b24cc59ab5381ad72007df314e4ef'
                ],
             },
-            {  item   => 'Idle_cleanup',
+            {  item   => 'APACHE_Idle_cleanup',
                color  => '540202',
                task   => 'hash_09_VER_fc03d4316c43ccbd3d9ecf0a7279a850',
                type   => 'STACK',
@@ -312,7 +312,7 @@
                   'hash_10_VER_e31c7864d29b10c35d3c0c7640797caf'
                ],
             },
-            {  item   => 'Open_slot',
+            {  item   => 'APACHE_Open_slot',
                color  => '6E645A',
                task   => 'hash_09_VER_1555fa38c0124d776cc8e4810db0f3ec',
                type   => 'STACK',
@@ -339,22 +339,22 @@
             },
          ],
          outputs => {
-            Requests               => 'hash_07_VER_cff73d78a6870918b25fec9af9ba55d3',
-            Bytes_sent             => 'hash_07_VER_9430882fbafec2abb63390553b47f6d8',
-            CPU_Load               => 'hash_07_VER_254558f5aa21ff73ebe348612cca429e',
-            Idle_workers           => 'hash_07_VER_8f45bda7f92b305ce53485bf349c74a2',
-            Busy_workers           => 'hash_07_VER_37cae992ca15d54db89e5fbb4d55b5e3',
-            Waiting_for_connection => 'hash_07_VER_b3882f9fad342ef4437389afe5a48255',
-            Starting_up            => 'hash_07_VER_bca2a7f9e02eb1e0119b9901620213e0',
-            Reading_request        => 'hash_07_VER_f55a3ab774898f05be545865ab08dc3d',
-            Sending_reply          => 'hash_07_VER_ae55e6043b1e658090c3992b429ab772',
-            Keepalive              => 'hash_07_VER_95432bea896bfe38ae8b02bfda3345ae',
-            DNS_lookup             => 'hash_07_VER_d7708a0ebcdbd2c2d50e795c785607e4',
-            Closing_connection     => 'hash_07_VER_65d90ec19f533d6dfd59b7e59a59a961',
-            Logging                => 'hash_07_VER_1c9ae3f9d3f450274caf42acda243314',
-            Gracefully_finishing   => 'hash_07_VER_e9ea07ba78ae485021e48f3d09d2fe51',
-            Idle_cleanup           => 'hash_07_VER_cd3456d0c13abf6bd90ca951466508d6',
-            Open_slot              => 'hash_07_VER_11e86aca3dd09262052d32571502349f',
+            APACHE_Requests               => 'hash_07_VER_cff73d78a6870918b25fec9af9ba55d3',
+            APACHE_Bytes_sent             => 'hash_07_VER_9430882fbafec2abb63390553b47f6d8',
+            APACHE_CPU_Load               => 'hash_07_VER_254558f5aa21ff73ebe348612cca429e',
+            APACHE_Idle_workers           => 'hash_07_VER_8f45bda7f92b305ce53485bf349c74a2',
+            APACHE_Busy_workers           => 'hash_07_VER_37cae992ca15d54db89e5fbb4d55b5e3',
+            APACHE_Waiting_for_connection => 'hash_07_VER_b3882f9fad342ef4437389afe5a48255',
+            APACHE_Starting_up            => 'hash_07_VER_bca2a7f9e02eb1e0119b9901620213e0',
+            APACHE_Reading_request        => 'hash_07_VER_f55a3ab774898f05be545865ab08dc3d',
+            APACHE_Sending_reply          => 'hash_07_VER_ae55e6043b1e658090c3992b429ab772',
+            APACHE_Keepalive              => 'hash_07_VER_95432bea896bfe38ae8b02bfda3345ae',
+            APACHE_DNS_lookup             => 'hash_07_VER_d7708a0ebcdbd2c2d50e795c785607e4',
+            APACHE_Closing_connection     => 'hash_07_VER_65d90ec19f533d6dfd59b7e59a59a961',
+            APACHE_Logging                => 'hash_07_VER_1c9ae3f9d3f450274caf42acda243314',
+            APACHE_Gracefully_finishing   => 'hash_07_VER_e9ea07ba78ae485021e48f3d09d2fe51',
+            APACHE_Idle_cleanup           => 'hash_07_VER_cd3456d0c13abf6bd90ca951466508d6',
+            APACHE_Open_slot              => 'hash_07_VER_11e86aca3dd09262052d32571502349f',
          },
       },
    },

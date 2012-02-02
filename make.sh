@@ -29,8 +29,8 @@ rm -rf release
 # mkdir -p release/{docs/,}{nagios,cacti}
 mkdir release
 cp -R nagios docs release
-mkdir release/cacti
-cp -R cacti/scripts release/cacti
+mkdir -p release/cacti/templates
+cp -R cacti/scripts cacti/definitions release/cacti
 rm -rf release/nagios/t
 
 # Update the version number and other important macros in the temporary
@@ -46,6 +46,43 @@ for f in release/nagios/pmp* release/docs/config/conf.py release/cacti/scripts/s
    sed -e "s/${YEAR}-${YEAR}/${YEAR}/g" "$f" > "${TEMPFILE}"
    mv "${TEMPFILE}" "$f"
 done
+
+# Build the XML files for the Cacti templates.  Each XML file is built by
+# looking in the definitions file for the PHP script that it uses, then calling
+# make-template.pl with that script, and saving the resulting XML into a file
+# that's appropriately named.  After that, we substitute the script's MD5 sum
+# into the template, so that it will inject an appropriate variable into Cacti.
+# This lets us see whether the PHP file on disk has been modified relative to
+# the one that was shipped with the templates.  Finally, we update the
+# documentation to add the MD5 sums there too, which is useful for upgrades; it
+# lets us see whether we need to merge any customizations when upgrading the
+# templates.
+if ! grep "^Version ${VERSION}$" release/docs/cacti/upgrading-templates.rst >/dev/null; then
+   echo "There doesn't appear to be a changelog entry for $VERSION in " \
+        "docs/cacti/upgrading-templates.rst"
+   exit 1
+fi
+for file in cacti/definitions/*.pl; do
+   # Get the name of the thing we're building an XML file for.
+   NAME="${file##*/}"
+   NAME="${NAME%%_definitions.pl}"
+   # Ensure that there's no duplicated hashes
+   cacti/tools/unique-hashes.pl "${file}" > "${TEMPFILE}"
+   if ! diff -q "${file}" "${TEMPFILE}"; then
+      echo "${file} has duplicated hashes!"
+      exit 1
+   fi
+   SCRIPT=$(awk '/Autobuild/{ print $NF; exit }' "$file");
+   FILE="release/cacti/templates/cacti_host_template_x_${NAME}_server_ht_0.8.6i-sver${VERSION}.xml"
+   perl cacti/tools/make-template.pl --script release/cacti/scripts/$SCRIPT "$file" > "${FILE}"
+   MD5=$(md5 -q "${FILE}")
+   sed -e "s/CUSTOMIZED_XML_TEMPLATE/${MD5}/" "${FILE}" > "${TEMPFILE}"
+   mv "${TEMPFILE}" "${FILE}"
+done
+echo >> release/docs/cacti/upgrading-templates.rst
+grep Checksum release/cacti/templates/*.xml \
+   | sed -e 's/^.*<name>//' -e 's/<.name>//' -e 's/^/   /' \
+   >> release/docs/cacti/upgrading-templates.rst
 
 # Make the Nagios documentation into Sphinx .rst format.  The Cacti docs are
 # already in Sphinx format.

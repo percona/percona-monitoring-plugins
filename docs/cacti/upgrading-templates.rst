@@ -25,3 +25,5 @@ Version 1.0.0
 Version 1.0.0 of these templates may not be backwards compatible with the
 *Better Cacti Templates* project from which they are derived, because the short
 names of the data items have changed to work around a bug in Cacti.
+
+Here are the checksums of the scripts in Version 1.0.0::
