@@ -44,7 +44,10 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'percona-theme'
+html_theme_path = ['.', './percona-theme']
+html_title = 'Percona Monitoring Plugins Documentation'
+html_short_title = 'Monitoring Plugins'
 
 html_favicon = 'http://s1.percona.com/percona_favicon.ico'
 
