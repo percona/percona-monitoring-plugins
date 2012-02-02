@@ -9,7 +9,7 @@ is that they are not created by experts in MySQL monitoring, so they tend to
 cause false alarms and noise, and don't encourage good practices to monitor what
 matters.
 
-These templates offer the following improvements:
+These plugins offer the following improvements:
 
 * Created by MySQL experts.
 * Good documentation.
@@ -26,6 +26,15 @@ commands, or they connect to MySQL via the ``mysql`` commandline executable and
 retrieve information. Some plugins combine these actions.  Each plugin's
 documentation explains its commandline options and arguments, as well as the
 commands executed and the privileges required.
+
+System Requirements
+===================
+
+The plugins are all written in standard Unix shell script. They should run on
+any Unix or Unix-like operating system, such as GNU/Linux, Solaris, or FreeBSD.
+
+List of Plugins
+===============
 
 .. toctree::
    :maxdepth: 1
