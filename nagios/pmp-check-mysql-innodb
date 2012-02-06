@@ -170,7 +170,7 @@ get_waiter_count() {
          tseen = 1;
       }
       {
-         if ( tseen == 1 && $0 ~ /LOCK WAIT/ ) {
+         if ( tseen == 1 && $0 ~ /TRX HAS BEEN WAITING/ ) {
             lock_waits++;
          }
       }
