@@ -201,7 +201,12 @@ compute_result() {
                if ( \"${TRAN}\" == \"pct\" ) {
                   val = val * 100;
                }
-               print val;
+               if ( val ~ /\.[0-9]/ ) {
+                  printf \"%.6f\\n\", val;
+               }
+               else {
+                  print val;
+               }
             }
             else {
                print got1, got2 | \"cat 1>&2\";
@@ -339,8 +344,9 @@ exceeds 80% of max_connections:
 The -T option only works when you specify both -x and -y.  Currently the only
 transformation implemented for -T is C<pct>.  The plugin uses awk to do its
 computations and comparisons, so you can use floating-point math; you are not
-restricted to integers for comparisons.  The -o option accepts the arithmetic
-operators /, *, +, and -.  A division by zero results in zero, not an error.
+restricted to integers for comparisons.  Floating-point numbers are printed with
+six digits of precision. The -o option accepts the arithmetic operators /, *,
++, and -.  A division by zero results in zero, not an error.
 
 If you specify the -I option with an integer argument, the SHOW STATUS values
 become incremental instead of absolute.  The argument is used as a delay in
