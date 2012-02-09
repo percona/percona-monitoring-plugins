@@ -10,7 +10,7 @@ set -u
 # 1. Version of the release, e.g. 1.0.0.
 
 # This will be replaced into the $RELEASE$ macro.
-VERSION="$1"
+VERSION="${1:-}"
 if [ -z "${VERSION}" ]; then
    echo "Specify a release version"
    exit 1
@@ -18,6 +18,17 @@ fi
 
 # This will be replaced into the $PROJECT_NAME$ macro.
 PROJECT_NAME="Percona Monitoring Plugins"
+
+# This md5 function works on Linux and Mac.
+function _md5() {
+   if test -x /usr/bin/md5sum; then
+      # Linux
+      md5sum "$1" | awk '{print $1}'
+   else
+      # Mac
+      md5 -q "$1"
+   fi
+}
 
 # Set up a temp file.
 TEMPFILE=$(mktemp /tmp/${0##*/}.XXXX)
@@ -76,7 +87,7 @@ for file in cacti/definitions/*.pl; do
    SCRIPT=$(awk '/Autobuild/{ print $NF; exit }' "$file");
    FILE="release/cacti/templates/cacti_host_template_percona_${NAME}_server_ht_0.8.6i-sver${VERSION}.xml"
    perl cacti/tools/make-template.pl --script release/cacti/scripts/$SCRIPT "$file" > "${FILE}"
-   MD5=$(md5 -q "${FILE}")
+   MD5=$(_md5 "${FILE}")
    sed -e "s/CUSTOMIZED_XML_TEMPLATE/${MD5}/" "${FILE}" > "${TEMPFILE}"
    mv "${TEMPFILE}" "${FILE}"
 done
