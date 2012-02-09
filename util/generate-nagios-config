@@ -1,0 +1,148 @@
+#!/bin/sh
+
+set -e
+set -u
+
+PRJ="Percona Monitoring Plugins"
+TEMP=$(mktemp "/tmp/${0##*/}-nagios-setup.XXXX")
+trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
+read -e -p "Configuration file prefix to use [/etc/nagios/objects]: " DIR
+DIR="${DIR:-/etc/nagios/objects}"
+DIR="${DIR%/}"  # Delete trailing slash.
+if [ ! -d "${DIR}" ]; then
+   echo "${DIR} is not a directory" >&2
+   exit 1
+fi
+touch "${DIR}/hosts.cfg" # Check permissions up front.
+
+CFG="${DIR}/hosts.cfg"
+if grep "${PRJ}" "${CFG}" >/dev/null 2>&1; then
+   : TODO
+   # TODO: check whether we've already done this step, and prompt whether to
+   # skip it or not.
+fi
+cat <<-EOF >> "${CFG}"
+# ####################################################################
+# ${PRJ} Host Definitions
+# ####################################################################
+EOF
+echo -e "\033[34m # ##################################################\033[0m"
+echo -e "\033[34m # Creating\033[31m host\033[34m definitions\033[0m"
+echo -e "\033[34m # ##################################################\033[0m"
+while read -e -p "Enter a hostname, or blank if done: " host; do
+   if [ -z "$host" ]; then
+      break;
+   fi
+   read -e -p "   Enter the IP or DNS address, or blank to use $host: " ip
+   read -e -p "   Enter the list of hostgroups, or blank for none: " hostgroups
+   echo >> "${CFG}"
+   cat <<-EOF >> "${CFG}"
+	define host{
+	   use        linux-server
+	   host_name  ${host}
+	   alias      ${host}
+	   address    ${ip:-${host}}
+      ${hostgroups:+hostgroups ${hostgroups// /,}}
+	}
+	EOF
+done
+
+CFG="${DIR}/hostgroups.cfg"
+cat <<-EOF >> "${CFG}"
+# ####################################################################
+# ${PRJ} Host Group Definitions
+# ####################################################################
+EOF
+echo -e "\033[34m # ##################################################\033[0m"
+echo -e "\033[34m # Creating\033[31m hostgroup\033[34m definitions\033[0m"
+echo -e "\033[34m # ##################################################\033[0m"
+while read -e -p "Enter a hostgroup name, or blank if done: " hostgroup; do
+   if [ -z "$hostgroup" ]; then
+      break;
+   fi
+   read -e -p "   Enter the list of hosts, or blank for none: " hosts
+   echo >> "${CFG}"
+   cat <<-EOF >> "${CFG}"
+	define hostgroup{
+	   hostgroup_name  $hostgroup
+	   alias           $hostgroup
+	   ${hosts:+members         ${hosts// /,}}
+	}
+	EOF
+done
+
+# Generate NRPE check commands. TODO: lib, or lib64 depending on the machine
+cat <<-EOF
+command[check_disk_all]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10% --all -I shm -I boot
+command[check_load]=/usr/lib/nagios/plugins/check_load -w 15,10,5 -c 30,25,20
+command[check_zombie_procs]=/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
+command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w 150 -c 200 
+command[check_users]=/usr/lib/nagios/plugins/check_users -w 5 -c 10
+command[check_swap]=/usr/lib/nagios/plugins/check_swap -w 90% -c 50%
+
+  - Add check_linux_mem check, w=95,c=99
+EOF
+
+# TODO
+exit 0
+
+# Set up the services we want to make
+# TODO: set this up as a macro that the makefile fills in.
+cat <<-EOF >> "${TEMP}"
+pmp-check-lvm-snapshots
+pmp-check-mysql-deadlocks
+pmp-check-mysql-deleted-files
+pmp-check-mysql-file-privs
+pmp-check-mysql-innodb
+pmp-check-mysql-pidfile
+pmp-check-mysql-processlist
+pmp-check-mysql-replication-delay
+pmp-check-mysql-replication-running
+pmp-check-mysql-status
+pmp-check-unix-memory
+EOF
+
+CFG="${DIR}/services.cfg"
+cat <<-EOF >> "${CFG}"
+# ####################################################################
+# ${PRJ} Service Definitions
+# ####################################################################
+EOF
+echo -e "\033[34m # ##################################################\033[0m"
+echo -e "\033[34m # Creating\033[31m service\033[34m definitions\033[0m"
+echo -e "\033[34m # ##################################################\033[0m"
+while read -e -p "Enter a service name, or blank if done: " service; do
+   if [ -z "$service" ]; then
+      break;
+   fi
+   read -e -p "   Enter the list of hosts for $service: " hosts
+   # TODO: can't it apply to a hostgroup too?
+   echo >> "${CFG}"
+   cat <<-EOF >> "${CFG}"
+	define service{
+	   use                  ${service//-/_}
+	   host_name            localhost
+	   service_description  ${service//-/_}
+	   check_command        pmp_check_nrpe!$service
+	}
+	EOF
+done
+
+# Server configuration:
+# Add an NRPE check command to /etc/nagios/objects/commands.cfg.
+CFG="${DIR}/commands.cfg"
+cat <<-EOF >> "${CFG}"
+# ####################################################################
+# ${PRJ} Check-Command Definitions
+# ####################################################################
+EOF
+echo -e "\033[34m # ##################################################\033[0m"
+echo -e "\033[34m # Creating\033[31m command\033[34m definitions\033[0m"
+echo -e "\033[34m # ##################################################\033[0m"
+echo >> "${CFG}"
+cat <<-EOF >> "${CFG}"
+define command{
+   command_name  pmp_check_nrpe
+   command_line  \$USER1\$/check_nrpe -H \$HOSTADDRESS\$ -c \$ARG1\$
+}
+EOF
