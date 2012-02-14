@@ -20,144 +20,144 @@
 
 {
    name   => 'Nginx Server',
-   hash   => 'hash_02_VER_be7718e794244e2cf363bbb64c0cb705',
+   hash   => 'hash_02_VER_e7de4d351f346629172af6742e82d228',
    version => {
       version => '1.1.8',
-      hash    => 'hash_06_VER_ac10705723a27cae224aa85dc7e38cdd',
+      hash    => 'hash_06_VER_7dd672be5a3dae86d9cdf2d1151f5dad',
    },
-   checksum => 'hash_06_VER_c934708128c9378f53521f0842b6ea79',
+   checksum => 'hash_06_VER_386ad8c3de68ba2654cd2143b05f3b53',
    graphs => [
       {  name       => 'Nginx Requests',
          base_value => '1000',
-         hash       => 'hash_00_VER_89b799bc81c33304ded07c8363fb8bdd',
+         hash       => 'hash_00_VER_caf6193a479da08e50c37a9433781ef1',
          dt         => {
-            hash       => 'hash_01_VER_200c3b9af34f3c6c96e68c8e561660bd',
+            hash       => 'hash_01_VER_654cf221afc19da2790c32c2115eb8d6',
             input      => 'Get Nginx Stats',
             NGINX_server_requests => {
                data_source_type_id => '3',
-               hash => 'hash_08_VER_e4b05773e000997ad54f63f312a97e08'
+               hash => 'hash_08_VER_7bd232c3ec98239cab41723882830c23'
             },
          },
          items => [
             {  item   => 'NGINX_server_requests',
                color  => '803405',
-               task   => 'hash_09_VER_63ad225064673ed776cf6226a9032344',
+               task   => 'hash_09_VER_b5d2331fb7e6c8a39dd404003278b1f0',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_f37177e39032acedc883e5565b189aaf',
-                  'hash_10_VER_a9612d5624639d3c56d339d4883cbb27',
-                  'hash_10_VER_a6b47c90bc60a0f7261c20fd3fcb51cd',
-                  'hash_10_VER_a630aaced81152053b1206007c6318d9'
+                  'hash_10_VER_8f1a408d208c6eb010c366f866c8249f',
+                  'hash_10_VER_0752bc700706aff79d3318f4500bd6ce',
+                  'hash_10_VER_7e56ae1f6a3e052d4958e724d72282f8',
+                  'hash_10_VER_7825e173dd0dfbc2ecb1646250c07de6'
                ],
             },
          ],
       },
       {  name       => 'Nginx Accepts/Handled',
          base_value => '1000',
-         hash       => 'hash_00_VER_78acb7b46bede0b4b8999faf194bdfdf',
+         hash       => 'hash_00_VER_b3910088454a149fc25a13499dbb5fc9',
          dt         => {
-            hash       => 'hash_01_VER_ada5ac735d555cb01993d27575398b95',
+            hash       => 'hash_01_VER_d89942d0a0f04061b7f98a7d8ce3c358',
             input      => 'Get Nginx Stats',
             NGINX_server_accepts => {
                data_source_type_id => '3',
-               hash => 'hash_08_VER_49fb074c37172a9be39e78187fa42957'
+               hash => 'hash_08_VER_5276759b797a71c1b630b10933b4e679'
             },
             NGINX_server_handled => {
                data_source_type_id => '3',
-               hash => 'hash_08_VER_a4cc1ed0cd85151e74b1b4c4fc5c76a9'
+               hash => 'hash_08_VER_08cd1189cfff32b2bebd1d09a9bf83cf'
             },
          },
          items => [
             {  item   => 'NGINX_server_accepts',
                color  => '5D868C',
-               task   => 'hash_09_VER_a6dc14e10aead1f201cd21aaac3640f5',
+               task   => 'hash_09_VER_c4d539e49ca6f0e100178d1882329f13',
                type   => 'LINE1',
                hashes => [
-                  'hash_10_VER_8284ff82b553b4baa8ec2e0e42ae267f',
-                  'hash_10_VER_6626a39dac1c78e017cf93259a27f648',
-                  'hash_10_VER_4b551cd2ed6015bd63efb37c56926f66',
-                  'hash_10_VER_f76f4f712dd8da8bcc50aebcad3f7bc5'
+                  'hash_10_VER_ca4b91ff62f252670bae30270f442501',
+                  'hash_10_VER_b302b21fff645b08054aac3bf279344f',
+                  'hash_10_VER_f13cee7f8aaf6f9d57997b842eecc2e8',
+                  'hash_10_VER_60b2f40a0578cfa580c701b6e85f7ae2'
                ],
             },
             {  item   => 'NGINX_server_handled',
                color  => '700004',
-               task   => 'hash_09_VER_fcb4a4e8e24e75811e295e121dae29c1',
+               task   => 'hash_09_VER_c8b632a4f6bdc6c354cba7e4109e8ce5',
                type   => 'LINE1',
                hashes => [
-                  'hash_10_VER_6efd6ba48830a54dd907554da25921ca',
-                  'hash_10_VER_64511bb1c2a20ce501eaedbf5d063069',
-                  'hash_10_VER_a29f8e13b5cb29aa9427822798e0df4f',
-                  'hash_10_VER_c8e7c9f495eb550ba2f8e80c05907a19'
+                  'hash_10_VER_c0e7d14fd1ce1471648bd539f645976e',
+                  'hash_10_VER_1014f34b7cf221e971b868d4df043748',
+                  'hash_10_VER_a493b2e5588648e4413ac6a76de26348',
+                  'hash_10_VER_33beaeb3c26f6093bcffa03cfbb21ef1'
                ],
             },
          ],
       },
       {  name       => 'Nginx Scoreboard',
          base_value => '1000',
-         hash       => 'hash_00_VER_aaf3d5e054c9f0525790c9367e01033a',
+         hash       => 'hash_00_VER_1a183387199adabc51640b4236642444',
          dt         => {
-            hash       => 'hash_01_VER_ed48eeb6c1773c1adbf204520e704f71',
+            hash       => 'hash_01_VER_735142d4ebc05aa2db9e98e823830bf4',
             input      => 'Get Nginx Stats',
             NGINX_active_connections => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_047e1a844b116f80e59d076b7c8ef0b1'
+               hash => 'hash_08_VER_cfebce7eb4e0f8d00daf98fae30d772c'
             },
             NGINX_reading => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_097e37232bc70fc54dd4decad6f6b864'
+               hash => 'hash_08_VER_5db2a724b89de78c8b5802139cc4408e'
             },
             NGINX_writing => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_10b57cfb408f8ec6972a1011acfdee88'
+               hash => 'hash_08_VER_04e72dae440c397145b1f1c9bed628bf'
             },
             NGINX_waiting => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_0e1f7f4ba7fa7a9996dc8f7ed521c9da'
+               hash => 'hash_08_VER_e69d8945953386e192b9245866e5a9f4'
             },
          },
          items => [
             {  item   => 'NGINX_reading',
                color  => 'D1642E',
-               task   => 'hash_09_VER_c3d771fa9229c2023395dd5551909486',
+               task   => 'hash_09_VER_e020bd96b8f8783a5f1f2d1217141352',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_2a22a67a08b1bc599ffc9ce4d0e372f8',
-                  'hash_10_VER_a4049c753fce6e14ee0672ccb12c5a21',
-                  'hash_10_VER_bd0360323b082e0e04cdf7b4d39c23c2',
-                  'hash_10_VER_6a762cf6c56ed9d14a80bf790f8502f4'
+                  'hash_10_VER_32a523b00ce83f764b4aade10c8d2f94',
+                  'hash_10_VER_011d2b6f5796a48e26099bd89f7cf38a',
+                  'hash_10_VER_f170e75edda4d227571720584a5d3ab9',
+                  'hash_10_VER_da114762a0db71075e732b8eb86dc7e4'
                ],
             },
             {  item   => 'NGINX_writing',
                color  => '850707',
-               task   => 'hash_09_VER_9cd249d937d972814d8e38a66d462dc4',
+               task   => 'hash_09_VER_9bbd0591b6f3630f9b2dacebf8a80f88',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_295ffd74de08d42bee44f0ae1ca9a9b2',
-                  'hash_10_VER_708abdb46a2c777a05af9fa455664e91',
-                  'hash_10_VER_f89921012d04dae646d6b49792e76ab5',
-                  'hash_10_VER_39770e6de29f152d6cca56cb4461f78b'
+                  'hash_10_VER_0eb7146137e715b542eb4fb6d844a983',
+                  'hash_10_VER_2c9263204877861f9103a2be226fab5a',
+                  'hash_10_VER_a629b3ec8570915d3a2429e0d0e1af79',
+                  'hash_10_VER_f0e5211ed4317e663304c36e3516af8a'
                ],
             },
             {  item   => 'NGINX_waiting',
                color  => '487860',
-               task   => 'hash_09_VER_3000c5bbdda2aeb2117d658672cbb5e1',
+               task   => 'hash_09_VER_9d024c0fb2e60834ae1fd6c8dde8b034',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_ab0dd198d98259206565a6e01b5e8e5b',
-                  'hash_10_VER_63758637862d357eac6693934683f387',
-                  'hash_10_VER_3911d8dedb45fed6be5ea560968e54fd',
-                  'hash_10_VER_89fdfe0cd6a0b2e6d6f5084250e8611e'
+                  'hash_10_VER_daee0e7a3d4c8433d577783aba28e1ca',
+                  'hash_10_VER_5e116ad9e52624731df31a96882f3578',
+                  'hash_10_VER_0c7374008cd24f835a7d5a686136ac0d',
+                  'hash_10_VER_fe1fd71d28096adac28c0b91c5b0a224'
                ],
             },
             {  item   => 'NGINX_active_connections',
                color  => '000000',
-               task   => 'hash_09_VER_9e921f6da9362add3e9b7c5798370163',
+               task   => 'hash_09_VER_575c4f0c4152fd2eed54dde7275db1ff',
                type   => 'LINE1',
                hashes => [
-                  'hash_10_VER_4c902a673ed890465e362285d0ab6387',
-                  'hash_10_VER_7d748a71aeea78d297cdf2d86497398c',
-                  'hash_10_VER_1fee53f6750ed04b345680fb310353ca',
-                  'hash_10_VER_c25e457997ef75d3187bb0a98d5b9201'
+                  'hash_10_VER_664b06edecb5fc929a12e399422372b6',
+                  'hash_10_VER_6d97ceb690c8014850786cb89162435e',
+                  'hash_10_VER_5cb8466200eefceab5bd51673bfd0127',
+                  'hash_10_VER_f6cd85c87f663417c3bca18d259c064a'
                ],
             },
          ],
@@ -166,7 +166,7 @@
    inputs => {
       'Get Nginx Stats' => {
          type_id      => 1,
-         hash         => 'hash_03_VER_686afc01e6df060bab64e885af593ffa',
+         hash         => 'hash_03_VER_8b1a02b408567c844fd7910445c7eff9',
          input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
                        . '--host <hostname> --type nginx --items <items> '
                        . '--server <server> --url <url> --http-user <http-user> '
@@ -174,34 +174,34 @@
                        ,
          inputs => [
             {  allow_nulls => '',
-               hash        => 'hash_07_VER_66ea73b103e3bb7e6793d22b14cd9bfd',
+               hash        => 'hash_07_VER_a241e8f425220fc136a733152a874d63',
                name        => 'hostname'
             },
             {  allow_nulls => 'on',
-               hash        => 'hash_07_VER_dd54f81d90b9734d59dcc8bb8af02701',
+               hash        => 'hash_07_VER_4a1b802ba6e92609f8aa2b9521e221e3',
                name        => 'server'
             },
             {  allow_nulls => 'on',
-               hash        => 'hash_07_VER_8197c00079b1af4c3430899375c509d3',
+               hash        => 'hash_07_VER_b10c7a20a84e2c20200bd48da6689541',
                name        => 'url'
             },
             {  allow_nulls => 'on',
-               hash        => 'hash_07_VER_f9efa99759d943edacf3a2bbbfb61a4e',
+               hash        => 'hash_07_VER_74f1e0b4ffb166b059b0d30c69995db0',
                name        => 'http-user'
             },
             {  allow_nulls => 'on',
-               hash        => 'hash_07_VER_4806787d655ef66379c425d14ce00465',
+               hash        => 'hash_07_VER_8be8c0b99b5f4da649367b8ca72330d5',
                name        => 'http-password'
             },
          ],
          outputs => {
-            NGINX_active_connections => 'hash_07_VER_a9c1f21665497ec628a36e92c70c1fb4',
-            NGINX_server_accepts     => 'hash_07_VER_9b3ce4bef308f4e297512075cc5493be',
-            NGINX_server_handled     => 'hash_07_VER_f85507377f268d5c20675799d6336cae',
-            NGINX_server_requests    => 'hash_07_VER_bcc65f926a0add4628f8b4640e67026a',
-            NGINX_reading            => 'hash_07_VER_e799bddc91a433bf14bf2c59d92da425',
-            NGINX_writing            => 'hash_07_VER_60d5b3f136757ab015262aaf8c148762',
-            NGINX_waiting            => 'hash_07_VER_0146375a2c06277f36390ebb49877c73',
+            NGINX_active_connections => 'hash_07_VER_53dbd3e75b8ae7c2c0d465dda7159eb7',
+            NGINX_server_accepts     => 'hash_07_VER_8e605e362b759857bd4df12fe783267b',
+            NGINX_server_handled     => 'hash_07_VER_5fe6f1c3bf461bb5ef82f5111db3e578',
+            NGINX_server_requests    => 'hash_07_VER_f0718ebbef8e06e8aeea73f9b1e2149e',
+            NGINX_reading            => 'hash_07_VER_35db5329924e5a5bcfc117b3cd04ca97',
+            NGINX_writing            => 'hash_07_VER_023a95b14a03fa98e6c880010c138310',
+            NGINX_waiting            => 'hash_07_VER_9db90209ef504a4664e803f54cd4929a',
          },
       },
    },

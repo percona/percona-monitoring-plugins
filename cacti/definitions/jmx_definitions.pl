@@ -19,214 +19,214 @@
 # Autobuild: ss_get_by_ssh.php
 
 {  name    => 'JMX Server',
-   hash    => 'hash_02_VER_48c14a8d4a9f079ee691526cbf10c0a0',
+   hash    => 'hash_02_VER_236a6046a04b17b533e2fd308cebf851',
    version => {
       version => '1.1.8',
-      hash    => 'hash_06_VER_30ad6e39e56f911b3c93545c8d44c984',
+      hash    => 'hash_06_VER_4bae7c13f3fdde2845ed5aa5801f6ae2',
    },
-   checksum => 'hash_06_VER_9a101a62d4dc2ace6f7b022cf16010d1',
+   checksum => 'hash_06_VER_6d0f36ee98a42329139a7b96cef47d29',
    graphs => [
       {  name       => 'JMX Heap Memory Usage',
          base_value => '1024',
-         hash       => 'hash_00_VER_68e078ab874ea34fec4e42bbd7f300c6',
+         hash       => 'hash_00_VER_7c8d8068fb3e4b948c234264943ebd91',
          dt         => {
-            hash  => 'hash_01_VER_8790c041d8bd2412b6e77642050f2104',
+            hash  => 'hash_01_VER_2dac94a3d9021cb54732af23591aef54',
             input => 'Heap Memory Usage',
             JMX_heap_memory_used => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_cdc9a9e4dae51dbfe5ec95d0f9445d27'
+               hash => 'hash_08_VER_3b157a71baab98d42b7a296c46aee29b'
             },
             JMX_heap_memory_committed => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_36d3606b177b7c7c409a6c2917d40625'
+               hash => 'hash_08_VER_10539297537316c54bc75a7a4dfc5b24'
             },
             JMX_heap_memory_max => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_2451b83739058d8c05a861c0c1d86a7a'
+               hash => 'hash_08_VER_418dc3d98764483fbe133903b7b7de5c'
             },
          },
          items => [
             {  item   => 'JMX_heap_memory_max',
                color  => '4F7774',
-               task   => 'hash_02_VER_24f6301c90cb2721de85e4481bcd08af',
+               task   => 'hash_02_VER_b2463336953416bf825a2de2a1c83f18',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_b476ae9f73a3d8e763a18bec392b447e',
-                  'hash_10_VER_674a447d52ea894a7a68b71c88973d8b',
-                  'hash_10_VER_5cea25a317bc39432842e706bccd952a',
-                  'hash_10_VER_8958122127b149f02da28f4d4b7f62ba'
+                  'hash_10_VER_7623bf5f8c69e3c5a9478629a89f5faf',
+                  'hash_10_VER_68cc90d191ef510d38613555ef5d7835',
+                  'hash_10_VER_34917525882e931e52186c6c14aaffdf',
+                  'hash_10_VER_7b58505cf088a637189a3e28abb0b5f4'
                ],
             },
             {  item   => 'JMX_heap_memory_committed',
                color  => 'FFDB87',
-               task   => 'hash_02_VER_c3e7c60bd6bf464e92792ec335e801eb',
+               task   => 'hash_02_VER_ced0ef714ff846defaf772a62ca81b49',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_1602288c955962065c9bf0ebaf90fb2c',
-                  'hash_10_VER_b61a091d010f26edc3231821bfcc3136',
-                  'hash_10_VER_273034f3285a46393758ff3c5a544cb7',
-                  'hash_10_VER_4bb13c2d64d6810e91b54d50c2f68860'
+                  'hash_10_VER_88c57b5e8c726497ae11ae6417c8e6a5',
+                  'hash_10_VER_9fcefed8f1b98866017a62b48f949a9f',
+                  'hash_10_VER_5a3ed1c130c6c81021cd6a3ce732ef1f',
+                  'hash_10_VER_fbe94caa17afe76d2f297b52f283198f'
                ],
             },
             {  item   => 'JMX_heap_memory_used',
                color  => '850707',
-               task   => 'hash_02_VER_64ec5ed91e2661c3dfccddac9b321b10',
+               task   => 'hash_02_VER_88164fddfa97747426d452babdb47ffb',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_07a06081159fcd776892c6cdfd7b2079',
-                  'hash_10_VER_2dae09985e6740dcd4c24d3545bbbb44',
-                  'hash_10_VER_020db1bfce101042be2541cb6d9d2a11',
-                  'hash_10_VER_18504e3ab2caa2ec0729aa307ed331c6'
+                  'hash_10_VER_8718c4f5e94cbaaa3e5a82e6d9477a14',
+                  'hash_10_VER_eb7413c7d9c14d1d8b1b8539203d9320',
+                  'hash_10_VER_54d9edc7324e3672d5c0923bac443555',
+                  'hash_10_VER_f549808095d09e96ca11cbd73dbb6172'
                ],
             },
          ],
       },
       {  name       => 'JMX Non-Heap Memory Usage',
          base_value => '1024',
-         hash       => 'hash_00_VER_7994aab7e71d10d474fa0af729fe3f3a',
+         hash       => 'hash_00_VER_5309324496b62ae6cb18383bb34928b8',
          dt         => {
-            hash  => 'hash_01_VER_cceafeecdbfd3870b656ca90f363c6ca',
+            hash  => 'hash_01_VER_d914834865d8e8b168363ed80e6c5407',
             input => 'Non-Heap Memory Usage',
             JMX_non_heap_memory_used => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_fc3fa2aa1288524d6e7510a83cc6b2f3'
+               hash => 'hash_08_VER_517707ffc969c048496aaf99a7e4757f'
             },
             JMX_non_heap_memory_committed => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_1e8980d9a0b58626f5f5a7e176492f10'
+               hash => 'hash_08_VER_c9bda6ee668b69149de97fed6b76c04b'
             },
             JMX_non_heap_memory_max => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_52895f8b3ba59a1b4c27782273ea45f9'
+               hash => 'hash_08_VER_7a5d19f058d15cc90062ab91892510a3'
             },
          },
          items => [
             {  item   => 'JMX_non_heap_memory_max',
                color  => '4F7774',
-               task   => 'hash_02_VER_ddbfedd1335e728a3734c6601644aa27',
+               task   => 'hash_02_VER_131b3d4511ec486b80e25cceeb4066cd',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_8b9a25afd5a8bb1227133d276395afe6',
-                  'hash_10_VER_63353ecc77d4f97e0e23cf590fe37ce2',
-                  'hash_10_VER_c4474365f795fe4279b7af775e6392aa',
-                  'hash_10_VER_932b9cb12e491dfd507f30c2ffc4a57e'
+                  'hash_10_VER_37308989af7c20277bfb48dc89aae34b',
+                  'hash_10_VER_36cfd554123fcfa97a61f9eb367303fe',
+                  'hash_10_VER_162a1cf54fc3dd00ec61c5a165935c75',
+                  'hash_10_VER_78d294149c30181a603009e55a32e7b0'
                ],
             },
             {  item   => 'JMX_non_heap_memory_committed',
                color  => 'FFDB87',
-               task   => 'hash_02_VER_f5665100f5736ca4e6734c363289c2f3',
+               task   => 'hash_02_VER_da9e53bc831a4486b20073d5f5d01955',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_f97f72c65f7978e939e06e9c8a1366ad',
-                  'hash_10_VER_8d63f3e67d75d63ada895931226f1614',
-                  'hash_10_VER_4cde6558d06896fc6684b7efcbd2ce46',
-                  'hash_10_VER_3088105383b953a2c763a3a1763122c5'
+                  'hash_10_VER_8cb04009106b09d5e0aa5bc655d9a2f7',
+                  'hash_10_VER_b6ca90a74d5efd653cef1a31021a6469',
+                  'hash_10_VER_6562ed2f66fdd3aa510e37e018b0cb60',
+                  'hash_10_VER_b9c2bb3c84b9ddf2ed0360d94b1cf482'
                ],
             },
             {  item   => 'JMX_non_heap_memory_used',
                color  => '850707',
-               task   => 'hash_02_VER_35aae66d1e8c7f56d545c5fa118cb530',
+               task   => 'hash_02_VER_97c8351b5e3c025cfe57415059c28e67',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_0fbcefa1de77e6660ad2eb49510af309',
-                  'hash_10_VER_8fad23d61ea3f68f4debc83069d48b72',
-                  'hash_10_VER_f7681fab6ed7cd47db13cbd8a3eab880',
-                  'hash_10_VER_8623719613f60b18092a506c7c32cf1d'
+                  'hash_10_VER_205d54ee8033b6d02bef9940b476e27f',
+                  'hash_10_VER_ee3fcb1e416e5c2d890a6f47de91b772',
+                  'hash_10_VER_4c5b7885bbea1c72bfb5987564ade2b9',
+                  'hash_10_VER_349466b7774ef1213e0197beb54a11a8'
                ],
             },
          ],
       },
       {  name       => 'JMX File Descriptor',
          base_value => '1000',
-         hash       => 'hash_00_VER_58c8e5dacd51785c76ce4c8202648fc6',
+         hash       => 'hash_00_VER_9d6b1e0d3e3b6821b03484dac00207e1',
          dt         => {
-            hash  => 'hash_01_VER_22c04338d3e02d5d4fd0c34dc3e66708',
+            hash  => 'hash_01_VER_792c078dffd2d33d59caa6fba9e2663b',
             input => 'File Descriptor',
             JMX_open_file_descriptors => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_3e67b36ea631297157c891d96175a4c4'
+               hash => 'hash_08_VER_050ba33c5218128f0a4414cbc25fe220'
             },
             JMX_max_file_descriptors => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_4c272fb8d5bb17e6991d4ead9c17b369'
+               hash => 'hash_08_VER_2421c21d36754116d35ef0dc80f22bce'
             },
          },
          items => [
             {  item   => 'JMX_max_file_descriptors',
                color  => '4F7774',
-               task   => 'hash_02_VER_90e212ffb6aec7d09432f9517853faac',
+               task   => 'hash_02_VER_3856a45c9a0862a937368f7a7e91daa2',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_2efbe7d46c26fa73e2bf488852b3dc87',
-                  'hash_10_VER_ff4425b7ef50b119c86f00e18595c14f',
-                  'hash_10_VER_7708ba9771e5dced951654d557058206',
-                  'hash_10_VER_1baf374810a6affd2284de35480a2275'
+                  'hash_10_VER_0c645a279239821220a354574623f841',
+                  'hash_10_VER_cff209f48ce7354ac19916731b78b516',
+                  'hash_10_VER_982340558dd4210bb0ff4f920070c592',
+                  'hash_10_VER_350b4b5f270bfb3dcfccb8319ecdcb7b'
                ],
             },
             {  item   => 'JMX_open_file_descriptors',
                color  => '850707',
-               task   => 'hash_02_VER_710fbdd16e9d25109119a355e346e2ab',
+               task   => 'hash_02_VER_712fd800c5875242a80a0485a22ee1dc',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_d062ed5bd545a3148ebbf45cec5385c6',
-                  'hash_10_VER_66429a79c2fe39e5243336a859d41028',
-                  'hash_10_VER_c0d4b7adcb26686a80b32f8ab9d63e59',
-                  'hash_10_VER_8482b1fb6955c84486cd498ad2f692d1'
+                  'hash_10_VER_d08bd93e487f68ce30c6b8b8d5563e68',
+                  'hash_10_VER_62caa1d7de5a61000e4a135bcc214307',
+                  'hash_10_VER_05c900f361e7f0c3df2665d24b9e235d',
+                  'hash_10_VER_7b239e63cd4ef13d7f62920a53f5799d'
                ],
             },
          ],
       },
       {  name       => 'JMX ThreadPool',
          base_value => '1000',
-         hash       => 'hash_00_VER_8c2ec59bd22ecf2a530a21c6d4e918ca',
+         hash       => 'hash_00_VER_01c6f18c47728d9e4d8870d42c30b592',
          dt         => {
-            hash  => 'hash_01_VER_d6a840937346b3f3b5e33888ac842708',
+            hash  => 'hash_01_VER_6be522e28e4912d00e2abba1e7ebc127',
             input => 'ThreadPool',
             JMX_max_threads => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_7bc29aa177ac5efa0bddeebb363669db'
+               hash => 'hash_08_VER_7f1a692e90060dc01ade08640dbae991'
             },
             JMX_current_thread_count => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_d4c21fa0fb69a169b6ce1a388a2a1553'
+               hash => 'hash_08_VER_f7891887ea70673db6f4ee716c3c6fde'
             },
             JMX_current_threads_busy => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_c14fbc3af70e0a61e17e42174b7ebe16'
+               hash => 'hash_08_VER_74974c18135dc6b1fa46be16d46e9ef5'
             },
          },
          items => [
             {  item   => 'JMX_max_threads',
                color  => '4F7774',
-               task   => 'hash_02_VER_0e83f70bd10ce46004cd90b2b950d943',
+               task   => 'hash_02_VER_4a0385d366d663c4be766ea7befc09c6',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_c0a4b4f316075ea6be3bf7d806979987',
-                  'hash_10_VER_3a2c9c7258e1e6bfe46f6b8d235a3222',
-                  'hash_10_VER_9995590e807064aaea233d1d0ee1ad70',
-                  'hash_10_VER_e7d58f42e04cb561270b5df8957a1558'
+                  'hash_10_VER_b16693c3af3c1b15125e1093f1f8a1c3',
+                  'hash_10_VER_153fbd4ea29641ae1e865dc8a013dfc6',
+                  'hash_10_VER_7ad0ab1826d163b2a7efd181d85e73cd',
+                  'hash_10_VER_f9a4a9e5a3d70a71c0b6452ab992d168'
                ],
             },
             {  item   => 'JMX_current_thread_count',
                color  => 'FFDB87',
-               task   => 'hash_02_VER_3be2d93854f4079a37f2cd9221b010df',
+               task   => 'hash_02_VER_4d89a4964aa212d310d919134d2e664e',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_36a4ddfcaf4b8b857d495d396f190086',
-                  'hash_10_VER_bd5a1e016b70362a9b9cc43d71b92f84',
-                  'hash_10_VER_e41ee5172d438012858b13a9dfba6983',
-                  'hash_10_VER_683e1832280fd659b5f580087bafb07d'
+                  'hash_10_VER_898b8a42d2945399abd9b3abe1e29efc',
+                  'hash_10_VER_26a49159208ebdedb3996795e2e74dd1',
+                  'hash_10_VER_99ac31f1a5fc872208f44fb9fd926308',
+                  'hash_10_VER_e2344e192cebc4babac3b2f85779008e'
                ],
             },
             {  item   => 'JMX_current_threads_busy',
                color  => '850707',
-               task   => 'hash_02_VER_049abbd379abec6dfedb6c108c5e370c',
+               task   => 'hash_02_VER_7fccf386b4be419d9f7ad3eed204b6c5',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_79a2315acac9403c010277a169497ff7',
-                  'hash_10_VER_95af64bfd807a2b6e1d2eb3e7f126216',
-                  'hash_10_VER_c3f4daa800b92532f43899214de65e1b',
-                  'hash_10_VER_01de3f6927116fd2dbbf0a8fde685508'
+                  'hash_10_VER_40be67f06c19f07fd153ff958b79260f',
+                  'hash_10_VER_d645625be83d2edfeb3eef824e6bcc4e',
+                  'hash_10_VER_a37a69d31a8223147961c88ea7732304',
+                  'hash_10_VER_f29b7e8ecebc7d971308d64122af60fb'
                ],
             },
          ],
@@ -235,89 +235,89 @@
    inputs => {
       'Heap Memory Usage' => {
          type_id => 1,
-         hash    => 'hash_03_VER_beb2f81a856e5ba03b0f08adc39160bc',
+         hash    => 'hash_03_VER_85b90d5e7fea3eca81d5aa951f85d83c',
          input_string =>
             '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
             . '--host <hostname> --type jmx --items <items>',
          inputs => [
             {  allow_nulls => '',
-               hash        => 'hash_07_VER_73b15f9cff6981090931ebf57661efdd',
+               hash        => 'hash_07_VER_1277b71ea3382b4b91f42181f0a35110',
                name        => 'hostname'
             },
          ],
          outputs => {
             JMX_heap_memory_used =>
-               'hash_07_VER_d3ff23086e6d53adf935de14b04f32bc',
+               'hash_07_VER_6a2371b766f36de6a9856a6ef7664fa0',
             JMX_heap_memory_committed =>
-               'hash_07_VER_1c10f8ce987251079bba3a545d706892',
+               'hash_07_VER_c8bf1c72ba8aaa57f636425d4bcde7a9',
             JMX_heap_memory_max =>
-               'hash_07_VER_594d7a7da75cc27f35168c02cc62f3e2',
+               'hash_07_VER_31c371d545800cb28ff0457dd4a5cf30',
          },
       },
       'Non-Heap Memory Usage' => {
          type_id => 1,
-         hash    => 'hash_03_VER_2f143b3f470112c4199aae55a931d49c',
+         hash    => 'hash_03_VER_2b93e279af220d6818442a035e5a8c0a',
          input_string =>
             '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
             . '--host <hostname> --type jmx --items <items>',
          inputs => [
             {  allow_nulls => '',
-               hash        => 'hash_07_VER_b70b0da69dde9e1d9937085c08305c1d',
+               hash        => 'hash_07_VER_ae9d9100d9697c8ea5436f77b38b8024',
                name        => 'hostname'
             },
          ],
          outputs => {
             JMX_non_heap_memory_used =>
-               'hash_07_VER_e7572a60d80d702f3f20432cfc421f9e',
+               'hash_07_VER_4b6336c51d849c0489ae0d318f06881f',
             JMX_non_heap_memory_committed =>
-               'hash_07_VER_a18d9e71f8b894c8a34efcb4e0f7e5d5',
+               'hash_07_VER_2f2aec3de951fcbd1f3b88a74ee5f781',
             JMX_non_heap_memory_max =>
-               'hash_07_VER_d45e0587edc75f776db6b32720ada6fb',
+               'hash_07_VER_ef160528b82487a6d5931ef897937d04',
          },
       },
       'File Descriptor' => {
          type_id => 1,
-         hash    => 'hash_03_VER_d915cc3b266cdebaa26a30c25c4c0b84',
+         hash    => 'hash_03_VER_64176d59bb4d6cdeb94d9387b9dc6a89',
          input_string =>
             '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
             . '--host <hostname> --type jmx --items <items>',
          inputs => [
             {  allow_nulls => '',
-               hash        => 'hash_07_VER_0e0ae59f56b615ae2c2708952ea5dd98',
+               hash        => 'hash_07_VER_a42a2dedc5e953283f543bcfe90aa705',
                name        => 'hostname'
             },
          ],
          outputs => {
             JMX_open_file_descriptors =>
-               'hash_07_VER_c1c38e5ec6cb89b5cc3aa3d48f8e49b7',
+               'hash_07_VER_0c6166bbde9b8df3bd2c5a2cbbd09b16',
             JMX_max_file_descriptors =>
-               'hash_07_VER_d8f96bdd0f3950c50ff9776789274c81',
+               'hash_07_VER_e86c119c8e93a4947609dd7a799f82f6',
          },
       },
       'ThreadPool' => {
          type_id => 1,
-         hash    => 'hash_03_VER_81b20f10ae00cb284a49291ce83b3b58',
+         hash    => 'hash_03_VER_819b9c3a13995aa1842244733d6dbaca',
          input_string =>
             '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
             . '--host <hostname> --type jmx --items <items>',
          inputs => [
             {  allow_nulls => '',
-               hash        => 'hash_07_VER_b04a547db314499fdc16534467196754',
+               hash        => 'hash_07_VER_fbb21e3e9920cfc6ee2c41b07902715d',
                name        => 'hostname'
             },
             {  allow_nulls => '',
-               hash        => 'hash_07_VER_50ae6f7bdd6bc35a4b9206dd23921783',
+               hash        => 'hash_07_VER_2bd2f6f40a26a82db4b01962e4b9f43c',
                name        => 'threadpool',
                override    => 1,
             },
          ],
          outputs => {
             JMX_current_threads_busy =>
-               'hash_07_VER_7bed075223c77eb1c767b8fdd8ae6c7a',
+               'hash_07_VER_b9aa53c78469e0ddcf0c68ff3270f21c',
             JMX_current_thread_count =>
-               'hash_07_VER_31f702762bd160ac48a9b4728e6c49ac',
+               'hash_07_VER_c4ca951a4564fcf5d4667e15398362d1',
             JMX_max_threads =>
-               'hash_07_VER_b3bb6cf017b4cf7b6c2471c0c4750e2f',
+               'hash_07_VER_2f1e316505c94b6468dde6c97795ed2f',
          },
       },
    }

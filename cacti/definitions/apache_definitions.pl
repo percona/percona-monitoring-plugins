@@ -20,307 +20,307 @@
 
 {
    name   => 'Apache Server',
-   hash   => 'hash_02_VER_f74237cf7fb53fc002b0215117856be3',
+   hash   => 'hash_02_VER_73892c19311e1fcf88bc41b0daed18c7',
    version => {
       version => '1.1.8',
-      hash    => 'hash_06_VER_ac10705723a27cae224aa85dc7e38cd0',
+      hash    => 'hash_06_VER_77f3b553c351bf1e678c9b6c93a2266e',
    },
-   checksum    => 'hash_06_VER_f6212a68c24f9ef744bb58b4a45345b4',
+   checksum    => 'hash_06_VER_259de583017cbc4be74c359930d0af12',
    graphs => [
       {  name       => 'Apache Requests',
          base_value => '1000',
-         hash       => 'hash_00_VER_7dd582146162f1d9c61bc52bec83d2f8',
+         hash       => 'hash_00_VER_c919ea3bf4e1c5248aff68bda0225ff3',
          dt         => {
-            hash       => 'hash_01_VER_b126c9d16618d1cd99dc2d4eb27703c3',
+            hash       => 'hash_01_VER_f9c42195d10d5c43ae680625c29ecf5c',
             input      => 'Get Apache Stats',
             APACHE_Requests => {
                data_source_type_id => '3',
-               hash => 'hash_08_VER_9ab18f7a0cdc99e5a704af15dd0908cc'
+               hash => 'hash_08_VER_4a03ef2973154a0e52ee0fc3f532983e'
             },
          },
          items => [
             {  item   => 'APACHE_Requests',
                color  => '803405',
-               task   => 'hash_09_VER_320385532fb7c191c962fdb9a1414479',
+               task   => 'hash_09_VER_f5f45137eea74d8a9d64a78769ef9471',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_c98bdbb53284805a8938d434041b9781',
-                  'hash_10_VER_eb7b204a8beeae2f41193d4eecdbc54c',
-                  'hash_10_VER_58d5ab7cbd19f1650bb08815a2d752ae',
-                  'hash_10_VER_268eea107e7cb8c3b936a21bb0ce9236'
+                  'hash_10_VER_4886ba8ff63f3b35ac8676e162508b39',
+                  'hash_10_VER_7ba4f3bdf4f08239d69e512b40f9d1a1',
+                  'hash_10_VER_942fe5f115709960781d6486c18f5db7',
+                  'hash_10_VER_e686f710621eb420c27f00b2e593bc97'
                ],
             },
          ],
       },
       {  name       => 'Apache Bytes',
          base_value => '1024',
-         hash       => 'hash_00_VER_35fc5db4eda3fcb831ee4e66f2d758ed',
+         hash       => 'hash_00_VER_7a2e264c5d52cc8fe938beff86081f0e',
          dt         => {
-            hash       => 'hash_01_VER_fcd7e3d3cfb9ff2086af3573da16c4bb',
+            hash       => 'hash_01_VER_4aaee4ddc5048cf427e5a077783e0073',
             input      => 'Get Apache Stats',
             APACHE_Bytes_sent => {
                data_source_type_id => '3',
-               hash => 'hash_08_VER_4f32e43daef6ae3e1423c80578c06ce1'
+               hash => 'hash_08_VER_32435aaf4845cd6c251cbbc91f133851'
             },
          },
          items => [
             {  item   => 'APACHE_Bytes_sent',
                color  => '5D868C',
-               task   => 'hash_09_VER_f21ce020e6fab43d47cecf785340ab30',
+               task   => 'hash_09_VER_02587d6029c37748001f962bf4763f7e',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_94e067cb1e0cff9995cbdeec92a42932',
-                  'hash_10_VER_1a5ccbed57de33186c1a003dd0a0f28e',
-                  'hash_10_VER_37f077e6b4a61aea6ff0cc5dc6ec7db7',
-                  'hash_10_VER_cc030ec16b2a03aebfee1d83a765d645'
+                  'hash_10_VER_c8bdabf9d6a22c115829f34593fa04b1',
+                  'hash_10_VER_329f0530c5e785da7624fcdcd2538a22',
+                  'hash_10_VER_85bbe6b237894fd386a3565499b15e2d',
+                  'hash_10_VER_ccef1b50cdd8eec456a0891c33f0270c'
                ],
             },
          ],
       },
       {  name       => 'Apache CPU Load',
          base_value => '1000',
-         hash       => 'hash_00_VER_19dbe918854a4e549e48b172ad8b51b2',
+         hash       => 'hash_00_VER_a5c83dfc0b52a746a93e4ebdcda326ef',
          dt         => {
-            hash       => 'hash_01_VER_a6ae963635e330621d67f3c1d680efb0',
+            hash       => 'hash_01_VER_9cdf1586ca4c148131787a4431545684',
             input      => 'Get Apache Stats',
             APACHE_CPU_Load => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_4192deafb5ae488a21ae6cf33999fe82'
+               hash => 'hash_08_VER_2c0b5d3f5cd53363b94554b9e885e634'
             },
          },
          items => [
             {  item   => 'APACHE_CPU_Load',
                color  => '700004',
-               task   => 'hash_09_VER_a20147e0e31048d256b063831641b2dc',
+               task   => 'hash_09_VER_dcbbbfeedba772ea1a4f22e84bd3ff6c',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_d91eca467ac3b023964efb712d0d823a',
-                  'hash_10_VER_2f6a43e23d7160e0a5b549e43fe0a4e9',
-                  'hash_10_VER_dcd286268735b635bcab92c37704f759',
-                  'hash_10_VER_42fd6384bc247e64271f8a6b3baee61c'
+                  'hash_10_VER_3d3b9d125d38be561fb2268bb9fcbfd4',
+                  'hash_10_VER_e7e2240b1c2be0ef31811ba2b6c45527',
+                  'hash_10_VER_6209381b6d51190e9d57694d0b1479ec',
+                  'hash_10_VER_3c1b7135e33109978896ba0d9ad811e4'
                ],
             },
             {  item   => 'APACHE_CPU_Load',
                color  => '000000',
-               task   => 'hash_09_VER_a5ab7839ad06a8b08c10e2eac17f2d46',
+               task   => 'hash_09_VER_a0d3e200ca7ad97a5c1534cebaf346aa',
                type   => 'LINE1',
                hashes => [
-                  'hash_10_VER_ad3dbea90e53675c6a715fa70d80b425',
+                  'hash_10_VER_d00ac8145df4e1dfe30126e51be3dd61',
                ],
             },
          ],
       },
       {  name       => 'Apache Workers',
          base_value => '1000',
-         hash       => 'hash_00_VER_9b65e677a20f742582b9985a208550b6',
+         hash       => 'hash_00_VER_5b1a9e8542dcf1e5fdb71ae2457c4141',
          dt         => {
-            hash       => 'hash_01_VER_6e1cc2e3365f385cf934e32b8a204138',
+            hash       => 'hash_01_VER_f55da464cbc351f2b006438816194720',
             input      => 'Get Apache Stats',
             APACHE_Idle_workers => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_6aa30e77d556e4f27b78e86d75d240ce'
+               hash => 'hash_08_VER_fc7d9f93b5d5a7f892e05e7a77d3287f'
             },
             APACHE_Busy_workers => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_51669662e5a65025cc33a6963f7d13a5'
+               hash => 'hash_08_VER_0e2969a383c373218823cc6434cdfda4'
             },
          },
          items => [
             {  item   => 'APACHE_Idle_workers',
                color  => 'EEB78E',
-               task   => 'hash_09_VER_c607a8fc1798542b45d9db03821f5416',
+               task   => 'hash_09_VER_6448c8be4dc370ea714ebb68914336df',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_79922e1752125c15992283338f02e41c',
-                  'hash_10_VER_dc6d82130210fea4e442f4d449005bf0',
-                  'hash_10_VER_999a3c9ca0b6052df9f684eb86349833',
-                  'hash_10_VER_7af8dc449c88a166aae40048350281ff'
+                  'hash_10_VER_d77fcbc477938fa63a1c28b5f1c01348',
+                  'hash_10_VER_81d32fd494417bd7b46d5f277b4e2365',
+                  'hash_10_VER_e2dd730f7a6c8dd3a87ef4891564da4b',
+                  'hash_10_VER_d32bfe77e561aacf253aa02ea3516ef4'
                ],
             },
             {  item   => 'APACHE_Busy_workers',
                color  => '47748B',
-               task   => 'hash_09_VER_b41cfa6817023350822546893ce286bb',
+               task   => 'hash_09_VER_af51aadda6ad8afa465049af3197d86d',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_03bb3a68dcddd53c5a52d9d7fea80557',
-                  'hash_10_VER_fc4196b492d51221a20559eaf897d0cb',
-                  'hash_10_VER_5a9805bf1435610ccb227023d1f624b4',
-                  'hash_10_VER_8edc7aa7ab4c0fbdc8e080bdcb2b33e2'
+                  'hash_10_VER_75c78940bd02a05c1309f7378e70fec3',
+                  'hash_10_VER_0479a4b4122812fa5d2908170511ee2e',
+                  'hash_10_VER_6da60cb7eea1c6bf40df9b8eb64a2522',
+                  'hash_10_VER_20dbd04b3324fd7ca36515ce0a662321'
                ],
             },
          ],
       },
       {  name       => 'Apache Scoreboard',
          base_value => '1000',
-         hash       => 'hash_00_VER_6a66771502a2ef127619d17a6510eaf3',
+         hash       => 'hash_00_VER_f60b74bf26f749769ba25fc470e360ec',
          dt         => {
-            hash       => 'hash_01_VER_5dc334b912c46ab4c6d9af8ba8a62b18',
+            hash       => 'hash_01_VER_6e5719ef70d8a9a820103eb07f336756',
             input      => 'Get Apache Stats',
             APACHE_Waiting_for_connection => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_37696315ea6d63f72ff4369f8ce9d28f'
+               hash => 'hash_08_VER_6b97bacebd3e8d530c397cd5bfa98aea'
             },
             APACHE_Starting_up => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_be57013790b1b1f990cd854e915ed011'
+               hash => 'hash_08_VER_45018a757444027d11c0ce0b641dc07c'
             },
             APACHE_Reading_request => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_55b42d77e63ae182af5a1accbcb446ba'
+               hash => 'hash_08_VER_e180ea674149dfb1434afa01e50613c2'
             },
             APACHE_Sending_reply => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_7d7d154d9836e010680e178ad01f05e7'
+               hash => 'hash_08_VER_30766a565dca68e7780f77bbac07d0a9'
             },
             APACHE_Keepalive => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_e5fbb1607fe2e9a06be2c8c6a03655f4'
+               hash => 'hash_08_VER_6b9a1ed422e5df89522039cf05bdd0b1'
             },
             APACHE_DNS_lookup => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_1ca4724e477d5e6a01c9a2e4158715a1'
+               hash => 'hash_08_VER_bfeb1f5646138f8ea8b941ed79fdc003'
             },
             APACHE_Closing_connection => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_db20e41c1485c040e6458d82fd2aa1ee'
+               hash => 'hash_08_VER_8b856a8766315516ea187ecb2fbaa2ee'
             },
             APACHE_Logging => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_d1d955999673b9ee52fd04958ce4f69f'
+               hash => 'hash_08_VER_15361d610403f0e73f24b7e9e7766a10'
             },
             APACHE_Gracefully_finishing => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_970a7ed0d0685727508fa9cc791a5eec'
+               hash => 'hash_08_VER_b704aa7f1ef090776d65ea7938af4a85'
             },
             APACHE_Idle_cleanup => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_5d906b480bed5be85ddf27b46feb5ba9'
+               hash => 'hash_08_VER_93e6fb4c447d6615e3cfcbf860540357'
             },
             APACHE_Open_slot => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_a8a002b8651f6ec96d58db5c6534c959'
+               hash => 'hash_08_VER_e35d473f2419852bdce7576648c9821a'
             },
          },
          items => [
             {  item   => 'APACHE_Waiting_for_connection',
                color  => 'DE0056',
-               task   => 'hash_09_VER_a80215bf3ff228c0b6c568779f06b85c',
+               task   => 'hash_09_VER_f5cb9a27bc339cb5cbfd264bcea16ead',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_2f5b9e2564725c0fb1b922b4bd97c201',
-                  'hash_10_VER_a7238d0616a2ba162566702834a2347a',
-                  'hash_10_VER_513fd42fc5895a7dc86e815d908a06bf',
-                  'hash_10_VER_0db1a81e909798e42edd1ed9805c2a30'
+                  'hash_10_VER_8e38a88fbb19a2222b29c4dc0bd0fc8d',
+                  'hash_10_VER_14b75abfd17f3c5ac640d7723ac16cf4',
+                  'hash_10_VER_210e2c423b65c98a0be1df5db95ddcab',
+                  'hash_10_VER_51748a634f48468d636c96f953adecb2'
                ],
             },
             {  item   => 'APACHE_Starting_up',
                color  => '784890',
-               task   => 'hash_09_VER_6a181d6121b20efdf004a70a8ef47f1c',
+               task   => 'hash_09_VER_43b520c92bc1a2559787d10f9b721e6b',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_feec879010e407f91aa272ced883c4e2',
-                  'hash_10_VER_f43ceb7975cedae059a11be3221b5fcc',
-                  'hash_10_VER_b518386180a8f75c6871413f80be2175',
-                  'hash_10_VER_b67fbc3ae53d866e9dca38c3983aba7f'
+                  'hash_10_VER_f0e0dc0ed69bb21a1cc08929968d9b05',
+                  'hash_10_VER_52bc6b651e868ebc8834cd73df4230db',
+                  'hash_10_VER_0dbb240bac7a2319fb51114f12c7e596',
+                  'hash_10_VER_2949a121cfb8b9253c7730ed62e542c6'
                ],
             },
             {  item   => 'APACHE_Reading_request',
                color  => 'D1642E',
-               task   => 'hash_09_VER_838a522638302fbdfca68eb4d8e8e755',
+               task   => 'hash_09_VER_4f83ba37f71ab054d0195bfa1b98e5c6',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_b4c6d061c33b77bdacdc2eb6d9d72734',
-                  'hash_10_VER_730a9ae5490b1abe140abbfca6318df7',
-                  'hash_10_VER_23ab4fa861de371911f31fde6f4c650c',
-                  'hash_10_VER_dee2bf79588d24ac22c3960e2a1adfcc'
+                  'hash_10_VER_3324c9d0c2b32749511c083bbc8f6de6',
+                  'hash_10_VER_12eca125791c0031173196817a656e3e',
+                  'hash_10_VER_c0d8877f8d539e0868293457394c44fe',
+                  'hash_10_VER_e64318deb6813163a57761867b94e7d6'
                ],
             },
             {  item   => 'APACHE_Sending_reply',
                color  => '487860',
-               task   => 'hash_09_VER_126a087f7bcae3056b701b0493e0714a',
+               task   => 'hash_09_VER_23adcee9cab3ca4f14765fe3c7253242',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_7f2572aa90ec46c979e2b89cdfe6a598',
-                  'hash_10_VER_53d8d8d3b22a98d1365a09f526eb3574',
-                  'hash_10_VER_8f4ab85a11d053e4e3ccebfdbbb40c07',
-                  'hash_10_VER_ecf6b2f8603ae2e75e4a9053d0300f43'
+                  'hash_10_VER_43ef3f81769b5825318aab786f6597b4',
+                  'hash_10_VER_a848dcb6d2e6cb236d74feecd4665dc8',
+                  'hash_10_VER_ba81d789ec90dcac77fcba150a993c2b',
+                  'hash_10_VER_384ffdd9154e378da2164fbdb5d2911d'
                ],
             },
             {  item   => 'APACHE_Keepalive',
                color  => '907890',
-               task   => 'hash_09_VER_4a39512d24f2023398eedff0dcd399a7',
+               task   => 'hash_09_VER_927222ed371558df199e36cb291e07c3',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_396b8bcfd67623c10b9485ccb698288c',
-                  'hash_10_VER_6f2683a8d3808dfc064ce7720585558b',
-                  'hash_10_VER_7cc79c5569657285a10c5aab2930235b',
-                  'hash_10_VER_51e655f37c25b6015aaf10eafa5749f1'
+                  'hash_10_VER_4126af1166975a1f29b5f897f2e02624',
+                  'hash_10_VER_29e037bba6ef0d4be45c3d459a7ea3d5',
+                  'hash_10_VER_cb3585d91618ff8b09507922176437f0',
+                  'hash_10_VER_75561b968a3ac85a83a919047a53fdb0'
                ],
             },
             {  item   => 'APACHE_DNS_lookup',
                color  => 'DE0056',
-               task   => 'hash_09_VER_f99da81cd9ba660c901cdcdbdcbb6bba',
+               task   => 'hash_09_VER_7964389e04e201754bce92a1ab9b0f45',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_552fe0cfcd2bd7a7ca0a7104293eb1b7',
-                  'hash_10_VER_950147840d123dd58eb753be80e9634c',
-                  'hash_10_VER_d8bfcf3d0a8cb176432eeb52ee6bcb53',
-                  'hash_10_VER_41b645619a517cc7ba9b8cd8f7edace1'
+                  'hash_10_VER_aff3474f146a819358f3f6d9c2b621aa',
+                  'hash_10_VER_c4d5b7b33264109f21f36501ca648770',
+                  'hash_10_VER_1adfe31481e04218240afd91d1bee9b1',
+                  'hash_10_VER_bc25d3e35d0e439c63474183c0e8abdb'
                ],
             },
             {  item   => 'APACHE_Closing_connection',
                color  => '1693A7',
-               task   => 'hash_09_VER_cf8485ee4bb76ed6c8538c77abd7b310',
+               task   => 'hash_09_VER_83abaaf1c1869fd008892bbd263f9ba8',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_44315f16adcfd7e3882f60e92f332dda',
-                  'hash_10_VER_0583112cb00ae94c17d6fe0d96bb1ab4',
-                  'hash_10_VER_0a877cf8512ef1b9d2813f0774db0ca3',
-                  'hash_10_VER_5a44212b067eb73c8170ff88b1b1c829'
+                  'hash_10_VER_77ad183429b299aedc29676e72c40d2e',
+                  'hash_10_VER_2e24a9eb579094caba9215e406dd2b23',
+                  'hash_10_VER_910964396a523d50bb6f12014be0d5e9',
+                  'hash_10_VER_fba625d3eedb73abd4d3399cf36cabce'
                ],
             },
             {  item   => 'APACHE_Logging',
                color  => 'FF7D00',
-               task   => 'hash_09_VER_aac162da0dc535a0ea28291194658b85',
+               task   => 'hash_09_VER_f9b56cdac7d6bde2baed1354251463a1',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_9ae920a46f532f0f4a49dbaca7e731c0',
-                  'hash_10_VER_e6fbbc3f9b85f1ff8f778e46ab0b1e41',
-                  'hash_10_VER_ac2161413f7ee6920d3786c8eb1fc1bc',
-                  'hash_10_VER_14616b47b80629a31cf649885a7523a0'
+                  'hash_10_VER_8b09886507f8233875fe93ef0b24ca58',
+                  'hash_10_VER_cd0ea9b511e4f2b3e4a2b6f270196b01',
+                  'hash_10_VER_23076f41cd1ccee831d00908d823815a',
+                  'hash_10_VER_808230a30be8b51ab1dc6bc7f4115fed'
                ],
             },
             {  item   => 'APACHE_Gracefully_finishing',
                color  => 'B83A04',
-               task   => 'hash_09_VER_6626c31745e227ee7799add9014e86a1',
+               task   => 'hash_09_VER_08428235371b20af7ef6c397d66c706f',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_ac488b16d39e0bbb7b9e19f989177f06',
-                  'hash_10_VER_8a625639d2f5d9301f6b6810e9e68dd2',
-                  'hash_10_VER_f47ebd6fa1afdead7b2a3cbb4770fa25',
-                  'hash_10_VER_594b24cc59ab5381ad72007df314e4ef'
+                  'hash_10_VER_b8ec43fbea7ac6d147f41e44cb68f6c8',
+                  'hash_10_VER_5654785da70d2161933204e834392b61',
+                  'hash_10_VER_ec54958c8153e29cf0f869e364737e3c',
+                  'hash_10_VER_deba211070590241a2c58e3f2a12dc5d'
                ],
             },
             {  item   => 'APACHE_Idle_cleanup',
                color  => '540202',
-               task   => 'hash_09_VER_fc03d4316c43ccbd3d9ecf0a7279a850',
+               task   => 'hash_09_VER_44cf9ae38e5273c0d55b30de0d32ead1',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_bbfb4404823a3a1e1d1f9eabd25455c4',
-                  'hash_10_VER_9e222bde9a5af3ffd4bd5aaa13a4676c',
-                  'hash_10_VER_d22744845006091d5db17198591ba3e9',
-                  'hash_10_VER_e31c7864d29b10c35d3c0c7640797caf'
+                  'hash_10_VER_93e67aab28dc09bb7ab53cdfbab3dbe6',
+                  'hash_10_VER_b2a57c635fddb84ee34e89a900462c70',
+                  'hash_10_VER_7178419370c89bb6ff82b2c1ed65073b',
+                  'hash_10_VER_4d051614ada7203d727bc65d166b0636'
                ],
             },
             {  item   => 'APACHE_Open_slot',
                color  => '6E645A',
-               task   => 'hash_09_VER_1555fa38c0124d776cc8e4810db0f3ec',
+               task   => 'hash_09_VER_d2fb4326379df5e08ca2e0ea269291ef',
                type   => 'STACK',
                hashes => [
-                  'hash_10_VER_5bc2da8fc57817b82413247f0c029607',
-                  'hash_10_VER_4e9f134418a7f4e2b36e033d063ee585',
-                  'hash_10_VER_1aa91553763234161676d15c6c9c0760',
-                  'hash_10_VER_b189156869d85a4ebe01f805d5ea5b37'
+                  'hash_10_VER_0609dfe3177b880beddcc0f1c68f47bc',
+                  'hash_10_VER_bdb6a987087674f282ff2af8d4fa7a9a',
+                  'hash_10_VER_35a1a7d8495b07f431aacb1252899328',
+                  'hash_10_VER_a029caad27fedd71986e3a8ac51443e2'
                ],
             },
          ],
@@ -329,32 +329,32 @@
    inputs => {
       'Get Apache Stats' => {
          type_id      => 1,
-         hash         => 'hash_03_VER_6d2a648161b8c79a67821046280dde43',
+         hash         => 'hash_03_VER_2b804ed27a849cba3c0d028dd82c087e',
          input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
                        . '--host <hostname> --type apache --items <items>',
          inputs => [
             {  allow_nulls => '',
-               hash        => 'hash_07_VER_9ede3b32324e1978bc938bbbcf99c7da',
+               hash        => 'hash_07_VER_36c5df1a60194652f8fd63f941dc99a7',
                name        => 'hostname'
             },
          ],
          outputs => {
-            APACHE_Requests               => 'hash_07_VER_cff73d78a6870918b25fec9af9ba55d3',
-            APACHE_Bytes_sent             => 'hash_07_VER_9430882fbafec2abb63390553b47f6d8',
-            APACHE_CPU_Load               => 'hash_07_VER_254558f5aa21ff73ebe348612cca429e',
-            APACHE_Idle_workers           => 'hash_07_VER_8f45bda7f92b305ce53485bf349c74a2',
-            APACHE_Busy_workers           => 'hash_07_VER_37cae992ca15d54db89e5fbb4d55b5e3',
-            APACHE_Waiting_for_connection => 'hash_07_VER_b3882f9fad342ef4437389afe5a48255',
-            APACHE_Starting_up            => 'hash_07_VER_bca2a7f9e02eb1e0119b9901620213e0',
-            APACHE_Reading_request        => 'hash_07_VER_f55a3ab774898f05be545865ab08dc3d',
-            APACHE_Sending_reply          => 'hash_07_VER_ae55e6043b1e658090c3992b429ab772',
-            APACHE_Keepalive              => 'hash_07_VER_95432bea896bfe38ae8b02bfda3345ae',
-            APACHE_DNS_lookup             => 'hash_07_VER_d7708a0ebcdbd2c2d50e795c785607e4',
-            APACHE_Closing_connection     => 'hash_07_VER_65d90ec19f533d6dfd59b7e59a59a961',
-            APACHE_Logging                => 'hash_07_VER_1c9ae3f9d3f450274caf42acda243314',
-            APACHE_Gracefully_finishing   => 'hash_07_VER_e9ea07ba78ae485021e48f3d09d2fe51',
-            APACHE_Idle_cleanup           => 'hash_07_VER_cd3456d0c13abf6bd90ca951466508d6',
-            APACHE_Open_slot              => 'hash_07_VER_11e86aca3dd09262052d32571502349f',
+            APACHE_Requests               => 'hash_07_VER_2dd3706fda20c335021e01ba89ad46ca',
+            APACHE_Bytes_sent             => 'hash_07_VER_176792b65f67b89314c2d0fdfc990f14',
+            APACHE_CPU_Load               => 'hash_07_VER_8902bb51439e3d1e04e67deb8d3771bd',
+            APACHE_Idle_workers           => 'hash_07_VER_e43724ec3b8d65747338f762279eb279',
+            APACHE_Busy_workers           => 'hash_07_VER_9e96f24e26b87ef28d27166613cdcd8d',
+            APACHE_Waiting_for_connection => 'hash_07_VER_5380cc7f6d855b8b03df2b7529d56fcd',
+            APACHE_Starting_up            => 'hash_07_VER_fd0d8b2e6ab119d070bd370da9a25591',
+            APACHE_Reading_request        => 'hash_07_VER_3d3305fa52c23ebaa1961201f9af6ddb',
+            APACHE_Sending_reply          => 'hash_07_VER_0bdb150fa2458bfb6910ab5ab4782ec0',
+            APACHE_Keepalive              => 'hash_07_VER_33763ca0a2d71ea0eda166f3889106d2',
+            APACHE_DNS_lookup             => 'hash_07_VER_1d5f6ca0a5d998ddd445cdecca4c70b0',
+            APACHE_Closing_connection     => 'hash_07_VER_71558c1bf3f967a6383b0350808eb1bb',
+            APACHE_Logging                => 'hash_07_VER_1d3e4c6b5882f10e3ada52c9353a7997',
+            APACHE_Gracefully_finishing   => 'hash_07_VER_bd600fdd9df21e99c4b94f7f77d2917b',
+            APACHE_Idle_cleanup           => 'hash_07_VER_8d4698c6ffd74722796f765cbd83be87',
+            APACHE_Open_slot              => 'hash_07_VER_6b4c99c5731ce8a4e379f0ae748a130d',
          },
       },
    },

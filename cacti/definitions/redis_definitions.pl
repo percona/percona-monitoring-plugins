@@ -20,139 +20,139 @@
 
 {
    name   => 'Redis Server',
-   hash   => 'hash_02_VER_f3047229cf7d96bb613032d847a29113',
+   hash   => 'hash_02_VER_88501be442eb224a429fecace9b0ca99',
    version => {
       version => '1.1.8',
-      hash    => 'hash_06_VER_0f91ebe15204e0d45977627acaabd138',
+      hash    => 'hash_06_VER_42808faea8f8f49388d2f885f74d7413',
    },
-   checksum => 'hash_06_VER_fc13e22cb63305e2ac89c5e350af8337',
+   checksum => 'hash_06_VER_99eca26b3c0418b79e6984b56cd9f04f',
    graphs => [
       {  name       => 'Redis Connections',
          base_value => '1000',
-         hash       => 'hash_00_VER_84ebd40765d98e2f876692bec708bb6d',
+         hash       => 'hash_00_VER_58605b758b8583058191633ce91ee7c9',
          dt         => {
-            hash       => 'hash_01_VER_eeae29f39e8657454bde3e7600937f63',
+            hash       => 'hash_01_VER_e16c97ecf8dde1a2cd113a0ced39b564',
             input      => 'Get Redis Stats',
             REDIS_connected_clients => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_aab0dc2585c37325ebbb92d370e82d98'
+               hash => 'hash_08_VER_2ed1bfcdf90c57a054bb3326922f5ed0'
             },
             REDIS_connected_slaves => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_542d97edeb5b0ed52e0b90ca770e3c76'
+               hash => 'hash_08_VER_2db5ce58f698e28e7ff3c94f0aef0193'
             },
             REDIS_total_connections_received => {
                data_source_type_id => '3',
-               hash => 'hash_08_VER_e1ce80efd6fe12e05e336478fb6e6749'
+               hash => 'hash_08_VER_72a3947c4553c5df2c325280f3733382'
             },
          },
          items => [
             {  item   => 'REDIS_connected_clients',
                color  => '9B2B1B',
-               task   => 'hash_09_VER_8e28f481aca7e96e4064dee8c2c69c3c',
+               task   => 'hash_09_VER_1bf05bfd3efdbf41f4f91b174e38cc30',
                type   => 'LINE1',
                hashes => [
-                  'hash_10_VER_4af5df96e560fcb0a8f1930f7b1156cf',
-                  'hash_10_VER_fca522db4bea3e30fde7361a69b6ac5f',
-                  'hash_10_VER_cb171679f47cb9121e1e72f472be0c1a',
-                  'hash_10_VER_fa606307b66560ae38e985bde5a10713'
+                  'hash_10_VER_6071f069a5bd15e74ef598a9b4db7644',
+                  'hash_10_VER_6975aa8992c9c88fe7be8b3dd61a9c62',
+                  'hash_10_VER_1378738d9922c5e213a87c1872aa97e8',
+                  'hash_10_VER_f27bb1882e9a4f170c4800a025e5bf8d'
                ],
             },
             {  item   => 'REDIS_connected_slaves',
                color  => '4A170F',
-               task   => 'hash_09_VER_d328df039fcce441380c3a3ab8c5a550',
+               task   => 'hash_09_VER_0a3beb5b828545518dd79c85bdad50e2',
                type   => 'LINE1',
                hashes => [
-                  'hash_10_VER_e08f91815b0669edce068596f9e040ab',
-                  'hash_10_VER_385daccb37cbcda9a3ac80d4c22ffe51',
-                  'hash_10_VER_ecd035859f634165aa089fdde12f40fc',
-                  'hash_10_VER_e5d3c4faeb89ac9fe27650ca7a597d55'
+                  'hash_10_VER_beb0c210ddedb5746745cf034d277f3f',
+                  'hash_10_VER_fbb554b0fb6a1b285a764d241866d961',
+                  'hash_10_VER_a628a06f4a3af11989870dbf8c9be8c6',
+                  'hash_10_VER_c606a20bedd8e369003fc3176dbb5938'
                ],
             },
             {  item   => 'REDIS_total_connections_received',
                color  => '38524B',
-               task   => 'hash_09_VER_fdf1c0f25b286c2b56ba6aac54b74aaa',
+               task   => 'hash_09_VER_86507352c88a1db5466434438f0ac7a6',
                type   => 'LINE1',
                hashes => [
-                  'hash_10_VER_49f5d38e05744070047bccb319a16546',
-                  'hash_10_VER_e058cdb4c48e5bf41876d27304cd99e8',
-                  'hash_10_VER_6043255d0c40482b024a50d53bb93f5b',
-                  'hash_10_VER_edbcee791812e1f90f83f5f5bf5fb4f7'
+                  'hash_10_VER_6e92739c5eccd34d5f4ca7bbc7094690',
+                  'hash_10_VER_7db5f931889d0b5f8103e6b505af9416',
+                  'hash_10_VER_3c3e7dfbf736070e11c8d3af7032c07a',
+                  'hash_10_VER_dcb448626fe1960d66c8e269966b8c68'
                ],
             },
          ],
       },
       {  name       => 'Redis Memory',
          base_value => '1024',
-         hash       => 'hash_00_VER_6bc7cee7973b7f44ecda5b6289c3d41b',
+         hash       => 'hash_00_VER_f4294ffa0addd18eac86307b49e792dd',
          dt         => {
-            hash       => 'hash_01_VER_71bbb5674a7fd60127453b1c17953cb4',
+            hash       => 'hash_01_VER_604d89e787b0cdfe275b556fa720118c',
             input      => 'Get Redis Stats',
             REDIS_used_memory => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_a0502b590f50ad61522d7804e7fcb62b'
+               hash => 'hash_08_VER_8b73f208626cc1aceb64897005bf057c'
             },
          },
          items => [
             {  item   => 'REDIS_used_memory',
                color  => '3B7AD9',
-               task   => 'hash_09_VER_75d120ce56a9e0653b86076fe0030179',
+               task   => 'hash_09_VER_3bae2ef9a80cad6fd1386c9f5a14ee5d',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_c12a3a6161aa489bbfe6c6f11f587812',
-                  'hash_10_VER_d31f6df64a0459cc6175236c194b4a52',
-                  'hash_10_VER_77a22aed4ece675903470dd9144bac24',
-                  'hash_10_VER_08013b39e1e214843bc431d51a26497d'
+                  'hash_10_VER_10e7047ede5a2f3415fb750d11bf1bf5',
+                  'hash_10_VER_50f0fa0b8b4fbd4b19cda83ab0f865db',
+                  'hash_10_VER_5f9a6238ed16c67511ebab8e1350a6da',
+                  'hash_10_VER_b41cc19d76c8082207a4bd96da9c3008'
                ],
             },
          ],
       },
       {  name       => 'Redis Commands',
          base_value => '1000',
-         hash       => 'hash_00_VER_9bf8937365d86e0fbff94d75151f891c',
+         hash       => 'hash_00_VER_68547617d6aa55d2149ae496f60d16c3',
          dt         => {
-            hash       => 'hash_01_VER_9f7324073b69c016bdbac67afa871f4a',
+            hash       => 'hash_01_VER_d923c88b5edb8e2d47f7171072ba6f91',
             input      => 'Get Redis Stats',
             REDIS_total_commands_processed => {
                data_source_type_id => '3',
-               hash => 'hash_08_VER_c4e04070d2ae18fe32beaf1059260162'
+               hash => 'hash_08_VER_614ee9dd08ef55d82a411f341dfe65f6'
             },
          },
          items => [
             {  item   => 'REDIS_total_commands_processed',
                color  => 'FF7200',
-               task   => 'hash_09_VER_8bafab546a3c2c9a329163eda7e795c9',
+               task   => 'hash_09_VER_4f019a4ad72030fdbca608004aa36006',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_3c021e98935b259b66342b91ff13908e',
-                  'hash_10_VER_90b832f143d92387f1c5eebff447fc59',
-                  'hash_10_VER_3ce50de9067697a964dfd1e90571c2b1',
-                  'hash_10_VER_111ccb7df69a4e5e336a6a2ba7bef753'
+                  'hash_10_VER_38569d43af987292a6800552e49e0f35',
+                  'hash_10_VER_32e9ced148c6c6ee70eaa0c969bf8356',
+                  'hash_10_VER_bd06b053d27efa28be85dde74cdb9d4b',
+                  'hash_10_VER_bc969168bcb5e89435605a14a6ebb9d8'
                ],
             },
          ],
       },
       {  name       => 'Redis Unsaved Changes',
          base_value => '1000',
-         hash       => 'hash_00_VER_24e1734c18efaccdeae5637075647313',
+         hash       => 'hash_00_VER_4eaf3512be033d1e19397dd33676be72',
          dt         => {
-            hash       => 'hash_01_VER_7fd4ba2d9a1f72af2c4cadb9a5fe120b',
+            hash       => 'hash_01_VER_80a035b69f36e83c0624d7865d732cb2',
             input      => 'Get Redis Stats',
             REDIS_changes_since_last_save => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_05844394fda8a854144e5cd88760a4f7'
+               hash => 'hash_08_VER_f8d281cfc380bd27e0aa57e18767bdba'
             },
          },
          items => [
             {  item   => 'REDIS_changes_since_last_save',
                color  => 'A88558',
-               task   => 'hash_09_VER_b44eb38fbf04f9c72e16dbcd05f29289',
+               task   => 'hash_09_VER_fcf2ca58aabc0878762ff7ef0e865537',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_9e773c0569b332325b06f482ba5c2461',
-                  'hash_10_VER_997754feac9bfa6126b4081086557f58',
-                  'hash_10_VER_e4495715fb649e8af1dc8c6e1f9d69c9',
-                  'hash_10_VER_b2b7e39747eaca57a6acd5b1f6aabc8b'
+                  'hash_10_VER_d0878b183c6e961a893712717784b5a7',
+                  'hash_10_VER_161c968d7ae7398c89cf25e61f4f8d02',
+                  'hash_10_VER_4fa85c29c9810255945c4fa465bebd62',
+                  'hash_10_VER_62cd0ed99224aa689a95cd475ef98491'
                ],
             },
          ],
@@ -161,26 +161,26 @@
    inputs => {
       'Get Redis Stats' => {
          type_id      => 1,
-         hash         => 'hash_03_VER_3d39a7a9c9c25791440c870db77ea738',
+         hash         => 'hash_03_VER_6cb78e25c814d7c81748d9017ef34050',
          input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
                        . '--host <hostname> --type redis --items <items> ',
          inputs => [
             {  allow_nulls => '',
-               hash        => 'hash_07_VER_4ac2e9c33e6d098e3b735d252d4fd84e',
+               hash        => 'hash_07_VER_ceefc4380d71467ed5401804c0013316',
                name        => 'hostname'
             },
             {  allow_nulls => 'on',
-               hash        => 'hash_07_VER_4ac2e9c33e6d098e3b735d252d4fd84f',
+               hash        => 'hash_07_VER_3a7b33fd0c706876b023471a84c417d3',
                name        => 'port2'
             },
          ],
          outputs => {
-            REDIS_connected_clients          => 'hash_07_VER_aeca8ba12e90190900f1da95a6e954ae',
-            REDIS_connected_slaves           => 'hash_07_VER_6f717310dd5348ecf294bbfe7d387444',
-            REDIS_used_memory                => 'hash_07_VER_bf96594b2ae19aa9eff40379096dcc79',
-            REDIS_changes_since_last_save    => 'hash_07_VER_e72bdb6771b1d525bb68824e6648cc53',
-            REDIS_total_connections_received => 'hash_07_VER_c1eef47fc6d9178e16a227a45bff6336',
-            REDIS_total_commands_processed   => 'hash_07_VER_bb4948db9c650a1ab5e7278d3e6f7479',
+            REDIS_connected_clients          => 'hash_07_VER_8a7ac23d94b9c68aef61a2ff8c503100',
+            REDIS_connected_slaves           => 'hash_07_VER_57c234a4072e907a928341eb7d2003cf',
+            REDIS_used_memory                => 'hash_07_VER_27df1ac398bc01914c7e42c616a5f6c7',
+            REDIS_changes_since_last_save    => 'hash_07_VER_70fe6c2ec3ea0ad42d0a768170f3ebad',
+            REDIS_total_connections_received => 'hash_07_VER_ea020fcd69393ba0acf347fbc91a0151',
+            REDIS_total_commands_processed   => 'hash_07_VER_972c7ace0dae7671b37ea76365331024',
          },
       },
    },
