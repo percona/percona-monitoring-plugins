@@ -73,6 +73,11 @@ This template shows InnoDB transaction counts:
 
 * An active transaction is a transaction that's currently open.  It's possible for transactions to be in "not started" status, which really means that this connection to MySQL doesn't actually have a transaction open.  A transaction is active between BEGIN and COMMIT.  It's also active whilst a query is running, although it might commit immediately due to auto-commit, if applicable.  This graph really just shows how much transactional activity is happening on the database.
 * A locked transaction is in LOCK WAIT status.  This usually means it's waiting for a row lock, but in some cases could be a table lock or an auto-increment lock.  If you start to see lock waits, you need to check SHOW INNODB STATUS and search for the string "LOCK WAIT" to examine what's waiting.  Lock waits can come from several sources, including too much contention on busy tables, queries accessing data through scans on different indexes, or bad query patterns such as SELECT .. FOR UPDATE.
+* The current transactions are all transactions, no matter what status (ACTIVE, LOCK WAIT, not started, etc).
+* The number of read views open shows how many transactions have a consistent snapshot of the database's contents, which is achieved by MVCC.
+
+The example image is slightly outdated; some of the items just mentioned don't
+appear on this image, but are on the InnoDB Transactions graph instead.
 
 .. figure:: images/InnoDB_Adaptive_Hash_Index.png
 
@@ -278,15 +283,10 @@ and other signs of contention amongst queries.
 This graph shows information about transactions within InnoDB.
 
 * Total transactions ever created is the internal transaction counter.
-* The current transactions are all transactions, no matter what status (ACTIVE, LOCK WAIT, not started, etc).
 * The length of the history list shows how old the oldest unpurged transaction is.  If this grows large, you might have transactions that are staying open a very long time.  This means InnoDB can't purge old row versions.  It will get bloated and slow as a result.  Commit your transactions as quickly as you can.
-* The number of read views open shows how many transactions have a consistent snapshot of the database's contents, which is achieved by MVCC.
 
-Some of the things on this graph really belong on the Active/Locked graph, where
-they would make more sense, but I don't want to break backwards compatibility by
-doing that.  The current transactions and the number of transactions with read
-views open would be more sensible on that graph.  Cross reference that graph to
-make sense of these metrics.
+The example graph is slightly outdated; a newer version of the templates has
+moved some of the items to the Active/Locked graph instead.
 
 .. figure:: images/MyISAM_Indexes.png
 

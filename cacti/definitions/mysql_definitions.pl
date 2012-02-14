@@ -1694,10 +1694,6 @@
          dt         => {
             input   => 'Get MySQL Stats',
             hash    => 'hash_01_VER_fbbf7f38a0a20613dc79003f0c702084',
-            current_transactions => {
-               data_source_type_id => '1',
-               hash => 'hash_08_VER_65dd57fbce5ead54134c6503c037db90',
-            },
             history_list => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_d77d77348050b6a61f9df87f2cd0a47c',
@@ -1705,10 +1701,6 @@
             innodb_transactions => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_4bb48cfeb0c6ba33cd0efc263f17d3d6',
-            },
-            read_views => {
-               data_source_type_id => '1',
-               hash => 'hash_08_VER_24c6e5dcd3e22c73c19a3ff8eee9d6c2',
             },
          },
          items => [
@@ -1723,17 +1715,6 @@
                task => 'hash_09_VER_ed94196aac019b05e7d6dea85d2426ed',
                type => 'LINE1',
             },
-            {  color  => '4444FF',
-               hashes => [
-                  'hash_10_VER_1541676d140a4dac37656c772c56e83f',
-                  'hash_10_VER_0d2599eaa11fd4e3f1c1f56df279df0a',
-                  'hash_10_VER_a4557928a62844ccb487e73ec01aa6e0',
-                  'hash_10_VER_2818ffcfcceaa49d0d0f1f2315af2006',
-               ],
-               item => 'current_transactions',
-               task => 'hash_09_VER_a34797ac2967209ac53511847683d493',
-               type => 'LINE1',
-            },
             {  color  => 'FF7D00',
                hashes => [
                   'hash_10_VER_b66a6d7a2ef6f29f92dd2cd07aa5ab55',
@@ -1743,17 +1724,6 @@
                ],
                item => 'history_list',
                task => 'hash_09_VER_e3f9eafa729269f2f1f0be84469739c4',
-               type => 'LINE1',
-            },
-            {  color  => '74C366',
-               hashes => [
-                  'hash_10_VER_6d6d7abff63a7a52a1ee61168f8320a1',
-                  'hash_10_VER_26bba3ca70e705b05186396a4379357f',
-                  'hash_10_VER_58e550f8923ae74195585e11270de50a',
-                  'hash_10_VER_8f81adca5b09f671a0ce364c66c910ad',
-               ],
-               item => 'read_views',
-               task => 'hash_09_VER_2ec141f159d322bcc954561e4584ce44',
                type => 'LINE1',
             },
          ],
@@ -1771,6 +1741,14 @@
             locked_transactions => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_a21487b718256d024260f04ec77d2a6c',
+            },
+            current_transactions => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_65dd57fbce5ead54134c6503c037db90',
+            },
+            read_views => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_24c6e5dcd3e22c73c19a3ff8eee9d6c2',
             },
          },
          items => [
@@ -1794,6 +1772,28 @@
                ],
                item => 'locked_transactions',
                task => 'hash_09_VER_a34797ac2967209ac53511847683d49d',
+               type => 'LINE1',
+            },
+            {  color  => '4444FF',
+               hashes => [
+                  'hash_10_VER_1541676d140a4dac37656c772c56e83f',
+                  'hash_10_VER_0d2599eaa11fd4e3f1c1f56df279df0a',
+                  'hash_10_VER_a4557928a62844ccb487e73ec01aa6e0',
+                  'hash_10_VER_2818ffcfcceaa49d0d0f1f2315af2006',
+               ],
+               item => 'current_transactions',
+               task => 'hash_09_VER_a34797ac2967209ac53511847683d493',
+               type => 'LINE1',
+            },
+            {  color  => '74C366',
+               hashes => [
+                  'hash_10_VER_6d6d7abff63a7a52a1ee61168f8320a1',
+                  'hash_10_VER_26bba3ca70e705b05186396a4379357f',
+                  'hash_10_VER_58e550f8923ae74195585e11270de50a',
+                  'hash_10_VER_8f81adca5b09f671a0ce364c66c910ad',
+               ],
+               item => 'read_views',
+               task => 'hash_09_VER_2ec141f159d322bcc954561e4584ce44',
                type => 'LINE1',
             },
          ],
