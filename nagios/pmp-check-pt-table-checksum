@@ -115,7 +115,7 @@ fi
 
 =head1 NAME
 
-pmp-check-pt-table-checksum - Alert when pt-table-checksum finds differences.
+pmp-check-pt-table-checksum - Alert when pt-table-checksum finds data differences on a replica.
 
 =head1 SYNOPSIS
 
@@ -157,6 +157,9 @@ The word CHECKSUM_TABLE is replaced by the value of the -T option.  If the table
 specified by -T does not exist, no error or warning is raised. This makes it
 possible to run this check on all MySQL servers by default, and only receive
 alerts if a server is being checksummed by pt-table-checksum.
+
+Alerts are raised at a WARNING level by default, but specifying the -c option
+with any value will change this to CRITICAL instead.
 
 This check should be backwards compatible with Maatkit's mk-table-checksum tool
 as well.
