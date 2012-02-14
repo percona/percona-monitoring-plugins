@@ -32,7 +32,7 @@ function _md5() {
 
 # Set up a temp file.
 TEMPFILE=$(mktemp /tmp/${0##*/}.XXXX)
-trap 'rm -rf "$TEMPFILE"' EXIT
+trap 'rm -rf "$TEMPFILE" release' EXIT
 
 # Set up the release directory.  Copy things into the directory so
 # we can alter them without messing with stuff that is under source control.
