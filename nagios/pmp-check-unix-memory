@@ -20,7 +20,7 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -47,7 +47,7 @@ main() {
    if free -m > "${TEMP}" ; then
       MEM_TOT=$(get_total_memory "${TEMP}")
       USD_PCT=$(get_used_memory_pct "${TEMP}")
-      NOTE="Memory: ${USD_PCT}% used"
+      NOTE="Memory ${USD_PCT}% used"
       if [ "${USD_PCT:-0}" -ge "${OPT_CRIT}" ]; then
          EXITSTATUS=$STATE_CRITICAL
       elif [ "${USD_PCT:-0}" -ge "${OPT_WARN}" ]; then
@@ -61,7 +61,7 @@ main() {
          BIG_VSZ=$(echo $BIGGEST | cut -d' ' -f2)
          BIG_COMMAND=$(echo $BIGGEST | cut -d' ' -f3)
          PID_PCT=$(pct_of ${BIG_VSZ:-0} ${MEM_TOT:-0});
-         NOTE="$NOTE; largest process: ${BIG_COMMAND} (${BIG_PID}) = ${BIG_VSZ}MB (${PID_PCT}%)"
+         NOTE="$NOTE. Largest process: ${BIG_COMMAND} (${BIG_PID}) = ${BIG_VSZ}MB (${PID_PCT}%)"
          if [ "${PID_PCT:-0}" -ge "${OPT_CRIT}" ]; then
             EXITSTATUS=$STATE_CRITICAL
          elif [ $EXITSTATUS != $STATE_CRITICAL -a "${PID_PCT:-0}" -ge "${OPT_WARN}" ]; then
@@ -161,7 +161,8 @@ memory.
     -w WARN     Warning threshold; default 90%.
     --help      Print help and exit.
     --version   Print version and exit.
-   Use perldoc to read embedded documentation with more details.
+  Options must be given as --option value, not --option=value or -Ovalue.
+  Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION
 

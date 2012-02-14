@@ -20,7 +20,7 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -42,6 +42,9 @@ main() {
          -*)              echo "Unknown option ${o}.  Try --help."; exit 1; ;;
       esac
    done
+   if [ -e '/etc/nagios/mysql.cnf' ]; then
+      OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
+   fi
 
    # Set the exit status in case there are any problems.
    EXITSTATUS=$STATE_UNKNOWN
@@ -57,7 +60,9 @@ main() {
    if [ "${OPT_HOST}${OPT_USER}${OPT_PASS}${OPT_PORT}${OPT_SOCK}" ]; then
       # If this fails (e.g. we can't log in), then there will be no line in the
       # file, and later we won't change the exit code / note away from "UNK".
-      mysql_exec "SELECT IF(@@pid_file LIKE '/%', @@pid_file, CONCAT(@@basedir, @@pid_file))" >> "${FILES}"
+      if mysql_exec "SHOW GLOBAL VARIABLES" > "${TEMP}"; then
+         get_pidfile "${TEMP}" >> "${FILES}"
+      fi
    else
       # Find all MySQL server instances.
       for pid in $(_pidof mysqld); do
@@ -129,6 +134,27 @@ _pidof() {
 }
 
 # ########################################################################
+# Unfortunately, MySQL 5.0 doesn't have a system variable @@pid_file, so
+# we have to use SHOW VARIABLES and a temp file.  In 5.1 and newer we
+# could have done it in a single SQL statement:
+#    SELECT IF(@@pid_file LIKE '/%', @@pid_file,
+#    CONCAT(@@basedir, @@pid_file))" >> "${FILES}"
+# The first argument is the file that contains SHOW VARIABLES.
+# ########################################################################
+get_pidfile() {
+   awk '
+      /^pid_file/ { pid_file = $2 }
+      /^basedir/  { basedir  = $2 }
+      END {
+         if ( substr(pid_file, 1, 1) != "/" ) {
+            pid_file = basedir pid_file;
+         }
+         print pid_file;
+      }
+      ' "$1"
+}
+
+# ########################################################################
 # Execute the program if it was not included from another file.
 # This makes it possible to include without executing, and thus test.
 # ########################################################################
@@ -152,7 +178,8 @@ pmp-check-mysql-pidfile - Alert when the mysqld PID file is missing.
   Usage: pmp-check-mysql-pidfile [OPTIONS]
   Options:
     -c CRIT         Critical threshold; makes a missing PID file critical.
-    --defaults-file FILE Only read default options from the given file.
+    --defaults-file FILE Only read mysql options from the given file.
+                    Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
     -p PASS         MySQL password.
@@ -161,6 +188,7 @@ pmp-check-mysql-pidfile - Alert when the mysqld PID file is missing.
     -w WARN         Warning threshold; ignored.
     --help          Print help and exit.
     --version       Print version and exit.
+  Options must be given as --option value, not --option=value or -Ovalue.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION

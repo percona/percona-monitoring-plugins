@@ -20,7 +20,7 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -44,6 +44,9 @@ main() {
       esac
    done
    OPT_CHEK="${OPT_CHEK:-idle_blocker_duration}"
+   if [ -e '/etc/nagios/mysql.cnf' ]; then
+      OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
+   fi
    EXITSTATUS=$STATE_UNKNOWN
    NOTE="UNK could not find information about transactions"
 
@@ -59,7 +62,13 @@ main() {
             FROM       INFORMATION_SCHEMA.INNODB_LOCK_WAITS AS w
             INNER JOIN INFORMATION_SCHEMA.INNODB_TRX        AS b ON  b.trx_id = w.blocking_trx_id
             INNER JOIN INFORMATION_SCHEMA.INNODB_TRX        AS r ON  r.trx_id = w.requesting_trx_id
-            LEFT  JOIN INFORMATION_SCHEMA.PROCESSLIST       AS p ON  p.id     = b.trx_mysql_thread_id")
+            LEFT  JOIN INFORMATION_SCHEMA.PROCESSLIST       AS p ON  p.id     = b.trx_mysql_thread_id" 2>"${TEMP}")
+         if grep "Unknown table" "${TEMP}" >/dev/null 2>&1; then
+            # The I_S tables don't exist.
+            LEVEL=""
+            NOTE="OK The INFORMATION_SCHEMA.INNODB_% tables don't exist."
+            EXITSTATUS=$STATE_OK
+         fi
          ;;
       waiter_count)
          OPT_WARN=${OPT_WARN:-10}
@@ -112,6 +121,7 @@ main() {
          EXITSTATUS=$STATE_WARNING
          NOTE="WARN $NOTE"
       else
+         EXITSTATUS=$STATE_OK
          NOTE="OK $NOTE"
       fi
    fi
@@ -205,7 +215,8 @@ pmp-check-mysql-innodb - Alert on problems inside InnoDB.
   Options:
     -C CHECK        What to alert on; default idle_blocker_duration.
     -c CRIT         Critical threshold; default varies.
-    --defaults-file FILE Only read default options from the given file.
+    --defaults-file FILE Only read mysql options from the given file.
+                    Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
     -p PASS         MySQL password.
@@ -214,6 +225,7 @@ pmp-check-mysql-innodb - Alert on problems inside InnoDB.
     -w WARN         Warning threshold; default varies.
     --help          Print help and exit.
     --version       Print version and exit.
+  Options must be given as --option value, not --option=value or -Ovalue.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION
@@ -236,7 +248,9 @@ committed, such as performing very long tasks in the application while holding
 the transaction open.
 
 This check examines the INFORMATION_SCHEMA tables included with InnoDB version
-1.0 and newer. The default critical level is 600, and warning is 60.
+1.0 and newer. The default critical level is 600, and warning is 60.  If the
+tables do not exist, the exit status is OK, with a note that the tables don't
+exist.
 
 =item waiter_count
 

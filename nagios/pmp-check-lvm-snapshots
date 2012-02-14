@@ -20,16 +20,21 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Print the name and fullness of every LVM snapshot that is open and
-# nearly full.  The input is the filename and the allowable fullness.
+# nearly full.  The input is the file with 'lvs', and the allowable fullness.
+# In many cases lvs will report "File descriptor %d (...) leaked" and we ignore
+# this, as it's only a warning that usually happens from a shell.
 # ########################################################################
 check_lvm_snapshot_fullness() {
    local FILE="$1"
    local FULL="$2"
-   awk -v full="$FULL" '$1 != "LV" && $6 > full {print $2 "/" $1 "[" $5 "]=" $6 "%"}' "${FILE}"
+   awk -v full="$FULL" '
+      $1 != "LV" && $1 != "File" && $6 !~ /[^0-9.]/ && $6 > full {
+         print $2 "/" $1 "[" $5 "]=" $6 "%"
+      }' "${FILE}"
 }
 
 # ########################################################################
@@ -53,18 +58,31 @@ main() {
    local NOTE="OK no full LVM snapshot volumes"
    local TEMP=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
    trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
-   lvs > "${TEMP}" || exit $?
-   local VOLS=$(check_lvm_snapshot_fullness "${TEMP}" "${OPT_CRIT}")
-   if [ "${VOLS}" ]; then
-      NOTE="CRIT LVM snapshot volumes over ${FULL}% full: ${VOLS}"
-      EXITSTATUS=$STATE_CRITICAL
+
+   # The lvs command is usually in /usr/sbin.  But if it's run as a non-root
+   # user, it will print out "WARNING: Running as a non-root user. Functionality
+   # may be unavailable." and exit with success anyway.  So we have to detect
+   # this and make the plugin exit UNKNOWN in that case.
+   PATH="$PATH:/usr/sbin:/sbin"
+   lvs > "${TEMP}" 2>&1 || exit $?
+
+   if grep 'WARNING: Running as a non-root user' "${TEMP}" >/dev/null 2>&1; then
+      NOTE="UNK You must execute lvs with root privileges"
+      EXITSTATUS=$STATE_UNKNOWN
    else
-      VOLS=$(check_lvm_snapshot_fullness "${TEMP}" "${OPT_WARN}")
+      local VOLS=$(check_lvm_snapshot_fullness "${TEMP}" "${OPT_CRIT}")
       if [ "${VOLS}" ]; then
-         NOTE="WARN LVM snapshot volumes over ${FULL}% full: ${VOLS}"
-         EXITSTATUS=$STATE_WARNING
+         NOTE="CRIT LVM snapshot volumes over ${FULL}% full: ${VOLS}"
+         EXITSTATUS=$STATE_CRITICAL
+      else
+         VOLS=$(check_lvm_snapshot_fullness "${TEMP}" "${OPT_WARN}")
+         if [ "${VOLS}" ]; then
+            NOTE="WARN LVM snapshot volumes over ${FULL}% full: ${VOLS}"
+            EXITSTATUS=$STATE_WARNING
+         fi
       fi
    fi
+
    echo $NOTE
    exit $EXITSTATUS
 }
@@ -96,7 +114,8 @@ pmp-check-lvm-snapshots - Alert when LVM snapshots are running out of copy-on-wr
     -w WARN     Warning threshold; default 90%.
     --help      Print help and exit.
     --version   Print version and exit.
-   Use perldoc to read embedded documentation with more details.
+  Options must be given as --option value, not --option=value or -Ovalue.
+  Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION
 

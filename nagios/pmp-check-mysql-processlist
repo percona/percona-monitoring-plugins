@@ -20,7 +20,7 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -44,6 +44,9 @@ main() {
    done
    OPT_CRIT=${OPT_CRIT:-32}
    OPT_WARN=${OPT_WARN:-16}
+   if [ -e '/etc/nagios/mysql.cnf' ]; then
+      OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
+   fi
 
    # Get processlist into a temp file.
    local TEMP=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
@@ -68,6 +71,9 @@ main() {
       elif [ "${MAX:-0}" -gt "${OPT_WARN}" ]; then
          NOTE="WARN $NOTE"
          EXITSTATUS=$STATE_WARNING
+      else
+         NOTE="OK $NOTE"
+         EXITSTATUS=$STATE_OK
       fi
    else
       EXITSTATUS=$STATE_UNKNOWN
@@ -137,7 +143,8 @@ pmp-check-mysql-processlist - Alert when MySQL processlist has dangerous pattern
   Usage: pmp-check-mysql-processlist [OPTIONS]
   Options:
     -c CRIT         Critical threshold; default 32.
-    --defaults-file FILE Only read default options from the given file.
+    --defaults-file FILE Only read mysql options from the given file.
+                    Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
     -p PASS         MySQL password.
@@ -146,6 +153,7 @@ pmp-check-mysql-processlist - Alert when MySQL processlist has dangerous pattern
     -w WARN         Warning threshold; default 16.
     --help          Print help and exit.
     --version       Print version and exit.
+  Options must be given as --option value, not --option=value or -Ovalue.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION

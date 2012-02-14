@@ -20,7 +20,7 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -50,6 +50,9 @@ main() {
    done
    # Set default option values
    OPT_COMP="${OPT_COMP:->=}"
+   if [ -e '/etc/nagios/mysql.cnf' ]; then
+      OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
+   fi
 
    # Validate the options.
    OPT_ERR=""
@@ -293,7 +296,8 @@ pmp-check-mysql-status - Check MySQL SHOW GLOBAL STATUS output.
   Usage: pmp-check-mysql-status [OPTIONS]
   Options:
     -c CRIT         Critical threshold.
-    --defaults-file FILE Only read default options from the given file.
+    --defaults-file FILE Only read mysql options from the given file.
+                    Defaults to /etc/nagios/mysql.cnf if it exists.
     -C COMPARE      Comparison operator to apply to -c and -w; default >=.
     -H HOST         MySQL hostname.
     -I INCR         Make SHOW STATUS incremental over this delay.
@@ -308,6 +312,7 @@ pmp-check-mysql-status - Check MySQL SHOW GLOBAL STATUS output.
     -y VAR2         Optional second status or configuration variable.
     --help          Print help and exit.
     --version       Print version and exit.
+  Options must be given as --option value, not --option=value or -Ovalue.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION

@@ -20,7 +20,7 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -46,6 +46,9 @@ main() {
    done
    OPT_UNIX_GROUP="${OPT_UNIX_GROUP:-mysql}"
    OPT_UNIX_USER="${OPT_UNIX_USER:-mysql}"
+   if [ -e '/etc/nagios/mysql.cnf' ]; then
+      OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
+   fi
 
    # Set the exit status in case there are any problems.
    EXITSTATUS=$STATE_UNKNOWN
@@ -156,7 +159,8 @@ pmp-check-mysql-file-privs - Alert if MySQL data directory privileges are wrong.
   Usage: pmp-check-mysql-file-privs [OPTIONS]
   Options:
     -c CRIT         Critical threshold; makes a missing PID file critical.
-    --defaults-file FILE Only read default options from the given file.
+    --defaults-file FILE Only read mysql options from the given file.
+                    Defaults to /etc/nagios/mysql.cnf if it exists.
     -g GROUP        The Unix group who should own the files; default mysql.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
@@ -167,6 +171,7 @@ pmp-check-mysql-file-privs - Alert if MySQL data directory privileges are wrong.
     -w WARN         Warning threshold; ignored.
     --help          Print help and exit.
     --version       Print version and exit.
+  Options must be given as --option value, not --option=value or -Ovalue.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION

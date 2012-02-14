@@ -20,7 +20,7 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -46,6 +46,9 @@ main() {
    done
    OPT_WARN=${OPT_WARN:-300}
    OPT_CRIT=${OPT_CRIT:-600}
+   if [ -e '/etc/nagios/mysql.cnf' ]; then
+      OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
+   fi
 
    # Get replication delay from a heartbeat table or from SHOW SLAVE STATUS.
    # TODO: support pt-heartbeat v1.0 table format.
@@ -74,6 +77,7 @@ main() {
          EXITSTATUS=$STATE_WARNING
          NOTE="WARN $NOTE"
       else
+         EXITSTATUS=$STATE_OK
          NOTE="OK $NOTE"
       fi
    else
@@ -117,7 +121,8 @@ pmp-check-mysql-replication-delay - Alert when MySQL replication becomes delayed
   Usage: pmp-check-mysql-replication-delay [OPTIONS]
   Options:
     -c CRIT         Critical threshold; default 600.
-    --defaults-file FILE Only read default options from the given file.
+    --defaults-file FILE Only read mysql options from the given file.
+                    Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
     -p PASS         MySQL password.
@@ -128,6 +133,7 @@ pmp-check-mysql-replication-delay - Alert when MySQL replication becomes delayed
     -w WARN         Warning threshold; default 300.
     --help          Print help and exit.
     --version       Print version and exit.
+  Options must be given as --option value, not --option=value or -Ovalue.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION

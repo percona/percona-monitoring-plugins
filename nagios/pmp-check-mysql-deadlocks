@@ -22,7 +22,7 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -50,6 +50,9 @@ main() {
    OPT_CRIT=${OPT_CRIT:-60}
    OPT_INTERVAL=${OPT_INTERVAL:-1}
    OPT_TABLE="${OPT_TABLE:-percona.deadlocks}"
+   if [ -e '/etc/nagios/mysql.cnf' ]; then
+      OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
+   fi
 
    LEVEL=$(mysql_exec "SELECT COUNT(*) FROM ${OPT_TABLE} WHERE ts >= NOW() - INTERVAL ${OPT_INTERVAL} MINUTE")
    if [ $? = 0 ]; then
@@ -104,7 +107,8 @@ pmp-check-mysql-deadlocks - Alert when pt-deadlock-logger has recorded too many 
   Usage: pmp-check-mysql-deadlocks [OPTIONS]
   Options:
     -c CRIT         Critical threshold; default 60.
-    --defaults-file FILE Only read default options from the given file.
+    --defaults-file FILE Only read mysql options from the given file.
+                    Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
     -i INTERVAL     Interval over which to count, in minutes; default 1.
     -l USER         MySQL username.
@@ -115,6 +119,7 @@ pmp-check-mysql-deadlocks - Alert when pt-deadlock-logger has recorded too many 
     -w WARN         Warning threshold; default 12.
     --help          Print help and exit.
     --version       Print version and exit.
+  Options must be given as --option value, not --option=value or -Ovalue.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION

@@ -20,7 +20,7 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -44,6 +44,9 @@ main() {
       esac
    done
    OPT_TABLE="${OPT_TABLE:-percona.checksums}"
+   if [ -e '/etc/nagios/mysql.cnf' ]; then
+      OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
+   fi
 
    EXITSTATUS=$STATE_UNKNOWN
    NOTE="UNK couldn't query the checksum table"
@@ -122,7 +125,8 @@ pmp-check-pt-table-checksum - Alert when pt-table-checksum finds data difference
   Usage: pmp-check-pt-table-checksum [OPTIONS]
   Options:
     -c CRIT         Raise a critical error instead of a warning.
-    --defaults-file FILE Only read default options from the given file.
+    --defaults-file FILE Only read mysql options from the given file.
+                    Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
     -p PASS         MySQL password.
@@ -132,6 +136,7 @@ pmp-check-pt-table-checksum - Alert when pt-table-checksum finds data difference
     -w WARN         Warning threshold; ignored.
     --help          Print help and exit.
     --version       Print version and exit.
+  Options must be given as --option value, not --option=value or -Ovalue.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION

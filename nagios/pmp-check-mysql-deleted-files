@@ -20,7 +20,7 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -43,6 +43,9 @@ main() {
          -*)              echo "Unknown option ${o}.  Try --help."; exit 1; ;;
       esac
    done
+   if [ -e '/etc/nagios/mysql.cnf' ]; then
+      OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
+   fi
 
    # If any connection option was given, then try to log in to find the server's
    # tmpdir.
@@ -58,14 +61,27 @@ main() {
    if [ "${PROC_ID}" ]; then
       local TEMP=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
       trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
-      _lsof "${PROC_ID}" > "${TEMP}" || exit $?
-      local FILES=$(check_deleted_files "${TEMP}" "${OPT_TMPDIR}")
-      if [ "${FILES}" -a -z "${OPT_WARN}" ]; then
-         NOTE="CRIT open but deleted files: ${FILES}"
-         EXITSTATUS=$STATE_CRITICAL
-      elif [ "${FILES}" ]; then
-         NOTE="WARN open but deleted files: ${FILES}"
-         EXITSTATUS=$STATE_WARNING
+      if _lsof "${PROC_ID}" > "${TEMP}" ; then
+         # If lsof exists, but you run it as non-root, you'll get a file with a
+         # bunch of this stuff:
+         # mysqld 15287 ... /proc/15287/cwd (readlink: Permission denied)
+         # We have to detect this and return UNK.
+         if grep -v -e denied -e COMMAND "${TEMP}" >/dev/null 2>&1; then
+            local FILES=$(check_deleted_files "${TEMP}" "${OPT_TMPDIR}")
+            if [ "${FILES}" -a -z "${OPT_WARN}" ]; then
+               NOTE="CRIT open but deleted files: ${FILES}"
+               EXITSTATUS=$STATE_CRITICAL
+            elif [ "${FILES}" ]; then
+               NOTE="WARN open but deleted files: ${FILES}"
+               EXITSTATUS=$STATE_WARNING
+            fi
+         else
+            NOTE="UNK You must execute lsof with root privileges"
+            EXITSTATUS=$STATE_UNKNOWN
+         fi
+      else
+         NOTE="UNK could not list MySQL's open files"
+         EXITSTATUS=$STATE_UNKNOWN
       fi
    else
       NOTE="UNK could not find a mysqld process"
@@ -100,6 +116,7 @@ mysql_exec() {
 # /proc/pid/fd will probably only work on Linux.
 # ########################################################################
 _lsof() {
+   PATH="$PATH:/usr/sbin:/sbin"
    if ! lsof -p $1 2>/dev/null; then
       /bin/ls -l /proc/$1/fd 2>/dev/null
    fi
@@ -113,7 +130,7 @@ _lsof() {
 # ########################################################################
 check_deleted_files() {
    awk -v tmpdir="${2}" '
-   /\(deleted\)/ { if ( index($0, tmpdir) > 0 ) {
+   /\(deleted\)/ { if ( index($0, tmpdir) == 0 ) {
       if ( $NF ~ /deleted/ ) {
          lf=NF-1;
       }
@@ -148,7 +165,8 @@ pmp-check-mysql-deleted-files - Alert when MySQL's files are deleted.
   Usage: pmp-check-mysql-deleted-files [OPTIONS]
   Options:
     -c CRIT         Critical threshold; ignored.
-    --defaults-file FILE Only read default options from the given file.
+    --defaults-file FILE Only read mysql options from the given file.
+                    Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
     -p PASS         MySQL password.
@@ -157,7 +175,8 @@ pmp-check-mysql-deleted-files - Alert when MySQL's files are deleted.
     -w WARN         Warning threshold; changes the alert to WARN instead of CRIT.
     --help          Print help and exit.
     --version       Print version and exit.
-   Use perldoc to read embedded documentation with more details.
+  Options must be given as --option value, not --option=value or -Ovalue.
+  Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION
 

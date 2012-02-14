@@ -20,7 +20,7 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_OK
+EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -42,6 +42,9 @@ main() {
          -*)              echo "Unknown option ${o}.  Try --help."; exit 1; ;;
       esac
    done
+   if [ -e '/etc/nagios/mysql.cnf' ]; then
+      OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
+   fi
 
    # Get replication status into a temp file. TODO: move this into a subroutine
    # and test it.
@@ -49,18 +52,30 @@ main() {
    trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
    mysql_exec 'SHOW SLAVE STATUS\G' > "${TEMP}"
    if [ $? = 0 ]; then
-      NOTE=$(awk '$1 ~ /_Running:|Last_Error:/{print substr($0, 1, 100)}' "${TEMP}")
-      if grep 'Last_Error: .' "${TEMP}" >/dev/null 2>&1; then
-         EXITSTATUS=$STATE_CRITICAL
-         NOTE="CRIT $NOTE"
-      elif grep '_Running: No' "${TEMP}" >/dev/null 2>&1; then
-         if [ "${OPT_CRIT}" ]; then
+      # SHOW SLAVE STATUS isn't an error if the server isn't a replica. The file
+      # will be empty if that happens.
+      if [ -s "${TEMP}" ]; then
+         NOTE=$(awk '$1 ~ /_Running:|Last_Error:/{print substr($0, 1, 100)}' "${TEMP}")
+         if grep 'Last_Error: .' "${TEMP}" >/dev/null 2>&1; then
             EXITSTATUS=$STATE_CRITICAL
             NOTE="CRIT $NOTE"
-         else
-            EXITSTATUS=$STATE_WARNING
-            NOTE="WARN $NOTE"
+         elif grep '_Running: No' "${TEMP}" >/dev/null 2>&1; then
+            if [ "${OPT_CRIT}" ]; then
+               EXITSTATUS=$STATE_CRITICAL
+               NOTE="CRIT $NOTE"
+            else
+               EXITSTATUS=$STATE_WARNING
+               NOTE="WARN $NOTE"
+            fi
          fi
+      elif [ "${OPT_WARN}" ]; then
+         # Empty file; not a replica, but that's not supposed to happen.
+         NOTE="WARN This server is not configured as a replica."
+         EXITSTATUS=$STATE_WARNING
+      else
+         # Empty file; not a replica.
+         NOTE="OK This server is not configured as a replica."
+         EXITSTATUS=$STATE_OK
       fi
    else
       EXITSTATUS=$STATE_UNKNOWN
@@ -103,16 +118,18 @@ pmp-check-mysql-replication-running - Alert when MySQL replication stops.
 
   Usage: pmp-check-mysql-replication-running [OPTIONS]
   Options:
-    -c CRIT         Critical threshold; makes non-error failures critical.
-    --defaults-file FILE Only read default options from the given file.
+    -c CRIT         Report CRITICAL when replication is stopped without errors.
+    --defaults-file FILE Only read mysql options from the given file.
+                    Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
     -p PASS         MySQL password.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
-    -w WARN         Warning threshold; ignored.
+    -w WARN         Report WARNING when SHOW SLAVE STATUS output is empty.
     --help          Print help and exit.
     --version       Print version and exit.
+  Options must be given as --option value, not --option=value or -Ovalue.
   Use perldoc to read embedded documentation with more details.
 
 =head1 DESCRIPTION
@@ -127,11 +144,12 @@ an error, and a warning when threads are stopped with no error.  You can provide
 critical and warning thresholds with the -c and -w options, for compatibility
 with Nagios plugin conventions, but they don't work as thresholds.  Instead, if
 you specify a critical threshold, this plugin will treat it as critical if
-either thread is stopped with or without an error. The warning threshold is
-entirely ignored.
+either thread is stopped, with or without an error.
 
-If SHOW SLAVE STATUS produces no output, then this plugin will report that
-replication is healthy.
+The warning threshold makes the plugin report a warning when SHOW SLAVE STATUS
+produces no output, which means it is not configured as a replica.  By default,
+this plugin will report that replication is healthy when a server isn't
+configured as a replica.
 
 =head1 PRIVILEGES
 
