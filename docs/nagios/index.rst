@@ -33,6 +33,16 @@ System Requirements
 The plugins are all written in standard Unix shell script. They should run on
 any Unix or Unix-like operating system, such as GNU/Linux, Solaris, or FreeBSD.
 
+The plugins are designed to be used with MySQL 5.0 and newer versions, but they
+may work on 4.1 or older versions as well.
+
+Configuration Best Practices
+============================
+
+These plugins can be used locally or via NRPE.  NRPE is the suggested
+configuration.  Some plugins execute commands that require privileges, so you
+may need to specify a command prefix to execute them with ``sudo``.
+
 List of Plugins
 ===============
 
@@ -40,4 +50,5 @@ List of Plugins
    :maxdepth: 1
    :glob:
 
+   support
    pmp-*
