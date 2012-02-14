@@ -65,19 +65,6 @@ Sample Graphs
 
 The following sample graphs demonstrate how the data is presented.
 
-.. figure:: images/InnoDB_Active_Locked_Transactions.png
-
-   InnoDB Active/Locked Transactions
-
-This template shows InnoDB transaction counts:
-
-* An active transaction is a transaction that's currently open.  It's possible for transactions to be in "not started" status, which really means that this connection to MySQL doesn't actually have a transaction open.  A transaction is active between BEGIN and COMMIT.  It's also active whilst a query is running, although it might commit immediately due to auto-commit, if applicable.  This graph really just shows how much transactional activity is happening on the database.
-* A locked transaction is in LOCK WAIT status.  This usually means it's waiting for a row lock, but in some cases could be a table lock or an auto-increment lock.  If you start to see lock waits, you need to check SHOW INNODB STATUS and search for the string "LOCK WAIT" to examine what's waiting.  Lock waits can come from several sources, including too much contention on busy tables, queries accessing data through scans on different indexes, or bad query patterns such as SELECT .. FOR UPDATE.
-* The current transactions are all transactions, no matter what status (ACTIVE, LOCK WAIT, not started, etc).
-* The number of read views open shows how many transactions have a consistent snapshot of the database's contents, which is achieved by MVCC.
-
-The example image is slightly outdated; some of the items just mentioned don't
-appear on this image, but are on the InnoDB Transactions graph instead.
 
 .. figure:: images/InnoDB_Adaptive_Hash_Index.png
 
@@ -287,6 +274,20 @@ This graph shows information about transactions within InnoDB.
 
 The example graph is slightly outdated; a newer version of the templates has
 moved some of the items to the Active/Locked graph instead.
+
+.. figure:: images/InnoDB_Active_Locked_Transactions.png
+
+   InnoDB Active/Locked Transactions
+
+This template shows InnoDB transaction counts:
+
+* An active transaction is a transaction that's currently open.  It's possible for transactions to be in "not started" status, which really means that this connection to MySQL doesn't actually have a transaction open.  A transaction is active between BEGIN and COMMIT.  It's also active whilst a query is running, although it might commit immediately due to auto-commit, if applicable.  This graph really just shows how much transactional activity is happening on the database.
+* A locked transaction is in LOCK WAIT status.  This usually means it's waiting for a row lock, but in some cases could be a table lock or an auto-increment lock.  If you start to see lock waits, you need to check SHOW INNODB STATUS and search for the string "LOCK WAIT" to examine what's waiting.  Lock waits can come from several sources, including too much contention on busy tables, queries accessing data through scans on different indexes, or bad query patterns such as SELECT .. FOR UPDATE.
+* The current transactions are all transactions, no matter what status (ACTIVE, LOCK WAIT, not started, etc).
+* The number of read views open shows how many transactions have a consistent snapshot of the database's contents, which is achieved by MVCC.
+
+The example image is slightly outdated; some of the items just mentioned don't
+appear on this image, but are on the InnoDB Transactions graph instead.
 
 .. figure:: images/MyISAM_Indexes.png
 

@@ -1728,7 +1728,7 @@
             },
          ],
       },
-      {  name => 'InnoDB Active/Locked Transactions',
+      {  name => 'InnoDB Transactions Active/Locked',
          base_value => '1000',
          hash  => 'hash_00_VER_b5153f8ecf6c970212c8f7697433523a',
          dt         => {
