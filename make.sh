@@ -114,6 +114,15 @@ done
 # Make the Sphinx documentation into HTML format.
 sphinx-build -N -W -c release-docs/config/ -b html release-docs/ release-docs/html
 
+# Build latex sources 
+sphinx-build -N -W -c release-docs/config/ -b latex release-docs/ release-docs/latex
+# Compile latex to the PDF
+make -C release-docs/latex all-pdf 
+# Remove latex files, and keep only pdf files
+mkdir release-docs/pdf
+mv release-docs/latex/*.pdf release-docs/pdf/
+rm -rf release-docs/latex
+
 # Make the release tarball
 
 NAME="percona-monitoring-plugins-${VERSION}"
