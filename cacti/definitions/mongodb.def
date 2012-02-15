@@ -1,5 +1,4 @@
-# This is the template definition file.  To use it, see make-template.pl.  This
-# one goes with the ss_get_by_ssh.php script.
+# This is the template definition file.  To use it, see pmp-cacti-template.
 #
 # This program is copyright (c) 2008 Baron Schwartz. Feedback and improvements
 # are welcome.

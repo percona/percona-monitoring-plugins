@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
 # This is a script that extracts graph templates matching a pattern from a Cacti
-# database.  It is supposed to make it easier to create a .pl file that
-# make-template.pl can consume.
+# database.  It is supposed to make it easier to create a .def file that
+# pmp-cacti-template can consume.
 #
 # This program is copyright (c) 2007 Baron Schwartz. Feedback and improvements
 # are welcome.

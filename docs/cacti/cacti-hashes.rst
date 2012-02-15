@@ -23,9 +23,9 @@ following::
    hash_100010ac260a1434298e088f15f70cd1a5f726
 
 If you need to add support for a newer version, look for ``%hash_version_codes``
-in ``meta/make-template.pl``.
+in ``pmp-cacti-template``.
 
-The hashes in the template definition ``.pl`` files should be globally unique.
-It's difficult to generate them manually, so there is a ``unique-hashes.pl``
-helper tool to make this easier.  You can read more about this in
-the documentation on creating graphs.
+The hashes in the template definition ``.def`` files should be globally unique.
+It's difficult to generate them manually, so there is a
+``pmp-cacti-make-hashes`` helper tool to make this easier.  You can read more
+about this in the documentation on creating graphs.

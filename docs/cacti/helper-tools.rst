@@ -5,8 +5,8 @@ Cacti Template Helper Tools
 
 Aside from the tools documented elsewhere, there are the following tools:
 
-tools/graph_defs.pl
--------------------
+pmp-cacti-graph-defs
+--------------------
 
 This tool helps you make boilerplate text to plug into a definitions file.  If
 you create the definitions file and add the data input as suggested in the
@@ -41,5 +41,5 @@ started.
 
 When you're done, make sure you generate new hashes for everything, or you'll
 re-use hashes from another template.  The best way to do this is to run
-``tools/unique-hashes.pl`` with the ``--refresh`` option on that to generate all new
+``pmp-cacti-make-hashes`` with the ``--refresh`` option on that to generate all new
 hashes.

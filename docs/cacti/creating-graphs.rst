@@ -604,16 +604,16 @@ templates. One thing remains: you need to resolve the duplication you created by
 copy/pasting hash values all over the place.  There's a tool to do this.  Run it
 like this::
 
-   $ tools/unique-hashes.pl definitions/gnu_linux_definitions.pl > temp.pl
+   $ pmp-cacti-unique-hashes definitions/gnu_linux.def > temp.def
 
-Now examine the generated file ``temp.pl`` and make sure it is okay.  You can
+Now examine the generated file ``temp.def`` and make sure it is okay.  You can
 use ``vimdiff`` to compare it to the original definitions file.  Ensure that you
 pasted the new hashes *below* where you copied them from.  *Hashes of the
 definition elements that pre-dated your work should never be changed!*  If they
 are, they can cause problems with existing Cacti installations.  The ``diff`` or
 ``vimdiff`` should reveal that new lines were added, but no old lines were
 changed.  After you verify that, you can replace the original file with the
-``temp.pl`` file.
+``temp.def`` file.
 
 If you are creating a new definitions file based on an existing one, you can use
 the ``--refresh`` option to replace all hashes.
@@ -623,7 +623,7 @@ Generate Templates
 
 Now you're ready to generate templates from your definition file.  Here's how::
 
-   $ tools/make-template.pl --script ss_get_by_ssh.php unix_definitions.pl > template.xml
+   $ pmp-cacti-template --script ss_get_by_ssh.php unix.def > template.xml
 
 At this point, the generated template file should be ready to import and use.
 
@@ -638,4 +638,4 @@ You can define these as children of the top level in the template definition:
 * rras -- these are just some custom RRA definitions so you can keep more than the usual amount of data.
 * cdefs -- these are custom CDEF sections, which generally don't need to be modified.
 
-If you don't define these, built-in defaults are used.  They're kept in the ``tools/make-template.pl`` script.
+If you don't define these, built-in defaults are used.  They're kept in the ``pmp-cacti-template`` script.
