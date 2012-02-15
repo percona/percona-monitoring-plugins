@@ -86,8 +86,12 @@ htmlhelp_basename = 'PerconaMonitoringPluginsdoc'
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'PerconaMonitoringPlugins.tex', u'Percona Monitoring Plugins Documentation',
-   u'Percona Inc', 'manual'),
+   '', 'manual'),
 ]
+
+# The name of an image file (relative to this directory) to place at the top of
+# the title page.
+latex_logo = '_static/percona-logo.jpg'
 
 # -- Options for manual page output --------------------------------------------
 
