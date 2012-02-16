@@ -4,17 +4,11 @@ set -e
 set -u
 
 # This script makes a tarball of all of the source code and documentation for
-# both the Cacti templates and the Nagios plugins.  Call it with these
-# arguments:
-#
-# 1. Version of the release, e.g. 1.0.0.
+# both the Cacti templates and the Nagios plugins.
 
 # This will be replaced into the $RELEASE$ macro.
-VERSION="${1:-}"
-if [ -z "${VERSION}" ]; then
-   echo "Specify a release version"
-   exit 1
-fi
+VERSION="$(cat VERSION)"
+echo "Building version $VERSION"
 
 # This will be replaced into the $PROJECT_NAME$ macro.
 PROJECT_NAME="Percona Monitoring Plugins"
@@ -40,7 +34,7 @@ mkdir -p release/{docs/html,code/cacti/templates}
 cp -R nagios release/code/nagios
 cp -R docs/* release/docs
 cp -R cacti/scripts cacti/definitions cacti/bin cacti/misc release/code/cacti
-cp COPYING release
+cp COPYING Changelog release
 
 # Update the version number and other important macros in the temporary
 # directory.
@@ -66,9 +60,8 @@ done
 # documentation to add the MD5 sums there too, which is useful for upgrades; it
 # lets us see whether we need to merge any customizations when upgrading the
 # templates.
-if ! grep "^Version ${VERSION}$" release/docs/cacti/upgrading-templates.rst >/dev/null; then
-   echo "There doesn't appear to be a changelog entry for $VERSION in " \
-        "docs/cacti/upgrading-templates.rst"
+if ! grep "^Version ${VERSION}$" release/code/Changelog >/dev/null; then
+   echo "There doesn't appear to be a changelog entry for $VERSION"
    exit 1
 fi
 for file in cacti/definitions/*.def; do
@@ -90,8 +83,8 @@ for file in cacti/definitions/*.def; do
 done
 echo >> release/docs/cacti/upgrading-templates.rst
 grep Checksum release/code/cacti/templates/*.xml \
-   | sed -e 's/^.*<name>//' -e 's/<.name>//' -e 's/^/   /' \
-   >> release/docs/cacti/upgrading-templates.rst
+   | sed -e 's/^.*<name>//' -e 's/<.name>//' -e 's/^/\t* Checksum: /' \
+   | tee -a release/docs/changelog.rst >> release/code/Changelog
 
 # Make the Nagios documentation into Sphinx .rst format.  The Cacti docs are
 # already in Sphinx format.
@@ -108,11 +101,16 @@ for f in release/code/nagios/pmp-check-*; do
       > "release/docs/nagios/${f##*/}.rst";
 done
 
-# Make the Sphinx documentation into HTML format.
-sphinx-build -N -W -c release/docs/config/ -b html release/docs/ release/docs/html
+# Make the Sphinx documentation into HTML and PDF formats.
+sphinx-build -q -N -W -c release/docs/config/ -b html \
+   release/docs/ release/docs/html
+sphinx-build -q -N -W -c release/docs/config/ -b latex \
+   release/docs/ release/docs/latex
+make -C release/docs/latex all-pdf
+mkdir release/docs/pdf
+mv release/latex/*.pdf release/docs/pdf
 
 # Make the release tarball
-
 NAME="percona-monitoring-plugins-${VERSION}"
 mv release/code "release/${NAME}"
 tar zcf "release/${NAME}.tar.gz" "release/${NAME}"

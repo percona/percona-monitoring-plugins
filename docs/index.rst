@@ -78,10 +78,14 @@ intuitive point-and-click configuration and browsing of graphs and metrics.
 
    cacti/index
    cacti/faq
-   cacti/changelog
    cacti/installing-templates
    cacti/customizing-templates
    cacti/upgrading-templates
    cacti/mysql-templates
    cacti/ssh-based-templates
    cacti/developer-documentation
+
+.. toctree::
+   :maxdepth: 1
+
+   changelog
