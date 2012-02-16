@@ -11,4 +11,3 @@ new graphs, collect new types of data, and so on.
    cacti-hashes
    creating-graphs
    helper-tools
-   making-releases

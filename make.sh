@@ -34,7 +34,7 @@ mkdir -p release/{docs/html,code/cacti/templates}
 cp -R nagios release/code/nagios
 cp -R docs/* release/docs
 cp -R cacti/scripts cacti/definitions cacti/bin cacti/misc release/code/cacti
-cp COPYING Changelog release
+cp COPYING Changelog release/code
 
 # Update the version number and other important macros in the temporary
 # directory.
@@ -60,7 +60,7 @@ done
 # documentation to add the MD5 sums there too, which is useful for upgrades; it
 # lets us see whether we need to merge any customizations when upgrading the
 # templates.
-if ! grep "^Version ${VERSION}$" release/code/Changelog >/dev/null; then
+if ! grep "^2[^:]*: version ${VERSION}$" release/code/Changelog >/dev/null; then
    echo "There doesn't appear to be a changelog entry for $VERSION"
    exit 1
 fi
@@ -81,10 +81,11 @@ for file in cacti/definitions/*.def; do
    sed -e "s/CUSTOMIZED_XML_TEMPLATE/${MD5}/" "${FILE}" > "${TEMPFILE}"
    mv "${TEMPFILE}" "${FILE}"
 done
-echo >> release/docs/cacti/upgrading-templates.rst
+cp Changelog release/docs/changelog.rst
 grep Checksum release/code/cacti/templates/*.xml \
-   | sed -e 's/^.*<name>//' -e 's/<.name>//' -e 's/^/\t* Checksum: /' \
+   | sed -e 's/^.*<name>//' -e 's/<.name>//' -e "s/^/	* Checksum: /" \
    | tee -a release/docs/changelog.rst >> release/code/Changelog
+echo >> release/docs/changelog.rst
 
 # Make the Nagios documentation into Sphinx .rst format.  The Cacti docs are
 # already in Sphinx format.
@@ -108,7 +109,7 @@ sphinx-build -q -N -W -c release/docs/config/ -b latex \
    release/docs/ release/docs/latex
 make -C release/docs/latex all-pdf
 mkdir release/docs/pdf
-mv release/latex/*.pdf release/docs/pdf
+mv release/docs/latex/*.pdf release/docs/pdf
 
 # Make the release tarball
 NAME="percona-monitoring-plugins-${VERSION}"

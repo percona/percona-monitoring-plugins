@@ -85,7 +85,10 @@ intuitive point-and-click configuration and browsing of graphs and metrics.
    cacti/ssh-based-templates
    cacti/developer-documentation
 
+Changelog
+=========
+
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    changelog
