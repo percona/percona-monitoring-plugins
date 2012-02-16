@@ -48,9 +48,6 @@ would like help setting up the components, integrating them into your
 environment, choosing alerts, or any other task, Percona consulting and support
 staff can help.
 
-Installing the Plugins
-======================
-
 You can download the Percona Monitoring Plugins from the `Percona Software
 Downloads <http://www.percona.com/downloads/>`_ directory, including our APT and
 Yum repositories.  For specific installation instructions, read the detailed
