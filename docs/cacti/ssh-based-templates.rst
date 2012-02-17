@@ -114,7 +114,7 @@ SSH.  All you need to do is copy ss_get_by_ssh.php to the Cacti script directory
 and set the proper configuration variables.  This example shows how to do it
 with an external configuration file, but you can do it any way you please::
 
-   debian:~# cp mysql-cacti-templates/scripts/ss_get_by_ssh.php /usr/share/cacti/site/scripts/
+   debian:~# cp scripts/ss_get_by_ssh.php /usr/share/cacti/site/scripts/
    debian:~# cat > /usr/share/cacti/site/scripts/ss_get_by_ssh.php.cnf
    <?php
    $ssh_user   = 'cacti';

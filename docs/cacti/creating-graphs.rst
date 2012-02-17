@@ -81,7 +81,7 @@ Once you have written the test, execute the test file and ensure that the test
 fails!  If it doesn't fail, you have no reliable indicator that a passing test
 really means success::
 
-   mysql-cacti-templates/t $ php get_by_ssh.php
+   t/cacti $ php get_by_ssh.php
 
 You should see a fatal error that the function ``diskstats_parse()`` doesn't
 exist.  Now it's time to write it.  Open ``scripts/ss_get_by_ssh.php`` and move
