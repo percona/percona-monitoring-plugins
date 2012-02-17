@@ -39,7 +39,7 @@ cp COPYING Changelog release/code
 # Update the version number and other important macros in the temporary
 # directory.
 YEAR=$(date +%Y)
-for f in release/code/nagios/pmp* release/docs/config/conf.py release/code/cacti/scripts/ss* ; do
+for f in release/code/nagios/bin/pmp* release/docs/config/conf.py release/code/cacti/scripts/ss* ; do
    sed -e "s/\\\$PROJECT_NAME\\\$/$PROJECT_NAME/g" "$f" > "${TEMPFILE}"
    mv "${TEMPFILE}" "$f"
    sed -e "s/\\\$VERSION\\\$/$VERSION/g" "$f" > "${TEMPFILE}"
@@ -89,7 +89,7 @@ echo >> release/docs/changelog.rst
 
 # Make the Nagios documentation into Sphinx .rst format.  The Cacti docs are
 # already in Sphinx format.
-for f in release/code/nagios/pmp-check-*; do
+for f in release/code/nagios/bin/pmp-check-*; do
    # The documents have all =head1 sections, which is fine for man pages, but is
    # not what we want for a hierarchical series of documents; we want the
    # program's NAME to be a head1 and the rest to be head2.  This will break if
@@ -110,6 +110,9 @@ sphinx-build -q -N -W -c release/docs/config/ -b latex \
 make -C release/docs/latex all-pdf
 mkdir release/docs/pdf
 mv release/docs/latex/*.pdf release/docs/pdf
+
+# Make certain everything that's supposed to be executable is.
+chmod +x release/code/{cacti,nagios}/bin/*
 
 # Make the release tarball
 NAME="percona-monitoring-plugins-${VERSION}"

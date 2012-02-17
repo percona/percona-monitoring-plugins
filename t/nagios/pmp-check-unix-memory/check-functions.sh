@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ../../../nagios/pmp-check-unix-memory
+. ../../../nagios/bin/pmp-check-unix-memory
 
 echo "Should print 16046"
 get_total_memory     samples/free-001.txt

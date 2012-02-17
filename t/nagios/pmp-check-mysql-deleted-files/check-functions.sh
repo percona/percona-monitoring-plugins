@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ../../../nagios/pmp-check-mysql-deleted-files
+. ../../../nagios/bin/pmp-check-mysql-deleted-files
 
 echo "should print nothing"
 check_deleted_files samples/lsof-001.txt /tmp/

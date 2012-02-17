@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ../../../nagios/pmp-check-mysql-status
+. ../../../nagios/bin/pmp-check-mysql-status
 
 echo "should print 1"
 compute_result samples/status-variables-001.txt Threads_running

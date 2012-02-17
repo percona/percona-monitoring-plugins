@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ../../../nagios/pmp-check-mysql-innodb
+. ../../../nagios/bin/pmp-check-mysql-innodb
 
 echo "should print 40"
 get_longest_trx "samples/innodb-status-001.txt"

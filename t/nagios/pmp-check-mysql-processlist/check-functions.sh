@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ../../../nagios/pmp-check-mysql-processlist
+. ../../../nagios/bin/pmp-check-mysql-processlist
 
 echo "should print 15"
 max 1 5 15 11 8

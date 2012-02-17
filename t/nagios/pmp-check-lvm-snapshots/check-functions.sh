@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ../../../nagios/pmp-check-lvm-snapshots
+. ../../../nagios/bin/pmp-check-lvm-snapshots
 
 echo "should print nothing"
 check_lvm_snapshot_fullness "samples/lvs-001.txt" 20
