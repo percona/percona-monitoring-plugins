@@ -24,7 +24,7 @@ of the device.  This will make the items visually distinctive.
 
 See the following screenshot for an example:
 
-.. figure:: images/add_unix_disk_graph.png
+.. image:: images/add_unix_disk_graph.png
 
 You should append ``sda`` in every textbox shown in that screenshot, if you want
 to monitor ``/dev/sda``.  Use the device name as it appears in ``/proc/diskstats``.
@@ -34,60 +34,58 @@ Sample Graphs
 
 The following sample graphs demonstrate how the data is presented.
 
-.. figure:: images/unix_context_switches.png
+.. image:: images/unix_context_switches.png
 
-   The number of context switches performed by the server.
+The number of context switches performed by the server.
 
-.. figure:: images/unix_cpu_usage.png
+.. image:: images/unix_cpu_usage.png
 
-   The CPU usage.
+The CPU usage.
+The example shows a server with two CPUs.  The values will increase by 100 with each added CPU.
 
-   The example shows a server with two CPUs.  The values will increase by 100 with each added CPU.
+.. image:: images/unix_forks.png
 
-.. figure:: images/unix_forks.png
+The number of new processes created by the system.
 
-   The number of new processes created by the system.
+.. image:: images/unix_interrupts.png
 
-.. figure:: images/unix_interrupts.png
+The interrupts the system handles.
 
-   The interrupts the system handles.
+.. image:: images/unix_load_average.png
 
-.. figure:: images/unix_load_average.png
+The system load average.
 
-   The system load average.
+If you're used to Cacti's standard load average graph, you might think this
+one has less information.  That is not true; the standard graph that comes
+with Cacti simply shows the same information averaged over three time
+intervals, which is redundant.  RRDTool is natively capable of doing that.
 
-   If you're used to Cacti's standard load average graph, you might think this
-   one has less information.  That is not true; the standard graph that comes
-   with Cacti simply shows the same information averaged over three time
-   intervals, which is redundant.  RRDTool is natively capable of doing that.
+.. image:: images/unix_memory.png
 
-.. figure:: images/unix_memory.png
+The system's memory usage, as reported by the "free" command.
 
-   The system's memory usage, as reported by the "free" command.
+.. image:: images/unix_number_of_users.png
 
-.. figure:: images/unix_number_of_users.png
+The number of users that were logged into the system, as reported by the "w" command.
 
-   The number of users that were logged into the system, as reported by the "w" command.
+.. image:: images/disk_operations.png
 
-.. figure:: images/disk_operations.png
+The number of read and write operations completed, and how many reads and writes were merged.
 
-   The number of read and write operations completed, and how many reads and writes were merged.
+.. image:: images/disk_sectors_read_written.png
 
-.. figure:: images/disk_sectors_read_written.png
+The number of disk sectors read and written.
 
-   The number of disk sectors read and written.
+.. image:: images/disk_read_write_time.png
 
-.. figure:: images/disk_read_write_time.png
+The amount of time spent reading and writing.
 
-   The amount of time spent reading and writing.
+.. image:: images/disk_elapsed_io_time.png
 
-.. figure:: images/disk_elapsed_io_time.png
-
-   The disk utilization.
-
-   This graph shows how much time was spent in disk I/O overall (busy time), and
-   how much weighted time was spent doing disk I/O. The latter is a useful
-   indication of I/O backlog. The weighted time is the number of requests
-   multiplied by the busy time, so if there are 5 requests that take 1 second,
-   it is 5 seconds. (If they all happen at the same time, the busy time is only
-   1 second.)
+The disk utilization.
+This graph shows how much time was spent in disk I/O overall (busy time), and
+how much weighted time was spent doing disk I/O. The latter is a useful
+indication of I/O backlog. The weighted time is the number of requests
+multiplied by the busy time, so if there are 5 requests that take 1 second,
+it is 5 seconds. (If they all happen at the same time, the busy time is only
+1 second.)

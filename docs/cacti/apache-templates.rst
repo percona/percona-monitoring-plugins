@@ -31,22 +31,22 @@ Sample Graphs
 
 The following sample graphs demonstrate how the data is presented.
 
-.. figure:: images/apache_bytes.png
+.. image:: images/apache_bytes.png
 
-   The number of bytes sent by Apache.
+The number of bytes sent by Apache.
 
-.. figure:: images/apache_cpu_load.png
+.. image:: images/apache_cpu_load.png
 
-   Apache's CPU usage.
+Apache's CPU usage.
 
-.. figure:: images/apache_requests.png
+.. image:: images/apache_requests.png
 
-   The number of requests that Apache has handled.
+The number of requests that Apache has handled.
 
-.. figure:: images/apache_scoreboard.png
+.. image:: images/apache_scoreboard.png
 
-   The number of Apache processes in each of a variety of statuses.
+The number of Apache processes in each of a variety of statuses.
 
-.. figure:: images/apache_workers.png
+.. image:: images/apache_workers.png
 
-   The number of worker processes busy or idle at any given time.
+The number of worker processes busy or idle at any given time.

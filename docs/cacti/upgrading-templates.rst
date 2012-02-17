@@ -7,7 +7,7 @@ Upgrading is normally a simple process.  Before you begin, find the version of
 the templates and scripts that is currently installed.  You can find this as a
 GPRINT item, as in the following screenshot:
 
-.. figure:: images/mysql-cacti-templates-installed-version.png
+.. image:: images/mysql-cacti-templates-installed-version.png
 
 This shows that the MySQL templates installed were generated from version 1.1.4
 of the templates, against version 1.1.4 of the PHP script file.

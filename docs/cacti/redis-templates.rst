@@ -24,24 +24,23 @@ Sample Graphs
 
 The following sample graphs demonstrate how the data is presented.
 
-.. figure:: images/Redis_Commands.png
+.. image:: images/Redis_Commands.png
 
-   Shows commands to the Redis server.
+Shows commands to the Redis server.
 
-.. figure:: images/Redis_Connections.png
+.. image:: images/Redis_Connections.png
 
-   Shows connections to the Redis server.
+Shows connections to the Redis server.
+The top two items are *current* connections at the time the poller sampled
+the data; the bottom line, Total Connections, is the number of new
+connections created per second during the polling interval.  That's the
+important number to watch, and despite the name it should not be equal to the
+sum of the first two lines!
 
-   The top two items are *current* connections at the time the poller sampled
-   the data; the bottom line, Total Connections, is the number of new
-   connections created per second during the polling interval.  That's the
-   important number to watch, and despite the name it should not be equal to the
-   sum of the first two lines!
+.. image:: images/Redis_Memory.png
 
-.. figure:: images/Redis_Memory.png
+Shows memory usage.
 
-   Shows memory usage.
+.. image:: images/Redis_Unsaved_Changes.png
 
-.. figure:: images/Redis_Unsaved_Changes.png
-
-   Shows unsaved changes.
+Shows unsaved changes.

@@ -48,14 +48,14 @@ Sample Graphs
 
 The following sample graphs demonstrate how the data is presented.
 
-.. figure:: images/jmx-file-descriptor.png
+.. image:: images/jmx-file-descriptor.png
 
-   The file descriptors used by the JMX process.
+The file descriptors used by the JMX process.
 
-.. figure:: images/jmx-heap-memory-usage.png
+.. image:: images/jmx-heap-memory-usage.png
 
-   The heap memory usage used by the JMX process.
+The heap memory usage used by the JMX process.
 
-.. figure:: images/jmx-nonheap-memory-usage.png
+.. image:: images/jmx-nonheap-memory-usage.png
 
-   The non-heap memory usage used by the JMX process.
+The non-heap memory usage used by the JMX process.

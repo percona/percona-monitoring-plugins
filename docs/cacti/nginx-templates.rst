@@ -34,14 +34,14 @@ Sample Graphs
 
 The following sample graphs demonstrate how the data is presented.
 
-.. figure:: images/nginx_accepts_handled.png
+.. image:: images/nginx_accepts_handled.png
 
-   The number of connections the server accepted and handled.
+The number of connections the server accepted and handled.
 
-.. figure:: images/nginx_requests.png
+.. image:: images/nginx_requests.png
 
-   The number of requests the Nginx server received.
+The number of requests the Nginx server received.
 
-.. figure:: images/nginx_scoreboard.png
+.. image:: images/nginx_scoreboard.png
 
-   The number of connections to the Nginx server in various states.
+The number of connections to the Nginx server in various states.

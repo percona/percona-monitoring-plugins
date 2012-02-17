@@ -187,13 +187,13 @@ override the individual graph's values; the individual graphs must specify their
 own values.  For example, the following figure shows how to set the checkboxes
 so that username and password are per-data-source:
 
-.. figure:: images/use-per-data-source-value.png
+.. image:: images/use-per-data-source-value.png
 
 Next find the data source by clicking into Data Sources.  Now that you've
 specified that this data source should use per-data-source values for the
 username and password, there are text boxes to fill in:
 
-.. figure:: images/fill-in-data-source-values.png
+.. image:: images/fill-in-data-source-values.png
 
 Cacti will now pass the given arguments to the PHP script when it executes.
 Here's a snippet from the Cacti log, showing this in action::

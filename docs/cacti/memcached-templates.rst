@@ -32,30 +32,30 @@ Sample Graphs
 
 The following sample graphs demonstrate how the data is presented.
 
-.. figure:: images/memcached_additions_and_evictions.png
+.. image:: images/memcached_additions_and_evictions.png
 
-   Shows how many items were added and evicted.
+Shows how many items were added and evicted.
 
-.. figure:: images/memcached_connections.png
+.. image:: images/memcached_connections.png
 
-   Shows how many connections have been made.
+Shows how many connections have been made.
 
-.. figure:: images/memcached_current_items.png
+.. image:: images/memcached_current_items.png
 
-   Shows how many items are stored in the server.
+Shows how many items are stored in the server.
 
-.. figure:: images/memcached_memory.png
+.. image:: images/memcached_memory.png
 
-   Shows how much memory the server is using.
+Shows how much memory the server is using.
 
-.. figure:: images/memcached_requests.png
+.. image:: images/memcached_requests.png
 
-   Shows how many gets and sets have happened, as well as how many of the gets were misses (there was no item in the cache).
+Shows how many gets and sets have happened, as well as how many of the gets were misses (there was no item in the cache).
 
-.. figure:: images/memcached_rusage.png
+.. image:: images/memcached_rusage.png
 
-   Shows the resource usage statistics reported by memcached, in system and user CPU time.
+Shows the resource usage statistics reported by memcached, in system and user CPU time.
 
-.. figure:: images/memcached_traffic.png
+.. image:: images/memcached_traffic.png
 
-   Shows the network traffic in and out of the memcached server.
+Shows the network traffic in and out of the memcached server.

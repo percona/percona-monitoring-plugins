@@ -29,22 +29,22 @@ Sample Graphs
 
 The following sample graphs demonstrate how the data is presented.
 
-.. figure:: images/mongodb_background_flushes.png
+.. image:: images/mongodb_background_flushes.png
 
-   Background flushes
+Background flushes
 
-.. figure:: images/mongodb_commands.png
+.. image:: images/mongodb_commands.png
 
-   Commands
+Commands
 
-.. figure:: images/mongodb_connections.png
+.. image:: images/mongodb_connections.png
 
-   Connections
+Connections
 
-.. figure:: images/mongodb_index_ops.png
+.. image:: images/mongodb_index_ops.png
 
-   Index Operations
+Index Operations
 
-.. figure:: images/mongodb_memory.png
+.. image:: images/mongodb_memory.png
 
-   Memory
+Memory
