@@ -20,7 +20,6 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -47,8 +46,13 @@ main() {
    if [ -e '/etc/nagios/mysql.cnf' ]; then
       OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
    fi
+   if is_not_sourced; then
+      if [ -n "$1" ]; then
+         echo "WARN spurious command-line options: $@"
+         exit 1
+      fi
+   fi
 
-   EXITSTATUS=$STATE_UNKNOWN
    NOTE="UNK couldn't query the checksum table"
 
    # Set up a temp file to hold error messages from MySQL.
@@ -62,26 +66,21 @@ main() {
       if [ "${PROBLEMS}" ]; then
          NOTE="pt-table-checksum found ${PROBLEMS}"
          if [ "${OPT_CRIT}" ]; then
-            EXITSTATUS=$STATE_CRITICAL
             NOTE="CRIT $NOTE"
          else
-            EXITSTATUS=$STATE_WARNING
             NOTE="WARN $NOTE"
          fi
       else
          NOTE="OK pt-table-checksum found no out-of-sync tables"
-         EXITSTATUS=$STATE_OK
       fi
    else
       # If the query returns an error about table not found, then it's not an
       # error.
       if grep "Table '${OPT_TABLE}' doesn't exist" "${TEMP}" >/dev/null 2>&1; then
          NOTE="OK The pt-table-checksum table ${OPT_TABLE} doesn't exist"
-         EXITSTATUS=$STATE_OK
       fi
    fi
    echo $NOTE
-   exit $EXITSTATUS
 }
 
 # ########################################################################
@@ -102,12 +101,28 @@ get_magic_query() {
 }
 
 # ########################################################################
+# Determine whether this program is being executed directly, or sourced/included
+# from another file.
+# ########################################################################
+is_not_sourced() {
+   [ "${0##*/}" = "pmp-check-pt-table-checksum" ] || [ "${0##*/}" = "bash" -a "$_" = "$0" ]
+}
+
+# ########################################################################
 # Execute the program if it was not included from another file.
 # This makes it possible to include without executing, and thus test.
 # ########################################################################
-if    [ "${0##*/}" = "pmp-check-pt-table-checksum" ] \
-   || [ "${0##*/}" = "bash" -a "$_" = "$0" ]; then
-   main "$@"
+if is_not_sourced; then
+   OUTPUT=$(main "$@")
+   EXITSTATUS=$STATE_UNKNOWN
+   case "${OUTPUT}" in
+      UNK*)  EXITSTATUS=$STATE_UNKNOWN;  ;;
+      OK*)   EXITSTATUS=$STATE_OK;       ;;
+      WARN*) EXITSTATUS=$STATE_WARNING;  ;;
+      CRIT*) EXITSTATUS=$STATE_CRITICAL; ;;
+   esac
+   echo "${OUTPUT}"
+   exit $EXITSTATUS
 fi
 
 # ############################################################################

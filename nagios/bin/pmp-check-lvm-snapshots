@@ -20,7 +20,6 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Print the name and fullness of every LVM snapshot that is open and
@@ -54,6 +53,12 @@ main() {
    done
    OPT_WARN=${OPT_WARN:-90}
    OPT_CRIT=${OPT_CRIT:-95}
+   if is_not_sourced; then
+      if [ -n "$1" ]; then
+         echo "WARN spurious command-line options: $@"
+         exit 1
+      fi
+   fi
 
    local NOTE="OK no full LVM snapshot volumes"
    local TEMP=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
@@ -62,38 +67,57 @@ main() {
    # The lvs command is usually in /usr/sbin.  But if it's run as a non-root
    # user, it will print out "WARNING: Running as a non-root user. Functionality
    # may be unavailable." and exit with success anyway.  So we have to detect
-   # this and make the plugin exit UNKNOWN in that case.
+   # this and make the plugin exit UNKNOWN in that case.  If there is a $1 it's
+   # the output of lvs.
    PATH="$PATH:/usr/sbin:/sbin"
-   lvs > "${TEMP}" 2>&1 || exit $?
+   if [ -z "$1" ]; then
+      lvs > "${TEMP}" 2>&1
+   else
+      cat "$1" > "${TEMP}" 2>/dev/null # For testing only
+   fi
 
-   if grep 'WARNING: Running as a non-root user' "${TEMP}" >/dev/null 2>&1; then
+   if grep 'command not found' "${TEMP}" > /dev/null 2>&1; then
+      NOTE="OK $(cat "${TEMP}")"
+   elif grep 'WARNING: Running as a non-root user' "${TEMP}" >/dev/null 2>&1; then
       NOTE="UNK You must execute lvs with root privileges"
-      EXITSTATUS=$STATE_UNKNOWN
    else
       local VOLS=$(check_lvm_snapshot_fullness "${TEMP}" "${OPT_CRIT}")
       if [ "${VOLS}" ]; then
-         NOTE="CRIT LVM snapshot volumes over ${FULL}% full: ${VOLS}"
-         EXITSTATUS=$STATE_CRITICAL
+         NOTE="CRIT LVM snapshot volumes over ${OPT_CRIT}% full: ${VOLS}"
       else
          VOLS=$(check_lvm_snapshot_fullness "${TEMP}" "${OPT_WARN}")
          if [ "${VOLS}" ]; then
-            NOTE="WARN LVM snapshot volumes over ${FULL}% full: ${VOLS}"
-            EXITSTATUS=$STATE_WARNING
+            NOTE="WARN LVM snapshot volumes over ${OPT_WARN}% full: ${VOLS}"
          fi
       fi
    fi
 
    echo $NOTE
-   exit $EXITSTATUS
+}
+
+# ########################################################################
+# Determine whether this program is being executed directly, or sourced/included
+# from another file.
+# ########################################################################
+is_not_sourced() {
+   [ "${0##*/}" = "pmp-check-lvm-snapshots" ] || [ "${0##*/}" = "bash" -a "$_" = "$0" ]
 }
 
 # ########################################################################
 # Execute the program if it was not included from another file.
 # This makes it possible to include without executing, and thus test.
 # ########################################################################
-if    [ "${0##*/}" = "pmp-check-lvm-snapshots" ] \
-   || [ "${0##*/}" = "bash" -a "$_" = "$0" ]; then
-   main "$@"
+if is_not_sourced; then
+   OUTPUT=$(main "$@")
+   EXITSTATUS=$STATE_UNKNOWN
+   case "${OUTPUT}" in
+      UNK*)  EXITSTATUS=$STATE_UNKNOWN;  ;;
+      OK*)   EXITSTATUS=$STATE_OK;       ;;
+      WARN*) EXITSTATUS=$STATE_WARNING;  ;;
+      CRIT*) EXITSTATUS=$STATE_CRITICAL; ;;
+   esac
+   echo "${OUTPUT}"
+   exit $EXITSTATUS
 fi
 
 # ############################################################################

@@ -20,7 +20,6 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -52,6 +51,12 @@ main() {
    OPT_COMP="${OPT_COMP:->=}"
    if [ -e '/etc/nagios/mysql.cnf' ]; then
       OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
+   fi
+   if is_not_sourced; then
+      if [ -n "$1" ]; then
+         echo "WARN spurious command-line options: $@"
+         exit 1
+      fi
    fi
 
    # Validate the options.
@@ -97,10 +102,8 @@ main() {
       exit 1
    fi
 
-   EXITSTATUS=$STATE_UNKNOWN
    NOTE="UNK could not evaluate the expression."
 
-   # TODO: use a cache file? Does it matter?
    # Set up a temporary file
    local TEMP1=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
    local TEMP2=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
@@ -109,11 +112,12 @@ main() {
    if get_status_variables "${TEMP1}" "${TEMP2}" "${OPT_INCR}"; then
       LEVEL=$(compute_result "${TEMP1}" "${OPT_VAR1}" "${OPT_OPER}" "${OPT_VAR2}" "${OPT_TRAN}")
       if [ $? = 0 -a -n "${LEVEL}" ]; then
-         compare_result "${LEVEL}" "${OPT_CRIT}" "${OPT_WARN}" "${OPT_COMP}"
-         EXITSTATUS=$?
          NOTE="${OPT_VAR1}${OPT_OPER:+ ${OPT_OPER}}${OPT_VAR2:+ ${OPT_VAR2}}${OPT_TRAN:+ (${OPT_TRAN})}"
          NOTE="${NOTE} = ${LEVEL}"
-         case $EXITSTATUS in
+
+         # XXX Make sure this line and the "case" don't get separated.
+         compare_result "${LEVEL}" "${OPT_CRIT}" "${OPT_WARN}" "${OPT_COMP}"
+         case $? in
             $STATE_OK)
                NOTE="OK $NOTE"
                ;;
@@ -130,7 +134,6 @@ main() {
    fi
 
    echo $NOTE
-   exit $EXITSTATUS
 }
 
 # ########################################################################
@@ -273,12 +276,28 @@ get_status_variables() {
 }
 
 # ########################################################################
+# Determine whether this program is being executed directly, or sourced/included
+# from another file.
+# ########################################################################
+is_not_sourced() {
+   [ "${0##*/}" = "pmp-check-mysql-status" ] || [ "${0##*/}" = "bash" -a "$_" = "$0" ]
+}
+
+# ########################################################################
 # Execute the program if it was not included from another file.
 # This makes it possible to include without executing, and thus test.
 # ########################################################################
-if    [ "${0##*/}" = "pmp-check-mysql-status" ] \
-   || [ "${0##*/}" = "bash" -a "$_" = "$0" ]; then
-   main "$@"
+if is_not_sourced; then
+   OUTPUT=$(main "$@")
+   EXITSTATUS=$STATE_UNKNOWN
+   case "${OUTPUT}" in
+      UNK*)  EXITSTATUS=$STATE_UNKNOWN;  ;;
+      OK*)   EXITSTATUS=$STATE_OK;       ;;
+      WARN*) EXITSTATUS=$STATE_WARNING;  ;;
+      CRIT*) EXITSTATUS=$STATE_CRITICAL; ;;
+   esac
+   echo "${OUTPUT}"
+   exit $EXITSTATUS
 fi
 
 # ############################################################################

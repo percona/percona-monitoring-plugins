@@ -20,7 +20,6 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 STATE_DEPENDENT=4
-EXITSTATUS=$STATE_UNKNOWN
 
 # ########################################################################
 # Run the program.
@@ -39,21 +38,28 @@ main() {
    done
    OPT_WARN=${OPT_WARN:-90}
    OPT_CRIT=${OPT_CRIT:-95}
+   if is_not_sourced; then
+      if [ -n "$1" ]; then
+         echo "WARN spurious command-line options: $@"
+         exit 1
+      fi
+   fi
 
    NOTE="UNK cannot find memory statistics"
-   EXITSTATUS=$STATE_UNKNOWN
    TEMP=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
    trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
+   IS_CRIT=""
    if free -m > "${TEMP}" ; then
       MEM_TOT=$(get_total_memory "${TEMP}")
       USD_PCT=$(get_used_memory_pct "${TEMP}")
       NOTE="Memory ${USD_PCT}% used"
       if [ "${USD_PCT:-0}" -ge "${OPT_CRIT}" ]; then
-         EXITSTATUS=$STATE_CRITICAL
+         NOTE="CRIT $NOTE"
+         IS_CRIT=1
       elif [ "${USD_PCT:-0}" -ge "${OPT_WARN}" ]; then
-         EXITSTATUS=$STATE_WARNING
+         NOTE="WARN $NOTE"
       else
-         EXITSTATUS=$STATE_OK
+         NOTE="OK $NOTE"
       fi
       if ps -eo pid,vsz,ucomm > "${TEMP}" ; then
          BIGGEST=$(get_largest_process "${TEMP}")
@@ -63,24 +69,16 @@ main() {
          PID_PCT=$(pct_of ${BIG_VSZ:-0} ${MEM_TOT:-0});
          NOTE="$NOTE. Largest process: ${BIG_COMMAND} (${BIG_PID}) = ${BIG_VSZ}MB (${PID_PCT}%)"
          if [ "${PID_PCT:-0}" -ge "${OPT_CRIT}" ]; then
-            EXITSTATUS=$STATE_CRITICAL
-         elif [ $EXITSTATUS != $STATE_CRITICAL -a "${PID_PCT:-0}" -ge "${OPT_WARN}" ]; then
+            NOTE="CRIT $NOTE"
+         elif [ -z "$IS_CRIT" -a "${PID_PCT:-0}" -ge "${OPT_WARN}" ]; then
             # The IF condition just above is to prevent a mere warning from
             # downgrading a critical that was triggered by overall memory used.
-            EXITSTATUS=$STATE_WARNING
+            NOTE="WARN $NOTE"
          fi
-      fi
-      if [ $EXITSTATUS = $STATE_CRITICAL ]; then
-         NOTE="CRIT $NOTE"
-      elif [ $EXITSTATUS = $STATE_WARNING ]; then
-         NOTE="WARN $NOTE"
-      else
-         NOTE="OK $NOTE"
       fi
    fi
 
    echo $NOTE
-   exit $EXITSTATUS
 }
 
 # ########################################################################
@@ -134,12 +132,28 @@ pct_of() {
 }
 
 # ########################################################################
+# Determine whether this program is being executed directly, or sourced/included
+# from another file.
+# ########################################################################
+is_not_sourced() {
+   [ "${0##*/}" = "pmp-check-unix-memory" ] || [ "${0##*/}" = "bash" -a "$_" = "$0" ]
+}
+
+# ########################################################################
 # Execute the program if it was not included from another file.
 # This makes it possible to include without executing, and thus test.
 # ########################################################################
-if    [ "${0##*/}" = "pmp-check-unix-memory" ] \
-   || [ "${0##*/}" = "bash" -a "$_" = "$0" ]; then
-   main "$@"
+if is_not_sourced; then
+   OUTPUT=$(main "$@")
+   EXITSTATUS=$STATE_UNKNOWN
+   case "${OUTPUT}" in
+      UNK*)  EXITSTATUS=$STATE_UNKNOWN;  ;;
+      OK*)   EXITSTATUS=$STATE_OK;       ;;
+      WARN*) EXITSTATUS=$STATE_WARNING;  ;;
+      CRIT*) EXITSTATUS=$STATE_CRITICAL; ;;
+   esac
+   echo "${OUTPUT}"
+   exit $EXITSTATUS
 fi
 
 # ############################################################################
