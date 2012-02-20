@@ -76,6 +76,8 @@ main() {
             else
                NOTE="WARN $NOTE"
             fi
+         else
+            NOTE="OK $NOTE"
          fi
       elif [ "${OPT_WARN}" ]; then
          # Empty file; not a replica, but that's not supposed to happen.
