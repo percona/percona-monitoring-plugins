@@ -57,6 +57,7 @@ $version = '$VERSION$';
 # Include settings from an external config file.
 # ============================================================================
 if ( file_exists(__FILE__ . '.cnf' ) ) {
+   debug("Found configuration file " . __FILE__ . ".cnf");
    require(__FILE__ . '.cnf');
 }
 

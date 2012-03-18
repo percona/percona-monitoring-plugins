@@ -57,6 +57,7 @@ $version = '$VERSION$';
 # Include settings from an external config file (issue 39).
 # ============================================================================
 if ( file_exists(__FILE__ . '.cnf' ) ) {
+   debug("Found configuration file " . __FILE__ . ".cnf");
    require(__FILE__ . '.cnf');
 }
 
@@ -265,6 +266,7 @@ function ss_get_mysql_stats( $options ) {
       $conn = mysql_connect($host_str, $user, $pass);
    }
    if ( !$conn ) {
+      debug("MySQL connection failed: " . mysql_error());
       die("MySQL: " . mysql_error());
    }
 
