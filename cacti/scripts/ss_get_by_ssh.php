@@ -1317,7 +1317,8 @@ function mongodb_cachefile ( $options ) {
 }
 
 function mongodb_cmdline ( $options ) {
-   return "echo \"db._adminCommand({serverStatus:1, repl:2})\" | mongo";
+   $port = isset($options['port2']) ? " --port $options[port2]" : '';
+   return "echo \"db._adminCommand({serverStatus:1, repl:2})\" | mongo$port";
 }
 
 function mongodb_parse ( $options, $output ) {
