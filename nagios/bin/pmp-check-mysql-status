@@ -107,7 +107,7 @@ main() {
    # Set up a temporary file
    local TEMP1=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
    local TEMP2=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
-   trap 'rm -rf "${TEMP1}" "${TEMP1}" >/dev/null 2>&1' EXIT
+   trap 'rm -rf "${TEMP1}" "${TEMP2}" >/dev/null 2>&1' EXIT
 
    if get_status_variables "${TEMP1}" "${TEMP2}" "${OPT_INCR}"; then
       LEVEL=$(compute_result "${TEMP1}" "${OPT_VAR1}" "${OPT_OPER}" "${OPT_VAR2}" "${OPT_TRAN}")
