@@ -17,4 +17,4 @@ Check the installed scripts for their version::
    # grep ^.version /path/to/ss_get_mysql_stats.php
    $version = "1.1.4";
 
-The changelog explains how to upgrade from each version to the next.
+If any special upgrade steps are necessary, the changelog will explain them.
