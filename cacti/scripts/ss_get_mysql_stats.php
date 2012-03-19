@@ -482,10 +482,24 @@ function ss_get_mysql_stats( $options ) {
                . "WHERE `time` <> 'TOO LONG'",
             $conn);
          foreach ( $result as $row ) {
+            if ( $i > 13 ) {
+               # It's possible that the number of rows returned isn't 14.
+               # Don't add extra status counters.
+               break;
+            }
             $count_key = sprintf("Query_time_count_%02d", $i);
             $total_key = sprintf("Query_time_total_%02d", $i);
             $status[$count_key] = $row['count'];
             $status[$total_key] = $row['total'];
+            $i++;
+         }
+         # It's also possible that the number of rows returned is too few.
+         # Don't leave any status counters unassigned; it will break graphs.
+         while ( $i <= 13 ) {
+            $count_key = sprintf("Query_time_count_%02d", $i);
+            $total_key = sprintf("Query_time_total_%02d", $i);
+            $status[$count_key] = 0;
+            $status[$total_key] = 0;
             $i++;
          }
       }
