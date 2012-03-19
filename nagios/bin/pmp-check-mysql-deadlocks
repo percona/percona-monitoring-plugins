@@ -5,7 +5,7 @@
 # License: GPL License (see COPYING)
 # Authors:
 #  Baron Schwartz
-# Depends-on: pt-heartbeat
+# Depends-on: pt-deadlock-logger
 # ########################################################################
 
 # ########################################################################
@@ -153,7 +153,7 @@ This plugin executes the following commands against MySQL:
 
 =item *
 
-C<SELECT> from the C<pt-heartbeat> table.
+C<SELECT> from the C<pt-deadlock-logger> table.
 
 =back
 
