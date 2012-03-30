@@ -1,6 +1,6 @@
 <?php
 require('test-more.php');
-require('../../scripts/ss_get_mysql_stats.php');
+require('../../cacti/scripts/ss_get_mysql_stats.php');
 $debug = true;
 
 is(

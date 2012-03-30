@@ -1,6 +1,7 @@
 2012-04-02: version 1.0.0
 -------------------------
 
+	* Load average was 15-minute instead of 1-minute (bug 968604).
 	* MySQL connection errors weren't logged (bug 958782).
 	* The pmp-check-mysql-deadlocks referred to pt-heartbeat (bug 934255).
 	* HTTP status was not fetched correctly when $use_ssh was disabled (bug 937017).

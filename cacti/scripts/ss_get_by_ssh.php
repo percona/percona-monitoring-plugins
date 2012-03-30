@@ -895,9 +895,8 @@ function w_parse ( $options, $output ) {
          if ( preg_match('/(\d+) u[^ ]*,/', $line, $words) ) {
             $result['STAT_numusers'] = $words[1];
          }
-         if ( preg_match('/(\d+[,.]\d+)$/', $line, $words) ) {
-            $result['STAT_loadavg']  = $words[1];
-         }
+         $words = explode(" ", $line);
+         $result['STAT_loadavg']  = rtrim($words[count($words)-3], ',');
       }
    }
    return $result;
