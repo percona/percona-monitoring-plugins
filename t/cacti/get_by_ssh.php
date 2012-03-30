@@ -1,6 +1,6 @@
 <?php
 require('test-more.php');
-require('../../scripts/ss_get_by_ssh.php');
+require('../../cacti/scripts/ss_get_by_ssh.php');
 $debug = true;
 
 is(
@@ -102,7 +102,7 @@ is(
 is_deeply(
    w_parse( null, file_get_contents('samples/w-001.txt') ),
    array(
-      'STAT_loadavg' => '1.43',
+      'STAT_loadavg' => '0.00',
       'STAT_numusers' => '2',
    ),
    'samples/w-001.txt'
@@ -111,7 +111,7 @@ is_deeply(
 is_deeply(
    w_parse( null, file_get_contents('samples/w-002.txt') ),
    array(
-      'STAT_loadavg' => '0.35',
+      'STAT_loadavg' => '0.29',
       'STAT_numusers' => '6',
    ),
    'samples/w-002.txt'
@@ -120,7 +120,7 @@ is_deeply(
 is_deeply(
    w_parse( null, file_get_contents('samples/w-003.txt') ),
    array(
-      'STAT_loadavg' => '0.00',
+      'STAT_loadavg' => '0.02',
       'STAT_numusers' => '1',
    ),
    'samples/w-003.txt'
@@ -129,7 +129,7 @@ is_deeply(
 is_deeply(
    w_parse( null, file_get_contents('samples/w-004.txt') ),
    array(
-      'STAT_loadavg' => '11.00',
+      'STAT_loadavg' => '11.02',
       'STAT_numusers' => '1',
    ),
    'samples/w-004.txt'
@@ -138,7 +138,7 @@ is_deeply(
 is_deeply(
    w_parse( null, file_get_contents('samples/uptime-001.txt') ),
    array(
-      'STAT_loadavg' => '0.06',
+      'STAT_loadavg' => '0.00',
       'STAT_numusers' => '0',
    ),
    'samples/uptime-001.txt'
@@ -151,7 +151,7 @@ is(
       'host'    => 'localhost',
       'items'   => 'gs,gt'
    )),
-   'gs:1.43 gt:2',
+   'gs:0.00 gt:2',
    'main(samples/w-001.txt)'
 );
 
