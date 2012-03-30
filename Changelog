@@ -6,6 +6,7 @@
 	* HTTP status was not fetched correctly when $use_ssh was disabled (bug 937017).
 	* MongoDB didn't support --port2 (bug 937018).
 	* Percona Server response time graph didn't tolerate <> 14 rows (bug 954118).
+	* The release tarball had an extra directory (bug 934227).
 
 2012-02-16: version 0.9.0
 -------------------------
