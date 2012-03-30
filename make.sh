@@ -117,7 +117,9 @@ chmod +x release/code/{cacti,nagios}/bin/*
 # Make the release tarball
 NAME="percona-monitoring-plugins-${VERSION}"
 mv release/code "release/${NAME}"
-tar zcf "release/${NAME}.tar.gz" "release/${NAME}"
+cd release
+tar zcf "${NAME}.tar.gz" "${NAME}"
+cd ..
 
 echo "The documentation is complete in HTML format."
 echo "It is in the release/docs/html directory."
