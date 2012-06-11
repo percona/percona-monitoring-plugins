@@ -63,7 +63,7 @@ main() {
       LEVEL=$(mysql_exec "${SQL}")
       MYSQL_CONN=$?
    else
-      local TEMP=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
+      local TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
       trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
       if [ -z "$1" ]; then
          mysql_exec 'SHOW SLAVE STATUS\G' > "${TEMP}"

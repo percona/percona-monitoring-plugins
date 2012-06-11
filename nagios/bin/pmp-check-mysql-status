@@ -105,8 +105,8 @@ main() {
    NOTE="UNK could not evaluate the expression."
 
    # Set up a temporary file
-   local TEMP1=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
-   local TEMP2=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
+   local TEMP1=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
+   local TEMP2=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
    trap "rm -f '${TEMP1}' '${TEMP2}' >/dev/null 2>&1" EXIT
 
    if get_status_variables "${TEMP1}" "${TEMP2}" "${OPT_INCR}"; then

@@ -59,8 +59,8 @@ main() {
    NOTE="UNK could not determine the datadir location."
 
    # Set up files to hold one or more data directory locations.
-   local TEMP=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
-   local DATADIRS=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
+   local TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
+   local DATADIRS=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
    trap "rm -f '${TEMP}' '${DATADIRS}' >/dev/null 2>&1" EXIT
 
    # If any connection option was given, then try to log in to find the datadir.

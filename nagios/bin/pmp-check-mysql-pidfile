@@ -55,8 +55,8 @@ main() {
    NOTE="UNK could not determine the PID file location."
 
    # Set up files to hold one or more PID file locations.
-   local TEMP=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
-   local FILES=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
+   local TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
+   local FILES=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
    trap "rm -f '${TEMP}' '${FILES}' >/dev/null 2>&1" EXIT
 
    # If any connection option was given, then try to log in to find the PID

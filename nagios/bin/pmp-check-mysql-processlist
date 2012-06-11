@@ -54,7 +54,7 @@ main() {
    fi
 
    # Get processlist into a temp file.
-   local TEMP=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
+   local TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
    trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
    mysql_exec 'SHOW PROCESSLIST\G' > "${TEMP}"
    if [ $? = 0 ]; then
