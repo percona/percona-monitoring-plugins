@@ -1,3 +1,12 @@
+2012-06-12: version 1.0.1
+-------------------------
+
+	* Cacti debug logs had a 12-hour timestamp instead of 24-hour (bug 973320).
+	* Nagios checks didn't remove temporary files on some platforms (bug 977514).
+	* Nagios plugins didn't use enough XXX in mktemp patterns (bug 2022766).
+	* Nagios check for deleted files didn't return 0 on success (bug 1009751).
+	* Nagios check for long-running txns didn't show thread ID (bug 1011625).
+
 2012-04-02: version 1.0.0
 -------------------------
 
