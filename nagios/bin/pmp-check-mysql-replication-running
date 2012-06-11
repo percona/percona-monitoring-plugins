@@ -54,8 +54,8 @@ main() {
    # Get replication status into a temp file. TODO: move this into a subroutine
    # and test it.  But, if there is a commandline argument left over after
    # parsing options, then use that as the file instead.
-   local TEMP=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
-   trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
+   local TEMP=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
+   trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
    if [ -z "$1" ]; then
       mysql_exec 'SHOW SLAVE STATUS\G' > "${TEMP}"
    else

@@ -2,7 +2,7 @@
 
 . ../../../nagios/bin/pmp-check-mysql-innodb
 
-echo "should print 40"
+echo "should print 40 31615419"
 get_longest_trx "samples/innodb-status-001.txt"
 
 echo "should print 0"

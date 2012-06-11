@@ -46,8 +46,8 @@ main() {
    fi
 
    NOTE="UNK cannot find memory statistics"
-   TEMP=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
-   trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
+   TEMP=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
+   trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
    IS_CRIT=""
    if free -m > "${TEMP}" ; then
       MEM_TOT=$(get_total_memory "${TEMP}")

@@ -61,8 +61,8 @@ main() {
    fi
 
    local NOTE="OK no full LVM snapshot volumes"
-   local TEMP=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
-   trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
+   local TEMP=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
+   trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
 
    # The lvs command is usually in /usr/sbin.  But if it's run as a non-root
    # user, it will print out "WARNING: Running as a non-root user. Functionality

@@ -56,8 +56,8 @@ main() {
    NOTE="UNK couldn't query the checksum table"
 
    # Set up a temp file to hold error messages from MySQL.
-   TEMP=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
-   trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
+   TEMP=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
+   trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
 
    # Get the query from the documentation and execute it.
    SQL=$(get_magic_query "${0}" checksum_diff_query)

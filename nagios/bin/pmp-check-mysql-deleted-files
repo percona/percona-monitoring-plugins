@@ -64,8 +64,8 @@ main() {
    local NOTE="OK no deleted files"
    local PROC_ID=$(_pidof mysqld | head -n1)
    if [ "${PROC_ID}" ]; then
-      local TEMP=$(mktemp "/tmp/${0##*/}.XXXX") || exit $?
-      trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
+      local TEMP=$(mktemp "/tmp/${0##*/}.XXXXXX") || exit $?
+      trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
       if _lsof "${PROC_ID}" > "${TEMP}" ; then
          # If lsof exists, but you run it as non-root, you'll get a file with a
          # bunch of this stuff:
@@ -78,6 +78,8 @@ main() {
                NOTE="CRIT $NOTE"
             elif [ "${FILES}" ]; then
                NOTE="WARN $NOTE"
+            else
+               NOTE="OK no deleted files"
             fi
          else
             NOTE="UNK You must execute lsof with root privileges"
