@@ -1313,7 +1313,7 @@ function debug($val) {
       if ( !count($calls) ) {
          $calls[] = "at $file:$line";
       }
-      fwrite($fp, date('Y-m-d h:i:s') . ' ' . implode(' <- ', $calls));
+      fwrite($fp, date('Y-m-d H:i:s') . ' ' . implode(' <- ', $calls));
       fwrite($fp, "\n" . var_export($val, TRUE) . "\n");
       fclose($fp);
    }
