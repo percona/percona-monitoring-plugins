@@ -81,7 +81,9 @@ main() {
    # Test whether the delay is too long.
    if [ "$MYSQL_CONN" = 0 ]; then
       NOTE="${LEVEL:-0} seconds of replication delay"
-      if [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
+      if [ "${LEVEL:-""}" = "NULL" ]; then
+         NOTE="UNK replica is stopped"
+      elif [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
          NOTE="CRIT $NOTE"
       elif [ "${LEVEL:-0}" -gt "${OPT_WARN}" ]; then
          NOTE="WARN $NOTE"
