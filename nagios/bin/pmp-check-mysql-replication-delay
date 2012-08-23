@@ -82,7 +82,7 @@ main() {
    if [ "$MYSQL_CONN" = 0 ]; then
       NOTE="${LEVEL:-0} seconds of replication delay"
       if [ "${LEVEL:-""}" = "NULL" ]; then
-         NOTE="UNK slave is not running"
+         NOTE="UNK replica is stopped"
       elif [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
          NOTE="CRIT $NOTE"
       elif [ "${LEVEL:-0}" -gt "${OPT_WARN}" ]; then
