@@ -81,10 +81,10 @@ main() {
       esac
    fi
    case "${OPT_COMP}" in
-      '=='|'>='|'>'|'<'|'<=')
+      '=='|'!='|'>='|'>'|'<'|'<=')
          ;;
       *)
-         OPT_ERR="Invalid -C option ${OPT_COMP}; use == >= > < <="
+         OPT_ERR="Invalid -C option ${OPT_COMP}; use == != >= > < <="
          ;;
    esac
    if [ "${OPT_OPER}" ]; then
@@ -357,7 +357,7 @@ and a critical alert if it is 40 or over:
 The threshold is implemented as greater-or-equals by default, not strictly
 greater-than, so a value of 20 is a warning and a value of 40 is critical.  You
 can switch this to less-or-equals or other operators with the -C option, which
-accepts the arithmetic comparison operators ==, >, >=, <, and <=.
+accepts the arithmetic comparison operators ==, !=, >, >=, <, and <=.
 
 You can use any variable that is present in SHOW VARIABLES or SHOW STATUS. If
 the variable is not found, there is an error.  To warn if Threads_connected
@@ -402,6 +402,11 @@ Some people might suggest that the following is a more useful alert for the
 query cache:
 
   -x query_cache_size -c 1
+
+To check Percona XtraDB Cluster node status you may want to use the following
+alert similar to what its clustercheck does:
+
+  -x wsrep_local_state -C '!=' -w 4
 
 =head1 PRIVILEGES
 
