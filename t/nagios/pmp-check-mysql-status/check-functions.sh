@@ -38,3 +38,11 @@ echo $?
 echo "should exit 0"
 compare_result 15 "" "20" '>='
 echo $?
+
+echo "should exit 1"
+compare_result 2 "" 4 '!='
+echo $?
+
+echo "should exit 0"
+compare_result 4 "" 4 '!='
+echo $?
