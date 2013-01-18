@@ -21,7 +21,7 @@
    name   => 'GNU/Linux Server',
    hash   => 'hash_02_VER_7f3cc974b740a9d134ca9e53c854e016',
    version => {
-      version => '1.1.8',
+      version => '1.1.9',
       hash    => 'hash_06_VER_aa3dce56769f195bccfd299318c541a6',
    },
    checksum => 'hash_06_VER_2092ed83d0986c71dc99740eef8e811c',
@@ -591,6 +591,32 @@
             },
          ],
       },
+      {  name       => 'Disk IOPS',
+         base_value => '1000',
+         hash       => 'hash_00_VER_e94c80be84e14bb25bc825837d9e4ea1',
+         override   => { title => 1 },
+         dt         => {
+            hash       => 'hash_01_VER_4a4782a93169cd9df1351b0018b78cfc',
+            input      => 'Get Disk Stats',
+            DISK_io_ops => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_637ed1adc7818d61cfda010d65830b21'
+            },
+         },
+         items => [
+            {  item   => 'DISK_io_ops',
+               color  => '4444FF',
+               task   => 'hash_09_VER_b6dca8e17e7d8a14b917d373dae9753d',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_e2e5174608b012cffb4c9cb79e4df93b',
+                  'hash_10_VER_0613f3be05727a2e4dfc19b7a98d0fb6',
+                  'hash_10_VER_1d3beb52f4a1c00844ca7369f6219003',
+                  'hash_10_VER_7b63e71259524509b63b06dbaeaebe3e'
+               ],
+            },
+         ],
+      },
       {  name       => 'Disk Space',
          base_value => '1024',
          hash       => 'hash_00_VER_84d5bcafb112d1b05ce38ae69448ab55',
@@ -1135,6 +1161,7 @@
             DISK_writes_merged      => 'hash_07_VER_1d9e6a350fa2ed02296b24e99864c51e',
             DISK_sectors_written    => 'hash_07_VER_781876011aa0b192cb2dcf2ac623925d',
             DISK_time_spent_writing => 'hash_07_VER_9aa60584a8cf5b117d87221ed076d970',
+            DISK_io_ops             => 'hash_07_VER_18f8cf2180f688c4efccbb93ce367fbc',
             DISK_io_time            => 'hash_07_VER_502e54254e2a4c4f93a968da81a28e26',
             DISK_io_time_weighted   => 'hash_07_VER_15cd8a0d97071982acc3b0ce8771c0cc',
          },

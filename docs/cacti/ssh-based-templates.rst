@@ -1,6 +1,7 @@
 .. _cacti_ssh_setup:
 
 .. toctree::
+
    apache-templates
    jmx-templates
    memcached-templates

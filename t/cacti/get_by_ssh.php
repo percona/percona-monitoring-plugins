@@ -255,9 +255,9 @@ is_deeply(
       'DISK_writes_merged'      => '21340',
       'DISK_sectors_written'    => '272616',
       'DISK_time_spent_writing' => '22360',
-      'DISK_io_ops_in_progress' => '0',
       'DISK_io_time'            => '12368',
-      'DISK_io_time_weighted'   => '28832'
+      'DISK_io_time_weighted'   => '28832',
+      'DISK_io_ops'             => '24780'
    ),
    'samples/diskstats-001.txt'
 );
@@ -275,7 +275,7 @@ is_deeply(
       'DISK_time_spent_writing' => '12081496',
       'DISK_io_time'            => '347416',
       'DISK_io_time_weighted'   => '12451664',
-      'DISK_io_ops_in_progress' => '0'
+      'DISK_io_ops'             => '181509'
    ),
    'samples/diskstats-002.txt'
 );
@@ -293,7 +293,7 @@ is_deeply(
       'DISK_time_spent_writing' => '0',
       'DISK_io_time'            => '0',
       'DISK_io_time_weighted'   => '0',
-      'DISK_io_ops_in_progress' => '0'
+      'DISK_io_ops'             => '488334420'
    ),
    'samples/diskstats-003.txt'
 );
@@ -307,7 +307,7 @@ is(
       'device'  => 'hda1'
    )),
    'hj:12043 hk:387 hl:300113 hm:6472 hn:12737 ho:21340 hp:272616 hq:22360 '
-      . 'hr:0 hs:12368 ht:28832',
+      . 'hr:24780 hs:12368 ht:28832',
    'main(samples/diskstats-001.txt)'
 );
 

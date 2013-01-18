@@ -82,6 +82,10 @@ The amount of time spent reading and writing.
 
 .. image:: images/disk_elapsed_io_time.png
 
+The number of disk IO operations per second. 
+
+.. image:: images/disk_iops.png
+
 The disk utilization.
 This graph shows how much time was spent in disk I/O overall (busy time), and
 how much weighted time was spent doing disk I/O. The latter is a useful

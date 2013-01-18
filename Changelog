@@ -1,3 +1,12 @@
+2013-01-17: version 1.0.2
+-------------------------
+
+        * #1040528: pmp-check-mysql-replication-delay doesn't alert if second behing master is NULL
+        * #1071802: "Bad substitution" error when running pmp-check-pt-table-checksum
+        * #1052368: Add option to disable overriding the status basing on the largest process memory in pmp-check-unix-memory   
+        * #1048627: Add '!=' comparison operator to pmp-check-mysql-status  
+        * Added "Disk IOPS" graph to Cacti Linux Templates 
+
 2012-06-12: version 1.0.1
 -------------------------
 
