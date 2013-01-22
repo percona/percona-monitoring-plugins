@@ -1,0 +1,4 @@
+#!/bin/sh
+echo
+echo "Scripts are installed to /usr/share/cacti/site/scripts"
+echo "Templates are installed to /usr/share/cacti/resource/percona"
