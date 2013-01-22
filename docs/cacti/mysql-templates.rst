@@ -36,6 +36,8 @@ To install,
 If you want to specify a different MySQL port for various servers, see
 the instructions on how to accept input in each data source.
 
+.. _mysql-templates-user-privileges:
+
 User Privileges
 ---------------
 
