@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ARG=$1
+
 set -e
 set -u
 
@@ -105,11 +107,13 @@ done
 # Make the Sphinx documentation into HTML and PDF formats.
 sphinx-build -q -N -W -c release/docs/config/ -b html \
    release/docs/ release/docs/html
-sphinx-build -q -N -W -c release/docs/config/ -b latex \
-   release/docs/ release/docs/latex
-make -C release/docs/latex all-pdf
-mkdir release/docs/pdf
-mv release/docs/latex/*.pdf release/docs/pdf
+if [ "$ARG" != "nopdf" ]; then
+   sphinx-build -q -N -W -c release/docs/config/ -b latex \
+      release/docs/ release/docs/latex
+   make -C release/docs/latex all-pdf
+   mkdir release/docs/pdf
+   mv release/docs/latex/*.pdf release/docs/pdf
+fi
 
 # Make certain everything that's supposed to be executable is.
 chmod +x release/code/{cacti,nagios}/bin/*

@@ -14,5 +14,8 @@ Here's how to create a release:
 * Update the upgrade instructions.
 * Update each template's documentation to include any changes and update the version number of the release.
 
+In case you don't want to create PDF docs run `./make.sh nopdf` instead.
+
 Packages required for development and building:
 php perl-Time-HiRes python-sphinx-doc texlive-latex
+
