@@ -16,6 +16,13 @@ Here's how to create a release:
 
 In case you don't want to create PDF docs run `./make.sh nopdf` instead.
 
-Packages required for development and building:
+Packages required for make.sh: 
 php perl-Time-HiRes python-sphinx-doc texlive-latex
 
+Building packages
+=================
+
+* Run `./build/build.sh <source_path> <build_number>`
+
+Packages required for build.sh:
+rpm-build dpkg fakeroot php perl-Time-HiRes python-sphinx-doc
