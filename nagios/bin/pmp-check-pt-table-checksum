@@ -77,7 +77,7 @@ main() {
       # If the query returns an error about table not found, then it's not an
       # error.
       if grep "Table '${OPT_TABLE}' doesn't exist" "${TEMP}" >/dev/null 2>&1; then
-         NOTE="OK The pt-table-checksum table ${OPT_TABLE} doesn't exist"
+         NOTE="UNK table '${OPT_TABLE}' doesn't exist"
       fi
    fi
    echo $NOTE
