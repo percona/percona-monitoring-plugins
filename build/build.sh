@@ -1,7 +1,7 @@
 #!/bin/sh
 # PMP package build script
 #
-# Required packages: rpm-build dpkg fakeroot php perl-Time-HiRes python-sphinx-doc
+# Required packages: rpm-build dpkg fakeroot php perl-Time-HiRes
 
 set -e
 
@@ -25,13 +25,10 @@ fi
 mkdir -p $WORK_DIR $TARGET
 cp -pr $SOURCE $WORK_DIR/source_code
 cd $WORK_DIR/source_code
-./make.sh nopdf > /dev/null
+./make.sh nodocs > /dev/null
 VERSION="$(cat VERSION)"
 FINAL_CODE=source_code/release/percona-monitoring-plugins-$VERSION
 mv release/percona-monitoring-plugins-$VERSION.tar.gz $TARGET
-cd release/docs
-tar czf $TARGET/html-docs-percona-monitoring-plugins-$VERSION.tar.gz html
-echo "HTML Docs:       $TARGET/html-docs-percona-monitoring-plugins-$VERSION.tar.gz"
 echo "Tarball created: $TARGET/percona-monitoring-plugins-$VERSION.tar.gz"
 
 build_rpm() {

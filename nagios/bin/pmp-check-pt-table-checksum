@@ -74,8 +74,6 @@ main() {
          NOTE="OK pt-table-checksum found no out-of-sync tables"
       fi
    else
-      # If the query returns an error about table not found, then it's not an
-      # error.
       if grep "Table '${OPT_TABLE}' doesn't exist" "${TEMP}" >/dev/null 2>&1; then
          NOTE="UNK table '${OPT_TABLE}' doesn't exist"
       fi
@@ -174,9 +172,7 @@ server's data matches its master's:
    HAVING COUNT(*) > 0
 
 The word CHECKSUM_TABLE is replaced by the value of the -T option.  If the table
-specified by -T does not exist, no error or warning is raised. This makes it
-possible to run this check on all MySQL servers by default, and only receive
-alerts if a server is being checksummed by pt-table-checksum.
+specified by -T does not exist, unknown is raised.
 
 Alerts are raised at a WARNING level by default, but specifying the -c option
 with any value will change this to CRITICAL instead.

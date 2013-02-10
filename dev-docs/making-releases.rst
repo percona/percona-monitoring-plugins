@@ -25,4 +25,4 @@ Building packages
 * Run `./build/build.sh <source_path> <build_number>`
 
 Packages required for build.sh:
-rpm-build dpkg fakeroot php perl-Time-HiRes python-sphinx-doc
+rpm-build dpkg fakeroot php perl-Time-HiRes
