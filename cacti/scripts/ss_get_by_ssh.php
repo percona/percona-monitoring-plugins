@@ -5,7 +5,7 @@
 # License: GPL License (see COPYING)
 # Copyright 2008-$CURRENT_YEAR$ Baron Schwartz, 2012-$CURRENT_YEAR$ Percona Inc.
 # Authors:
-#  Baron Schwartz
+#  Baron Schwartz, Roman Vynar
 # ============================================================================
 
 # ============================================================================
@@ -368,7 +368,7 @@ function ss_get_by_ssh( $options ) {
       'DISK_writes_merged'                =>  'ho',
       'DISK_sectors_written'              =>  'hp',
       'DISK_time_spent_writing'           =>  'hq',
-      'DISK_io_ops_in_progress'           =>  'hr',
+      'DISK_io_ops'                       =>  'hr',
       'DISK_io_time'                      =>  'hs',
       'DISK_io_time_weighted'             =>  'ht',
       'OPVZ_kmemsize_held'                =>  'hu',
@@ -1116,7 +1116,7 @@ function diskstats_parse ( $options, $output ) {
                   'DISK_writes_merged'      => $words[8],
                   'DISK_sectors_written'    => $words[9],
                   'DISK_time_spent_writing' => $words[10],
-                  'DISK_io_ops_in_progress' => $words[11],
+                  'DISK_io_ops'             => $words[3] + $words[7],
                   'DISK_io_time'            => $words[12],
                   'DISK_io_time_weighted'   => $words[13],
                );
@@ -1131,7 +1131,7 @@ function diskstats_parse ( $options, $output ) {
                   'DISK_writes_merged'      => 0,
                   'DISK_sectors_written'    => $words[6],
                   'DISK_time_spent_writing' => 0,
-                  'DISK_io_ops_in_progress' => 0,
+                  'DISK_io_ops'             => $words[3] + $words[5],
                   'DISK_io_time'            => 0,
                   'DISK_io_time_weighted'   => 0,
                );

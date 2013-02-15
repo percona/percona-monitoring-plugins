@@ -30,6 +30,7 @@ main() {
    for o; do
       case "${o}" in
          -w)        shift; OPT_WARN="${1}"; shift; ;;
+         -d)        shift; OPT_DISABLELP=1; ;;
          -c)        shift; OPT_CRIT="${1}"; shift; ;;
          --version) grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
          --help)    perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
@@ -61,19 +62,21 @@ main() {
       else
          NOTE="OK $NOTE"
       fi
-      if ps -eo pid,vsz,ucomm > "${TEMP}" ; then
-         BIGGEST=$(get_largest_process "${TEMP}")
-         BIG_PID=$(echo $BIGGEST | cut -d' ' -f1)
-         BIG_VSZ=$(echo $BIGGEST | cut -d' ' -f2)
-         BIG_COMMAND=$(echo $BIGGEST | cut -d' ' -f3)
-         PID_PCT=$(pct_of ${BIG_VSZ:-0} ${MEM_TOT:-0});
-         NOTE="$NOTE. Largest process: ${BIG_COMMAND} (${BIG_PID}) = ${BIG_VSZ}MB (${PID_PCT}%)"
-         if [ "${PID_PCT:-0}" -ge "${OPT_CRIT}" ]; then
-            NOTE="CRIT $NOTE"
-         elif [ -z "$IS_CRIT" -a "${PID_PCT:-0}" -ge "${OPT_WARN}" ]; then
-            # The IF condition just above is to prevent a mere warning from
-            # downgrading a critical that was triggered by overall memory used.
-            NOTE="WARN $NOTE"
+      if [ -z "${OPT_DISABLELP}" ]; then
+         if ps -eo pid,vsz,ucomm > "${TEMP}" ; then
+            BIGGEST=$(get_largest_process "${TEMP}")
+            BIG_PID=$(echo $BIGGEST | cut -d' ' -f1)
+            BIG_VSZ=$(echo $BIGGEST | cut -d' ' -f2)
+            BIG_COMMAND=$(echo $BIGGEST | cut -d' ' -f3)
+            PID_PCT=$(pct_of ${BIG_VSZ:-0} ${MEM_TOT:-0});
+            NOTE="$NOTE. Largest process: ${BIG_COMMAND} (${BIG_PID}) = ${BIG_VSZ}MB (${PID_PCT}%)"
+            if [ "${PID_PCT:-0}" -ge "${OPT_CRIT}" ]; then
+               NOTE="CRIT $NOTE"
+            elif [ -z "$IS_CRIT" -a "${PID_PCT:-0}" -ge "${OPT_WARN}" ]; then
+               # The IF condition just above is to prevent a mere warning from
+               # downgrading a critical that was triggered by overall memory used.
+               NOTE="WARN $NOTE"
+            fi
          fi
       fi
    fi
@@ -172,6 +175,7 @@ memory.
   Usage: pmp-check-unix-memory [OPTIONS]
   Options:
     -c CRIT     Critical threshold; default 95%.
+    -d          Disable single process memory check; default enabled.
     -w WARN     Warning threshold; default 90%.
     --help      Print help and exit.
     --version   Print version and exit.
@@ -182,8 +186,9 @@ memory.
 
 This Nagios plugin examines the output of C<free> and C<ps> to look for two
 conditions.  The first is when the system is running out of memory, and the
-second is when any single process uses too much memory.  Both checks are
-compared to the same thresholds.
+second is when any single process uses too much memory. However, there is an 
+option to disable the second condition. Both checks are compared to the same
+thresholds.
 
 For example, on a system with 144GB of memory, with the default options, the
 plugin might produce the following warning:

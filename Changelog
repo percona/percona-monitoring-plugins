@@ -1,3 +1,17 @@
+2013-02-15: version 1.0.2
+-------------------------
+
+	* Added "Disk IOPS" graph to Cacti Linux Templates
+	* Created Debian and RPM packages
+	* #1040528: pmp-check-mysql-replication-delay doesn't alert if second behing master is NULL
+	* #1114425: pmp-check-pt-table-checksum should not report OK when a table does not exist
+	* #1071802: "Bad substitution" error when running pmp-check-pt-table-checksum
+	* #1052368: Add option to disable overriding the status basing on the largest process memory in pmp-check-unix-memory   
+	* #1048627: Add '!=' comparison operator to pmp-check-mysql-status  
+	* #1021855: DOC: pmp-check-mysql-file-privs -C parameter
+	* #1014814: Docs don't mention privileges in the config section
+	* #1125233: [DOC] GRANT statement mentions maatkit schema but documentation specifies percona schema
+
 2012-06-12: version 1.0.1
 -------------------------
 

@@ -174,7 +174,7 @@ pmp-check-mysql-file-privs - Alert if MySQL data directory privileges are wrong.
 
   Usage: pmp-check-mysql-file-privs [OPTIONS]
   Options:
-    -c CRIT         Critical threshold; makes a missing PID file critical.
+    -c CRIT         Critical threshold; makes a permission issue critical.
     --defaults-file FILE Only read mysql options from the given file.
                     Defaults to /etc/nagios/mysql.cnf if it exists.
     -g GROUP        The Unix group who should own the files; default mysql.

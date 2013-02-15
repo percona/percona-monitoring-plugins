@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ARG=$1
+
 set -e
 set -u
 
@@ -102,14 +104,29 @@ for f in release/code/nagios/bin/pmp-check-*; do
       > "release/docs/nagios/${f##*/}.rst";
 done
 
-# Make the Sphinx documentation into HTML and PDF formats.
-sphinx-build -q -N -W -c release/docs/config/ -b html \
-   release/docs/ release/docs/html
-sphinx-build -q -N -W -c release/docs/config/ -b latex \
-   release/docs/ release/docs/latex
-make -C release/docs/latex all-pdf
-mkdir release/docs/pdf
-mv release/docs/latex/*.pdf release/docs/pdf
+if [ "$ARG" != "nodocs" ]; then
+   # Downloads latest percona-theme
+   echo "Downloading percona-theme..."
+   cd release/docs/config/
+   wget -O percona-theme.tar.gz http://percona.com/docs/theme/percona-monitoring-plugins/
+   rm -rf percona-theme
+   echo "Extracting theme."
+   tar -zxf percona-theme.tar.gz
+   rm percona-theme.tar.gz
+   cd ../../../
+
+   # Make the Sphinx documentation into HTML and PDF formats.
+   sphinx-build -q -N -W -c release/docs/config/ -b html \
+      release/docs/ release/docs/html
+   sphinx-build -q -N -W -c release/docs/config/ -b latex \
+      release/docs/ release/docs/latex
+   make -C release/docs/latex all-pdf
+   mkdir release/docs/pdf
+   mv release/docs/latex/*.pdf release/docs/pdf
+
+   echo "The documentation is complete in HTML format."
+   echo "It is in the release/docs/html directory."
+fi
 
 # Make certain everything that's supposed to be executable is.
 chmod +x release/code/{cacti,nagios}/bin/*
@@ -121,6 +138,4 @@ cd release
 tar zcf "${NAME}.tar.gz" "${NAME}"
 cd ..
 
-echo "The documentation is complete in HTML format."
-echo "It is in the release/docs/html directory."
 echo "The release is in release/${NAME}.tar.gz"

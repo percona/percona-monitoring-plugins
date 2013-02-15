@@ -66,7 +66,7 @@ uppercase prefix for the name.  Here is an example::
          'DISK_writes_merged'      => '21340',
          'DISK_sectors_written'    => '272616',
          'DISK_time_spent_writing' => '22360',
-         'DISK_io_ops_in_progress' => '0',
+         'DISK_io_ops'             => '24780',
          'DISK_io_time'            => '12368',
          'DISK_io_time_weighted'   => '28832'
       ),
@@ -209,7 +209,7 @@ and give each name a unique abbreviation.  For example::
       'DISK_writes_merged'                =>  'ho',
       'DISK_sectors_written'              =>  'hp',
       'DISK_time_spent_writing'           =>  'hq',
-      'DISK_io_ops_in_progress'           =>  'hr',
+      'DISK_io_ops'                       =>  'hr',
       'DISK_io_time'                      =>  'hs',
       'DISK_io_time_weighted'             =>  'ht',
    );
@@ -259,7 +259,7 @@ against the ``ss_get_by_ssh()`` function, and emulate that.  For example::
          'device'  => 'hda1'
       )),
       'hj:12043 hk:387 hl:300113 hm:6472 hn:12737 ho:21340 hp:272616 hq:22360 '
-         . 'hr:0 hs:12368 ht:28832',
+         . 'hr:24780 hs:12368 ht:28832',
       'main(samples/diskstats-001.txt)'
    );
 
@@ -604,7 +604,7 @@ templates. One thing remains: you need to resolve the duplication you created by
 copy/pasting hash values all over the place.  There's a tool to do this.  Run it
 like this::
 
-   $ pmp-cacti-unique-hashes definitions/gnu_linux.def > temp.def
+   $ pmp-cacti-make-hashes definitions/gnu_linux.def > temp.def
 
 Now examine the generated file ``temp.def`` and make sure it is okay.  You can
 use ``vimdiff`` to compare it to the original definitions file.  Ensure that you

@@ -1,6 +1,6 @@
 <?php
 require('test-more.php');
-require('../../scripts/ss_get_by_ssh.php');
+require('../../cacti/scripts/ss_get_by_ssh.php');
 $debug = true;
 
 is(

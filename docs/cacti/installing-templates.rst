@@ -151,6 +151,9 @@ This method still has the disadvantage that it works only if you use the same
 global configuration for every monitored resource.  If you need to specify a
 username and password for each host or each graph, it won't work.
 
+A MySQL user should be configured with :ref:`the proper privileges
+<mysql-templates-user-privileges>`.
+
 Passing Command-Line Arguments
 ------------------------------
 

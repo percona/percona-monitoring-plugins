@@ -1,0 +1,14 @@
+Source: percona-nagios-plugins
+Section: utils
+Priority: optional
+Maintainer: Percona
+Homepage: http://www.percona.com/software/percona-monitoring-plugins
+Package: percona-nagios-plugins
+Version: %{version} 
+Architecture: all 
+Description: Percona Monitoring Plugins (Nagios)
+ The Percona Monitoring Plugins are high-quality components to add enterprise-
+ grade MySQL monitoring and graphing capabilities to your existing in-house,
+ on-premises monitoring solutions. The components are designed to integrate
+ seamlessly with widely deployed solutions such as Nagios and Cacti, and are
+ delivered in the form of templates, plugins, and scripts.
