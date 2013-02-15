@@ -29,7 +29,7 @@ MySQL manual if you have trouble.
 To install,
 
 * Create a MySQL user with the SUPER and PROCESS privileges on each server you want to monitor.  Assuming you use "cacti" and "s3cret" as your username and password, execute the following command on each server: ``GRANT SUPER, PROCESS ON *.* TO 'cacti'@'%' IDENTIFIED BY "s3cret";``
-* If you want to monitor replication with ``pt-heartbeat`` from Percona Toolkit (recommended), you must grant SELECT on the heartbeat table also.  Assuming the ``pt-heartbeat`` table is ``percona.heartbeat``, execute ``GRANT SELECT ON maatkit.heartbeat TO 'cacti'@'%';``
+* If you want to monitor replication with ``pt-heartbeat`` from Percona Toolkit (recommended), you must grant SELECT on the heartbeat table also.  Assuming the ``pt-heartbeat`` table is ``percona.heartbeat``, execute ``GRANT SELECT ON percona.heartbeat TO 'cacti'@'%';``
 * Copy ss_get_mysql_stats.php into your Cacti installation's scripts/ directory.
 * All other steps are the same as mentioned in in installation document.
 
