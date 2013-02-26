@@ -377,7 +377,8 @@
          type_id      => 1,
          hash         => 'hash_03_VER_63af1b6572e75a1bbbfadfcaf547fcc0',
          input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
-                       . '--host <hostname> --type mongodb --items <items> ',
+                       . '--host <hostname> --type mongodb --items <items> '
+                       . '--server <server>',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_1523cdf6f372d7c285be82d424c152cb',
@@ -386,6 +387,10 @@
             {  allow_nulls => 'on',
                hash        => 'hash_07_VER_09eeb4f28b9e44cc1ade9ade9f38f440',
                name        => 'port2',
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_c7240233cb42d117043e26d87b04c24d',
+               name        => 'server',
             },
          ],
          outputs => {
