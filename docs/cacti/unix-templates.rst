@@ -27,7 +27,49 @@ See the following screenshot for an example:
 .. image:: images/add_unix_disk_graph.png
 
 You should append ``sda`` in every textbox shown in that screenshot, if you want
-to monitor ``/dev/sda``.  Use the device name as it appears in ``/proc/diskstats``.
+to monitor ``/dev/sda``. 
+
+However, for "Disk Space" graph you have to specify the volume.
+
+**Device** is a block device name as it appears in ``/proc/diskstats`` and not
+always seeing from ``df`` output especially when logical volumes are in use,
+e.g. ``sda3``, ``xvda1``, ``cciss/c0d0p1``. It also can be verified from
+``lsblk`` output. If ``lsblk`` is not available use ``pvdisplay`` from lvm2
+package.
+
+**Volume** is a filesystem absolute path as it appears under the first column of
+``df`` output, e.g. ``/dev/sda3``, ``/dev/cciss/c0d0p1``,
+``/dev/mapper/vglocal01-mysql00``.
+
+Example with logical volumes:
+
+.. code-block:: bash
+
+   [root@localhost ~]# df -h
+   Filesystem            Size  Used Avail Use% Mounted on
+   /dev/mapper/vglocal02-root00
+                         271G  5.5G  252G   3% /
+   tmpfs                 127G     0  127G   0% /dev/shm
+   /dev/sda1             243M   32M  199M  14% /boot
+   /dev/mapper/vglocal02-tmp00
+                         2.0G   68M  1.9G   4% /tmp
+   /dev/mapper/vglocal01-mysql00
+                         700G  198G  503G  29% /mnt/mysql-fs
+   [root@localhost ~]# lsblk
+   NAME                              MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+   sda                                 8:0    0 278.9G  0 disk 
+   |-sda1                              8:1    0   250M  0 part /boot
+   `-sda2                              8:2    0 278.6G  0 part 
+     |-vglocal02-swap00 (dm-0)       253:0    0     2G  0 lvm  [SWAP]
+     |-vglocal02-root00 (dm-1)       253:1    0 274.6G  0 lvm  /
+     `-vglocal02-tmp00 (dm-3)        253:3    0     2G  0 lvm  /tmp
+   sdb                                 8:16   0   744G  0 disk 
+   `-sdb1                              8:17   0   744G  0 part 
+     `-vglocal01-mysql00 (dm-2)      253:2    0   700G  0 lvm  /mnt/mysql-fs
+
+Device is ``sdb1`` and volume is ``/dev/mapper/vglocal01-mysql00`` in this
+example, if you want to monitor /mnt/mysql-fs.
+
 
 Sample Graphs
 -------------
