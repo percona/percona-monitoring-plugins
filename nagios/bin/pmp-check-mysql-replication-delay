@@ -37,6 +37,7 @@ main() {
          -S)              shift; OPT_SOCK="${1}"; shift; ;;
          -s)              shift; OPT_SRVID="${1}"; shift; ;;
          -T)              shift; OPT_TABLE="${1}"; shift; ;;
+         -u)              shift; OPT_UTC=1; ;;
          -w)              shift; OPT_WARN="${1}"; shift; ;;
          --version)       grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
          --help)          perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
@@ -56,9 +57,13 @@ main() {
    fi
 
    # Get replication delay from a heartbeat table or from SHOW SLAVE STATUS.
-   # TODO: support pt-heartbeat v1.0 table format.
    if [ "${OPT_TABLE}" ]; then
-      SQL="SELECT MAX(UNIX_TIMESTAMP() - UNIX_TIMESTAMP(ts)) AS delay
+      if [ -z "${OPT_UTC}" ]; then
+         NOW_FUNC='UNIX_TIMESTAMP()'
+      else
+         NOW_FUNC='UNIX_TIMESTAMP(UTC_TIMESTAMP)'
+      fi
+      SQL="SELECT MAX(${NOW_FUNC} - UNIX_TIMESTAMP(ts)) AS delay
          FROM ${OPT_TABLE} WHERE (${OPT_SRVID:-0} = 0 OR server_id = ${OPT_SRVID:-0})"
       LEVEL=$(mysql_exec "${SQL}")
       MYSQL_CONN=$?
@@ -154,6 +159,8 @@ pmp-check-mysql-replication-delay - Alert when MySQL replication becomes delayed
     -S SOCKET       MySQL socket file.
     -s SERVERID     MySQL server ID of master, if using pt-heartbeat table.
     -T TABLE        Heartbeat table used by pt-heartbeat.
+    -u              Use UTC time to count the delay in case pt-heartbeat is run
+                    with --utc option.
     -w WARN         Warning threshold; default 300.
     --help          Print help and exit.
     --version       Print version and exit.
@@ -167,9 +174,7 @@ default it uses SHOW SLAVE STATUS, but the output of the Seconds_behind_master
 column from this command is unreliable, so it is better to use pt-heartbeat from
 Percona Toolkit instead.  Use the -T option to specify which table pt-heartbeat
 updates.  Use the -s option to specify the master's server_id to compare
-against; otherwise the plugin reports the maximum delay from any server. This
-plugin does not support the legacy mk-heartbeat table format without the
-server_id column.
+against; otherwise the plugin reports the maximum delay from any server.
 
 =head1 PRIVILEGES
 
