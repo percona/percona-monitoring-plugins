@@ -459,11 +459,19 @@ function ss_get_mysql_stats( $options ) {
       }
    }
 
+   # Get SHOW ENGINES to be able to determine whether InnoDB is present.
+   $engines = array();
+   $result = run_query("SHOW ENGINES", $conn);
+   foreach ( $result as $row ) {
+      $engines[$row[0]] = $row[1];
+   }
+
    # Get SHOW INNODB STATUS and extract the desired metrics from it, then add
    # those to the array too.
    if ( $chk_options['innodb']
-         && array_key_exists('have_innodb', $status)
-         && $status['have_innodb'] == 'YES'
+         && array_key_exists('InnoDB', $engines)
+         && $engines['InnoDB'] == 'YES'
+         || $engines['InnoDB'] == 'DEFAULT'
    ) {
       $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
       $istatus_text = $result[0]['Status'];

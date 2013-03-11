@@ -50,6 +50,8 @@ and how to disable if it's unwanted:
    This query requires no special privileges and is necessary for core functionality.
 ``SHOW VARIABLES``
    This query requires no special privileges and is necessary for core functionality.
+``SHOW ENGINES``
+   This query requires no special privileges and is necessary for core functionality.
 ``SHOW SLAVE STATUS``
    This query requires either SUPER or REPLICATION CLIENT.  It is necessary for tracking replication lag on replication slaves, which is enabled by default.  To disable, edit the ``$chk_options`` array in the configuration.  Alternatively, use ``pt-heartbeat`` and grant SELECT on the heartbeat table.  If disabled, parts of the the MySQL Replication Status and MySQL Binary/Relay logs graphs will be empty.
 ``SHOW MASTER LOGS``
