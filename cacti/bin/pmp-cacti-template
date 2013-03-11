@@ -577,6 +577,23 @@ $t->{cdefs} ||= {
          },
       ],
    },
+   TurnIntoBits => {
+      hash  => 'hash_05_VER_41d094c95b3ae8f0d3a67f9c3ddb6a75',
+      items => [
+         {  type  => 4,
+            value => 'CURRENT_DATA_SOURCE',
+            hash  => 'hash_14_VER_568aa74185b3c1653c397f54e81b9126',
+         },
+         {  type  => 6,
+            value => '8',
+            hash  => 'hash_14_VER_43a4ea400b2069920aa957b0289cd48f',
+         },
+         {  type  => 2,
+            value => '3',
+            hash  => 'hash_14_VER_48008a1db45bbb1f11f2deccd31a2bdf',
+         },
+      ],
+   },
 };
 $t->{gprints} ||= {
       Normal => {
@@ -897,6 +914,7 @@ foreach my $g ( @{ $t->{graphs} } ) {
       my $i = 0;
       my $color = $it->{color} || 0;
       my $hash_count = scalar(@{ $it->{hashes} });
+      my $prev_cdef = 0;
 
       # Each bit of data can have several items.
       foreach my $h ( @{ $it->{hashes} } ) {
@@ -908,7 +926,7 @@ foreach my $g ( @{ $t->{graphs} } ) {
          el('color_id', $i ? 0 : $color);
          el('graph_type_id', $graph_types{$type});
          el('consolidation_function_id', $consolidations[$i]);
-         el('cdef_id', $cdef);
+         el('cdef_id', $prev_cdef ? $prev_cdef : $cdef);
          el('value', '');
          el('gprint_id',
             $t->{gprints}->{ $it->{gprint_id} || 'Normal' }->{hash});
@@ -916,6 +934,13 @@ foreach my $g ( @{ $t->{graphs} } ) {
          el('hard_return', ($i == $hash_count - 1) ? 'on' : '');
          el('sequence', ++$seq);
          ee($h);
+         # If CDEF is TurnIntoBits for the first item it should be the same
+         # for all others.
+         if (!$i && $it->{cdef}) {
+            if ($it->{cdef} eq 'TurnIntoBits') {
+               $prev_cdef = $cdef; 
+            }
+         }
          $i++;
       }
    }

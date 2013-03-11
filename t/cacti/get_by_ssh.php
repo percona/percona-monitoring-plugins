@@ -506,12 +506,12 @@ is(
 is_deeply(
    netdev_parse( array('device' => 'eth0'), file_get_contents('samples/netdev-001.txt') ),
    array(
-        'NETDEV_rxbytes'   => '99704481',
+        'NETDEV_inbound'   => '99704481',
         'NETDEV_rxerrs'    => '0',
         'NETDEV_rxdrop'    => '0',
         'NETDEV_rxfifo'    => '0',
         'NETDEV_rxframe'   => '0',
-        'NETDEV_txbytes'   => '21749178',
+        'NETDEV_outbound'  => '21749178',
         'NETDEV_txerrs'    => '0',
         'NETDEV_txdrop'    => '0',
         'NETDEV_txfifo'    => '0',
