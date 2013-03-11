@@ -1312,12 +1312,13 @@ function jmx_cmdline ( $options ) {
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items jc,je,jf,jg,jh,ji,jj,jk,jl,jm,jn,jo,jp,jq,jr,js,jt,ju
 # ============================================================================
 function mongodb_cachefile ( $options ) {
-   return sanitize_filename($options, array('host', 'port2'), 'mongodb');
+   return sanitize_filename($options, array('host', 'port2', 'server'), 'mongodb');
 }
 
 function mongodb_cmdline ( $options ) {
    $port = isset($options['port2']) ? " --port $options[port2]" : '';
-   return "echo \"db._adminCommand({serverStatus:1, repl:2})\" | mongo$port";
+   $host = isset($options['server']) ? " --host $options[server]" : '';
+   return "echo \"db._adminCommand({serverStatus:1, repl:2})\" | mongo$host$port";
 }
 
 function mongodb_parse ( $options, $output ) {
