@@ -69,6 +69,10 @@ main() {
       else
          NOTE="OK $NOTE"
       fi
+
+      # Build the common perf data output for graph trending
+      PERFDATA="deadlocks=${LEVEL:-0};${OPT_WARN};${OPT_CRIT};0;"
+      NOTE="$NOTE | $PERFDATA"
    else
       NOTE="UNK could not count deadlocks"
    fi
