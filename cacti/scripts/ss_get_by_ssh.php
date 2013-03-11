@@ -1316,9 +1316,16 @@ function mongodb_cachefile ( $options ) {
 }
 
 function mongodb_cmdline ( $options ) {
+   global $use_ssh;
    $port = isset($options['port2']) ? " --port $options[port2]" : '';
-   $host = isset($options['server']) ? " --host $options[server]" : '';
-   return "echo \"db._adminCommand({serverStatus:1, repl:2})\" | mongo$host$port";
+   $srv = '';
+   if ( isset($options['server']) ) {
+      $srv = " --host $options[server]";
+   }
+   elseif ( ! $use_ssh ) {
+      $srv = " --host $options[host]";
+   }
+   return "echo \"db._adminCommand({serverStatus:1, repl:2})\" | mongo$srv$port";
 }
 
 function mongodb_parse ( $options, $output ) {
