@@ -70,7 +70,7 @@ main() {
          NOTE=$(awk '$1 ~ /_Running:|Last_Error:/{print substr($0, 1, 100)}' "${TEMP}")
          if grep 'Last_Error: .' "${TEMP}" >/dev/null 2>&1; then
             NOTE="CRIT $NOTE"
-         elif grep '_Running: No' "${TEMP}" >/dev/null 2>&1; then
+         elif egrep "_Running: (No|Connecting)" "${TEMP}" >/dev/null 2>&1; then
             if [ "${OPT_CRIT}" ]; then
                NOTE="CRIT $NOTE"
             else

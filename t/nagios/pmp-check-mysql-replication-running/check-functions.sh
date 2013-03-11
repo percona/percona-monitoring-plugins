@@ -5,6 +5,15 @@
 echo "should print OK Slave_IO_Running: Yes Slave_SQL_Running: Yes Last_Error:"
 main samples/show-slave-status-001.txt 
 
+echo "should print WARN Slave_IO_Running: Connecting Slave_SQL_Running: Yes Last_Error:"
+main samples/show-slave-status-002.txt
+
+echo "should print WARN Slave_IO_Running: Yes Slave_SQL_Running: No Last_Error:"
+main samples/show-slave-status-003.txt
+
+echo "should print CRIT Slave_IO_Running: Yes Slave_SQL_Running: No Last_Error:"
+main -c 1 samples/show-slave-status-003.txt
+
 echo "should print OK This server is not configured as a replica."
 main samples/empty
 
