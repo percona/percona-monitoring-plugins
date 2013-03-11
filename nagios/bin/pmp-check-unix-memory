@@ -79,6 +79,10 @@ main() {
             fi
          fi
       fi
+
+      # Build the common perf data output for graph trending
+      PERFDATA="memory_used=${USD_PCT:-0};${OPT_WARN};${OPT_CRIT};0;100"
+      NOTE="$NOTE | $PERFDATA"
    fi
 
    echo $NOTE

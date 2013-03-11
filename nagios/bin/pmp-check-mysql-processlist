@@ -77,6 +77,10 @@ main() {
       else
          NOTE="OK $NOTE"
       fi
+
+      # Build the common perf data output for graph trending
+      PERFDATA="processes=${MAX:-0};${OPT_WARN};${OPT_CRIT};0;"
+      NOTE="$NOTE | $PERFDATA"
    else
       NOTE="UNK could not retrieve MySQL processlist"
    fi

@@ -78,17 +78,20 @@ main() {
       fi
    fi
 
+   # Build the common perf data output for graph trending
+   PERFDATA="replication_delay=${LEVEL:-0};${OPT_WARN};${OPT_CRIT};0;"
+
    # Test whether the delay is too long.
    if [ "$MYSQL_CONN" = 0 ]; then
       NOTE="${LEVEL:-0} seconds of replication delay"
       if [ "${LEVEL:-""}" = "NULL" ]; then
          NOTE="UNK replica is stopped"
       elif [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
-         NOTE="CRIT $NOTE"
+         NOTE="CRIT $NOTE | $PERFDATA"
       elif [ "${LEVEL:-0}" -gt "${OPT_WARN}" ]; then
-         NOTE="WARN $NOTE"
+         NOTE="WARN $NOTE | $PERFDATA"
       else
-         NOTE="OK $NOTE"
+         NOTE="OK $NOTE | $PERFDATA"
       fi
    else
       NOTE="UNK could not determine replication delay"
