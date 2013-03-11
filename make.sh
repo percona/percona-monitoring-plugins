@@ -38,6 +38,9 @@ cp -R docs/* release/docs
 cp -R cacti/scripts cacti/definitions cacti/bin cacti/misc release/code/cacti
 cp COPYING Changelog release/code
 
+# Remove bazaar tilde files (backup ones after revert)
+find release/ -name "*.~1~" -exec rm -f {} \;
+
 # Update the version number and other important macros in the temporary
 # directory.
 YEAR=$(date +%Y)

@@ -21,7 +21,7 @@
    name   => 'GNU/Linux Server',
    hash   => 'hash_02_VER_7f3cc974b740a9d134ca9e53c854e016',
    version => {
-      version => '1.1.9',
+      version => '1.2.0',
       hash    => 'hash_06_VER_aa3dce56769f195bccfd299318c541a6',
    },
    checksum => 'hash_06_VER_2092ed83d0986c71dc99740eef8e811c',
@@ -658,29 +658,28 @@
             },
          ],
       },
-      {  name       => 'Network Traffic',
+      {  name       => 'Network Traffic (bit/s)',
          base_value => '1024',
          hash       => 'hash_00_VER_617aff4ec1c162eb6aa61bf2b9883388',
          override   => { title => 1 },
          dt         => {
             hash       => 'hash_01_VER_687964fc0a8b6fb23029c69b97653789',
             input      => 'Get Network Traffic',
-            NETDEV_rxbytes => {
+            NETDEV_inbound => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_cc9fcdbb1ff53c20a2f20907f61d8a6f',
             },
-            NETDEV_txbytes => {
+            NETDEV_outbound => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_f951c9b8d06f9be3d79da7eb5d7fb165',
             },
          },
          items => [
-            # Colors from
-            # http://www.colourlovers.com/palette/444487/Curiosity_Killed
-            {  item   => 'NETDEV_rxbytes',
-               color  => '555152',
+            {  item   => 'NETDEV_inbound',
+               color  => '00CF00',
                task   => 'hash_09_VER_bdf8d8cb4adefa8e2e7672292e759497',
                type   => 'AREA',
+               cdef   => 'TurnIntoBits',
                hashes => [
                   'hash_10_VER_ba37c31f9b986c98e0d9738c264e520b',
                   'hash_10_VER_49a9aacadfd8eba4221b5743cc056847',
@@ -688,11 +687,11 @@
                   'hash_10_VER_c277294a3d867b35c81200588ffaf1cc'
                ],
             },
-            {  item   => 'NETDEV_txbytes',
-               color  => '2E2633',
+            {  item   => 'NETDEV_outbound',
+               color  => '002A97',
                task   => 'hash_09_VER_dc830071c31578228797d2681b985c2b',
-               type   => 'AREA',
-               cdef   => 'Negate',
+               type   => 'LINE1',
+               cdef   => 'TurnIntoBits',
                hashes => [
                   'hash_10_VER_fd3c2eae30d53866483951c3e21d00d0',
                   'hash_10_VER_272171450759a8dd6b387eec9e8db6aa',
@@ -1228,8 +1227,8 @@
             },
          ],
          outputs => {
-            NETDEV_rxbytes => 'hash_07_VER_34603bc78ebab0444b48df5cd75d2eb0',
-            NETDEV_txbytes => 'hash_07_VER_47a906734a9bb011623c0edac9ced050',
+            NETDEV_inbound  => 'hash_07_VER_34603bc78ebab0444b48df5cd75d2eb0',
+            NETDEV_outbound => 'hash_07_VER_47a906734a9bb011623c0edac9ced050',
          },
       },
       'Get Network Errors' => {
