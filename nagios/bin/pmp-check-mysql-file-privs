@@ -96,8 +96,9 @@ main() {
 
    WRONG=""
    NOTE2=""
+   > ${TEMP}
    while read datadir; do
-      FILES="$(find "${datadir}" \! -group "${OPT_UNIX_GROUP}" -o \! -user "${OPT_UNIX_USER}")" || exit $?
+      FILES="$(find "${datadir}" \! -group "${OPT_UNIX_GROUP}" -o \! -user "${OPT_UNIX_USER}" 2>>${TEMP})"
       if [ "${FILES}" ]; then
          WRONG=1
          NOTE2="${NOTE2:+${NOTE2} }${FILES}"
@@ -105,7 +106,9 @@ main() {
       NOTE="OK all files/directories have correct ownership."
    done < "${DATADIRS}"
 
-   if [ "${WRONG}" ]; then
+   if [ -s "${TEMP}" ]; then
+      NOTE="UNK `cat ${TEMP}`"
+   elif [ "${WRONG}" ]; then
       if [ "${OPT_CRIT}" ]; then
          NOTE="CRIT files with wrong ownership: ${NOTE2}"
       else
@@ -174,7 +177,7 @@ pmp-check-mysql-file-privs - Alert if MySQL data directory privileges are wrong.
 
   Usage: pmp-check-mysql-file-privs [OPTIONS]
   Options:
-    -c CRIT         Critical threshold; makes a permission issue critical.
+    -c CRIT         Critical threshold; makes a privilege issue critical.
     --defaults-file FILE Only read mysql options from the given file.
                     Defaults to /etc/nagios/mysql.cnf if it exists.
     -g GROUP        The Unix group who should own the files; default mysql.
@@ -219,6 +222,9 @@ to a single instance in the event that there are multiple instances on a single
 server, then you can specify MySQL authentication options.  This will cause the
 plugin to skip examining the Unix processlist, log into MySQL, and examine the
 datadir variable from SHOW VARIABLES to find the location of the data directory.
+
+In case an user you are calling this plugin from has no permissions to examine
+the datadir the plugin raises an unknown with the explanation. 
 
 =head1 PRIVILEGES
 
