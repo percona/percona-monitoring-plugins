@@ -59,7 +59,7 @@ main() {
       fi
    fi
 
-   LEVEL=$(mysql_exec "SELECT COUNT(*) FROM ${OPT_TABLE} WHERE ts >= NOW() - INTERVAL ${OPT_INTERVAL} MINUTE")
+   LEVEL=$(mysql_exec "SELECT COUNT(*) FROM ${OPT_TABLE} WHERE ts >= NOW() - INTERVAL ${OPT_INTERVAL}*60 SECOND")
    if [ $? = 0 ]; then
       NOTE="${LEVEL:-UNKNOWN} deadlocks in last ${OPT_INTERVAL} minutes"
       if [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
