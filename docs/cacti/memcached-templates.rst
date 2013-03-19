@@ -1,7 +1,7 @@
 .. _cacti_memcached_templates:
 
-Percona Apache Monitoring Template for Memcached
-================================================
+Percona Memcached Monitoring Template for Cacti 
+===============================================
 
 These templates use ``ss_get_by_ssh.php`` to connect to a server via SSH and
 extract statistics from the memcached server running there, by executing the
@@ -21,11 +21,18 @@ You need ``nc`` on the server.  Some versions of ``nc`` accept different
 command-line options.  You can change the options used by configuring the PHP
 script.  If you don't want to do this for some reason, then you can install a
 version of ``nc`` that conforms to the expectations coded in the script's
-default configuration instead.  On Debian/Ubuntu, ``netcat-openbsd`` does not
-work, so you need the ``netcat-traditional`` package, and you need to switch to
+default configuration instead. 
+
+On Debian/Ubuntu, ``netcat-openbsd`` does not work,
+so you need the ``netcat-traditional`` package, and you need to switch to
 ``/bin/nc.traditional`` with the following command::
 
    # update-alternatives --config nc
+
+Also for Debian re-define PHP variable in ss_get_by_ssh.php.cnf this way::
+
+   <?php
+   $nc_cmd = 'nc -q1';
 
 Sample Graphs
 -------------

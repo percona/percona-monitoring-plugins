@@ -28,7 +28,7 @@ $ssh_user   = 'cacti';                          # SSH username
 $ssh_port   = 22;                               # SSH port
 $ssh_iden   = '-i /var/www/cacti/.ssh/id_rsa';  # SSH identity
 $ssh_tout   = 10;                               # SSH connect timeout
-$nc_cmd     = 'nc -C -q1';                      # How to invoke netcat
+$nc_cmd     = 'nc';    # How to invoke netcat. NOTE, for Debian set 'nc -q1'.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300; # Adjust to match your polling interval.
 $timezone   = null;    # If not set, uses the system default.  Example: "UTC"
@@ -1061,7 +1061,7 @@ function memcached_cmdline ( $options ) {
    global $memcache_port, $nc_cmd;
    $srv = isset($options['server']) ? $options['server'] : $options['host'];
    $prt = isset($options['port2'])  ? $options['port2']  : $memcache_port;
-   return "echo \"stats\nquit\" | $nc_cmd $srv $prt";
+   return "echo stats | $nc_cmd $srv $prt";
 }
 
 function memcached_parse ( $options, $output ) {
