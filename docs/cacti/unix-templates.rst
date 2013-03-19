@@ -82,8 +82,9 @@ The number of context switches performed by the server.
 
 .. image:: images/linux_cpu_usage.png
 
-The CPU usage.
-The example shows a server with one CPU (2 cores with 4 threads each).  The values will increase by 100 with each added CPU/core/thread.
+The CPU usage. The example shows a server having 1 processor with
+2 cores, 4 threads, i.e. 4 virtual CPUs. The values will increase by 100
+with each added virtual CPU.
 
 .. image:: images/linux_forks.png
 
@@ -138,7 +139,7 @@ The number of disk IO operations per second.
 
 .. image:: images/linux_disk_space.png
 
-The disk space for the volume, mounted to /home partition in this case.
+The disk space for the volume.
 
 .. image:: images/linux_swap_usage.png
 
@@ -146,7 +147,7 @@ The swap usage of the system.
 
 .. image:: images/linux_network_traffic.png
 
-The network traffic for the adapter in KBytes per second.
+The network traffic for the adapter in bits/sec.
 
 .. image:: images/linux_network_connection_states.png
 
