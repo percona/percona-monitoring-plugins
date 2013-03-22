@@ -203,7 +203,7 @@ Here's a snippet from the Cacti log, showing this in action::
 
    10/26/2009 03:00:09 PM - CMDPHP: Poller[0] Host[1] DS[18] CMD:
       /usr/bin/php -q /usr/share/cacti/site/scripts/ss_get_mysql_stats.php
-      --host 127.0.0.1 --items cv,cx,cy,cz --user root --pass s3cret --port 3306
+      --host 127.0.0.1 --items kx,ky --user root --pass s3cret --port 3306
 
 Creating Graphs
 ---------------

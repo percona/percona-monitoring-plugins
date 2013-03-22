@@ -20,7 +20,7 @@
 {  name    => 'JMX Server',
    hash    => 'hash_02_VER_236a6046a04b17b533e2fd308cebf851',
    version => {
-      version => '1.1.8',
+      version => '$VERSION$',
       hash    => 'hash_06_VER_4bae7c13f3fdde2845ed5aa5801f6ae2',
    },
    checksum => 'hash_06_VER_6d0f36ee98a42329139a7b96cef47d29',

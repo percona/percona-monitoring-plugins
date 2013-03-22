@@ -22,9 +22,9 @@ full status.
 
 Finally, test one of your hosts like this.  You may need to change some of the
 example values below, such as the cacti username and the hostname you're
-connecting to.
+connecting to::
 
-``# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type apache --host 127.0.0.1 --items ge,gf'``
+  sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type apache --host 127.0.0.1 --items gg,gh
 
 Sample Graphs
 -------------

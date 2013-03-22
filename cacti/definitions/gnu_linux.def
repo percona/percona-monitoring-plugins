@@ -21,7 +21,7 @@
    name   => 'GNU/Linux Server',
    hash   => 'hash_02_VER_7f3cc974b740a9d134ca9e53c854e016',
    version => {
-      version => '1.2.0',
+      version => '$VERSION$',
       hash    => 'hash_06_VER_aa3dce56769f195bccfd299318c541a6',
    },
    checksum => 'hash_06_VER_2092ed83d0986c71dc99740eef8e811c',
@@ -658,7 +658,7 @@
             },
          ],
       },
-      {  name       => 'Network Traffic (bit/s)',
+      {  name       => 'Network Traffic',
          base_value => '1024',
          hash       => 'hash_00_VER_617aff4ec1c162eb6aa61bf2b9883388',
          override   => { title => 1 },

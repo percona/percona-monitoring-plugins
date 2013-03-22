@@ -20,7 +20,7 @@ using Tomcat, you can read `Monitoring and Managing Tomcat
 <http://tomcat.apache.org/tomcat-6.0-doc/monitoring.html>`_. A simple example of
 how to start Notepad.jar with JMX instrumentation follows::
 
-   $ java -jar -Dcom.sun.management.jmxremote \
+   java -jar -Dcom.sun.management.jmxremote \
    -Dcom.sun.management.jmxremote.port=9012 \
    -Dcom.sun.management.jmxremote.ssl=false \
    -Dcom.sun.magement.jmxremote.authenticate=false \
@@ -41,7 +41,7 @@ from the Cacti user's home directory.  Replace any values as needed::
 Now on the Cacti host, test a command similar to the following, replacing any
 values necessary with ones appropriate for your environment::
 
-   # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type jmx --host 127.0.0.1 --items j4,j5'
+   sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type jmx --host 127.0.0.1 --items lt,lu
 
 Sample Graphs
 -------------

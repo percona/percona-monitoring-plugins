@@ -21,7 +21,7 @@
    name   => 'Memcached Server',
    hash   => 'hash_02_VER_7f7efd1ec6e7a010d305e52a55eaaf3c',
    version => {
-      version => '1.1.8',
+      version => '$VERSION$',
       hash    => 'hash_06_VER_d878d34cebbf66beefcc7ca6434df8c2',
    },
    checksum => 'hash_06_VER_08370db8a4d24c413d4c34da16b3f33b',

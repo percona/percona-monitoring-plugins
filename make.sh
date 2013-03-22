@@ -44,15 +44,11 @@ find release/ -name "*.~1~" -exec rm -f {} \;
 # Update the version number and other important macros in the temporary
 # directory.
 YEAR=$(date +%Y)
-for f in release/code/nagios/bin/pmp* release/docs/config/conf.py release/code/cacti/scripts/ss* ; do
-   sed -e "s/\\\$PROJECT_NAME\\\$/$PROJECT_NAME/g" "$f" > "${TEMPFILE}"
-   mv "${TEMPFILE}" "$f"
-   sed -e "s/\\\$VERSION\\\$/$VERSION/g" "$f" > "${TEMPFILE}"
-   mv "${TEMPFILE}" "$f"
-   sed -e "s/\\\$CURRENT_YEAR\\\$/${YEAR}/g" "$f" > "${TEMPFILE}"
-   mv "${TEMPFILE}" "$f"
-   sed -e "s/${YEAR}-${YEAR}/${YEAR}/g" "$f" > "${TEMPFILE}"
-   mv "${TEMPFILE}" "$f"
+for f in release/code/nagios/bin/pmp* release/docs/config/conf.py release/code/cacti/scripts/ss* release/code/cacti/definitions/*.def ; do
+   sed -i "s/\\\$PROJECT_NAME\\\$/$PROJECT_NAME/g" "$f"
+   sed -i "s/\\\$VERSION\\\$/$VERSION/g" "$f"
+   sed -i "s/\\\$CURRENT_YEAR\\\$/${YEAR}/g" "$f"
+   sed -i "s/${YEAR}-${YEAR}/${YEAR}/g" "$f"
 done
 
 # Build the XML files for the Cacti templates.  Each XML file is built by
@@ -69,7 +65,7 @@ if ! grep "^2[^:]*: version ${VERSION}$" release/code/Changelog >/dev/null; then
    echo "There doesn't appear to be a changelog entry for $VERSION"
    exit 1
 fi
-for file in cacti/definitions/*.def; do
+for file in release/code/cacti/definitions/*.def; do
    # Get the name of the thing we're building an XML file for.
    NAME="${file##*/}"
    NAME="${NAME%%.def}"
@@ -83,8 +79,7 @@ for file in cacti/definitions/*.def; do
    FILE="release/code/cacti/templates/cacti_host_template_percona_${NAME}_server_ht_0.8.6i-sver${VERSION}.xml"
    perl cacti/bin/pmp-cacti-template --script release/code/cacti/scripts/$SCRIPT "$file" > "${FILE}"
    MD5=$(_md5 "${FILE}")
-   sed -e "s/CUSTOMIZED_XML_TEMPLATE/${MD5}/" "${FILE}" > "${TEMPFILE}"
-   mv "${TEMPFILE}" "${FILE}"
+   sed -i "s/CUSTOMIZED_XML_TEMPLATE/${MD5}/" "${FILE}"
 done
 cp Changelog release/docs/changelog.rst
 grep Checksum release/code/cacti/templates/*.xml \
@@ -111,9 +106,9 @@ if [ "$ARG" != "nodocs" ]; then
    # Downloads latest percona-theme
    echo "Downloading percona-theme..."
    cd release/docs/config/
-   wget -O percona-theme.tar.gz http://percona.com/docs/theme/percona-monitoring-plugins/
+   wget -q -O percona-theme.tar.gz http://percona.com/docs/theme/percona-monitoring-plugins/
    rm -rf percona-theme
-   echo "Extracting theme."
+   echo "Extracting theme..."
    tar -zxf percona-theme.tar.gz
    rm percona-theme.tar.gz
    cd ../../../

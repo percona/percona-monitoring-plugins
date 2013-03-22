@@ -21,7 +21,7 @@
    name   => 'Redis Server',
    hash   => 'hash_02_VER_88501be442eb224a429fecace9b0ca99',
    version => {
-      version => '1.1.8',
+      version => '$VERSION$',
       hash    => 'hash_06_VER_42808faea8f8f49388d2f885f74d7413',
    },
    checksum => 'hash_06_VER_99eca26b3c0418b79e6984b56cd9f04f',

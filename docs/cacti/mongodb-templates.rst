@@ -22,7 +22,7 @@ This should produce quite a bit of output. With all of this confirmed, test one
 of your hosts with the command below. You may need to change some of the example
 values below, such as the cacti username and the hostname you're connecting to::
 
-   su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items jc,jd'
+   sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items mk,ml
 
 Sample Graphs
 -------------

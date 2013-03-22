@@ -201,21 +201,21 @@ and give each name a unique abbreviation.  For example::
 
    # MAGIC_VARS_DEFINITIONS: Define the variables to output
    $keys = array(
-      'DISK_reads'                        =>  'hj',
-      'DISK_reads_merged'                 =>  'hk',
-      'DISK_sectors_read'                 =>  'hl',
-      'DISK_time_spent_reading'           =>  'hm',
-      'DISK_writes'                       =>  'hn',
-      'DISK_writes_merged'                =>  'ho',
-      'DISK_sectors_written'              =>  'hp',
-      'DISK_time_spent_writing'           =>  'hq',
-      'DISK_io_ops'                       =>  'hr',
-      'DISK_io_time'                      =>  'hs',
-      'DISK_io_time_weighted'             =>  'ht',
+      'DISK_reads'                        =>  'iw',
+      'DISK_reads_merged'                 =>  'ix',
+      'DISK_sectors_read'                 =>  'iy',
+      'DISK_time_spent_reading'           =>  'iz',
+      'DISK_writes'                       =>  'jg',
+      'DISK_writes_merged'                =>  'jh',
+      'DISK_sectors_written'              =>  'ji',
+      'DISK_time_spent_writing'           =>  'jj',
+      'DISK_io_ops'                       =>  'jk',
+      'DISK_io_time'                      =>  'jl',
+      'DISK_io_time_weighted'             =>  'jm',
    );
 
-The convention is two-letter abbreviations, beginning at g0, g1, and so on.  Do
-not use the range a0 through f0, because there is a bug in some versions of
+The convention is two-letter abbreviations, beginning at gg, gh, and so on.  Do
+not use the letters from ``a`` through ``f`` or digits, because there is a bug in some versions of
 Cacti that treats an all-hexadecimal name as a value instead of a prefix that
 identifies the value.  Append your data items to the list, and continue the
 convention.
@@ -233,8 +233,8 @@ use to test the functionality you're creating, such as the following::
    # ============================================================================
    # Get and parse stats from /proc/diskstats
    # You can test it like this, as root:
-   # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php \
-   #    --type diskstats --host 127.0.0.1 --items hj,hk,hl,hm,hn,ho,hp,hq,hr,hs,ht
+   # sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php \
+   #    --type diskstats --host 127.0.0.1 --device sda1 --host 127.0.0.1 --items iw,ix
    # ============================================================================
    function diskstats_cachefile ( $options ) {
 
@@ -255,11 +255,11 @@ against the ``ss_get_by_ssh()`` function, and emulate that.  For example::
          'file'    => 'samples/diskstats-001.txt',
          'type'    => 'diskstats',
          'host'    => 'localhost',
-         'items'   => 'hj,hk,hl,hm,hn,ho,hp,hq,hr,hs,ht',
+         'items'   => 'iw,ix,iy,iz,jg,jh,ji,jj,jk,jl,jm',
          'device'  => 'hda1'
       )),
-      'hj:12043 hk:387 hl:300113 hm:6472 hn:12737 ho:21340 hp:272616 hq:22360 '
-         . 'hr:24780 hs:12368 ht:28832',
+      'iw:12043 ix:387 iy:300113 iz:6472 jg:12737 jh:21340 ji:272616 jj:22360'
+      . ' jk:24780 jl:12368 jm:28832',
       'main(samples/diskstats-001.txt)'
    );
 

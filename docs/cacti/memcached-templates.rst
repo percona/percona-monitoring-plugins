@@ -15,7 +15,7 @@ Once the SSH connection is working, you need to test the memcached
 function.  You may need to change some of the example values below, such as the
 cacti username and the hostname you're connecting to::
 
-   # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items h6,h7'
+   sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items ij,ik
 
 You need ``nc`` on the server.  Some versions of ``nc`` accept different
 command-line options.  You can change the options used by configuring the PHP
@@ -27,7 +27,7 @@ On Debian/Ubuntu, ``netcat-openbsd`` does not work,
 so you need the ``netcat-traditional`` package, and you need to switch to
 ``/bin/nc.traditional`` with the following command::
 
-   # update-alternatives --config nc
+   update-alternatives --config nc
 
 Also for Debian re-define PHP variable in ss_get_by_ssh.php.cnf this way::
 

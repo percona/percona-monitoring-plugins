@@ -24,13 +24,13 @@ if ( !array_key_exists('SCRIPT_FILENAME', $_SERVER)
 # Define parameters.  Instead of defining parameters here, you can define them
 # in another file named the same as this file, with a .cnf extension.
 # ============================================================================
-$ssh_user   = 'cacti';                          # SSH username
-$ssh_port   = 22;                               # SSH port
-$ssh_iden   = '-i /var/www/cacti/.ssh/id_rsa';  # SSH identity
-$ssh_tout   = 10;                               # SSH connect timeout
+$ssh_user   = 'cacti';                           # SSH username
+$ssh_port   = 22;                                # SSH port
+$ssh_iden   = '-i /usr/share/cacti/.ssh/id_rsa'; # SSH identity
+$ssh_tout   = 10;                                # SSH connect timeout
 $nc_cmd     = 'nc';    # How to invoke netcat. NOTE, for Debian set 'nc -q1'.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
-$poll_time  = 300; # Adjust to match your polling interval.
+$poll_time  = 300;     # Adjust to match your polling interval.
 $timezone   = null;    # If not set, uses the system default.  Example: "UTC"
 $use_ss     = FALSE; # Whether to use the script server or not
 $use_ssh    = TRUE;  # Whether to connect via SSH or not (default yes).
@@ -299,181 +299,181 @@ function ss_get_by_ssh( $options ) {
 
    # Define the variables to output.  I use shortened variable names so maybe
    # it'll all fit in 1024 bytes for Cactid and Spine's benefit.  However, don't
-   # use things that have only hex characters, thus begin with 'g0' to avoid a
+   # use things that have only hex characters, thus begin with 'gg' to avoid a
    # bug in Cacti.  This list must come right after the word
    # MAGIC_VARS_DEFINITIONS.  The Perl script parses it and uses it as a Perl
    # variable.
    $keys = array(
-      'APACHE_Requests'                   =>  'g0',
-      'APACHE_Bytes_sent'                 =>  'g1',
-      'APACHE_Idle_workers'               =>  'g2',
-      'APACHE_Busy_workers'               =>  'g3',
-      'APACHE_CPU_Load'                   =>  'g4',
-      'APACHE_Waiting_for_connection'     =>  'g5',
-      'APACHE_Starting_up'                =>  'g6',
-      'APACHE_Reading_request'            =>  'g7',
-      'APACHE_Sending_reply'              =>  'g8',
-      'APACHE_Keepalive'                  =>  'g9',
-      'APACHE_DNS_lookup'                 =>  'ga',
-      'APACHE_Closing_connection'         =>  'gb',
-      'APACHE_Logging'                    =>  'gc',
-      'APACHE_Gracefully_finishing'       =>  'gd',
-      'APACHE_Idle_cleanup'               =>  'ge',
-      'APACHE_Open_slot'                  =>  'gf',
-      'STAT_CPU_user'                     =>  'gg',
-      'STAT_CPU_nice'                     =>  'gh',
-      'STAT_CPU_system'                   =>  'gi',
-      'STAT_CPU_idle'                     =>  'gj',
-      'STAT_CPU_iowait'                   =>  'gk',
-      'STAT_CPU_irq'                      =>  'gl',
-      'STAT_CPU_softirq'                  =>  'gm',
-      'STAT_CPU_steal'                    =>  'gn',
-      'STAT_CPU_guest'                    =>  'go',
-      'STAT_interrupts'                   =>  'gp',
-      'STAT_context_switches'             =>  'gq',
-      'STAT_forks'                        =>  'gr',
-      'STAT_loadavg'                      =>  'gs',
-      'STAT_numusers'                     =>  'gt',
-      'STAT_memcached'                    =>  'gu',
-      'STAT_membuffer'                    =>  'gv',
-      'STAT_memshared'                    =>  'gw',
-      'STAT_memfree'                      =>  'gx',
-      'STAT_memused'                      =>  'gy',
-      'STAT_memtotal'                     =>  'jv',
-      'NGINX_active_connections'          =>  'gz',
-      'NGINX_server_accepts'              =>  'h0',
-      'NGINX_server_handled'              =>  'h1',
-      'NGINX_server_requests'             =>  'h2',
-      'NGINX_reading'                     =>  'h3',
-      'NGINX_writing'                     =>  'h4',
-      'NGINX_waiting'                     =>  'h5',
-      'MEMC_rusage_user'                  =>  'h6',
-      'MEMC_rusage_system'                =>  'h7',
-      'MEMC_curr_items'                   =>  'h8',
-      'MEMC_total_items'                  =>  'h9',
-      'MEMC_bytes'                        =>  'ha',
-      'MEMC_curr_connections'             =>  'hb',
-      'MEMC_total_connections'            =>  'hc',
-      'MEMC_cmd_get'                      =>  'hd',
-      'MEMC_cmd_set'                      =>  'he',
-      'MEMC_get_misses'                   =>  'hf',
-      'MEMC_evictions'                    =>  'hg',
-      'MEMC_bytes_read'                   =>  'hh',
-      'MEMC_bytes_written'                =>  'hi',
-      'DISK_reads'                        =>  'hj',
-      'DISK_reads_merged'                 =>  'hk',
-      'DISK_sectors_read'                 =>  'hl',
-      'DISK_time_spent_reading'           =>  'hm',
-      'DISK_writes'                       =>  'hn',
-      'DISK_writes_merged'                =>  'ho',
-      'DISK_sectors_written'              =>  'hp',
-      'DISK_time_spent_writing'           =>  'hq',
-      'DISK_io_ops'                       =>  'hr',
-      'DISK_io_time'                      =>  'hs',
-      'DISK_io_time_weighted'             =>  'ht',
-      'OPVZ_kmemsize_held'                =>  'hu',
-      'OPVZ_kmemsize_failcnt'             =>  'hv',
-      'OPVZ_lockedpages_held'             =>  'hw',
-      'OPVZ_lockedpages_failcnt'          =>  'hx',
-      'OPVZ_privvmpages_held'             =>  'hy',
-      'OPVZ_privvmpages_failcnt'          =>  'hz',
-      'OPVZ_shmpages_held'                =>  'i0',
-      'OPVZ_shmpages_failcnt'             =>  'i1',
-      'OPVZ_numproc_held'                 =>  'i2',
-      'OPVZ_numproc_failcnt'              =>  'i3',
-      'OPVZ_physpages_held'               =>  'i4',
-      'OPVZ_physpages_failcnt'            =>  'i5',
-      'OPVZ_vmguarpages_held'             =>  'i6',
-      'OPVZ_vmguarpages_failcnt'          =>  'i7',
-      'OPVZ_oomguarpages_held'            =>  'i8',
-      'OPVZ_oomguarpages_failcnt'         =>  'i9',
-      'OPVZ_numtcpsock_held'              =>  'ia',
-      'OPVZ_numtcpsock_failcnt'           =>  'ib',
-      'OPVZ_numflock_held'                =>  'ic',
-      'OPVZ_numflock_failcnt'             =>  'id',
-      'OPVZ_numpty_held'                  =>  'ie',
-      'OPVZ_numpty_failcnt'               =>  'if',
-      'OPVZ_numsiginfo_held'              =>  'ig',
-      'OPVZ_numsiginfo_failcnt'           =>  'ih',
-      'OPVZ_tcpsndbuf_held'               =>  'ii',
-      'OPVZ_tcpsndbuf_failcnt'            =>  'ij',
-      'OPVZ_tcprcvbuf_held'               =>  'ik',
-      'OPVZ_tcprcvbuf_failcnt'            =>  'il',
-      'OPVZ_othersockbuf_held'            =>  'im',
-      'OPVZ_othersockbuf_failcnt'         =>  'in',
-      'OPVZ_dgramrcvbuf_held'             =>  'io',
-      'OPVZ_dgramrcvbuf_failcnt'          =>  'ip',
-      'OPVZ_numothersock_held'            =>  'iq',
-      'OPVZ_numothersock_failcnt'         =>  'ir',
-      'OPVZ_dcachesize_held'              =>  'is',
-      'OPVZ_dcachesize_failcnt'           =>  'it',
-      'OPVZ_numfile_held'                 =>  'iu',
-      'OPVZ_numfile_failcnt'              =>  'iv',
-      'OPVZ_numiptent_held'               =>  'iw',
-      'OPVZ_numiptent_failcnt'            =>  'ix',
-      'REDIS_connected_clients'           =>  'iy',
-      'REDIS_connected_slaves'            =>  'iz',
-      'REDIS_used_memory'                 =>  'j0',
-      'REDIS_changes_since_last_save'     =>  'j1',
-      'REDIS_total_connections_received'  =>  'j2',
-      'REDIS_total_commands_processed'    =>  'j3',
-      'JMX_heap_memory_used'              =>  'j4',
-      'JMX_heap_memory_committed'         =>  'j5',
-      'JMX_heap_memory_max'               =>  'j6',
-      'JMX_non_heap_memory_used'          =>  'j7',
-      'JMX_non_heap_memory_committed'     =>  'j8',
-      'JMX_non_heap_memory_max'           =>  'j9',
-      'JMX_open_file_descriptors'         =>  'ja',
-      'JMX_max_file_descriptors'          =>  'jb',
-      'JMX_current_threads_busy'          =>  'kl',
-      'JMX_current_thread_count'          =>  'km',
-      'JMX_max_threads'                   =>  'kn',
-      'MONGODB_connected_clients'         =>  'jc',
-      'MONGODB_used_resident_memory'      =>  'jd',
-      'MONGODB_used_mapped_memory'        =>  'je',
-      'MONGODB_used_virtual_memory'       =>  'jf',
-      'MONGODB_index_accesses'            =>  'jg',
-      'MONGODB_index_hits'                =>  'jh',
-      'MONGODB_index_misses'              =>  'ji',
-      'MONGODB_index_resets'              =>  'jj',
-      'MONGODB_back_flushes'              =>  'jk',
-      'MONGODB_back_total_ms'             =>  'jl',
-      'MONGODB_back_average_ms'           =>  'jm',
-      'MONGODB_back_last_ms'              =>  'jn',
-      'MONGODB_op_inserts'                =>  'jo',
-      'MONGODB_op_queries'                =>  'jp',
-      'MONGODB_op_updates'                =>  'jq',
-      'MONGODB_op_deletes'                =>  'jr',
-      'MONGODB_op_getmores'               =>  'js',
-      'MONGODB_op_commands'               =>  'jt',
-      'MONGODB_slave_lag'                 =>  'ju',
-      'DISKFREE_used'                     =>  'jw',
-      'DISKFREE_available'                =>  'jx',
-      'NETDEV_inbound'                    =>  'jy',
-      'NETDEV_rxerrs'                     =>  'jz',
-      'NETDEV_rxdrop'                     =>  'k0',
-      'NETDEV_rxfifo'                     =>  'k1',
-      'NETDEV_rxframe'                    =>  'k2',
-      'NETDEV_outbound'                   =>  'k3',
-      'NETDEV_txerrs'                     =>  'k4',
-      'NETDEV_txdrop'                     =>  'k5',
-      'NETDEV_txfifo'                     =>  'k6',
-      'NETDEV_txcolls'                    =>  'k7',
-      'NETDEV_txcarrier'                  =>  'k8',
-      'NETSTAT_established'               =>  'k9',
-      'NETSTAT_syn_sent'                  =>  'ka',
-      'NETSTAT_syn_recv'                  =>  'kb',
-      'NETSTAT_fin_wait1'                 =>  'kc',
-      'NETSTAT_fin_wait2'                 =>  'kd',
-      'NETSTAT_time_wait'                 =>  'ke',
-      'NETSTAT_close'                     =>  'kf',
-      'NETSTAT_close_wait'                =>  'kg',
-      'NETSTAT_last_ack'                  =>  'kh',
-      'NETSTAT_listen'                    =>  'ki',
-      'NETSTAT_closing'                   =>  'kj',
-      'NETSTAT_unknown'                   =>  'kk',
-      'VMSTAT_pswpin'                     =>  'ko',
-      'VMSTAT_pswpout'                    =>  'kp',
+      'APACHE_Requests'                   =>  'gg',
+      'APACHE_Bytes_sent'                 =>  'gh',
+      'APACHE_Idle_workers'               =>  'gi',
+      'APACHE_Busy_workers'               =>  'gj',
+      'APACHE_CPU_Load'                   =>  'gk',
+      'APACHE_Waiting_for_connection'     =>  'gl',
+      'APACHE_Starting_up'                =>  'gm',
+      'APACHE_Reading_request'            =>  'gn',
+      'APACHE_Sending_reply'              =>  'go',
+      'APACHE_Keepalive'                  =>  'gp',
+      'APACHE_DNS_lookup'                 =>  'gq',
+      'APACHE_Closing_connection'         =>  'gr',
+      'APACHE_Logging'                    =>  'gs',
+      'APACHE_Gracefully_finishing'       =>  'gt',
+      'APACHE_Idle_cleanup'               =>  'gu',
+      'APACHE_Open_slot'                  =>  'gv',
+      'STAT_CPU_user'                     =>  'gw',
+      'STAT_CPU_nice'                     =>  'gx',
+      'STAT_CPU_system'                   =>  'gy',
+      'STAT_CPU_idle'                     =>  'gz',
+      'STAT_CPU_iowait'                   =>  'hg',
+      'STAT_CPU_irq'                      =>  'hh',
+      'STAT_CPU_softirq'                  =>  'hi',
+      'STAT_CPU_steal'                    =>  'hj',
+      'STAT_CPU_guest'                    =>  'hk',
+      'STAT_interrupts'                   =>  'hl',
+      'STAT_context_switches'             =>  'hm',
+      'STAT_forks'                        =>  'hn',
+      'STAT_loadavg'                      =>  'ho',
+      'STAT_numusers'                     =>  'hp',
+      'STAT_memcached'                    =>  'hq',
+      'STAT_membuffer'                    =>  'hr',
+      'STAT_memshared'                    =>  'hs',
+      'STAT_memfree'                      =>  'ht',
+      'STAT_memused'                      =>  'hu',
+      'STAT_memtotal'                     =>  'hv',
+      'NGINX_active_connections'          =>  'hw',
+      'NGINX_server_accepts'              =>  'hx',
+      'NGINX_server_handled'              =>  'hy',
+      'NGINX_server_requests'             =>  'hz',
+      'NGINX_reading'                     =>  'ig',
+      'NGINX_writing'                     =>  'ih',
+      'NGINX_waiting'                     =>  'ii',
+      'MEMC_rusage_user'                  =>  'ij',
+      'MEMC_rusage_system'                =>  'ik',
+      'MEMC_curr_items'                   =>  'il',
+      'MEMC_total_items'                  =>  'im',
+      'MEMC_bytes'                        =>  'in',
+      'MEMC_curr_connections'             =>  'io',
+      'MEMC_total_connections'            =>  'ip',
+      'MEMC_cmd_get'                      =>  'iq',
+      'MEMC_cmd_set'                      =>  'ir',
+      'MEMC_get_misses'                   =>  'is',
+      'MEMC_evictions'                    =>  'it',
+      'MEMC_bytes_read'                   =>  'iu',
+      'MEMC_bytes_written'                =>  'iv',
+      'DISK_reads'                        =>  'iw',
+      'DISK_reads_merged'                 =>  'ix',
+      'DISK_sectors_read'                 =>  'iy',
+      'DISK_time_spent_reading'           =>  'iz',
+      'DISK_writes'                       =>  'jg',
+      'DISK_writes_merged'                =>  'jh',
+      'DISK_sectors_written'              =>  'ji',
+      'DISK_time_spent_writing'           =>  'jj',
+      'DISK_io_ops'                       =>  'jk',
+      'DISK_io_time'                      =>  'jl',
+      'DISK_io_time_weighted'             =>  'jm',
+      'OPVZ_kmemsize_held'                =>  'jn',
+      'OPVZ_kmemsize_failcnt'             =>  'jo',
+      'OPVZ_lockedpages_held'             =>  'jp',
+      'OPVZ_lockedpages_failcnt'          =>  'jq',
+      'OPVZ_privvmpages_held'             =>  'jr',
+      'OPVZ_privvmpages_failcnt'          =>  'js',
+      'OPVZ_shmpages_held'                =>  'jt',
+      'OPVZ_shmpages_failcnt'             =>  'ju',
+      'OPVZ_numproc_held'                 =>  'jv',
+      'OPVZ_numproc_failcnt'              =>  'jw',
+      'OPVZ_physpages_held'               =>  'jx',
+      'OPVZ_physpages_failcnt'            =>  'jy',
+      'OPVZ_vmguarpages_held'             =>  'jz',
+      'OPVZ_vmguarpages_failcnt'          =>  'kg',
+      'OPVZ_oomguarpages_held'            =>  'kh',
+      'OPVZ_oomguarpages_failcnt'         =>  'ki',
+      'OPVZ_numtcpsock_held'              =>  'kj',
+      'OPVZ_numtcpsock_failcnt'           =>  'kk',
+      'OPVZ_numflock_held'                =>  'kl',
+      'OPVZ_numflock_failcnt'             =>  'km',
+      'OPVZ_numpty_held'                  =>  'kn',
+      'OPVZ_numpty_failcnt'               =>  'ko',
+      'OPVZ_numsiginfo_held'              =>  'kp',
+      'OPVZ_numsiginfo_failcnt'           =>  'kq',
+      'OPVZ_tcpsndbuf_held'               =>  'kr',
+      'OPVZ_tcpsndbuf_failcnt'            =>  'ks',
+      'OPVZ_tcprcvbuf_held'               =>  'kt',
+      'OPVZ_tcprcvbuf_failcnt'            =>  'ku',
+      'OPVZ_othersockbuf_held'            =>  'kv',
+      'OPVZ_othersockbuf_failcnt'         =>  'kw',
+      'OPVZ_dgramrcvbuf_held'             =>  'kx',
+      'OPVZ_dgramrcvbuf_failcnt'          =>  'ky',
+      'OPVZ_numothersock_held'            =>  'kz',
+      'OPVZ_numothersock_failcnt'         =>  'lg',
+      'OPVZ_dcachesize_held'              =>  'lh',
+      'OPVZ_dcachesize_failcnt'           =>  'li',
+      'OPVZ_numfile_held'                 =>  'lj',
+      'OPVZ_numfile_failcnt'              =>  'lk',
+      'OPVZ_numiptent_held'               =>  'll',
+      'OPVZ_numiptent_failcnt'            =>  'lm',
+      'REDIS_connected_clients'           =>  'ln',
+      'REDIS_connected_slaves'            =>  'lo',
+      'REDIS_used_memory'                 =>  'lp',
+      'REDIS_changes_since_last_save'     =>  'lq',
+      'REDIS_total_connections_received'  =>  'lr',
+      'REDIS_total_commands_processed'    =>  'ls',
+      'JMX_heap_memory_used'              =>  'lt',
+      'JMX_heap_memory_committed'         =>  'lu',
+      'JMX_heap_memory_max'               =>  'lv',
+      'JMX_non_heap_memory_used'          =>  'lw',
+      'JMX_non_heap_memory_committed'     =>  'lx',
+      'JMX_non_heap_memory_max'           =>  'ly',
+      'JMX_open_file_descriptors'         =>  'lz',
+      'JMX_max_file_descriptors'          =>  'mg',
+      'JMX_current_threads_busy'          =>  'mh',
+      'JMX_current_thread_count'          =>  'mi',
+      'JMX_max_threads'                   =>  'mj',
+      'MONGODB_connected_clients'         =>  'mk',
+      'MONGODB_used_resident_memory'      =>  'ml',
+      'MONGODB_used_mapped_memory'        =>  'mm',
+      'MONGODB_used_virtual_memory'       =>  'mn',
+      'MONGODB_index_accesses'            =>  'mo',
+      'MONGODB_index_hits'                =>  'mp',
+      'MONGODB_index_misses'              =>  'mq',
+      'MONGODB_index_resets'              =>  'mr',
+      'MONGODB_back_flushes'              =>  'ms',
+      'MONGODB_back_total_ms'             =>  'mt',
+      'MONGODB_back_average_ms'           =>  'mu',
+      'MONGODB_back_last_ms'              =>  'mv',
+      'MONGODB_op_inserts'                =>  'mw',
+      'MONGODB_op_queries'                =>  'mx',
+      'MONGODB_op_updates'                =>  'my',
+      'MONGODB_op_deletes'                =>  'mz',
+      'MONGODB_op_getmores'               =>  'ng',
+      'MONGODB_op_commands'               =>  'nh',
+      'MONGODB_slave_lag'                 =>  'ni',
+      'DISKFREE_used'                     =>  'nj',
+      'DISKFREE_available'                =>  'nk',
+      'NETDEV_inbound'                    =>  'nl',
+      'NETDEV_rxerrs'                     =>  'nm',
+      'NETDEV_rxdrop'                     =>  'nn',
+      'NETDEV_rxfifo'                     =>  'no',
+      'NETDEV_rxframe'                    =>  'np',
+      'NETDEV_outbound'                   =>  'nq',
+      'NETDEV_txerrs'                     =>  'nr',
+      'NETDEV_txdrop'                     =>  'ns',
+      'NETDEV_txfifo'                     =>  'nt',
+      'NETDEV_txcolls'                    =>  'nu',
+      'NETDEV_txcarrier'                  =>  'nv',
+      'NETSTAT_established'               =>  'nw',
+      'NETSTAT_syn_sent'                  =>  'nx',
+      'NETSTAT_syn_recv'                  =>  'ny',
+      'NETSTAT_fin_wait1'                 =>  'nz',
+      'NETSTAT_fin_wait2'                 =>  'og',
+      'NETSTAT_time_wait'                 =>  'oh',
+      'NETSTAT_close'                     =>  'oi',
+      'NETSTAT_close_wait'                =>  'oj',
+      'NETSTAT_last_ack'                  =>  'ok',
+      'NETSTAT_listen'                    =>  'ol',
+      'NETSTAT_closing'                   =>  'om',
+      'NETSTAT_unknown'                   =>  'on',
+      'VMSTAT_pswpin'                     =>  'oo',
+      'VMSTAT_pswpout'                    =>  'op',
    );
 
    # Prepare and return the output.  The output we have right now is the whole
@@ -766,7 +766,7 @@ function debug($val) {
 # Gets and parses /proc/stat from Linux.
 # Options used: none.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type proc_stat --host 127.0.0.1 --items gg,gh'
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type proc_stat --host 127.0.0.1 --items gw,gx
 # ============================================================================
 function proc_stat_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port'), 'proc_stat');
@@ -823,7 +823,7 @@ function proc_stat_parse ( $options, $output ) {
 # Gets and parses the 'free' command from Linux.
 # Options used: none.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memory --host 127.0.0.1 --items gu,gv'
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type memory --host 127.0.0.1 --items hq,hr
 # ============================================================================
 function memory_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port'), 'memory');
@@ -866,7 +866,7 @@ function memory_parse ( $options, $output ) {
 # used to use 'w' but uptime prints the same thing.
 # Options used: none.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type w --host 127.0.0.1 --items gs,gt'
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type w --host 127.0.0.1 --items ho,hp
 # ============================================================================
 function w_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port'), 'w');
@@ -905,7 +905,7 @@ function w_parse ( $options, $output ) {
 # ============================================================================
 # Gets and parses /server-status from Apache.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type apache --host 127.0.0.1 --items ge,gf'
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type apache --host 127.0.0.1 --items gg,gh
 # ============================================================================
 function apache_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port', 'server'), 'apache');
@@ -992,7 +992,7 @@ function apache_parse ( $options, $output ) {
 # ============================================================================
 # Gets /server-status from Nginx.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type nginx --host 127.0.0.1 --items gz,h0'
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type nginx --host 127.0.0.1 --items hw,hx
 # ============================================================================
 function nginx_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port', 'port2', 'server'), 'nginx');
@@ -1051,7 +1051,7 @@ function nginx_parse ( $options, $output ) {
 # ============================================================================
 # Get and parse stats from memcached, using nc (netcat).
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items h6,h7'
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items ij,ik
 # ============================================================================
 function memcached_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port', 'port2', 'server'), 'memcached');
@@ -1085,7 +1085,7 @@ function memcached_parse ( $options, $output ) {
 # ============================================================================
 # Get and parse stats from /proc/diskstats
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type diskstats --device sda4 --host 127.0.0.1 --items hj,hk,hl,hm,hn,ho,hp'
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type diskstats --device sda1 --host 127.0.0.1 --items iw,ix
 # ============================================================================
 function diskstats_cachefile ( $options ) {
    if ( !isset($options['device']) ) {
@@ -1146,7 +1146,7 @@ function diskstats_parse ( $options, $output ) {
 # ============================================================================
 # Get and parse stats from /proc/user_beancounters for openvz graphs
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type openvz --host 127.0.0.1 --items hu,hv,hw,hx,hy,hz,i0'
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type openvz --host 127.0.0.1 --items jn,jo
 # ============================================================================
 function openvz_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port'), 'openvz');
@@ -1203,7 +1203,7 @@ function openvz_parse ( $options, $output ) {
 # ============================================================================
 # Get and parse stats from redis, using nc (netcat).
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type redis --host 127.0.0.1 --items iy,iz,j2,j3
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type redis --host 127.0.0.1 --items ln,lo
 # ============================================================================
 function redis_cachefile ( $options ) {
    global $status_server, $redis_port;
@@ -1270,7 +1270,7 @@ function redis_get ( $options ) {
 # ============================================================================
 # Get and parse stats from JMX.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type jmx --host 127.0.0.1 --items j4,j5,j6,j7,j8,j9,ja,jb
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type jmx --host 127.0.0.1 --items lt,lu
 # ============================================================================
 function jmx_parse ( $options, $output ) {
    $result = array();
@@ -1309,7 +1309,7 @@ function jmx_cmdline ( $options ) {
 # ============================================================================
 # Get and parse stats from mongodb on a given port
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items jc,je,jf,jg,jh,ji,jj,jk,jl,jm,jn,jo,jp,jq,jr,js,jt,ju
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items mk,ml
 # ============================================================================
 function mongodb_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port2', 'server'), 'mongodb');
@@ -1382,6 +1382,11 @@ function mongodb_parse ( $options, $output ) {
    return $result;
 }
 
+# ============================================================================
+# Get and parse the 'df' command from Linux.
+# You can test it like this, as root:
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type df --volume /dev/sda1 --host 127.0.0.1 --items nj,nk
+# ============================================================================
 function df_parse ( $options, $output ) {
    if ( !isset($options['volume']) ) {
       die("--volume is required for --type df");
@@ -1411,6 +1416,11 @@ function df_cmdline ( $options ) {
    return "df -k -P";
 }
 
+# ============================================================================
+# Get and parse stats from /proc/net/dev
+# You can test it like this, as root:
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type netdev --device eth0 --host 127.0.0.1 --items nl,nm
+# ============================================================================
 function netdev_parse ( $options, $output ) {
    if ( !isset($options['device']) ) {
       die("--device is required for --type netdev");
@@ -1449,6 +1459,12 @@ function netdev_cmdline ( $options ) {
    return "cat /proc/net/dev";
 }
 
+# ============================================================================
+# Get and parse the 'netstat' from Linux.
+# Options used: none.
+# You can test it like this, as root:
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type netstat --host 127.0.0.1 --items nw,nx
+# ============================================================================
 function netstat_parse ( $options, $output ) {
     $array = array(
         'NETSTAT_established' => 0,
@@ -1481,6 +1497,12 @@ function netstat_cmdline ( $options ) {
    return "netstat -ant";
 }
 
+# ============================================================================
+# Get and parse stats from /proc/vmstat
+# Options used: none.
+# You can test it like this, as root:
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type vmstat --host 127.0.0.1 --items oo,op
+# ============================================================================
 function vmstat_parse ( $options, $output ) {
    $result = array();
    $matches = array();

@@ -21,7 +21,7 @@
    name   => 'OpenVZ Server',
    hash   => 'hash_02_VER_5bb31324f1669d6ce5ecd04b3952db33',
    version => {
-      version => '1.1.8',
+      version => '$VERSION$',
       hash    => 'hash_06_VER_8945d7e23fc00707e8c84360af921eba',
    },
    checksum => 'hash_06_VER_474bd5605e4ce4e99895c6f632740b36',

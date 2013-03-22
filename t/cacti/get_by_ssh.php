@@ -55,10 +55,10 @@ is(
       'file'    => 'samples/proc_stat-001.txt',
       'type'    => 'proc_stat',
       'host'    => 'localhost',
-      'items'   => 'gg,gh,gi,gj,gk,gl,gm,gn,go,gp,gq,gr'
+      'items'   => 'gw,gx,gy,gz,hg,hh,hi,hj,hk,hl,hm,hn' 
    )),
-   'gg:24198 gh:0 gi:69614 gj:2630536 gk:558 gl:5872 gm:1572 gn:0 go:0'
-      . ' gp:339490 gq:697948 gr:11558',
+   'gw:24198 gx:0 gy:69614 gz:2630536 hg:558 hh:5872 hi:1572 hj:0 hk:0'
+   . ' hl:339490 hm:697948 hn:11558',
    'main(samples/proc_stat-001.txt)'
 );
 
@@ -93,9 +93,9 @@ is(
       'file'    => 'samples/free-001.txt',
       'type'    => 'memory',
       'host'    => 'localhost',
-      'items'   => 'gu,gv,gw,gx,gy'
+      'items'   => 'hq,hr,hs,ht,hu,hv'
    )),
-   'gu:22106112 gv:1531904 gw:0 gx:17928192 gy:21389312',
+   'hq:22106112 hr:1531904 hs:0 ht:17928192 hu:21389312 hv:62955520',
    'main(samples/free-001.txt)'
 );
 
@@ -149,9 +149,9 @@ is(
       'file'    => 'samples/w-001.txt',
       'type'    => 'w',
       'host'    => 'localhost',
-      'items'   => 'gs,gt'
+      'items'   => 'ho,hp'
    )),
-   'gs:0.00 gt:2',
+   'ho:0.00 hp:2',
    'main(samples/w-001.txt)'
 );
 
@@ -184,6 +184,18 @@ is_deeply(
    'samples/memcached-001.txt'
 );
 
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/memcached-001.txt',
+      'type'    => 'memcached',
+      'host'    => 'localhost',
+      'items'   => 'ij,ik,il,im,in,io,ip,iq,ir,is,it,iu,iv'
+   )),
+   'ij:396024 ik:1956122 il:0 im:0 in:0 io:1 ip:5 iq:0 ir:0 is:0 it:0 iu:45'
+   . ' iv:942',
+   'main(samples/memcached-001.txt)'
+);
+
 is_deeply(
    nginx_parse( null, file_get_contents('samples/nginx-001.txt') ),
    array(
@@ -196,6 +208,17 @@ is_deeply(
       'NGINX_waiting'            => '219',
    ),
    'samples/nginx-001.txt'
+);
+
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/nginx-001.txt',
+      'type'    => 'nginx',
+      'host'    => 'localhost',
+      'items'   => 'hw,hx,hy,hz,ig,ih,ii'
+   )),
+   'hw:251 hx:255601634 hy:255601634 hz:671013148 ig:5 ih:27 ii:219',
+   'main(samples/nginx-001.txt)'
 );
 
 is_deeply(
@@ -241,7 +264,19 @@ is_deeply(
       'APACHE_Idle_cleanup'           => 0,
       'APACHE_Open_slot'              => '236',
    ),
-   'samples/apache-001.txt'
+   'samples/apache-002.txt'
+);
+
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/apache-001.txt',
+      'type'    => 'apache',
+      'host'    => 'localhost',
+      'items'   => 'gg,gh,gi,gj,gk,gl,gm,gn,go,gp,gq,gr,gs,gt,gu,gv'
+   )),
+   'gg:3452389 gh:23852769280 gi:8 gj:1 gk:.023871 gl:8 gm:0 gn:0 go:1 gp:0'
+   . ' gq:0 gr:0 gs:0 gt:0 gu:0 gv:247',
+   'main(samples/apache-001.txt)'
 );
 
 is_deeply(
@@ -303,11 +338,11 @@ is(
       'file'    => 'samples/diskstats-001.txt',
       'type'    => 'diskstats',
       'host'    => 'localhost',
-      'items'   => 'hj,hk,hl,hm,hn,ho,hp,hq,hr,hs,ht',
+      'items'   => 'iw,ix,iy,iz,jg,jh,ji,jj,jk,jl,jm',
       'device'  => 'hda1'
    )),
-   'hj:12043 hk:387 hl:300113 hm:6472 hn:12737 ho:21340 hp:272616 hq:22360 '
-      . 'hr:24780 hs:12368 ht:28832',
+   'iw:12043 ix:387 iy:300113 iz:6472 jg:12737 jh:21340 ji:272616 jj:22360'
+   . ' jk:24780 jl:12368 jm:28832',
    'main(samples/diskstats-001.txt)'
 );
 
@@ -363,9 +398,12 @@ is(
       'file'    => 'samples/openvz-001.txt',
       'type'    => 'openvz',
       'host'    => 'localhost',
-      'items'   => 'hu,hv,hw,hx,hy,hz,i0',
+      'items'   => 'jn,jo,jp,jq,jr,js,jt,ju,jv,jw,jx,jy,jz,kg,kh,ki,kj,kk,kl,km,kn,ko,kp,kq,kr,ks,kt,ku,kv,kw,kx,ky,kz,lg,lh,li,lj,lk,ll,lm',
    )),
-   'hu:8906701 hv:0 hw:0 hx:0 hy:39695 hz:0 i0:688',
+   'jn:8906701 jo:0 jp:0 jq:0 jr:39695 js:0 jt:688 ju:0 jv:32 jw:0 jx:11101'
+   . ' jy:0 jz:0 kg:0 kh:11101 ki:0 kj:6 kk:0 kl:6 km:0 kn:1 ko:0 kp:0 kq:0'
+   . ' kr:338656 ks:0 kt:98304 ku:0 kv:9280 kw:0 kx:0 ky:0 kz:9 lg:0 lh:0 li:0'
+   . ' lj:788 lk:0 ll:10 lm:0',
    'main(samples/openvz-001.txt)'
 );
 
@@ -387,9 +425,9 @@ is(
       'file'    => 'samples/redis-001.txt',
       'type'    => 'redis',
       'host'    => 'localhost',
-      'items'   => 'iy,iz,j0,j1,j2,j3',
+      'items'   => 'ln,lo,lp,lq,lr,ls',
    )),
-   'iy:119 iz:911 j0:412372 j1:4321 j2:3333 j3:5',
+   'ln:119 lo:911 lp:412372 lq:4321 lr:3333 ls:5',
    'main(samples/redis-001.txt)'
 );
 
@@ -417,10 +455,11 @@ is(
          'file'  => 'samples/jmx-001.txt',
          'type'  => 'jmx',
          'host'  => 'localhost',
-         'items' => 'j4,j5,j6,j7,j8,j9,ja,jb,kl,km,kn',
+         'items' => 'lt,lu,lv,lw,lx,ly,lz,mg,mh,mi,mj',
       )
    ),
-   'j4:52685256 j5:205979648 j6:1864171520 j7:55160928 j8:61603840 j9:318767104 ja:60 jb:1024 kl:7 km:172 kn:200',
+   'lt:52685256 lu:205979648 lv:1864171520 lw:55160928 lx:61603840'
+   . ' ly:318767104 lz:60 mg:1024 mh:7 mi:172 mj:200',
    'main(samples/jmx-001.txt)'
 );
 
@@ -455,9 +494,11 @@ is(
       'file'    => 'samples/mongodb-001.txt',
       'type'    => 'mongodb',
       'host'    => 'localhost',
-      'items'   => 'jc,jd,je,jf,jg,jh,ji,jj,jk,jl,jm,jn,jo,jp,jq,jr,js,jt,ju',
+      'items'   => 'mk,ml,mm,mn,mo,mp,mq,mr,ms,mt,mu,mv,mw,mx,my,mz,ng,nh,ni',
    )),
-   'jc:3 jd:16029581312 je:64981303296 jf:65457356800 jg:1589814 jh:1589814 ji:0 jj:0 jk:4883 jl:2309034 jm:472 jn:36 jo:1584705 jp:145518 jq:2521129 jr:601 js:2268817 jt:17810 ju:0',
+   'mk:3 ml:16029581312 mm:64981303296 mn:65457356800 mo:1589814 mp:1589814'
+   . ' mq:0 mr:0 ms:4883 mt:2309034 mu:472 mv:36 mw:1584705 mx:145518'
+   . ' my:2521129 mz:601 ng:2268817 nh:17810 ni:0',
    'main(samples/mongodb-001.txt)'
 );
 
@@ -475,10 +516,10 @@ is(
       'file'    => 'samples/df-001.txt',
       'type'    => 'df',
       'host'    => 'localhost',
-      'items'   => 'jw,jx',
+      'items'   => 'nj,nk',
       'volume'  => '/dev/vzfs',
    )),
-   'jw:4596444160 jx:26860835840',
+   'nj:4596444160 nk:26860835840',
    'main(samples/df-001.txt)'
 );
 
@@ -496,10 +537,10 @@ is(
       'file'    => 'samples/df-002.txt',
       'type'    => 'df',
       'host'    => 'localhost',
-      'items'   => 'jw,jx',
+      'items'   => 'nj,nk',
       'volume'  => '/dev/mapper/vg00-server',
    )),
-   'jw:437121024 jx:3575664640',
+   'nj:437121024 nk:3575664640',
    'main(samples/df-002.txt)'
 );
 
@@ -526,10 +567,10 @@ is(
       'file'    => 'samples/netdev-001.txt',
       'type'    => 'netdev',
       'host'    => 'localhost',
-      'items'   => 'jy,jz,k0,k1,k2,k3,k4,k5,k6,k7,k8',
+      'items'   => 'nl,nm,nn,no,np,nq,nr,ns,nt,nu,nv',
       'device'  => 'eth0',
    )),
-   'jy:99704481 jz:0 k0:0 k1:0 k2:0 k3:21749178 k4:0 k5:0 k6:0 k7:0 k8:0',
+   'nl:99704481 nm:0 nn:0 no:0 np:0 nq:21749178 nr:0 ns:0 nt:0 nu:0 nv:0',
    'main(samples/netdev-001.txt)'
 );
 
@@ -557,9 +598,9 @@ is(
       'file'    => 'samples/netstat-001.txt',
       'type'    => 'netstat',
       'host'    => 'localhost',
-      'items'   => 'k9,ka,kb,kc,kd,ke,kf,kg,kh,ki,kj,kk',
+      'items'   => 'nw,nx,ny,nz,og,oh,oi,oj,ok,ol,om,on',
    )),
-   'k9:7 ka:0 kb:0 kc:1 kd:27 ke:6412 kf:0 kg:0 kh:0 ki:11 kj:0 kk:0',
+   'nw:7 nx:0 ny:0 nz:1 og:27 oh:6412 oi:0 oj:0 ok:0 ol:11 om:0 on:0',
    'main(samples/netstat-001.txt)'
 );
 
@@ -577,9 +618,9 @@ is(
       'file'    => 'samples/vmstat-001.txt',
       'type'    => 'vmstat',
       'host'    => 'localhost',
-      'items'   => 'ko,kp',
+      'items'   => 'oo,op',
    )),
-   'ko:32 kp:1274',
+   'oo:32 op:1274',
    'main(samples/vmstat-001.txt)'
 );
 

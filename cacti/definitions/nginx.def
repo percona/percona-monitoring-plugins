@@ -21,7 +21,7 @@
    name   => 'Nginx Server',
    hash   => 'hash_02_VER_e7de4d351f346629172af6742e82d228',
    version => {
-      version => '1.1.8',
+      version => '$VERSION$',
       hash    => 'hash_06_VER_7dd672be5a3dae86d9cdf2d1151f5dad',
    },
    checksum => 'hash_06_VER_386ad8c3de68ba2654cd2143b05f3b53',

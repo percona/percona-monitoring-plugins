@@ -21,7 +21,7 @@
    name   => 'Apache Server',
    hash   => 'hash_02_VER_73892c19311e1fcf88bc41b0daed18c7',
    version => {
-      version => '1.1.8',
+      version => '$VERSION$',
       hash    => 'hash_06_VER_77f3b553c351bf1e678c9b6c93a2266e',
    },
    checksum    => 'hash_06_VER_259de583017cbc4be74c359930d0af12',

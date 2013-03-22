@@ -21,7 +21,7 @@
    name   => 'MySQL Server',
    hash   => 'hash_02_VER_5144c02c3ca3bb2bfef6030202387bfb',
    version => {
-      version => '1.1.8',
+      version => '$VERSION$',
       hash    => 'hash_06_VER_f5ce191065d85a186cf31723fdea28c8',
    },
    checksum => 'hash_06_VER_3297f1ca480049ff1a8277b24d21a965',
