@@ -28,6 +28,11 @@ $ssh_user   = 'cacti';                           # SSH username
 $ssh_port   = 22;                                # SSH port
 $ssh_iden   = '-i /usr/share/cacti/.ssh/id_rsa'; # SSH identity
 $ssh_tout   = 10;                                # SSH connect timeout
+# You can enable SSH remote command timeout by prepending 'timeout $cmd_tout'
+# to the actual command, i.e. `ssh HOST timeout 10 CMD`
+# Disabled by default because the timeout command can be missed on EL5 boxes.
+$remote_cmd_tout = FALSE;
+$cmd_tout   = 10;      # Command exec timeout (ssh itself or local cmd)
 $nc_cmd     = 'nc';    # How to invoke netcat. NOTE, for Debian set 'nc -q1'.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300;     # Adjust to match your polling interval.
@@ -570,7 +575,7 @@ function sanitize_filename($options, $keys, $tail) {
 # Execute the command to get the output and return it.
 # ============================================================================
 function get_command_result($cmd, $options) {
-   global $debug, $ssh_user, $ssh_port, $ssh_iden, $ssh_tout, $use_ssh;
+   global $debug, $ssh_user, $ssh_port, $ssh_iden, $ssh_tout, $use_ssh, $cmd_tout, $remote_cmd_tout;
    $use_ssh = isset($options['use-ssh']) ? $options['use-ssh'] : $use_ssh;
 
    # If there is a --file, we just use that.
@@ -583,10 +588,40 @@ function get_command_result($cmd, $options) {
    $ssh  = "ssh -q -o \"ConnectTimeout $ssh_tout\" -o \"StrictHostKeyChecking no\" "
          . "$ssh_user@$options[host] -p $port $ssh_iden";
    debug($ssh);
-   $final_cmd = $use_ssh ? "$ssh '$cmd'" : $cmd;
+   if ($use_ssh) {
+       $final_cmd = $remote_cmd_tout ? "$ssh 'timeout $cmd_tout $cmd'" : "$ssh '$cmd'";
+   } else {
+       $final_cmd = $cmd;
+   }
    debug($final_cmd);
    $start = microtime_float();
-   $result = `$final_cmd`; # XXX this is the ssh command.
+
+   # Use proc_open and stream_select to handle the command exec timeout.
+   $descriptorspec = array(
+      0 => array("pipe", "r"),
+      1 => array("pipe", "w"),
+      2 => array("pipe", "w"),
+   );
+   $pipes = array();
+   $endtime = time() + $cmd_tout;
+   $process = proc_open($final_cmd, $descriptorspec, $pipes);
+   if (is_resource($process)) {
+      do {
+         $read = array($pipes[1]);
+         stream_select($read, $write = NULL, $exeptions = NULL, 1, NULL);
+         if (!empty($read)) {
+            $result .= fread($pipes[1], 8192);
+         }
+         $timeleft = $endtime - time();
+      } while (!feof($pipes[1]) && $timeleft > 0);
+      if ($timeleft <= 0) {
+         $result = "timed out";
+         proc_terminate($process);
+      }
+   } else {
+      $result = "proc_open failed";
+   }
+
    $end = microtime_float();
    debug(array("Time taken to exec: ", $end - $start));
    debug(array("result of $final_cmd", $result));
