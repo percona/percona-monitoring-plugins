@@ -414,9 +414,9 @@ but is covered well in the book *High Performance MySQL*.
 .. image:: images/mysql_mysql_threads.png
 
 The MySQL Threads graph shows the size of thread cache the server is configured
-with and the number of threads created.  If your server sees hundreds of
-connections per second you should normally set thread_cache_size high enough
-so that most new connections use cached threads.
+with and the number of threads of each type.  On this example we can observe that once
+thread_cache_size was set to 10, MySQL stopped creating new threads and started using
+the cached ones.
  
 .. image:: images/mysql_mysql_transaction_handler.png
 
