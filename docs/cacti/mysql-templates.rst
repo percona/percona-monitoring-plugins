@@ -57,7 +57,7 @@ and how to disable if it's unwanted:
 ``SHOW MASTER LOGS``
    This query is used to count up the size of binary logs.  It requires the SUPER privilege.  If disabled in the ``$chk_options`` array, then part of the MySQL Binary/Relay logs graph will be empty.
 ``SHOW PROCESSLIST``
-   This query requires the PROCESS privilege to generate the MySQL Processlist graph.  You can disable this query by editing the ``$chk_options`` array in the configuration.
+   This query requires the PROCESS privilege to generate the MySQL Processlist graph.  You can disable this query by editing the ``$chk_options`` array in the configuration.  If you don't grant this privilege Cacti will graph only its own process states.
 ``SHOW /*!50000 ENGINE*/ INNODB STATUS``
    This query requires the SUPER privilege in MySQL 5.1.23 and older versions.  It is required for all of the InnoDB graphs.  You can disable this query by editing the ``$chk_options`` array in the configuration.  In MySQL 5.1.24 and greater, the required privilege is PROCESS, not SUPER.
 

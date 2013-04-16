@@ -17,4 +17,20 @@ Check the installed scripts for their version::
    # grep ^.version /path/to/ss_get_mysql_stats.php
    $version = "1.1.4";
 
+To upgrade Percona Cacti scripts simply overwrite ss_get_*.php files from a new
+tarball or update the package::
+  
+   yum update percona-cacti-templates
+
+or::
+
+   apt-get install percona-cacti-templates
+
+Afterwards, re-import templates into Cacti using the web interface or from the command line, e.g.::
+
+   php /usr/share/cacti/cli/import_template.php --filename=/usr/share/cacti/resource/percona/templates/cacti_host_template_percona_gnu_linux_server_ht_0.8.6i-sver1.0.3.xml \
+   --with-user-rras='1:2:3:4'
+
+Then rebuild the poller cache under Cacti -> System Utilities.
+
 If any special upgrade steps are necessary, the changelog will explain them.
