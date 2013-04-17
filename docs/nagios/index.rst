@@ -36,6 +36,19 @@ any Unix or Unix-like operating system, such as GNU/Linux, Solaris, or FreeBSD.
 The plugins are designed to be used with MySQL 5.0 and newer versions, but they
 may work on 4.1 or older versions as well.
 
+Installation Instructions
+=========================
+You can download the tarball from the `Percona Software Downloads
+<http://www.percona.com/downloads/percona-monitoring-plugins/>`_
+directory or install the package from `Percona Software Repositories
+<http://www.percona.com/software/repositories>`_::
+
+   yum install percona-nagios-plugins
+
+or::
+
+   apt-get install percona-nagios-plugins
+
 Configuration Best Practices
 ============================
 

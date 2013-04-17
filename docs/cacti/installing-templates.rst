@@ -18,9 +18,15 @@ it'll cause the templates to be configured incorrectly.
 Downloading
 -----------
 
-You can download the templates from `Percona's download server
-<http://www.percona.com/downloads/>`_. Get the latest released version.  You
-will need to get a copy of the scripts on the server, and you need access to the
+You can download the tarball from the `Percona Software Downloads
+<http://www.percona.com/downloads/percona-monitoring-plugins/>`_
+directory or install the package from `Percona Software Repositories
+<http://www.percona.com/software/repositories>`_.
+
+Installing from tarball
+-----------------------
+
+You will need to get a copy of the scripts on the server, and you need access to the
 templates locally, so you can import them through your web browser.  Therefore,
 you should probably download the monitoring plugins to your own computer, and
 then upload them to your Cacti server as well.
@@ -36,9 +42,6 @@ containing several files.  (The directory name will change with each new
 release).  Change into this directory::
 
    root@cactiserver# cd percona-monitoring-plugins-1.0.0/cacti/
-
-Installing
-----------
 
 Before you install, read the specific instructions for the templates you plan to
 install.  These are linked from this document's table of contents.
@@ -58,7 +61,7 @@ interface's Console tab, click on the *Import Templates* link in the left
 sidebar.  Browse to the directory containing the unpacked templates, select the
 XML file for the templates you're installing, and submit the form.  In our
 example, the file will be named something like
-``cacti_host_template_percona_mysql_server_ht_0.8.6i-sver1.1.4.xml``.
+``cacti_host_template_percona_mysql_server_ht_0.8.6i-sver1.0.0.xml``.
 
 Inspect the page that results.  You should see something like the following::
 
@@ -87,6 +90,24 @@ Inspect the page that results.  You should see something like the following::
    [success] Percona Server HT [new]
 
 The above is an abbreviated list.  Every line should show "success" at the beginning, and "new" (or "update" if you're upgrading) at the end.
+
+Installing from package 
+-----------------------
+
+To install scripts and templates you can run::
+
+   yum install percona-cacti-templates
+
+or::
+
+   apt-get install percona-cacti-templates
+
+Now you have to import templates using Cacti web interface as described in the tarball installation above
+(do not need to copy any scripts but requires the local access to the templates from a tarball)
+or simply import templates from the command line, e.g.::
+
+   php /usr/share/cacti/cli/import_template.php --filename=/usr/share/cacti/resource/percona/templates/cacti_host_template_percona_gnu_linux_server_ht_0.8.6i-sver1.0.3.xml \
+   --with-user-rras='1:2:3:4'
 
 Configuring
 -----------

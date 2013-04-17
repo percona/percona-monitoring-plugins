@@ -37,6 +37,7 @@ cp -R nagios release/code/nagios
 cp -R docs/* release/docs
 cp -R cacti/scripts cacti/definitions cacti/bin cacti/misc release/code/cacti
 cp COPYING Changelog release/code
+cp Changelog release/docs/changelog.rst
 
 # Remove bazaar tilde files (backup ones after revert)
 find release/ -name "*.~1~" -exec rm -f {} \;
@@ -81,11 +82,6 @@ for file in release/code/cacti/definitions/*.def; do
    MD5=$(_md5 "${FILE}")
    sed -i "s/CUSTOMIZED_XML_TEMPLATE/${MD5}/" "${FILE}"
 done
-cp Changelog release/docs/changelog.rst
-grep Checksum release/code/cacti/templates/*.xml \
-   | sed -e 's/^.*<name>//' -e 's/<.name>//' -e "s/^/	* Checksum: /" \
-   | tee -a release/docs/changelog.rst >> release/code/Changelog
-echo >> release/docs/changelog.rst
 
 # Make the Nagios documentation into Sphinx .rst format.  The Cacti docs are
 # already in Sphinx format.

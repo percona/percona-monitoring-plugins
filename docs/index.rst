@@ -7,6 +7,8 @@ monitoring solutions.  The components are designed to integrate seamlessly with
 widely deployed solutions such as Nagios and Cacti, and are delivered in the
 form of templates, plugins, and scripts.
 
+.. image:: cacti/images/cacti-graph-set.png
+
 At Percona, our experience helping customers with emergencies informs our
 monitoring strategies. We have analyzed a large database of emergency issues,
 and used that to determine the best conditions to monitor.  You can read about
@@ -15,7 +17,7 @@ our suggested approaches to monitoring in our `white papers
 
 Monitoring generally takes two forms:
 
-#. Fault detection.
+*  Fault detection.
 
    Fault detection notifies you when systems become unhealthy or unavailable.
    In general, fault detection monitoring tends to fail because of false alarms,
@@ -27,7 +29,7 @@ Monitoring generally takes two forms:
    The classic example of a poor-quality check is a cache hit ratio, or a
    threshold such as the number of sort merges per second.
 
-#. Metrics collection and graphing.
+*  Metrics collection and graphing.
 
    By contrast to fault detection, it is a good idea to collect and store as
    much performance and status information about the systems as possible, for as
@@ -49,9 +51,10 @@ environment, choosing alerts, or any other task, Percona consulting and support
 staff can help.
 
 You can download the Percona Monitoring Plugins from the `Percona Software
-Downloads <http://www.percona.com/downloads/>`_ directory, including our APT and
-Yum repositories.  For specific installation instructions, read the detailed
-documentation on each type of components below.
+Downloads <http://www.percona.com/downloads/percona-monitoring-plugins/>`_
+directory, including our `Apt and Yum repositories
+<http://www.percona.com/software/repositories>`_. For specific installation
+instructions, read the detailed documentation on each type of components below.
 
 Plugins for Nagios
 ==================
