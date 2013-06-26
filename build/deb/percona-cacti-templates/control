@@ -6,7 +6,7 @@ Homepage: http://www.percona.com/software/percona-monitoring-plugins
 Package: percona-cacti-templates
 Version: %{version}
 Architecture: all
-Depends: cacti (>= 0.8.6) 
+Depends: cacti (>= 0.8.6)
 Description: Percona Monitoring Plugins (Nagios)
  The Percona Monitoring Plugins are high-quality components to add enterprise-
  grade MySQL monitoring and graphing capabilities to your existing in-house,
