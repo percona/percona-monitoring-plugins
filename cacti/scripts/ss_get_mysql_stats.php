@@ -3,7 +3,7 @@
 # ============================================================================
 # This program is part of $PROJECT_NAME$
 # License: GPL License (see COPYING)
-# Copyright 2008-$CURRENT_YEAR$ Baron Schwartz, 2012-$CURRENT_YEAR$ Percona Inc.
+# Copyright 2008-$CURRENT_YEAR$ Baron Schwartz, 2012-$CURRENT_YEAR$ Percona
 # Authors:
 #  Baron Schwartz, Roman Vynar
 # ============================================================================
@@ -31,6 +31,8 @@ $mysql_user = 'cactiuser';
 $mysql_pass = 'cactiuser';
 $mysql_port = 3306;
 $mysql_ssl  = FALSE;   # Whether to use SSL to connect to MySQL.
+$mysql_ssl_key  = '/etc/pki/tls/certs/mysql/client-key.pem';
+$mysql_ssl_cert = '/etc/pki/tls/certs/mysql/client-cert.pem';
 
 $heartbeat  = '';      # db.tbl if you use pt-heartbeat from Percona Toolkit.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
@@ -190,7 +192,7 @@ Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
    --heartbeat MySQL heartbeat table; defaults to '$heartbeat' (see pt-heartbeat)
    --nocache   Do not cache results in a file
    --port      MySQL port; defaults to $mysql_port if not given
-   --mysql_ssl Add the MYSQL_CLIENT_SSL flag to mysql_connect() call
+   --mysql_ssl Enable SSL support for MySQL connection
 
 EOF;
    die($usage);
@@ -243,7 +245,7 @@ function parse_cmdline( $args ) {
 function ss_get_mysql_stats( $options ) {
    # Process connection options and connect to MySQL.
    global $debug, $mysql_user, $mysql_pass, $heartbeat, $cache_dir, $poll_time,
-          $chk_options, $mysql_port, $mysql_ssl;
+          $chk_options, $mysql_port, $mysql_ssl, $mysql_ssl_key, $mysql_ssl_cert;
 
    # Connect to MySQL.
    $user = isset($options['user']) ? $options['user'] : $mysql_user;
@@ -255,19 +257,21 @@ function ss_get_mysql_stats( $options ) {
    $host_str  = $options['host']
               . (isset($options['port']) || $port != 3306 ? ":$port" : '');
    debug(array('connecting to', $host_str, $user, $pass));
-   if ( !extension_loaded('mysql') ) {
-      debug("The MySQL extension is not loaded");
-      die("The MySQL extension is not loaded");
+   if ( !extension_loaded('mysqli') ) {
+      debug("The MySQLi extension is not loaded");
+      die("The MySQLi extension is not loaded");
    }
    if ( $mysql_ssl || (isset($options['mysql_ssl']) && $options['mysql_ssl']) ) {
-      $conn = mysql_connect($host_str, $user, $pass, true, MYSQL_CLIENT_SSL);
+      $conn = mysqli_init(); 
+      mysqli_ssl_set($conn, $mysql_ssl_key, $mysql_ssl_cert, NULL, NULL, NULL);
+      mysqli_real_connect($conn, $host_str, $user, $pass);
    }
    else {
-      $conn = mysql_connect($host_str, $user, $pass);
+      $conn = mysqli_connect($host_str, $user, $pass);
    }
    if ( !$conn ) {
-      debug("MySQL connection failed: " . mysql_error());
-      die("MySQL: " . mysql_error());
+      debug("MySQL connection failed: " . mysqli_error());
+      die("MySQL: " . mysqli_error());
    }
 
    $sanitized_host
@@ -1197,22 +1201,22 @@ function to_int ( $str ) {
 }
 
 # ============================================================================
-# Wrap mysql_query in error-handling, and instead of returning the result,
+# Wrap mysqli_query in error-handling, and instead of returning the result,
 # return an array of arrays in the result.
 # ============================================================================
 function run_query($sql, $conn) {
    global $debug;
    debug($sql);
-   $result = @mysql_query($sql, $conn);
+   $result = @mysqli_query($conn, $sql);
    if ( $debug ) {
-      $error = @mysql_error($conn);
+      $error = @mysqli_error($conn);
       if ( $error ) {
          debug(array($sql, $error));
          die("SQLERR $error in $sql");
       }
    }
    $array = array();
-   while ( $row = @mysql_fetch_array($result) ) {
+   while ( $row = @mysqli_fetch_array($result) ) {
       $array[] = $row;
    }
    debug(array($sql, $array));
