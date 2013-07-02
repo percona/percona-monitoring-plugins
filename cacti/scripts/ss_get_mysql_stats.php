@@ -340,22 +340,22 @@ function ss_get_mysql_stats( $options ) {
       'innodb_sem_wait_time_ms'  => 0,
       # Values for the 'state' column from SHOW PROCESSLIST (converted to
       # lowercase, with spaces replaced by underscores)
-      'State_closing_tables'       => null,
-      'State_copying_to_tmp_table' => null,
-      'State_end'                  => null,
-      'State_freeing_items'        => null,
-      'State_init'                 => null,
-      'State_locked'               => null,
-      'State_login'                => null,
-      'State_preparing'            => null,
-      'State_reading_from_net'     => null,
-      'State_sending_data'         => null,
-      'State_sorting_result'       => null,
-      'State_statistics'           => null,
-      'State_updating'             => null,
-      'State_writing_to_net'       => null,
-      'State_none'                 => null,
-      'State_other'                => null, # Everything not listed above
+      'State_closing_tables'       => 0,
+      'State_copying_to_tmp_table' => 0,
+      'State_end'                  => 0,
+      'State_freeing_items'        => 0,
+      'State_init'                 => 0,
+      'State_locked'               => 0,
+      'State_login'                => 0,
+      'State_preparing'            => 0,
+      'State_reading_from_net'     => 0,
+      'State_sending_data'         => 0,
+      'State_sorting_result'       => 0,
+      'State_statistics'           => 0,
+      'State_updating'             => 0,
+      'State_writing_to_net'       => 0,
+      'State_none'                 => 0,
+      'State_other'                => 0, # Everything not listed above
    );
 
    # Get SHOW STATUS and convert the name-value array into a simple
