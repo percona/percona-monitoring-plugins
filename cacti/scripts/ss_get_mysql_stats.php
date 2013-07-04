@@ -1063,8 +1063,9 @@ function get_innodb_array($text) {
       }
 
       # BUFFER POOL AND MEMORY
-      elseif (strpos($line, "Total memory allocated") === 0 ) {
+      elseif (strpos($line, "Total memory allocated") === 0 && strpos($line, "in additional pool allocated") > 0 ) {
          # Total memory allocated 29642194944; in additional pool allocated 0
+         # Total memory allocated by read views 96
          $results['total_mem_alloc']       = to_int($row[3]);
          $results['additional_pool_alloc'] = to_int($row[8]);
       }
