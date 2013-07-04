@@ -1,0 +1,4 @@
+        State: copy to tmp table
+        State: Copying to tmp table on disk
+        State: Copying to tmp table
+        State: Copying to group table

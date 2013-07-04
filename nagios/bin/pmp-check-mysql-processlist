@@ -64,7 +64,7 @@ main() {
       LOCKED1=$(count_mysql_processlist "${TEMP}" "State" "Locked")
       LOCKED2=$(count_mysql_processlist "${TEMP}" "State" "Waiting for table level lock")
       LOCKED3=$(count_mysql_processlist "${TEMP}" "State" "Table lock")
-      COPYIN=$(count_mysql_processlist "${TEMP}" "State" "opy.*table*")
+      COPYIN=$(count_mysql_processlist "${TEMP}" "State" ".*opy.* to.* table.*")
       STATIS=$(count_mysql_processlist "${TEMP}" "State" "statistics")
       LOCKED=$((${LOCKED1:-0} + ${LOCKED2:-0} + ${LOCKED3:-0}))
       NOTE="${UNAUTH} unauthenticated, ${LOCKED} locked,"
