@@ -4,7 +4,7 @@
 # This program is part of $PROJECT_NAME$
 # License: GPL License (see COPYING)
 # Authors:
-#  Baron Schwartz
+#  Baron Schwartz, Roman Vynar
 # ########################################################################
 
 # ########################################################################
@@ -97,10 +97,12 @@ main() {
          OPT_WARN=${OPT_WARN:-60}
          OPT_CRIT=${OPT_CRIT:-600}
          LEVEL=$(mysql_exec "
-            SELECT   UNIX_TIMESTAMP() - UNIX_TIMESTAMP(trx_started),
-                     trx_mysql_thread_id
-            FROM     INFORMATION_SCHEMA.INNODB_TRX
-            ORDER BY trx_started LIMIT 1" 2>"${TEMP}")
+            SELECT   UNIX_TIMESTAMP() - UNIX_TIMESTAMP(t.trx_started),
+                     t.trx_mysql_thread_id,
+                     CONCAT(p.user, '@', p.host)
+            FROM     INFORMATION_SCHEMA.INNODB_TRX  AS t
+            JOIN     INFORMATION_SCHEMA.PROCESSLIST AS p ON p.id = t.trx_mysql_thread_id
+            ORDER BY t.trx_started LIMIT 1" 2>"${TEMP}")
          if [ "$?" != 0 ]; then
             if grep "Unknown table" "${TEMP}" >/dev/null 2>&1; then
                # The I_S tables don't exist.
@@ -110,15 +112,17 @@ main() {
                cat "${TEMP}"
             fi
          fi
-         # $LEVEL now contains either an empty string, or two words. 1) Age of
-         # oldest transaction, 2) thread ID of oldest transaction.
+         # $LEVEL now contains either an empty string or three words: 1) Age of
+         # oldest transaction, 2) thread ID of oldest transaction, 3) user info.
          if [ -z "${LEVEL}" ]; then
             LEVEL=0
             THD=0
+            USERINFO="nobody"
          else
-            THD="$(echo $LEVEL | awk '{print $2}')"
-            LEVEL="$(echo $LEVEL | awk '{print $1}')"
-         fi
+            THD="$(echo ${LEVEL} | awk '{print $2}')"
+            USERINFO="$(echo ${LEVEL} | awk '{print $3}')"
+            LEVEL="$(echo ${LEVEL} | awk '{print $1}')"
+         fi 
          ;;
       *)
          echo "Unknown value for -C: '${OPT_CHEK}'. Consult the documentation.";
@@ -135,7 +139,7 @@ main() {
             NOTE="${LEVEL:-UNKNOWN} transactions in LOCK WAIT status"
             ;;
          max_duration)
-            NOTE="longest transaction active for ${LEVEL:-UNKNOWN} seconds (thread ${THD:-unknown})"
+            NOTE="longest transaction active for ${LEVEL:-UNKNOWN} seconds (thread ${THD:-unknown} by ${USERINFO:-unknown})"
             ;;
       esac
       if [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
@@ -166,12 +170,13 @@ get_longest_trx() {
       BEGIN {
          maxtime = 0;
          thread  = 0;
+         userinfo = "nobody";
       }
       /^TRANSACTIONS$/ {
          tseen = 1;
       }
       {
-         if ( tseen == 1 && $0 ~ /^---TRANSACTION.*[0-9] sec,/ ) {
+         if ( tseen == 1 && $0 ~ /^---TRANSACTION.*[0-9] sec/ ) {
             if ( $2 ~ /,/ ) {
                time = $4;
             }
@@ -183,11 +188,15 @@ get_longest_trx() {
             if ( time > maxtime ) {
                maxtime = time;
                thread  = substr($4, 1, length($4) - 1);
+               match($0, /query id [0-9]+ .+/);
+               userinfo = substr($0, RSTART, RLENGTH);
+               split(userinfo, a, " ");
+               userinfo = a[5]"@"a[4];
             }
          }
       }
       END {
-         print maxtime, thread;
+         print maxtime, thread, userinfo;
       }
       ' "${1}"
 }
