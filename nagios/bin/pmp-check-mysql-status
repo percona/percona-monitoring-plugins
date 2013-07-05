@@ -4,7 +4,7 @@
 # This program is part of $PROJECT_NAME$
 # License: GPL License (see COPYING)
 # Authors:
-#  Baron Schwartz
+#  Baron Schwartz, Roman Vynar
 # ########################################################################
 
 # ########################################################################
@@ -69,14 +69,14 @@ main() {
       OPT_ERR="you specified -o but not -y"
    elif [ "${OPT_VAR2}" -a -z "${OPT_OPER}" ]; then
       OPT_ERR="you specified -y but not -o"
-   elif [ "${OPT_TRAN}" -a -z "${OPT_VAR2}" ]; then
-      OPT_ERR="you specified -T but not -y"
+   elif [ "${OPT_TRAN}" = 'pct'  -a -z "${OPT_VAR2}" ]; then
+      OPT_ERR="you specified -T pct but not -y"
    elif [ "${OPT_TRAN}" ]; then
       case "${OPT_TRAN}" in
-         pct)
+         pct|str)
             ;;
          *)
-            OPT_ERR="-T must be pct"
+            OPT_ERR="-T must be one of: pct str"
             ;;
       esac
    fi
@@ -84,7 +84,7 @@ main() {
       '=='|'!='|'>='|'>'|'<'|'<=')
          ;;
       *)
-         OPT_ERR="Invalid -C option ${OPT_COMP}; use == != >= > < <="
+         OPT_ERR="-C must be one of: == != >= > < <="
          ;;
    esac
    if [ "${OPT_OPER}" ]; then
@@ -93,7 +93,7 @@ main() {
             :
             ;;
          *)
-            OPT_ERR="-o must be one of [/*+-]"
+            OPT_ERR="-o must be one of: / * + -"
             ;;
       esac
    fi
@@ -116,7 +116,7 @@ main() {
          NOTE="${NOTE} = ${LEVEL}"
 
          # XXX Make sure this line and the "case" don't get separated.
-         compare_result "${LEVEL}" "${OPT_CRIT}" "${OPT_WARN}" "${OPT_COMP}"
+         compare_result "${LEVEL}" "${OPT_CRIT}" "${OPT_WARN}" "${OPT_COMP}" "${OPT_TRAN}"
          case $? in
             $STATE_OK)
                NOTE="OK $NOTE"
@@ -153,7 +153,7 @@ mysql_exec() {
 }
 
 # ########################################################################
-# Compares the variable to the thresholds. Arguments: VAR CRIT WARN CMP
+# Compares the variable to the thresholds. Arguments: VAR CRIT WARN CMP TRAN
 # Returns nothing; exits with OK/WARN/CRIT.
 # ########################################################################
 compare_result() {
@@ -161,15 +161,28 @@ compare_result() {
    local CRIT="${2}"
    local WARN="${3}"
    local CMP="${4}"
+   local TRAN="${5}"
    echo 1 | awk "END {
       if ( \"${CRIT}\" != \"\" ) {
-         if ( ${VAR} ${CMP} ${CRIT:-0} ) {
-            exit $STATE_CRITICAL
+         if ( \"${TRAN}\" == \"str\" ) {
+            if ( \"${VAR}\" ${CMP} \"${CRIT:-0}\" ) {
+               exit $STATE_CRITICAL
+            }
+         } else {
+            if ( ${VAR} ${CMP} ${CRIT:-0} ) {
+               exit $STATE_CRITICAL
+            }
          }
       }
       if ( \"${WARN}\" != \"\" ) {
-         if ( ${VAR} ${CMP} ${WARN:-0} ) {
-            exit $STATE_WARNING
+         if ( \"${TRAN}\" == \"str\" ) {
+            if ( \"${VAR}\" ${CMP} \"${WARN:-0}\" ) {
+               exit $STATE_WARNING
+            }
+         } else {
+            if ( ${VAR} ${CMP} ${WARN:-0} ) {
+               exit $STATE_WARNING
+            }
          }
       }
       exit $STATE_OK
@@ -324,7 +337,8 @@ pmp-check-mysql-status - Check MySQL SHOW GLOBAL STATUS output.
     -c CRIT         Critical threshold.
     --defaults-file FILE Only read mysql options from the given file.
                     Defaults to /etc/nagios/mysql.cnf if it exists.
-    -C COMPARE      Comparison operator to apply to -c and -w; default >=.
+    -C COMPARE      Comparison operator to apply to -c and -w.
+                    Possible values: == != >= > < <=. Default >=.
     -H HOST         MySQL hostname.
     -I INCR         Make SHOW STATUS incremental over this delay.
     -l USER         MySQL username.
@@ -333,6 +347,7 @@ pmp-check-mysql-status - Check MySQL SHOW GLOBAL STATUS output.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
     -T TRANS        Transformation to apply before comparing to -c and -w.
+                    Possible values: pct str.
     -w WARN         Warning threshold.
     -x VAR1         Required first status or configuration variable.
     -y VAR2         Optional second status or configuration variable.
@@ -372,8 +387,8 @@ exceeds 80% of max_connections:
 
   -x Threads_connected -o / -y max_connections -T pct -w 80
 
-The -T option only works when you specify both -x and -y.  Currently the only
-transformation implemented for -T is C<pct>.  The plugin uses awk to do its
+The -T C<pct> option only works when you specify both -x and -y and implements
+percentage transformation.  The plugin uses awk to do its
 computations and comparisons, so you can use floating-point math; you are not
 restricted to integers for comparisons.  Floating-point numbers are printed with
 six digits of precision. The -o option accepts the arithmetic operators /, *,
@@ -414,6 +429,12 @@ To check Percona XtraDB Cluster node status you may want to use the following
 alert similar to what its clustercheck does:
 
   -x wsrep_local_state -C '!=' -w 4
+
+To compare string variables use -T C<str> transformation. This is required as
+numeric and string comparisons are handled differently. The following example
+warns when the slave_exec_mode is IDEMPOTENT:
+
+  -x slave_exec_mode -C '==' -T str -w IDEMPOTENT
 
 =head1 PRIVILEGES
 
