@@ -432,6 +432,30 @@ is(
 );
 
 is_deeply(
+   redis_parse( null, file_get_contents('samples/redis-002.txt') ),
+   array(
+      'REDIS_connected_clients'          => '1',
+      'REDIS_connected_slaves'           => '1',
+      'REDIS_used_memory'                => '856928',
+      'REDIS_changes_since_last_save'    => '88',
+      'REDIS_total_connections_received' => '4',
+      'REDIS_total_commands_processed'   => '3',
+   ),
+   'samples/redis-002.txt'
+);
+
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/redis-002.txt',
+      'type'    => 'redis',
+      'host'    => 'localhost',
+      'items'   => 'ln,lo,lp,lq,lr,ls',
+   )),
+   'ln:1 lo:1 lp:856928 lq:88 lr:4 ls:3',
+   'main(samples/redis-002.txt)'
+);
+
+is_deeply(
    jmx_parse( null, file_get_contents('samples/jmx-001.txt') ),
    array(
       'JMX_heap_memory_used'          => '52685256',

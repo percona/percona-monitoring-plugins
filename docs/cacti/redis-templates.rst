@@ -5,7 +5,7 @@ Percona Redis Monitoring Template for Cacti
 
 These templates use ``ss_get_by_ssh.php`` to connect to a server and extract
 statistics from the Redis server with the `INFO command
-<http://code.google.com/p/redis/wiki/InfoCommand>`_.  The templates *do not use
+<http://redis.io/commands/info>`_.  The templates *do not use
 SSH*, but connect directly with TCP sockets to gather the information.
 
 Installation

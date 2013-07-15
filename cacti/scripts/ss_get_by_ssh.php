@@ -33,7 +33,7 @@ $ssh_tout   = 10;                                # SSH connect timeout
 # Disabled by default because the timeout command can be missed on EL5 boxes.
 $remote_cmd_tout = FALSE;
 $cmd_tout   = 10;      # Command exec timeout (ssh itself or local cmd)
-$nc_cmd     = 'nc';    # How to invoke netcat. NOTE, for Debian set 'nc -q1'.
+$nc_cmd     = 'nc -C'; # How to invoke netcat. NOTE, for Debian set 'nc -q1'.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300;     # Adjust to match your polling interval.
 $timezone   = null;    # If not set, uses the system default.  Example: "UTC"
@@ -1262,7 +1262,8 @@ function redis_parse ( $options, $output ) {
       'connected_clients',
       'connected_slaves',
       'used_memory',
-      'changes_since_last_save',
+      'changes_since_last_save', # 2.4
+      'rdb_changes_since_last_save', # 2.6
       'total_connections_received',
       'total_commands_processed'
    );
@@ -1271,6 +1272,11 @@ function redis_parse ( $options, $output ) {
       if ( count($words) && in_array($words[0], $wanted) ) {
          $result["REDIS_$words[0]"] = trim($words[1]);
       }
+   }
+   # Set changes_since_last_save to rdb_changes_since_last_save for Redis 2.6
+   if ( isset($result['REDIS_rdb_changes_since_last_save']) ) {
+      $result['REDIS_changes_since_last_save'] = $result['REDIS_rdb_changes_since_last_save'];
+      unset($result['REDIS_rdb_changes_since_last_save']);
    }
    return $result;
 }
