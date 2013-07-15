@@ -58,6 +58,14 @@ type "help" for help
       }
     ]
   },
+        "opcountersRepl" : {
+                "insert" : 22090596,
+                "query" : 0,
+                "update" : 10367,
+                "delete" : 16203779,
+                "getmore" : 0,
+                "command" : 0
+        },
 	"opcounters" : {
 		"insert" : 1584705,
 		"query" : 145518,

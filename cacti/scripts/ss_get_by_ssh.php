@@ -1401,17 +1401,19 @@ function mongodb_parse ( $options, $output ) {
    preg_match('/"last_ms" : ([0-9]+)/', $output, $matches);
    $result["MONGODB_back_last_ms"] = $matches[1];
 
-   preg_match('/"insert" : ([0-9]+)/', $output, $matches);
+   preg_match('/"opcounters" : {(.*?)}/s', $output, $matches);
+   $opcounters = $matches[1];
+   preg_match('/"insert" : ([0-9]+)/', $opcounters, $matches);
    $result["MONGODB_op_inserts"] = $matches[1];
-   preg_match('/"query" : ([0-9]+)/', $output, $matches);
+   preg_match('/"query" : ([0-9]+)/', $opcounters, $matches);
    $result["MONGODB_op_queries"] = $matches[1];
-   preg_match('/"update" : ([0-9]+)/', $output, $matches);
+   preg_match('/"update" : ([0-9]+)/', $opcounters, $matches);
    $result["MONGODB_op_updates"] = $matches[1];
-   preg_match('/"delete" : ([0-9]+)/', $output, $matches);
+   preg_match('/"delete" : ([0-9]+)/', $opcounters, $matches);
    $result["MONGODB_op_deletes"] = $matches[1];
-   preg_match('/"getmore" : ([0-9]+)/', $output, $matches);
+   preg_match('/"getmore" : ([0-9]+)/', $opcounters, $matches);
    $result["MONGODB_op_getmores"] = $matches[1];
-   preg_match('/"command" : ([0-9]+)/', $output, $matches);
+   preg_match('/"command" : ([0-9]+)/', $opcounters, $matches);
    $result["MONGODB_op_commands"] = $matches[1];
 
    if (preg_match('/"lagSeconds" : ([0-9]+)/', $output, $matches) == 0) {
