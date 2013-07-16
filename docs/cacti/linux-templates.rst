@@ -123,6 +123,10 @@ The number of disk sectors read and written.
 
 The amount of time spent reading and writing.
 
+.. image:: images/linux_disk_read_write_time_per_io_request.png
+
+The amount of time spent reading and writing per 1 IO request.
+
 .. image:: images/linux_disk_elapsed_io_time.png
 
 The disk utilization.
@@ -135,7 +139,7 @@ it is 5 seconds. (If they all happen at the same time, the busy time is only
 
 .. image:: images/linux_disk_iops.png
 
-The number of disk IO operations per second.
+The number of disk IO operations per second. Actually, this is a sum of reads + writes.
 
 .. image:: images/linux_disk_space.png
 
