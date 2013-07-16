@@ -82,7 +82,16 @@ intuitive point-and-click configuration and browsing of graphs and metrics.
    cacti/customizing-templates
    cacti/upgrading-templates
    cacti/mysql-templates
+   cacti/galera-templates
    cacti/ssh-based-templates
+   cacti/apache-templates
+   cacti/jmx-templates
+   cacti/linux-templates
+   cacti/memcached-templates
+   cacti/mongodb-templates
+   cacti/nginx-templates
+   cacti/openvz-templates
+   cacti/redis-templates
    cacti/developer-documentation
 
 Changelog

@@ -1,16 +1,5 @@
 .. _cacti_ssh_setup:
 
-.. toctree::
-
-   apache-templates
-   jmx-templates
-   memcached-templates
-   mongodb-templates
-   nginx-templates
-   openvz-templates
-   redis-templates
-   unix-templates
-
 Installing SSH-Based Templates
 ==============================
 
@@ -25,6 +14,21 @@ The high-level process is as follows:
 * Install the public key into that user's authorized_keys file.
 * Install and configure the PHP file.
 * Test the results.
+
+List of Templates
+-----------------
+
+.. toctree::
+   :maxdepth: 1
+
+   apache-templates
+   jmx-templates
+   linux-templates
+   memcached-templates
+   mongodb-templates
+   nginx-templates
+   openvz-templates
+   redis-templates
 
 Creating an SSH Key Pair
 ------------------------

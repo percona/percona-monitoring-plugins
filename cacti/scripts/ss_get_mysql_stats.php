@@ -262,7 +262,7 @@ function ss_get_mysql_stats( $options ) {
       die("The MySQLi extension is not loaded");
    }
    if ( $mysql_ssl || (isset($options['mysql_ssl']) && $options['mysql_ssl']) ) {
-      $conn = mysqli_init(); 
+      $conn = mysqli_init();
       mysqli_ssl_set($conn, $mysql_ssl_key, $mysql_ssl_cert, NULL, NULL, NULL);
       mysqli_real_connect($conn, $host_str, $user, $pass);
    }
@@ -483,7 +483,7 @@ function ss_get_mysql_stats( $options ) {
 
       # Get response time histogram from Percona Server if enabled.
       if ( $chk_options['get_qrt']
-           && isset($status['have_response_time_distribution']) 
+           && isset($status['have_response_time_distribution'])
            &&      ($status['have_response_time_distribution'] == 'YES'))
       {
          debug('Getting query time histogram');
@@ -778,6 +778,21 @@ function ss_get_mysql_stats( $options ) {
       'Query_time_total_11'         =>  'pq',
       'Query_time_total_12'         =>  'pr',
       'Query_time_total_13'         =>  'ps',
+      'wsrep_replicated_bytes'      =>  'pt',
+      'wsrep_received_bytes'        =>  'pu',
+      'wsrep_replicated'            =>  'pv',
+      'wsrep_received'              =>  'pw',
+      'wsrep_local_cert_failures'   =>  'px',
+      'wsrep_local_bf_aborts'       =>  'py',
+      'wsrep_local_send_queue'      =>  'pz',
+      'wsrep_local_recv_queue'      =>  'qg',
+      'wsrep_cluster_size'          =>  'qh',
+      'wsrep_cert_deps_distance'    =>  'qi',
+      'wsrep_apply_window'          =>  'qj',
+      'wsrep_commit_window'         =>  'qk',
+      'wsrep_flow_control_paused'   =>  'ql',
+      'wsrep_flow_control_sent'     =>  'qm',
+      'wsrep_flow_control_recv'     =>  'qn',
    );
 
    # Return the output.

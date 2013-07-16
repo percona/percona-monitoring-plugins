@@ -1,7 +1,7 @@
-.. _cacti_unix_templates:
+.. _cacti_linux_templates:
 
-Percona Linux/Unix Monitoring Template for Cacti
-================================================
+Percona Linux Monitoring Template for Cacti
+===========================================
 
 These templates use ``ss_get_by_ssh.php`` to connect to a server via SSH and
 extract standard metrics such as memory usage, number of users, and CPU usage.

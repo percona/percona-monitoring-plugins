@@ -559,7 +559,8 @@ $t->{rras} ||= [
          x_files_factor => '0.5'
       }
    ];
-$t->{cdefs} ||= {
+# Default CDEFs
+my $default_cdefs = {
    Negate => {
       hash  => 'hash_05_VER_4281cf63dfde6f44b46a59f022cf82b2',
       items => [
@@ -577,7 +578,7 @@ $t->{cdefs} ||= {
          },
       ],
    },
-   TurnIntoBits => {
+   'Turn Into Bits' => {
       hash  => 'hash_05_VER_41d094c95b3ae8f0d3a67f9c3ddb6a75',
       items => [
          {  type  => 4,
@@ -595,6 +596,9 @@ $t->{cdefs} ||= {
       ],
    },
 };
+# Merge default CDEFs into a per-template CDEFs
+@{$t->{cdefs}}{keys %$default_cdefs} = values %$default_cdefs; 
+
 $t->{gprints} ||= {
       Normal => {
          gprint_text => '%6.1lf%s',
@@ -914,7 +918,8 @@ foreach my $g ( @{ $t->{graphs} } ) {
       my $i = 0;
       my $color = $it->{color} || 0;
       my $hash_count = scalar(@{ $it->{hashes} });
-      my $prev_cdef = 0;
+      my $next_cdef = 0;
+      my $next_cdef_name = '';
 
       # Each bit of data can have several items.
       foreach my $h ( @{ $it->{hashes} } ) {
@@ -926,20 +931,26 @@ foreach my $g ( @{ $t->{graphs} } ) {
          el('color_id', $i ? 0 : $color);
          el('graph_type_id', $graph_types{$type});
          el('consolidation_function_id', $consolidations[$i]);
-         el('cdef_id', $prev_cdef ? $prev_cdef : $cdef);
+         # If CDEF was set on the first item and it is one of negates,
+         # make sure it will not populate to the next items by setting the respective non-negate CDEF
+         # or None if it is just a simple 'Negate'.
+         if ($i && $next_cdef && $next_cdef_name =~ /Negate$/) { 
+            my $new_cdef_name = $next_cdef_name;
+            $new_cdef_name =~ s/^(.*)Negate$/$1/;   
+            $new_cdef_name =~ s/ $//;
+            $next_cdef = !$new_cdef_name || $new_cdef_name eq '' ? 0 : $t->{cdefs}->{$new_cdef_name}->{hash};
+         }
+         el('cdef_id', $next_cdef ? $next_cdef : $cdef);
          el('value', '');
          el('gprint_id',
             $t->{gprints}->{ $it->{gprint_id} || 'Normal' }->{hash});
-         el('text_format', $text);
-         el('hard_return', ($i == $hash_count - 1) ? 'on' : '');
+         el('text_format', !$i && defined($it->{text}) ? $it->{text} : $text);
+         el('hard_return', ($i == $hash_count - 1) && (!defined($it->{text}) || $it->{text} ne '') ? 'on' : '');
          el('sequence', ++$seq);
          ee($h);
-         # If CDEF is TurnIntoBits for the first item it should be the same
-         # for all others.
          if (!$i && $it->{cdef}) {
-            if ($it->{cdef} eq 'TurnIntoBits') {
-               $prev_cdef = $cdef; 
-            }
+            $next_cdef = $cdef;
+            $next_cdef_name = $it->{cdef};
          }
          $i++;
       }

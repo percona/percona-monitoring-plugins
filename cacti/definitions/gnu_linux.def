@@ -679,7 +679,7 @@
                color  => '00CF00',
                task   => 'hash_09_VER_bdf8d8cb4adefa8e2e7672292e759497',
                type   => 'AREA',
-               cdef   => 'TurnIntoBits',
+               cdef   => 'Turn Into Bits',
                hashes => [
                   'hash_10_VER_ba37c31f9b986c98e0d9738c264e520b',
                   'hash_10_VER_49a9aacadfd8eba4221b5743cc056847',
@@ -691,7 +691,7 @@
                color  => '002A97',
                task   => 'hash_09_VER_dc830071c31578228797d2681b985c2b',
                type   => 'LINE1',
-               cdef   => 'TurnIntoBits',
+               cdef   => 'Turn Into Bits',
                hashes => [
                   'hash_10_VER_fd3c2eae30d53866483951c3e21d00d0',
                   'hash_10_VER_272171450759a8dd6b387eec9e8db6aa',
