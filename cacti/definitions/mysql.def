@@ -3294,6 +3294,46 @@
             },
          ],
       },
+      {  name => 'InnoDB Buffer Pool Efficiency',
+         base_value => '1000',
+         hash  => 'hash_00_VER_b4a2ee04d77bd8fc16555289fe38f646',
+         dt         => {
+            input   => 'Get MySQL Stats',
+            hash    => 'hash_01_VER_95b5e55a88a5d21f941f70b930d1251f',
+            pool_read_requests => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_7697410ed5c61c07787d1f0a410b4066',
+            },
+            pool_reads => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_7acdf0f165f21668aa14530479d9fc79',
+            },
+         },
+         items => [
+            {  color  => '6EA100',
+               hashes => [
+                  'hash_10_VER_eab4958981ab6316d4e71369340a3b82',
+                  'hash_10_VER_b2a3deb5aebe1626f6d0ae80a6df8d94',
+                  'hash_10_VER_fd53819289f90c5604c225e73072c6ac',
+                  'hash_10_VER_cbd52390554edff0b5c80ff9ebf7cbb1',
+               ],
+               item => 'pool_read_requests',
+               task => 'hash_09_VER_97a6ba20380c2661ebfb32a5b0975ee2',
+               type => 'LINE1',
+            },
+            {  color  => 'AA3B27',
+               hashes => [
+                  'hash_10_VER_325a658eb3078e8df227f74169758625',
+                  'hash_10_VER_bd2f1b82625bb5ceca91ea1638e37191',
+                  'hash_10_VER_14a612f04dbee94b108c295e80032ee9',
+                  'hash_10_VER_85bea1a4c2b53fd3d877eed8d6b6ed03',
+               ],
+               item => 'pool_reads',
+               task => 'hash_09_VER_655c03f0a4fddacac153607dfd51a238',
+               type => 'LINE1',
+            },
+         ],
+      },      
    ],
    inputs => {
       'Get MySQL Stats' => {
@@ -3555,6 +3595,8 @@
             Query_time_total_11        => 'hash_07_VER_f6fad42d83701dd1ef0582724dbb3671',
             Query_time_total_12        => 'hash_07_VER_4c6ac6fec8817219a655badc713d4447',
             Query_time_total_13        => 'hash_07_VER_a67533f9bbc6b46b44c29083c148a190',
+            pool_reads                 => 'hash_07_VER_a5806a736164cfd1600387f11481f3c4',
+            pool_read_requests         => 'hash_07_VER_aeb404311664f9492ca9b171a6881573',
          },
          type_id => 1
       },

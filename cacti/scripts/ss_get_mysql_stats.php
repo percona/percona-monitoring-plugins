@@ -538,6 +538,8 @@ function ss_get_mysql_stats( $options ) {
          'Innodb_rows_inserted'           => 'rows_inserted',
          'Innodb_rows_read'               => 'rows_read',
          'Innodb_rows_updated'            => 'rows_updated',
+         'Innodb_buffer_pool_reads'       => 'pool_reads',
+         'Innodb_buffer_pool_read_requests' => 'pool_read_requests',
       );
 
       # If the SHOW STATUS value exists, override...
@@ -793,6 +795,8 @@ function ss_get_mysql_stats( $options ) {
       'wsrep_flow_control_paused'   =>  'ql',
       'wsrep_flow_control_sent'     =>  'qm',
       'wsrep_flow_control_recv'     =>  'qn',
+      'pool_reads'                  =>  'qo',
+      'pool_read_requests'          =>  'qp',
    );
 
    # Return the output.

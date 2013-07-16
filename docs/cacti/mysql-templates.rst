@@ -98,6 +98,12 @@ written.  You can consider it roughly equivalent to the Handler graphs.  If you
 see a sudden change in the graph, you should try to trace it to some change in
 your application.
 
+.. image:: images/mysql_innodb_buffer_pool_efficiency.png
+
+The InnoDB Buffer Pool Efficiency graph shows the number of logical read requests InnoDB has done and
+the number of logical reads that InnoDB could not satisfy from the buffer pool, and had to read directly
+from the disk.
+
 .. image:: images/mysql_innodb_checkpoint_age.png
 
 The InnoDB Checkpoint Age graph shows the InnoDB checkpoint age, which is the same thing as the
