@@ -55,6 +55,6 @@ gets too full. If a node is sending out FC messages it indicates the problem. On
 were writing to both nodes and once we stopped writing to the current node, FC sent becomes 0 but still receiving FC messages from
 the neighbouring node.
 
-IMORTANT NOTE: the Flow Control graph can be faulty until this `bug <https://bugs.launchpad.net/percona-xtradb-cluster/+bug/1180792>`_ is fixed.
+IMPORTANT NOTE: the Flow Control graph can be faulty until this `bug <https://bugs.launchpad.net/percona-xtradb-cluster/+bug/1180792>`_ is fixed.
 The reason is the respective status variables are nullified on every ``SHOW STATUS`` query which means if something else runs it
 the Cacti script will see zeros right after that.
