@@ -1,3 +1,19 @@
+2013-07-22: version 1.0.4
+-------------------------
+
+* Added Galera/MySQL Monitoring Template for Cacti
+* Added "Disk Read/Write Time per IO Request (ms)" graph
+* Added "MySQL InnoDB Buffer Pool Efficiency" graph
+* Switched ss_get_mysql_stats.php to PHP MySQLi extension and made it working with SSL (bug 1193097)
+* Added user info to the max_duration check of pmp-check-mysql-innodb plugin (bug 1185513)
+* ss_get_mysql_stats.php default values for '$status' array were null instead of 0 (bug 1070268)
+* Introduction of innodb_read_views_memory overrode the InnoDB total memory allocated output in Cacti (bug 1188519)
+* ss_get_by_ssh.php parsed MongoDB counters incorrectly when replica is set (bug 1087073)
+* Cacti graph "Redis Unsaved Changes" was empty for Redis 2.6 (bug 1110372)
+* Comparison of status variables that are strings didn't work with pmp-check-mysql-status (bug 1191305)
+* pmp-check-mysql-processlist always showed 0 for "copy to table" counter (bug 1197084)
+* percona-nagios-plugins package failed to install on Debian Squeeze when debsums is installed (bug 1194757)
+
 2013-04-17: version 1.0.3
 -------------------------
 
