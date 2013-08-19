@@ -62,11 +62,13 @@ main() {
       # and compare to the threshold.
       UNAUTH=$(count_mysql_processlist "${TEMP}" "User" "unauthenticated user")
       LOCKED1=$(count_mysql_processlist "${TEMP}" "State" "Locked")
-      LOCKED2=$(count_mysql_processlist "${TEMP}" "State" "Waiting for table level lock")
+      LOCKED2=$(count_mysql_processlist "${TEMP}" "State" "Waiting for .* lock")
       LOCKED3=$(count_mysql_processlist "${TEMP}" "State" "Table lock")
+      LOCKED4=$(count_mysql_processlist "${TEMP}" "State" "Waiting for table flush")
+      LOCKED5=$(count_mysql_processlist "${TEMP}" "State" "Waiting for tables") 
       COPYIN=$(count_mysql_processlist "${TEMP}" "State" ".*opy.* to.* table.*")
       STATIS=$(count_mysql_processlist "${TEMP}" "State" "statistics")
-      LOCKED=$((${LOCKED1:-0} + ${LOCKED2:-0} + ${LOCKED3:-0}))
+      LOCKED=$((${LOCKED1:-0} + ${LOCKED2:-0} + ${LOCKED3:-0} + ${LOCKED4:-0} + ${LOCKED5:-0}))
       NOTE="${UNAUTH} unauthenticated, ${LOCKED} locked,"
       NOTE="${NOTE} ${COPYIN} copy to table, ${STATIS} statistics"
       MAX="$(max "${UNAUTH:-0}" "${LOCKED:-0}" "${COPYIN:-0}" "${STATIS:-0}")"
