@@ -187,14 +187,14 @@ available options.  For example::
    Required option --host is missing
    Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
 
-      --host      Hostname to connect to; use host:port syntax to specify a port
-                  Use :/path/to/socket if you want to connect via a UNIX socket
+      --host      MySQL host
+      --port      MySQL port; defaults to 3306 if not given
       --items     Comma-separated list of the items whose data you want
       --user      MySQL username; defaults to cactiuser if not given
       --pass      MySQL password; defaults to cactiuser if not given
       --heartbeat MySQL heartbeat table; defaults to '' (see mk-heartbeat)
       --nocache   Do not cache results in a file
-      --port      MySQL port; defaults to 3306 if not given
+      --mysql_ssl Enable SSL support for MySQL connection
 
 You can make Cacti pass configuration options to the script with these
 command-line options when it executes the script.  To do this, you will need to

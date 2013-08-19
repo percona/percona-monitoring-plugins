@@ -33,6 +33,7 @@ $mysql_port = 3306;
 $mysql_ssl  = FALSE;   # Whether to use SSL to connect to MySQL.
 $mysql_ssl_key  = '/etc/pki/tls/certs/mysql/client-key.pem';
 $mysql_ssl_cert = '/etc/pki/tls/certs/mysql/client-cert.pem';
+$mysql_ssl_ca = '/etc/pki/tls/certs/mysql/ca-cert.pem';
 
 $heartbeat  = '';      # db.tbl if you use pt-heartbeat from Percona Toolkit.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
@@ -184,14 +185,13 @@ function usage($message) {
 $message
 Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
 
-   --host      Hostname to connect to; use host:port syntax to specify a port
-               Use :/path/to/socket if you want to connect via a UNIX socket
+   --host      MySQL host
+   --port      MySQL port; defaults to $mysql_port if not given
    --items     Comma-separated list of the items whose data you want
    --user      MySQL username; defaults to $mysql_user if not given
    --pass      MySQL password; defaults to $mysql_pass if not given
    --heartbeat MySQL heartbeat table; defaults to '$heartbeat' (see pt-heartbeat)
    --nocache   Do not cache results in a file
-   --port      MySQL port; defaults to $mysql_port if not given
    --mysql_ssl Enable SSL support for MySQL connection
 
 EOF;
@@ -245,29 +245,27 @@ function parse_cmdline( $args ) {
 function ss_get_mysql_stats( $options ) {
    # Process connection options and connect to MySQL.
    global $debug, $mysql_user, $mysql_pass, $heartbeat, $cache_dir, $poll_time,
-          $chk_options, $mysql_port, $mysql_ssl, $mysql_ssl_key, $mysql_ssl_cert;
+          $chk_options, $mysql_port, $mysql_ssl, $mysql_ssl_key, $mysql_ssl_cert,
+          $mysql_ssl_ca;
 
    # Connect to MySQL.
    $user = isset($options['user']) ? $options['user'] : $mysql_user;
    $pass = isset($options['pass']) ? $options['pass'] : $mysql_pass;
+   $host = $options['host'];
    $port = isset($options['port']) ? $options['port'] : $mysql_port;
    $heartbeat = isset($options['heartbeat']) ? $options['heartbeat'] : $heartbeat;
-   # If there is a port, or if it's a non-standard port, we add ":$port" to the
-   # hostname.
-   $host_str  = $options['host']
-              . (isset($options['port']) || $port != 3306 ? ":$port" : '');
-   debug(array('connecting to', $host_str, $user, $pass));
+   debug(array('connecting to', $host, $port, $user, $pass));
    if ( !extension_loaded('mysqli') ) {
       debug("The MySQLi extension is not loaded");
       die("The MySQLi extension is not loaded");
    }
    if ( $mysql_ssl || (isset($options['mysql_ssl']) && $options['mysql_ssl']) ) {
       $conn = mysqli_init();
-      mysqli_ssl_set($conn, $mysql_ssl_key, $mysql_ssl_cert, NULL, NULL, NULL);
-      mysqli_real_connect($conn, $host_str, $user, $pass);
+      mysqli_ssl_set($conn, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca, NULL, NULL);
+      mysqli_real_connect($conn, $host, $user, $pass, NULL, $port);
    }
    else {
-      $conn = mysqli_connect($host_str, $user, $pass);
+      $conn = mysqli_connect($host, $user, $pass, NULL, $port);
    }
    if ( !$conn ) {
       debug("MySQL connection failed: " . mysqli_error());
