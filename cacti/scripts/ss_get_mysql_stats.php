@@ -1234,8 +1234,14 @@ function run_query($sql, $conn) {
       }
    }
    $array = array();
-   while ( $row = @mysqli_fetch_array($result) ) {
-      $array[] = $row;
+   $count = @mysqli_num_rows($result);
+   if ( $count > 10000 ) {
+      debug('Abnormal number of rows returned: ' . $count);
+   }
+   else {
+      while ( $row = @mysqli_fetch_array($result) ) {
+         $array[] = $row;
+      }
    }
    debug(array($sql, $array));
    return $array;
