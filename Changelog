@@ -1,3 +1,13 @@
+2013-10-02: version 1.0.5
+-------------------------
+
+* Added mysql-ca option to ss_get_mysql_stats.php (bug 1213857) 
+* Added user info to the idle_blocker_duration check of pmp-check-mysql-innodb (bug 1215317)
+* Extended pmp-check-mysql-processlist with more locking states (bug 1213859)
+* ss_get_mysql_stats.php did not work with custom mysql port (bug 1213862)
+* ss_get_mysql_stats.php silently failed when a query returns too many rows (bug 1225070)
+* Wrong description of percona-cacti-templates deb package (bug 1217782)
+
 2013-07-22: version 1.0.4
 -------------------------
 
