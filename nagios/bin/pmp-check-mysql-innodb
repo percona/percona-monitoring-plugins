@@ -62,21 +62,24 @@ main() {
          OPT_WARN=${OPT_WARN:-60}
          OPT_CRIT=${OPT_CRIT:-600}
          OUTPUT=$(mysql_exec "
-            SELECT COALESCE(MAX(IF(p.command = 'Sleep', p.time, 0)), 0) AS idle_in_trx,
+            SELECT MAX(COALESCE(p.time, 0)) AS idle_in_trx,
                    p.id,
-                   CONCAT(p.user, '@', p.host)
+                   CONCAT(p.user, '@', p.host) AS userhost
             FROM       INFORMATION_SCHEMA.INNODB_LOCK_WAITS AS w
             INNER JOIN INFORMATION_SCHEMA.INNODB_TRX        AS b ON  b.trx_id = w.blocking_trx_id
             INNER JOIN INFORMATION_SCHEMA.INNODB_TRX        AS r ON  r.trx_id = w.requesting_trx_id
-            LEFT  JOIN INFORMATION_SCHEMA.PROCESSLIST       AS p ON  p.id     = b.trx_mysql_thread_id" 2>"${TEMP}")
+            LEFT  JOIN INFORMATION_SCHEMA.PROCESSLIST       AS p ON  p.id     = b.trx_mysql_thread_id AND p.command = 'Sleep'
+            GROUP BY p.id, p.user, p.host
+            ORDER BY idle_in_trx DESC LIMIT 1" 2>"${TEMP}")
          if [ "$?" != 0 ]; then
             if grep "Unknown table" "${TEMP}" >/dev/null 2>&1; then
                # The I_S tables don't exist.
-               OUTPUT=""
                NOTE="OK The INFORMATION_SCHEMA.INNODB_% tables don't exist."
             else
                cat "${TEMP}"
             fi
+         elif [ -z "${OUTPUT}" ]; then
+            OUTPUT=0
          fi
          ;;
       waiter_count)
