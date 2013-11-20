@@ -1,0 +1,8 @@
+#!/bin/sh
+SOURCE_DIR=$1
+DEST_DIR=$2
+cd $SOURCE_DIR
+install -m 0755 -d $DEST_DIR/var/lib/zabbix/percona/scripts
+install -m 0755 -d $DEST_DIR/var/lib/zabbix/percona/templates
+install -m 0755 zabbix/scripts/* $DEST_DIR/var/lib/zabbix/percona/scripts
+install -m 0644 zabbix/templates/* $DEST_DIR/var/lib/zabbix/percona/templates

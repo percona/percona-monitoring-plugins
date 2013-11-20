@@ -32,20 +32,24 @@ TEMPFILE=$(mktemp /tmp/${0##*/}.XXXX)
 # Set up the release directory.  Copy things into the directory so
 # we can alter them without messing with stuff that is under source control.
 rm -rf release
-mkdir -p release/{docs/html,code/cacti/templates}
+mkdir -p release/code
+cp -R docs release/docs
 cp -R nagios release/code/nagios
-cp -R docs/* release/docs
-cp -R cacti/scripts cacti/definitions cacti/bin cacti/misc release/code/cacti
+cp -R cacti release/code/cacti
+cp -R zabbix release/code/zabbix
+cp cacti/scripts/ss_get_mysql_stats.php release/code/zabbix/scripts
 cp COPYING Changelog release/code
 cp Changelog release/docs/changelog.rst
+mkdir release/{docs/html,code/cacti/templates,code/zabbix/templates}
 
-# Remove bazaar tilde files (backup ones after revert)
-find release/ -name "*.~1~" -exec rm -f {} \;
+# Cleanup of tmp files 
+find release/ -name "*.~*~" -exec rm -f {} \;
+find release/ -name "*.pyc" -exec rm -f {} \;
 
 # Update the version number and other important macros in the temporary
 # directory.
 YEAR=$(date +%Y)
-for f in release/code/nagios/bin/pmp* release/docs/config/conf.py release/code/cacti/scripts/ss* release/code/cacti/definitions/*.def ; do
+for f in release/code/nagios/bin/pmp* release/docs/config/conf.py release/code/cacti/scripts/ss* release/code/cacti/definitions/*.def release/code/zabbix/scripts/* ; do
    sed -i "s/\\\$PROJECT_NAME\\\$/$PROJECT_NAME/g" "$f"
    sed -i "s/\\\$VERSION\\\$/$VERSION/g" "$f"
    sed -i "s/\\\$CURRENT_YEAR\\\$/${YEAR}/g" "$f"
@@ -82,6 +86,12 @@ for file in release/code/cacti/definitions/*.def; do
    MD5=$(_md5 "${FILE}")
    sed -i "s/CUSTOMIZED_XML_TEMPLATE/${MD5}/" "${FILE}"
 done
+
+# Generate Zabbix XML templates and agent configs
+FILE="release/code/zabbix/templates/zabbix_agent_template_percona_mysql_server_ht_2.0.9-sver${VERSION}.xml"
+python zabbix/bin/pmp-zabbix-template.py -o xml > "${FILE}"
+FILE="release/code/zabbix/templates/userparameter_percona_mysql.conf"
+python zabbix/bin/pmp-zabbix-template.py -o config > "${FILE}"
 
 # Make the Nagios documentation into Sphinx .rst format.  The Cacti docs are
 # already in Sphinx format.

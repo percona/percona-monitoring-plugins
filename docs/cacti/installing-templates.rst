@@ -146,6 +146,8 @@ This method this has some disadvantages.  If you upgrade the PHP script file,
 you'll lose your configuration.  And this only works if all of your monitored
 resources need the same configuration parameters.
 
+.. _cacti_php_config_file:
+
 A Configuration File
 --------------------
 

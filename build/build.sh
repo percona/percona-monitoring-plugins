@@ -30,6 +30,7 @@ VERSION="$(cat VERSION)"
 FINAL_CODE=source_code/release/percona-monitoring-plugins-$VERSION
 mv release/percona-monitoring-plugins-$VERSION.tar.gz $TARGET
 echo "Tarball created: $TARGET/percona-monitoring-plugins-$VERSION.tar.gz"
+echo '==================' 
 
 build_rpm() {
     PROJECT=$1
@@ -50,10 +51,8 @@ build_rpm() {
     mv RPMS/$ARCH/$PKG $TARGET 
     rm -rf $WORK_DIR/rpm
 
-    if [ "$DEBUG" = 1 ]; then
-        rpm -qpil $TARGET/$PKG
-        echo
-    fi
+    rpm -qpil $TARGET/$PKG
+    echo
     echo "Package created: $TARGET/$PKG"
 }
 
@@ -73,19 +72,18 @@ build_deb() {
     mv $NAME.deb $TARGET/$PKG
     rm -rf $WORK_DIR/deb
 
-    if [ "$DEBUG" = 1 ]; then
-        echo
-        dpkg -I $TARGET/$PKG
-        dpkg -c $TARGET/$PKG
-        echo
-    fi
+    dpkg -I $TARGET/$PKG
+    dpkg -c $TARGET/$PKG
+    echo
     echo "Package created: $TARGET/$PKG"
 }
 
-build_rpm percona-nagios-plugins
-build_rpm percona-cacti-templates
-build_deb percona-nagios-plugins
-build_deb percona-cacti-templates
+for p in percona-nagios-plugins percona-cacti-templates percona-zabbix-templates ; do 
+    build_rpm $p
+    echo '==================' 
+    build_deb $p
+    echo '==================' 
+done
 
 rm -rf $WORK_DIR
 exit 0

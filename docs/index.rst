@@ -4,10 +4,10 @@ Percona Monitoring Plugins
 The Percona Monitoring Plugins are high-quality components to add
 enterprise-grade MySQL capabilities to your existing in-house, on-premises
 monitoring solutions.  The components are designed to integrate seamlessly with
-widely deployed solutions such as Nagios and Cacti, and are delivered in the
-form of templates, plugins, and scripts.
+widely deployed solutions such as Nagios, Cacti and Zabbix, and are delivered in
+the form of templates, plugins, and scripts.
 
-.. image:: cacti/images/cacti-graph-set.png
+.. image:: zabbix/images/nagios-zabbix-cacti.png
 
 At Percona, our experience helping customers with emergencies informs our
 monitoring strategies. We have analyzed a large database of emergency issues,
@@ -67,8 +67,10 @@ features such as escalation, dependencies, and flexible notification rules.
 
    nagios/index
 
-Plugins for Cacti
-=================
+.. _templates_for_cacti:
+
+Templates for Cacti
+===================
 
 Cacti is a popular PHP- and MySQL-based web front-end to RRDTool, providing
 intuitive point-and-click configuration and browsing of graphs and metrics.
@@ -93,6 +95,17 @@ intuitive point-and-click configuration and browsing of graphs and metrics.
    cacti/openvz-templates
    cacti/redis-templates
    cacti/developer-documentation
+
+Templates for Zabbix 
+====================
+
+Zabbix is an enterprise-class open source distributed monitoring solution
+for networks and applications.
+
+.. toctree::
+   :maxdepth: 1
+
+   zabbix/index
 
 Changelog
 =========

@@ -1,13 +1,12 @@
-Source: percona-cacti-templates
+Source: percona-zabbix-templates
 Section: utils
 Priority: optional
 Maintainer: Percona
 Homepage: http://www.percona.com/software/percona-monitoring-plugins
-Package: percona-cacti-templates
+Package: percona-zabbix-templates
 Version: %{version}
 Architecture: all
-Depends: cacti (>= 0.8.6)
-Description: Percona Monitoring Plugins for Cacti
+Description: Percona Monitoring Plugins for Zabbix
  The Percona Monitoring Plugins are high-quality components to add enterprise-
  grade MySQL monitoring and graphing capabilities to your existing in-house,
  on-premises monitoring solutions. The components are designed to integrate
