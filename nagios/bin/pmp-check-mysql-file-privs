@@ -64,7 +64,7 @@ main() {
    trap "rm -f '${TEMP}' '${DATADIRS}' >/dev/null 2>&1" EXIT
 
    # If any connection option was given, then try to log in to find the datadir.
-   if [ "${OPT_HOST}${OPT_USER}${OPT_PASS}${OPT_PORT}${OPT_SOCK}" ]; then
+   if [ "${OPT_DEFT}${OPT_HOST}${OPT_USER}${OPT_PASS}${OPT_PORT}${OPT_SOCK}" ]; then
       # If this fails (e.g. we can't log in), then there will be no line in the
       # file, and later we won't change the exit code / note away from "UNK".
       mysql_exec "SELECT IF(@@datadir LIKE '/%', @@datadir, CONCAT(@@basedir, @@datadir))" >> "${DATADIRS}"
@@ -134,7 +134,7 @@ mysql_exec() {
 # ########################################################################
 _pidof() {
    if ! pidof "${1}" 2>/dev/null; then
-      ps -eo pid,ucomm | awk -v comm="${1}" '$2 == comm { print $1 }'
+      ps axo pid,ucomm | awk -v comm="${1}" '$2 == comm { print $1 }'
    fi
 }
 
@@ -251,6 +251,15 @@ ps
 find C<datadir>
 
 =back
+
+The plugin should be able to either get variables from MySQL or find mysqld
+PID using C<ps> command.
+
+On BSD, if C<sysctl> option C<security.bsd.see_other_uids> is set to 0, C<ps>
+will not return mysqld PID if the plugin run from non-root user.
+
+Also an user you run the plugin from should be able to access MySQL datadir
+files, so you may want to add it into mysql unix group etc.
 
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 

@@ -4,7 +4,7 @@
 # This program is part of $PROJECT_NAME$
 # License: GPL License (see COPYING)
 # Authors:
-#  Baron Schwartz
+#  Baron Schwartz, Roman Vynar
 # ########################################################################
 
 # ########################################################################
@@ -30,7 +30,7 @@ main() {
    for o; do
       case "${o}" in
          -w)        shift; OPT_WARN="${1}"; shift; ;;
-         -d)        shift; OPT_DISABLELP=1; ;;
+         -d)        shift; ;; # left for backward-compatibility
          -c)        shift; OPT_CRIT="${1}"; shift; ;;
          --version) grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
          --help)    perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
@@ -49,47 +49,42 @@ main() {
    NOTE="UNK cannot find memory statistics"
    TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
    trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
-   IS_CRIT=""
-   if free -m > "${TEMP}" ; then
-      MEM_TOT=$(get_total_memory "${TEMP}")
-      USD_PCT=$(get_used_memory_pct "${TEMP}")
-      NOTE="Memory ${USD_PCT}% used"
-      if [ "${USD_PCT:-0}" -ge "${OPT_CRIT}" ]; then
-         NOTE="CRIT $NOTE"
-         IS_CRIT=1
-      elif [ "${USD_PCT:-0}" -ge "${OPT_WARN}" ]; then
-         NOTE="WARN $NOTE"
-      else
-         NOTE="OK $NOTE"
-      fi
-      if [ -z "${OPT_DISABLELP}" ]; then
-         if ps -eo pid,vsz,ucomm > "${TEMP}" ; then
-            BIGGEST=$(get_largest_process "${TEMP}")
-            BIG_PID=$(echo $BIGGEST | cut -d' ' -f1)
-            BIG_VSZ=$(echo $BIGGEST | cut -d' ' -f2)
-            BIG_COMMAND=$(echo $BIGGEST | cut -d' ' -f3)
-            PID_PCT=$(pct_of ${BIG_VSZ:-0} ${MEM_TOT:-0});
-            NOTE="$NOTE. Largest process: ${BIG_COMMAND} (${BIG_PID}) = ${BIG_VSZ}MB (${PID_PCT}%)"
-            if [ "${PID_PCT:-0}" -ge "${OPT_CRIT}" ]; then
-               NOTE="CRIT $NOTE"
-            elif [ -z "$IS_CRIT" -a "${PID_PCT:-0}" -ge "${OPT_WARN}" ]; then
-               # The IF condition just above is to prevent a mere warning from
-               # downgrading a critical that was triggered by overall memory used.
-               NOTE="WARN $NOTE"
-            fi
-         fi
-      fi
-
-      # Build the common perf data output for graph trending
-      PERFDATA="memory_used=${USD_PCT:-0};${OPT_WARN};${OPT_CRIT};0;100"
-      NOTE="$NOTE | $PERFDATA"
+   if which free > /dev/null && free -m > "${TEMP}" ; then
+      USD_PCT=$(get_used_memory_linux "${TEMP}")
+   elif which sysctl > /dev/null && sysctl -a > "${TEMP}" ; then
+      USD_PCT=$(get_used_memory_bsd "${TEMP}")
+   else
+      echo $NOTE
+      exit
    fi
 
-   echo $NOTE
+   NOTE="Memory ${USD_PCT}% used"
+   if [ "${USD_PCT:-0}" -ge "${OPT_CRIT}" ]; then
+      NOTE="CRIT $NOTE. $(get_largest_process)"
+   elif [ "${USD_PCT:-0}" -ge "${OPT_WARN}" ]; then
+      NOTE="WARN $NOTE. $(get_largest_process)"
+   else
+      NOTE="OK $NOTE"
+   fi
+
+   # Build the common perf data output for graph trending
+   PERFDATA="memory_used=${USD_PCT:-0};${OPT_WARN};${OPT_CRIT};0;100"
+   echo "$NOTE | $PERFDATA"
 }
 
 # ########################################################################
-# Get the total memory from the output of 'free -m'.  In the following,
+# Find the largest process
+# ########################################################################
+get_largest_process () {
+   BIGGEST=$(ps axo pid,%mem,ucomm | sort -k2 -nr | head -1)
+   BIG_PID=$(echo $BIGGEST | cut -d' ' -f1)
+   BIG_MEM=$(echo $BIGGEST | cut -d' ' -f2)
+   BIG_COMMAND=$(echo $BIGGEST | cut -d' ' -f3)
+   echo "Largest process: ${BIG_COMMAND} (${BIG_PID}) = ${BIG_MEM}%"
+}
+
+# ########################################################################
+# Get the used memory (excluding buffers/cache) from the output of 'free -m'
 #              total       used       free     shared    buffers     cached
 # Mem:         16046      15212        834          0       4020       7402
 # -/+ buffers/cache:       3788      12258
@@ -97,45 +92,22 @@ main() {
 # This shows 12258MB free (834 + 4020 + 7402) out of 16046MB.  The percent
 # free should be 12258/16046 = 76.4%, and used should be 3788/16046.
 # ########################################################################
-get_total_memory() {
-   awk '/Mem:/{print $2}' "$1"
+get_used_memory_linux() {
+   awk '/Mem:/ {total = $2;}
+        /cache:/ {printf "%d\n", $3 / total * 100}' "$1"
 }
 
 # ########################################################################
-# Get the used memory (excluding buffers/cache) from the output of 'free -m'
+# Get the used memory from sysctl for BSD systems
 # ########################################################################
-get_used_memory_pct() {
-   awk '/Mem:/ {tot = $2;} /cache:/{printf "%d\n", $3 / tot * 100}' "$1"
-}
-
-# ########################################################################
-# Get the process that consumes the most virtual memory, and its size in MB,
-# from the output of 'ps'.  Example:
-# ps -eo pid,vsz,ucomm | sort -n -k2,2 | tail -n1
-# But that vsz column is in kiB, so we must convert it to MiB.
-# ########################################################################
-get_largest_process(){
-   awk '
-      BEGIN {
-         maxpid  = 0;
-         maxmem  = 0;
-         maxproc = "";
-      }
-      $1 !~ /[^0-9]/ && $2 > maxmem {
-         maxpid  = $1;
-         maxmem  = $2;
-         maxproc = $3;
-      }
-      END {
-         printf "%d %.2f %s\n", maxpid, maxmem / 1024, maxproc;
-      }' "$1"
-}
-
-# ########################################################################
-# Return what percent $1 is of $2, as an integer. If $2 is 0, result is 0.
-# ########################################################################
-pct_of() {
-   echo "$@" | awk '{if($2 > 0){printf "%d\n", $1 / $2 * 100}else{print 0}}'
+get_used_memory_bsd() {
+   awk '/vm.stats.vm.v_cache_count:/ {cache = $2}
+        /vm.stats.vm.v_inactive_count:/ {inactive = $2}
+        /vm.stats.vm.v_free_count:/ {free = $2}
+        /vm.stats.vm.v_page_count:/ {
+           total = $2;
+           used = total - inactive - cache - free;
+           printf "%d\n", used / total * 100}' "$1"
 }
 
 # ########################################################################
@@ -171,15 +143,13 @@ fi
 
 =head1 NAME
 
-pmp-check-unix-memory - Alert on low memory, or when a process uses too much
-memory.
+pmp-check-unix-memory - Alert on low memory.
 
 =head1 SYNOPSIS
 
   Usage: pmp-check-unix-memory [OPTIONS]
   Options:
     -c CRIT     Critical threshold; default 95%.
-    -d          Disable single process memory check; default enabled.
     -w WARN     Warning threshold; default 90%.
     --help      Print help and exit.
     --version   Print version and exit.
@@ -188,23 +158,11 @@ memory.
 
 =head1 DESCRIPTION
 
-This Nagios plugin examines the output of C<free> and C<ps> to look for two
-conditions.  The first is when the system is running out of memory, and the
-second is when any single process uses too much memory. However, there is an 
-option to disable the second condition. Both checks are compared to the same
-thresholds.
+This Nagios plugin examines the output of C<free> (Linux) or C<sysctl> (BSD)
+to check whether the system is running out of memory and finds the largest
+process in memory from C<ps> output.
 
-For example, on a system with 144GB of memory, with the default options, the
-plugin might produce the following warning:
-
-  WARN Memory: 94% used; largest process: mysqld (16675) = 133149.54MB (91%)
-
-Both the total used memory (94%) and the virtual size of mysqld (91%) are over
-the warning threshold.  If one of these tests evaluates to a higher severity
-than the other, the more serious result prevails.
-
-The plugin is tested on GNU/Linux, but may also work on other Unix-like
-operating systems, if the output of C<ps> and C<free> can be recognized.
+The plugin is tested on GNU/Linux and FreeBSD.
 
 =head1 PRIVILEGES
 
@@ -216,7 +174,7 @@ This plugin executes the following UNIX commands that may need special privilege
 
 =item *
 
-free
+free (Linux), sysctl (BSD)
 
 =item *
 

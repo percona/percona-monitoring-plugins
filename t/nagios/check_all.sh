@@ -5,5 +5,9 @@
 ../../nagios/bin/pmp-check-mysql-processlist
 ../../nagios/bin/pmp-check-mysql-innodb
 ../../nagios/bin/pmp-check-unix-memory
-../../nagios/bin/pmp-check-unix-memory -d
 ../../nagios/bin/pmp-check-mysql-deadlocks
+../../nagios/bin/pmp-check-pt-table-checksum
+../../nagios/bin/pmp-check-mysql-pidfile
+../../nagios/bin/pmp-check-mysql-deleted-files
+../../nagios/bin/pmp-check-mysql-file-privs
+../../nagios/bin/pmp-check-lvm-snapshots

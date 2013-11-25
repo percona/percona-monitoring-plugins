@@ -54,7 +54,7 @@ main() {
 
    # If any connection option was given, then try to log in to find the server's
    # tmpdir.
-   if [ "${OPT_HOST}${OPT_USER}${OPT_PASS}${OPT_PORT}${OPT_SOCK}" ]; then
+   if [ "${OPT_DEFT}${OPT_HOST}${OPT_USER}${OPT_PASS}${OPT_PORT}${OPT_SOCK}" ]; then
       OPT_TMPDIR=$(mysql_exec "SELECT @@tmpdir") || exit $?
    elif [ -z "${OPT_TMPDIR}" ]; then
       OPT_TMPDIR="${TMPDIR:-/tmp/}"
@@ -99,7 +99,7 @@ main() {
 # ########################################################################
 _pidof() {
    if ! pidof "${1}" 2>/dev/null; then
-      ps -eo pid,ucomm | awk -v comm="${1}" '$2 == comm { print $1 }'
+      ps axo pid,ucomm | awk -v comm="${1}" '$2 == comm { print $1 }'
    fi
 }
 
@@ -114,13 +114,15 @@ mysql_exec() {
 
 # ########################################################################
 # A wrapper around lsof, which might not exist. The first argument is the
-# process ID to match.  This is Linux-centric; the fallback of listing
-# /proc/pid/fd will probably only work on Linux.
+# process ID to match.  Otherwise, the fallback of listing /proc/pid/fd
+# will probably only work on Linux. For BSD, fstat will be used.
 # ########################################################################
 _lsof() {
    PATH="$PATH:/usr/sbin:/sbin"
    if ! lsof -p $1 2>/dev/null; then
-      /bin/ls -l /proc/$1/fd 2>/dev/null
+      if ! /bin/ls -l /proc/$1/fd 2>/dev/null; then
+         fstat -p $1 2>/dev/null
+      fi
    fi
 }
 
@@ -222,8 +224,8 @@ temporary directory.
 This plugin looks at the first running instance of MySQL, as found in the
 system process table, so it will not work on systems that have multiple
 instances running. It probably works best on Linux, though it might work on
-other operating systems. It relies on either lsof or the ability to list the
-files in the process's /proc/pid/fd directory.
+other operating systems. It relies on either lsof or fstat or the ability to
+list the files in the process's /proc/pid/fd directory.
 
 =head1 PRIVILEGES
 
@@ -247,13 +249,14 @@ ps
 
 =item *
 
-lsof
-
-=item *
-
-ls /proc/$pid/fd
+C<lsof> or C<ls /proc/$pid/fd> (Linux), C<fstat> (BSD)
 
 =back
+
+The plugin should be able to find mysqld PID using C<ps> command.
+
+On BSD, if C<sysctl> option C<security.bsd.see_other_uids> is set to 0, C<ps>
+will not return mysqld PID if the plugin run from non-root user.
 
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
