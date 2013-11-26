@@ -194,9 +194,8 @@ available options.  For example::
       --items     Comma-separated list of the items whose data you want
       --user      MySQL username; defaults to cactiuser if not given
       --pass      MySQL password; defaults to cactiuser if not given
-      --heartbeat MySQL heartbeat table; defaults to '' (see mk-heartbeat)
+      --server-id Server id to associate with a heartbeat if heartbeat usage is enabled
       --nocache   Do not cache results in a file
-      --mysql_ssl Enable SSL support for MySQL connection
 
 You can make Cacti pass configuration options to the script with these
 command-line options when it executes the script.  To do this, you will need to

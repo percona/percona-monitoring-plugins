@@ -33,9 +33,13 @@ $mysql_port = 3306;
 $mysql_ssl  = FALSE;   # Whether to use SSL to connect to MySQL.
 $mysql_ssl_key  = '/etc/pki/tls/certs/mysql/client-key.pem';
 $mysql_ssl_cert = '/etc/pki/tls/certs/mysql/client-cert.pem';
-$mysql_ssl_ca = '/etc/pki/tls/certs/mysql/ca-cert.pem';
+$mysql_ssl_ca   = '/etc/pki/tls/certs/mysql/ca-cert.pem';
 
-$heartbeat  = '';      # db.tbl if you use pt-heartbeat from Percona Toolkit.
+$heartbeat = FALSE;        # Whether to use pt-heartbeat table for repl. delay calculation.
+$heartbeat_utc = FALSE;    # Whether pt-heartbeat is run with --utc option.  
+$heartbeat_server_id = 0;  # Server id to associate with a heartbeat. Leave 0 if no preference.
+$heartbeat_table = 'percona.heartbeat'; # db.tbl.
+
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300;     # Adjust to match your polling interval.
 $timezone   = null;    # If not set, uses the system default.  Example: "UTC"
@@ -161,7 +165,7 @@ if ( !function_exists('array_change_key_case') ) {
 # ============================================================================
 function validate_options($options) {
    debug($options);
-   $opts = array('host', 'items', 'user', 'pass', 'heartbeat', 'nocache', 'port');
+   $opts = array('host', 'items', 'user', 'pass', 'nocache', 'port', 'server-id');
    # Required command-line options
    foreach ( array('host', 'items') as $option ) {
       if ( !isset($options[$option]) || !$options[$option] ) {
@@ -179,7 +183,7 @@ function validate_options($options) {
 # Print out a brief usage summary
 # ============================================================================
 function usage($message) {
-   global $mysql_user, $mysql_pass, $mysql_port, $heartbeat;
+   global $mysql_user, $mysql_pass, $mysql_port;
 
    $usage = <<<EOF
 $message
@@ -190,9 +194,8 @@ Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
    --items     Comma-separated list of the items whose data you want
    --user      MySQL username; defaults to $mysql_user if not given
    --pass      MySQL password; defaults to $mysql_pass if not given
-   --heartbeat MySQL heartbeat table; defaults to '$heartbeat' (see pt-heartbeat)
+   --server-id Server id to associate with a heartbeat if heartbeat usage is enabled
    --nocache   Do not cache results in a file
-   --mysql_ssl Enable SSL support for MySQL connection
 
 EOF;
    die($usage);
@@ -244,22 +247,22 @@ function parse_cmdline( $args ) {
 # ============================================================================
 function ss_get_mysql_stats( $options ) {
    # Process connection options and connect to MySQL.
-   global $debug, $mysql_user, $mysql_pass, $heartbeat, $cache_dir, $poll_time,
-          $chk_options, $mysql_port, $mysql_ssl, $mysql_ssl_key, $mysql_ssl_cert,
-          $mysql_ssl_ca;
+   global $debug, $mysql_user, $mysql_pass, $cache_dir, $poll_time, $chk_options,
+          $mysql_port, $mysql_ssl, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca, 
+          $heartbeat, $heartbeat_table, $heartbeat_server_id, $heartbeat_utc;
 
    # Connect to MySQL.
    $user = isset($options['user']) ? $options['user'] : $mysql_user;
    $pass = isset($options['pass']) ? $options['pass'] : $mysql_pass;
    $host = $options['host'];
    $port = isset($options['port']) ? $options['port'] : $mysql_port;
-   $heartbeat = isset($options['heartbeat']) ? $options['heartbeat'] : $heartbeat;
+   $heartbeat_server_id = isset($options['server-id']) ? $options['server-id'] : $heartbeat_server_id;
    debug(array('connecting to', $host, $port, $user, $pass));
    if ( !extension_loaded('mysqli') ) {
       debug("The MySQLi extension is not loaded");
       die("The MySQLi extension is not loaded");
    }
-   if ( $mysql_ssl || (isset($options['mysql_ssl']) && $options['mysql_ssl']) ) {
+   if ( $mysql_ssl ) {
       $conn = mysqli_init();
       mysqli_ssl_set($conn, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca, NULL, NULL);
       mysqli_real_connect($conn, $host, $user, $pass, NULL, $port);
@@ -383,9 +386,16 @@ function ss_get_mysql_stats( $options ) {
 
          # Check replication heartbeat, if present.
          if ( $heartbeat ) {
+            if ( $heartbeat_utc ) {
+               $now_func = 'UNIX_TIMESTAMP(UTC_TIMESTAMP)';
+            }
+            else {
+               $now_func = 'UNIX_TIMESTAMP()';
+            }
             $result2 = run_query(
-               "SELECT MAX(GREATEST(0, UNIX_TIMESTAMP() - UNIX_TIMESTAMP(ts) - 1))"
-               . " AS delay FROM $heartbeat", $conn);
+               "SELECT MAX($now_func - UNIX_TIMESTAMP(ts))"
+               . " AS delay FROM $heartbeat_table"
+               . " WHERE $heartbeat_server_id = 0 OR server_id = $heartbeat_server_id", $conn);
             $slave_delay_rows_gotten = 0;
             foreach ( $result2 as $row2 ) {
                $slave_delay_rows_gotten++;
@@ -395,7 +405,7 @@ function ss_get_mysql_stats( $options ) {
                   $status['slave_lag'] = $row2['delay'];
                }
                else {
-                  debug("Couldn't get slave lag from $heartbeat");
+                  debug("Couldn't get slave lag from $heartbeat_table");
                }
             }
             if ( $slave_delay_rows_gotten == 0 ) {
