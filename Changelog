@@ -1,6 +1,8 @@
-2013-11-20: version 1.1
+2013-11-26: version 1.1
 -------------------------
 * Added MySQL template for Zabbix 2.0.x (first release)
+* Added FreeBSD support to Nagios plugins, partially rewritten pmp-check-unix-memory (bugs 1249575, 1244081)
+* Added new options to ss_get_mysql_stats.php to better support pt-heartbeat (bugs 1253125, 1253130)
 * sql query for idle_blocker_duraction check in pmp-check-mysql-innodb did not conform sql mode of ONLY_FULL_GROUP_BY (bug #1240417)
 
 2013-10-02: version 1.0.5

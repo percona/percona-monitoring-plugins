@@ -3339,7 +3339,7 @@
       'Get MySQL Stats' => {
          hash         => 'hash_03_VER_436e47b578d778e94d10a552d7d35bdf',
          input_string =>
-            '<path_php_binary> -q <path_cacti>/scripts/ss_get_mysql_stats.php --host <hostname> --items <items> --user <username> --pass <password> --port <port>',
+            '<path_php_binary> -q <path_cacti>/scripts/ss_get_mysql_stats.php --host <hostname> --items <items> --user <username> --pass <password> --port <port> --server-id <server-id>',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_c8cef6437d22aa62790728f605a68d8e',
@@ -3356,6 +3356,10 @@
             {  allow_nulls => 'on',
                hash        => 'hash_07_VER_0dde201d3dde810ddb9eeed6b444bf50',
                name        => 'password',
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_5a1b802ba7e92609f8aa2b0521e221e1',
+               name        => 'server-id'
             },
          ],
          outputs => {

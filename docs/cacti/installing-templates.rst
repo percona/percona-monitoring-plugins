@@ -185,17 +185,18 @@ PHP variables, but it is also possible to pass command-line arguments to the
 scripts.  If you execute the script without any options, you'll see the
 available options.  For example::
 
-   php ss_get_mysql_stats.php
+   # php ss_get_mysql_stats.php                            
    Required option --host is missing
    Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
 
       --host      MySQL host
-      --port      MySQL port; defaults to 3306 if not given
       --items     Comma-separated list of the items whose data you want
       --user      MySQL username; defaults to cactiuser if not given
       --pass      MySQL password; defaults to cactiuser if not given
+      --port      MySQL port; defaults to 3306 if not given
       --server-id Server id to associate with a heartbeat if heartbeat usage is enabled
       --nocache   Do not cache results in a file
+      --help      Show usage
 
 You can make Cacti pass configuration options to the script with these
 command-line options when it executes the script.  To do this, you will need to

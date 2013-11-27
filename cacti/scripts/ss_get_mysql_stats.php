@@ -166,6 +166,11 @@ if ( !function_exists('array_change_key_case') ) {
 function validate_options($options) {
    debug($options);
    $opts = array('host', 'items', 'user', 'pass', 'nocache', 'port', 'server-id');
+   # Show help
+   if ( array_key_exists('help', $options) ) {
+      usage('');
+   }
+
    # Required command-line options
    foreach ( array('host', 'items') as $option ) {
       if ( !isset($options[$option]) || !$options[$option] ) {
@@ -190,12 +195,13 @@ $message
 Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
 
    --host      MySQL host
-   --port      MySQL port; defaults to $mysql_port if not given
    --items     Comma-separated list of the items whose data you want
    --user      MySQL username; defaults to $mysql_user if not given
    --pass      MySQL password; defaults to $mysql_pass if not given
+   --port      MySQL port; defaults to $mysql_port if not given
    --server-id Server id to associate with a heartbeat if heartbeat usage is enabled
    --nocache   Do not cache results in a file
+   --help      Show usage
 
 EOF;
    die($usage);
@@ -206,39 +212,19 @@ EOF;
 # return them as an array ( arg => value )
 # ============================================================================
 function parse_cmdline( $args ) {
-   $result = array();
-   $cur_arg = '';
-   foreach ($args as $val) {
-      if ( strpos($val, '--') === 0 ) {
-         if ( strpos($val, '--no') === 0 ) {
-            # It's an option without an argument, but it's a --nosomething so
-            # it's OK.
-            $result[substr($val, 2)] = 1;
-            $cur_arg = '';
+   $options = array();
+   while (list($tmp, $p) = each($args)) {
+      if (strpos($p, '--') === 0) {
+         $param = substr($p, 2);
+         $value = null;
+         $nextparam = current($args);
+         if ($nextparam !== false && strpos($nextparam, '--') !==0) {
+            list($tmp, $value) = each($args);
          }
-         elseif ( $cur_arg ) { # Maybe the last --arg was an option with no arg
-            if ( $cur_arg == '--user' || $cur_arg == '--pass' || $cur_arg == '--port' ) {
-               # Special case because Cacti will pass these without an arg
-               $cur_arg = '';
-            }
-            else {
-               die("No arg: $cur_arg\n");
-            }
-         }
-         else {
-            $cur_arg = $val;
-         }
-      }
-      else {
-         $result[substr($cur_arg, 2)] = $val;
-         $cur_arg = '';
+         $options[$param] = $value;
       }
    }
-   if ( $cur_arg && ($cur_arg != '--user' && $cur_arg != '--pass' && $cur_arg != '--port') ) {
-      die("No arg: $cur_arg\n");
-   }
-   debug($result);
-   return $result;
+   return $options;
 }
 
 # ============================================================================
@@ -283,7 +269,7 @@ function ss_get_mysql_stats( $options ) {
 
    # First, check the cache.
    $fp = null;
-   if ( !isset($options['nocache']) ) {
+   if ( !array_key_exists('nocache', $options) ) {
       if ( $fp = fopen($cache_file, 'a+') ) {
          $locked = flock($fp, 1); # LOCK_SH
          if ( $locked ) {
@@ -315,14 +301,17 @@ function ss_get_mysql_stats( $options ) {
             }
          }
          else {
-            debug("Couldn't lock the cache file, ignoring it.");
             $fp = null;
+            debug("Couldn't lock the cache file, ignoring it");
          }
+      }
+      else {
+         $fp = null;
+         debug("Couldn't open the cache file");
       }
    }
    else {
-      $fp = null;
-      debug("Couldn't open the cache file");
+      debug("Not using the cache file");
    }
 
    # Set up variables.

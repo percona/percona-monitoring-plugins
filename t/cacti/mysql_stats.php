@@ -3,6 +3,26 @@ require('test-more.php');
 require('../../cacti/scripts/ss_get_mysql_stats.php');
 $debug = true;
 
+is_deeply(parse_cmdline(explode(' ', '--host localhost --items jg,jh,ji,jj,jk --user  --pass  --port  --server-id 101')),
+          array('host' => 'localhost',
+                'items' => 'jg,jh,ji,jj,jk',
+                'user' => '',
+                'pass' => '',
+                'port' => '',
+                'server-id' => '101'),
+          'parse_cmdline "--host localhost --items jg,jh,ji,jj,jk --user  --pass  --port  --server-id 101"'
+);
+
+is_deeply(parse_cmdline(explode(' ', '--host localhost --items gg --user  --pass  --port 3341 --server-id ')),
+          array('host' => 'localhost',
+                'items' => 'gg',
+                'user' => '',
+                'pass' => '',
+                'port' => '3341',
+                'server-id' => ''),
+          'parse_cmdline "--host localhost --items gg --user  --pass  --port 3341 --server-id "' 
+);
+
 is(
    make_bigint('0', '1170663853'),
    '1170663853',
