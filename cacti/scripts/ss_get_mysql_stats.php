@@ -232,39 +232,19 @@ function parse_cmdline( $args ) {
 # top of this file.
 # ============================================================================
 function ss_get_mysql_stats( $options ) {
-   # Process connection options and connect to MySQL.
+   # Process connection options.
    global $debug, $mysql_user, $mysql_pass, $cache_dir, $poll_time, $chk_options,
           $mysql_port, $mysql_ssl, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca, 
           $heartbeat, $heartbeat_table, $heartbeat_server_id, $heartbeat_utc;
 
-   # Connect to MySQL.
    $user = isset($options['user']) ? $options['user'] : $mysql_user;
    $pass = isset($options['pass']) ? $options['pass'] : $mysql_pass;
    $host = $options['host'];
    $port = isset($options['port']) ? $options['port'] : $mysql_port;
    $heartbeat_server_id = isset($options['server-id']) ? $options['server-id'] : $heartbeat_server_id;
-   debug(array('connecting to', $host, $port, $user, $pass));
-   if ( !extension_loaded('mysqli') ) {
-      debug("The MySQLi extension is not loaded");
-      die("The MySQLi extension is not loaded");
-   }
-   if ( $mysql_ssl ) {
-      $conn = mysqli_init();
-      mysqli_ssl_set($conn, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca, NULL, NULL);
-      mysqli_real_connect($conn, $host, $user, $pass, NULL, $port);
-   }
-   else {
-      $conn = mysqli_connect($host, $user, $pass, NULL, $port);
-   }
-   if ( !$conn ) {
-      debug("MySQL connection failed: " . mysqli_error());
-      die("MySQL: " . mysqli_error());
-   }
 
-   $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   $cache_file = "$cache_dir/$sanitized_host-mysql_cacti_stats.txt"
-               . (isset($options['port']) || $port != 3306 ? ":$port" : '');
+   $sanitized_host = str_replace(array(":", "/"), array("", "_"), $host);
+   $cache_file = "$cache_dir/$sanitized_host-mysql_cacti_stats.txt" . ($port != 3306 ? ":$port" : '');
    debug("Cache file is $cache_file");
 
    # First, check the cache.
@@ -312,6 +292,25 @@ function ss_get_mysql_stats( $options ) {
    }
    else {
       debug("Not using the cache file");
+   }
+
+   # Connect to MySQL.
+   debug(array('Connecting to', $host, $port, $user, $pass));
+   if ( !extension_loaded('mysqli') ) {
+      debug("PHP MySQLi extension is not loaded");
+      die("PHP MySQLi extension is not loaded");
+   }
+   if ( $mysql_ssl ) {
+      $conn = mysqli_init();
+      mysqli_ssl_set($conn, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca, NULL, NULL);
+      mysqli_real_connect($conn, $host, $user, $pass, NULL, $port);
+   }
+   else {
+      $conn = mysqli_connect($host, $user, $pass, NULL, $port);
+   }
+   if ( mysqli_connect_errno() ) {
+      debug("MySQL connection failed: " . mysqli_connect_error());
+      die("ERROR: " . mysqli_connect_error());
    }
 
    # Set up variables.

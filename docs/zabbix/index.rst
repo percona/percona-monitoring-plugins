@@ -83,7 +83,7 @@ the Agent node.
      [root@centos6 ~]# /var/lib/zabbix/percona/scripts/get_mysql_stats_wrapper.sh gg
      ERROR: run the command manually to investigate the problem: /usr/bin/php -q /var/lib/zabbix/percona/scripts/ss_get_mysql_stats.php --host localhost --items gg
      [root@centos6 ~]# /usr/bin/php -q /var/lib/zabbix/percona/scripts/ss_get_mysql_stats.php --host localhost --items gg
-     MySQL: [root@centos6 ~]# 
+     ERROR: Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)[root@centos6 ~]# 
 
 3. Configure /root/.my.cnf
 
