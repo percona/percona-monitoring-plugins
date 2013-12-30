@@ -1,3 +1,8 @@
+2013-12-30: version 1.1.1
+-------------------------
+* Cacti mysql graphs stop working with data input field "server-id" after 1.1 upgrade (bug 1264814)
+* Non-integer poller errors for MySQL Query Response Time (bug 1264353)
+
 2013-12-16: version 1.1
 -------------------------
 * Added MySQL template for Zabbix 2.0.x (first release)
