@@ -112,7 +112,7 @@ if [ "$ARG" != "nodocs" ]; then
    # Downloads latest percona-theme
    echo "Downloading percona-theme..."
    cd release/docs/config/
-   wget -q -O percona-theme.tar.gz http://percona.com/docs/theme/percona-monitoring-plugins/
+   wget -q -O percona-theme.tar.gz http://percona.com/docs/theme/percona-monitoring-plugins/1.1
    rm -rf percona-theme
    echo "Extracting theme..."
    tar -zxf percona-theme.tar.gz
