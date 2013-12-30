@@ -485,7 +485,7 @@ function ss_get_mysql_stats( $options ) {
          debug('Getting query time histogram');
          $i = 0;
          $result = run_query(
-            "SELECT `count`, total * 1000000 AS total "
+            "SELECT `count`, ROUND(total * 1000000) AS total "
                . "FROM INFORMATION_SCHEMA.QUERY_RESPONSE_TIME "
                . "WHERE `time` <> 'TOO LONG'",
             $conn);
