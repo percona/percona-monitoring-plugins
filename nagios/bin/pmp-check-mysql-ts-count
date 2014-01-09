@@ -51,7 +51,7 @@ main() {
    OPT_WARN=${OPT_WARN:-12}
    OPT_CRIT=${OPT_CRIT:-60}
    OPT_INTERVAL=${OPT_INTERVAL:-1}
-   OPT_TARGET="${OPT_TABLE:-deadlocks}"
+   OPT_TARGET="${OPT_TARGET:-deadlocks}"
    if [ -e '/etc/nagios/mysql.cnf' ]; then
       OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
    fi
