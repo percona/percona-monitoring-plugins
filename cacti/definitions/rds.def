@@ -1,0 +1,551 @@
+# This is the template definition file.  To use it, see pmp-cacti-template.
+#
+# This program is copyright (c) 2014 Roman Vynar. Feedback and improvements
+# are welcome.
+#
+# THIS PROGRAM IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+# MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, version 2.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA.
+
+# Autobuild: ss_get_rds_stats.py
+
+{
+   name   => 'Amazon RDS Server',
+   hash   => 'hash_02_VER_475e905ca7d161c6c626c47fa4fa0c59',
+   version => {
+      version => '$VERSION$',
+      hash    => 'hash_06_VER_419c461546f918cce3704fbbab666039',
+   },
+   checksum => 'hash_06_VER_dd8bace85b2a47b7cdf8926b84954dc2',
+   graphs => [
+      {  name       => 'RDS Binlog Disk Usage',
+         base_value => '1024',
+         hash       => 'hash_00_VER_3f3d6b30ff7805a46fe1ca454f9ccfbc',
+         dt         => {
+            hash       => 'hash_01_VER_e03c8e82b192dffbccb7258730114e82',
+            input      => 'Get RDS Stats/BinLogDiskUsage',
+            binlog_disk_usage => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_729129dea15d64a72219a5043d238092'
+            },
+         },
+         items => [
+            {  item   => 'binlog_disk_usage',
+               color  => '9E8655',
+               task   => 'hash_09_VER_7531a3943ecb8894231d8c63a34663e2',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_27de130d1c007e2f61ca78bb692e09ee',
+                  'hash_10_VER_d1ab5abe71dd0e8f9bed19f8330bfa04',
+                  'hash_10_VER_b506f7648e3c9da3d6ac27e4ffc51906',
+                  'hash_10_VER_f2bc1a509736a43c908520d2f023794d'
+               ],
+            },
+         ],
+      },
+      {  name       => 'RDS CPU Utilization',
+         base_value => '1000',
+         hash       => 'hash_00_VER_98d7f90931873d43ca9bdae4c04459d5',
+         dt         => {
+            hash       => 'hash_01_VER_69feec4991549892c15693c049976e62',
+            input      => 'Get RDS Stats/CPUUtilization',
+            utilization => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_da3b70b5bbf31c436d6dda4a468bc31d'
+            },
+         },
+         items => [
+            {  item   => 'utilization',
+               color  => 'EB6841',
+               task   => 'hash_09_VER_46e055b7a9bced6e039f6eb629905776',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_c559b0a4cabd524bf5b3f4a83e7b76ac',
+                  'hash_10_VER_51910baef98d86d86642204c9fda8bae',
+                  'hash_10_VER_fd80e539954a05e16c97a21f6a28f9d4',
+                  'hash_10_VER_b98af70d54095f99439cb404165b0ca7'
+               ],
+            },
+         ],
+      },
+      {  name       => 'RDS Database Connections',
+         base_value => '1000',
+         hash       => 'hash_00_VER_7ee1ed94d9d9255854089bab8a219470',
+         dt         => {
+            hash       => 'hash_01_VER_3cc221caaca52c53de9ccdbb33759736',
+            input      => 'Get RDS Stats/DatabaseConnections',
+            connections => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_f9ad49bc2fb154d488ea9d8b10d91924'
+            },
+         },
+         items => [
+            {  item   => 'connections',
+               color  => '002A97',
+               task   => 'hash_09_VER_28278e1401bac8f432ea4433a0e86f01',
+               type   => 'LINE1',
+               hashes => [
+                  'hash_10_VER_7da0218bf39e110d0815f496e0f57830',
+                  'hash_10_VER_9b89e5254fb8b67e582f4ef1d927164d',
+                  'hash_10_VER_77475c2d9d85f379cf01f25a0cc7b07a',
+                  'hash_10_VER_c383b39245ea4cbfb27a8bd7f2f5f2d0'
+               ],
+            },
+         ],
+      },
+      {  name       => 'RDS Disk Queue Depth',
+         base_value => '1000',
+         hash       => 'hash_00_VER_2ac8ae4c5c850ebc6ee1cbcbb2072f01',
+         dt         => {
+            hash       => 'hash_01_VER_b07b85cd06e20f34f632a6ab2fa78426',
+            input      => 'Get RDS Stats/DiskQueueDepth',
+            disk_queue_depth => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_aac78576e9df13fd9381bcd80ad836d3'
+            },
+         },
+         items => [
+            {  item   => 'disk_queue_depth',
+               color  => '7020AF',
+               task   => 'hash_09_VER_2b73df3b092b8f9967336a9f8911f1e9',
+               type   => 'LINE1',
+               hashes => [
+                  'hash_10_VER_a8df2d741dbe1f53d34ee824dad0e8c4',
+                  'hash_10_VER_31dcfa47df0582338a53823828fad8e8',
+                  'hash_10_VER_01d3860451aa5518da0298c0f4b152d9',
+                  'hash_10_VER_283851ce8d07f5c0112fa241a51d2703'
+               ],
+            },
+         ],
+      },
+      {  name       => 'RDS Replica Lag',
+         base_value => '1000',
+         hash       => 'hash_00_VER_4745fb573131d776e662b27566818303',
+         dt         => {
+            hash       => 'hash_01_VER_5a6ec499d9626f67013ea5bbbd9b37bd',
+            input      => 'Get RDS Stats/ReplicaLag',
+            replica_lag => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_a0b82e53025e622d3e304c9d612553e1'
+            },
+         },
+         items => [
+            {  item   => 'replica_lag',
+               color  => 'B3092B',
+               task   => 'hash_09_VER_dafadbf826a4113571acb1c0beb6f835',
+               type   => 'LINE1',
+               hashes => [
+                  'hash_10_VER_0dec04a1009a81bc8bd4a75935151e42',
+                  'hash_10_VER_0a0e7e544ab3bfb04b1564ceec0948e8',
+                  'hash_10_VER_74e6ef7a347cae4fac45f33584c616d9',
+                  'hash_10_VER_307ef40a0728a93892d580378e2f9d0e'
+               ],
+            },
+         ],
+      },
+      {  name       => 'RDS Memory',
+         base_value => '1024',
+         hash       => 'hash_00_VER_e181aee8c080e0a2c2b302ff194e3915',
+         dt         => {
+            hash       => 'hash_01_VER_b5c871240ccbdf8f29c71276e3d2bd60',
+            input      => 'Get RDS Stats/FreeableMemory',
+            total_memory   => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_743d85c882436931a4d327502c444b85'
+            },
+            used_memory => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_a7243984a30a5e873549069e0efc4435'
+            },
+         },
+         items => [
+            {  item   => 'total_memory',
+               color  => 'FFDB87',
+               task   => 'hash_09_VER_23109343df6b17c3717b2689e19b9cd0',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_9a4f86a39552212fb34823235c20e784',
+                  'hash_10_VER_bb6efe7ab97b07333acbe6e6daabdd54'
+               ],
+            },
+            {  item   => 'used_memory',
+               color  => '850707',
+               task   => 'hash_09_VER_0aedabf257811e1127e5641b0b7dc93d',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_3c2ff89abb03382d54a5396717981dfc',
+                  'hash_10_VER_e5550c1c7dcee33f0554676f0f609bdb',
+                  'hash_10_VER_c0b9f490d33678c42460e9df4eaa0b81',
+                  'hash_10_VER_10b0e2c425812d50b787c70f15467323'
+               ],
+            },
+         ],
+      },
+      {  name       => 'RDS Storage Space',
+         base_value => '1024',
+         hash       => 'hash_00_VER_99c980448a043429227d2747ef8ec600',
+         dt         => {
+            hash       => 'hash_01_VER_4bc5aa00d4c9bf970d6224a7bed59b06',
+            input      => 'Get RDS Stats/FreeStorageSpace',
+            total_space => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_0e63935883d0e331354d23ca7f68b136',
+            },
+            used_space => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_44d4db8d7e97af7f8d739600a50bce8c',
+            },
+         },
+         items => [
+            {  item   => 'total_space',
+               color  => '0E4E5A',
+               task   => 'hash_09_VER_9c6f656a82d29aab6ee91f6f53be9f2c',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_053584dc66a7c1b030137867c68616b3',
+                  'hash_10_VER_9f0666a8761d0356f52c95c9f05fc573'
+               ],
+            },
+            {  item   => 'used_space',
+               color  => '62BECB',
+               task   => 'hash_09_VER_96f9f50c27a0d4eb23684e2166ef4552',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_6af8e7b6247c7fb6a59e4b7c8444afc2',
+                  'hash_10_VER_8da06a701aba52706bde5632a28b8f36',
+                  'hash_10_VER_2e155ef5673eb63544282f3993c9260c',
+                  'hash_10_VER_075f02a0a7a0782e5d7eecdf30a05cdd'
+               ],
+            },
+         ],
+      },     
+      {  name       => 'RDS Swap Usage',
+         base_value => '1024',
+         hash       => 'hash_00_VER_aee8656af0361c9cba37ca623b8455db',
+         dt         => {
+            hash       => 'hash_01_VER_ef75d8c47a5b25837aac6b8fed61fdb4',
+            input      => 'Get RDS Stats/SwapUsage',
+            swap_usage => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_151289532c2212ecf388fa7fc0d615b8',
+            },
+         },
+         items => [
+            {  item   => 'swap_usage',
+               color  => '4F7774',
+               task   => 'hash_09_VER_852259676e383002fb0c5540061b5ac5',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_10229ffa848c9bb3834a83505f08e779',
+                  'hash_10_VER_c8a38a6ff27a46a313f9a1a3537db016',
+                  'hash_10_VER_0582801fa0c3eb835d8bf5c22ccc2b3b',
+                  'hash_10_VER_5cbd14ba89712f1954f89b2f20264b6b'
+               ],
+            },
+         ],
+      },       
+      {  name       => 'RDS Disk IOPS',
+         base_value => '1000',
+         hash       => 'hash_00_VER_839a4773c29fe6c5dbe03494083916fc',
+         dt         => {
+            hash       => 'hash_01_VER_690d1415c56ffeca296a2ca961b14b4a',
+            input      => 'Get RDS Stats/DiskIOPS',
+            read_iops   => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_13e420788ddd69025c936a69c75133a1',
+            },
+            write_iops  => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_c3b5075840881eb2568ce6c7b07cbf78',
+            },
+         },
+         items => [
+            {  item   => 'read_iops',
+               color  => '668284',
+               task   => 'hash_09_VER_e18a0adaa90c0cd54430b8909be0e61b',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_b5d8eea4a300f966461035a99a08c00b',
+                  'hash_10_VER_54e6ea808d1b3f55a7d8529cb1c1d379',
+                  'hash_10_VER_0a60345408647ac6a8f14907ce30340e',
+                  'hash_10_VER_33773ed1458899c28758abd547d09190'
+               ],
+            },
+            {  item   => 'write_iops',
+               color  => '7B3B3B',
+               task   => 'hash_09_VER_5bf24e5bab9c41bc51f6ccfbf56b0589',
+               type   => 'AREA',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_b4e9ad69b5e3a717fa555c69248bb5a0',
+                  'hash_10_VER_2d87b039ec7f538be5b8f0581b4e0fed',
+                  'hash_10_VER_c16e535cf5b6d360ebbed0aa5e46580c',
+                  'hash_10_VER_a096fa76d0a159154590d270f810f6dc'
+               ],
+            },
+         ],
+      },
+      {  name       => 'RDS Disk Latency (ms)',
+         base_value => '1000',
+         hash       => 'hash_00_VER_78d9b5a5d3f6fecd6803bb47198eee88',
+         dt         => {
+            hash       => 'hash_01_VER_3e81c171c3e352237afd013d080ea2d0',
+            input      => 'Get RDS Stats/DiskLatency',
+            read_latency => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_387b5cf4ec7b8575e0e4d079cca6e866',
+            },
+            write_latency => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_cea2a269772ae717b7d51727ddbebd21',
+            },
+         },
+         items => [
+            {  item   => 'read_latency',
+               color  => '75637E',
+               task   => 'hash_09_VER_975722587e7a3f86b2c758d68a80545f',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_9a2b2fb23c9e4f05826b44046cab93cf',
+                  'hash_10_VER_9dee57ff3f8c1b55ec88e20157daf023',
+                  'hash_10_VER_53f62366b17ac41c64a999800ec20075',
+                  'hash_10_VER_1efc9c6f2d413414e66026d6d11a1b73'
+               ],
+            },
+            {  item   => 'write_latency',
+               color  => '81BFE0',
+               task   => 'hash_09_VER_5193bcb1d29fb2883489849b4d956438',
+               type   => 'AREA',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_e5fab775d5031fe4709fbbfc4a352f7d',
+                  'hash_10_VER_3632a94db949aa200fe09b8087d4b564',
+                  'hash_10_VER_7524e17fa07a22e22978ab26664e9103',
+                  'hash_10_VER_0dcb235d11313ffcd49df79ce320b5bf'
+               ],
+            },
+         ],
+      },
+      {  name       => 'RDS Disk Throughput',
+         base_value => '1024',
+         hash       => 'hash_00_VER_cb8a7f0a8b6a567fc88965da964f5268',
+         dt         => {
+            hash       => 'hash_01_VER_e476c26ed12f80cf930a83bbd98f12cf',
+            input      => 'Get RDS Stats/DiskThroughput',
+            read_throughput => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_7d09e383209f7289902dfae7f27b28bf',
+            },
+            write_throughput => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_2392b2054d88b4f96753b47bb3a010ed',
+            },
+         },
+         items => [
+            {  item   => 'read_throughput',
+               color  => '755E5E',
+               task   => 'hash_09_VER_eafe3dc1ecf5ebc651297a5405445a17',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_cd59560bda9e55e12a2d271b3ac1758f',
+                  'hash_10_VER_5994c9957b83027bd8bcfb9771f3abf0',
+                  'hash_10_VER_453d120b78cceacc8175d57235864948',
+                  'hash_10_VER_5abff49dd729f9c7937cff5ef0c96025'
+               ],
+            },
+            {  item   => 'write_throughput',
+               color  => 'C02942',
+               task   => 'hash_09_VER_e0c4ebc09d15223459ca87bf5870b798',
+               type   => 'AREA',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_a241040a0b773dbe9b21091430716724',
+                  'hash_10_VER_b9947f7803439c0afbff130e943e9f1a',
+                  'hash_10_VER_9903b1a36ee4fb4ee084e6c2110fb263',
+                  'hash_10_VER_4098c6f494de481a27c5d0a4f07a0bb5'
+               ],
+            },
+         ],
+      },
+   ],
+   inputs => {
+      'Get RDS Stats/BinLogDiskUsage' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_fc8d744c6fc9960984779e437e32c548',
+         input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--ident=<hostname> --metric=BinLogDiskUsage',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_fdc8284e6c7c3cfc9c109fa203bd962c',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            binlog_disk_usage => 'hash_07_VER_f84001c7839bc479553698dc517882f9',
+         },
+      },
+      'Get RDS Stats/CPUUtilization' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_96e0af6c7f13ba8917e80fc29937a7f5',
+         input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--ident=<hostname> --metric=CPUUtilization',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_e869f35a1a45b6660020310c6b6ac686',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            utilization => 'hash_07_VER_f3dce023d340333c76108ac9b844553c',
+         },
+      },
+      'Get RDS Stats/DatabaseConnections' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_625f125c254cd97956073472fa0e7535',
+         input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--ident=<hostname> --metric=DatabaseConnections',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_102976dd7aac4093c47ff42ad85ba4dc',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            connections => 'hash_07_VER_f96375b262c8b68778149b958e875ae6',
+         },
+      },
+      'Get RDS Stats/DiskQueueDepth' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_b36f4ebb970120a31074717d5f0a73f1',
+         input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--ident=<hostname> --metric=DiskQueueDepth',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_edbc034709d78d91c5d1bd3698576c69',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            disk_queue_depth => 'hash_07_VER_af70294a98940d95b4d563d0b452c994',
+         },
+      },
+      'Get RDS Stats/ReplicaLag' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_47ffad13db87eeae30f3c65d72d5b57d',
+         input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--ident=<hostname> --metric=ReplicaLag',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_51ec8d07efd0df7f569efc1b73dfde49',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            replica_lag => 'hash_07_VER_4437ca5573f97abf9e802785474b9cce',
+         },
+      },
+      'Get RDS Stats/SwapUsage' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_3104e6b585cf079559c6cede8dcb57ac',
+         input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--ident=<hostname> --metric=SwapUsage',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_9e79ee2e86b6ecc19369e1087294bacd',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            swap_usage => 'hash_07_VER_9b8cafdc82620c4aefd817bed8901c33',
+         },
+      },
+      'Get RDS Stats/FreeableMemory' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_46ad0ef622223d9ac921c44140484e9c',
+         input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--ident=<hostname> --metric=FreeableMemory',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_34fc76345eea2b7d4bea5e9490d02297',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            used_memory => 'hash_07_VER_d1b91057a9df70006c3bbe488427e958',
+            total_memory => 'hash_07_VER_bacc064e229402d5b6ba515923d54e0b',
+         },
+      },
+      'Get RDS Stats/FreeStorageSpace' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_cb7b04b7099a83ecc6e183270e1813d7',
+         input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--ident=<hostname> --metric=FreeStorageSpace',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_2203c1f4a38c6c9ff37bc4349ec2ed35',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            used_space => 'hash_07_VER_dd9c4c4457d1ba587c4b44884c36b823',         
+            total_space => 'hash_07_VER_083e9569124218902b0cf59e4d932d18',
+         },
+      },
+      'Get RDS Stats/DiskIOPS' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_10bd7f6024df803c6e3eb8cca35ad486',
+         input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--ident=<hostname> --metric=ReadIOPS,WriteIOPS',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_47324c46e6bce5d569c752a1cb8e65da',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            read_iops => 'hash_07_VER_da2b79b87db0418645905b3d8cd965b6',
+            write_iops => 'hash_07_VER_0778f413bfecd7e3d2b7e53e9b7d1d30',            
+         },
+      },
+      'Get RDS Stats/DiskLatency' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_a44b051f5f06a884b421e5b3743a4709',
+         input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--ident=<hostname> --metric=ReadLatency,WriteLatency',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_bf218821df58890e3fa186086e7c440e',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            read_latency => 'hash_07_VER_8960cf3c4ea37743740d56b2ba6b6593',
+            write_latency => 'hash_07_VER_ee20f91078eb17953a91f9e74a71d9d1',
+         },
+      },
+      'Get RDS Stats/DiskThroughput' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_0614689e78516b287caa366473ac072c',
+         input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--ident=<hostname> --metric=ReadThroughput,WriteThroughput',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_64c79bfc359ba6c0e214b75c08018770',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            read_throughput => 'hash_07_VER_6a33e92ba50edcf1c4da6ddcdb029445',         
+            write_throughput => 'hash_07_VER_58bc74ba5ca40cbb211fe9423a86ebe6',
+         },
+      },      
+   },    
+};
