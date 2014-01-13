@@ -1,7 +1,7 @@
 .. _cacti_rds_templates:
 
-Percona RDS Monitoring Template for Cacti
-=========================================
+Percona Amazon RDS Monitoring Template for Cacti
+================================================
 
 This page gives installation instructions specific to the RDS graph template,
 shows examples of graphs in the RDS template collection, and shows what they
