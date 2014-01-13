@@ -82,7 +82,6 @@ intuitive point-and-click configuration and browsing of graphs and metrics.
    cacti/faq
    cacti/installing-templates
    cacti/customizing-templates
-   cacti/upgrading-templates
    cacti/mysql-templates
    cacti/galera-templates
    cacti/ssh-based-templates
@@ -94,7 +93,9 @@ intuitive point-and-click configuration and browsing of graphs and metrics.
    cacti/nginx-templates
    cacti/openvz-templates
    cacti/redis-templates
+   cacti/rds-templates
    cacti/developer-documentation
+   cacti/upgrading-templates
 
 Templates for Zabbix 
 ====================

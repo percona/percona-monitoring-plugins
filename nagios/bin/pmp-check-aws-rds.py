@@ -58,7 +58,7 @@ def main():
                     CRITICAL: 'CRIT',
                     UNKNOWN: 'UNK'}
 
-    # DB instance classes as listed on http://aws.amazon.com/rds/
+    # DB instance classes as listed on http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html
     db_classes = {'db.t1.micro': 0.61,
                   'db.m1.small': 1.7,
                   'db.m1.medium': 3.75,
@@ -278,15 +278,27 @@ pmp-check-aws-rds.py - Check Amazon RDS metrics.
 
 =head1 REQUIREMENTS 
 
-* Install the package: yum / apt-get install python-boto
-* Create a config /etc/boto.cfg or ~/.boto with your AWS API credentials.
+This plugin is written on Python and utilizes the module C<boto> (Python interface
+to Amazon Web Services) to get various RDS metrics from CloudWatch and compare
+them against the thresholds.
+
+* Install the package: C<yum install python-boto> or C<apt-get install python-boto>
+* Create a config /etc/boto.cfg or ~nagios/.boto with your AWS API credentials.
   See http://code.google.com/p/boto/wiki/BotoConfig
 
-=head1 DESCRIPTION
+This plugin that is supposed to be run by Nagios, i.e. under ``nagios`` user,
+should have permissions to read the config /etc/boto.cfg or ~nagios/.boto.
 
-This plugin is written on Python and utilizes the module C<boto> (Python interface
-to Amazon Web Services) to get various RDS metrics and compare them against
-the thresholds.
+Example:
+
+  [root@centos6 ~]# cat /etc/boto.cfg
+  [Credentials]
+  aws_access_key_id = THISISATESTKEY
+  aws_secret_access_key = thisisatestawssecretaccesskey
+  [root@centos6 ~]# chown nagios /etc/boto.cfg
+  [root@centos6 ~]# chmod 600 /etc/boto.cfg
+
+=head1 DESCRIPTION
 
 The plugin provides 4 checks and some options to list and print RDS details:
 
@@ -294,8 +306,6 @@ The plugin provides 4 checks and some options to list and print RDS details:
 * RDS Load Average
 * RDS Free Storage
 * RDS Free Memory
-
-Usage examples.
 
 To get the list of all RDS instances under AWS account:
 
@@ -326,11 +336,6 @@ Nagios check for the free storage space, specify thresholds as percentage:
 
   # ./aws-rds-nagios-check.py -i blackbox -m storage -w 10 -c 5
   OK Free storage: 161.69 GB (32%) of 500.0 GB | free_storage=32.34;10.0;5.0;0;100
-
-=head1 PRIVILEGES
-
-This plugin should have permissions to read the config
-/etc/boto.cfg or ~/.boto 
 
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 

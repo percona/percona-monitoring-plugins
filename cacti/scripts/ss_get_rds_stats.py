@@ -71,7 +71,7 @@ def main():
     """Main function"""
     global options
 
-    # DB instance classes as listed on http://aws.amazon.com/rds/
+    # DB instance classes as listed on http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html
     db_classes = {'db.t1.micro': 0.61,
                   'db.m1.small': 1.7,
                   'db.m1.medium': 3.75,
