@@ -170,7 +170,7 @@ def main():
                 perf_data = None
                 break
             loads.append(str(load))
-            perf_data.append('load%s=%s;%s;%s;0;' % (i, load, warns[j], crits[j]))
+            perf_data.append('load%s=%s;%s;%s;0;100' % (i, load, warns[j], crits[j]))
 
             # Compare thresholds
             if not fail:
@@ -325,17 +325,21 @@ Nagios check for CPU utilization, specify thresholds as percentage of
 1-min., 5-min., 15-min. average accordingly: 
 
   # ./aws-rds-nagios-check.py -i blackbox -m load -w 90,85,80 -c 98,95,90
-  OK Load average: 28.27%, 34.65%, 30.53% | load1=28.27;90.0;98.0;0; load5=34.65;85.0;95.0;0; load15=30.53;80.0;90.0;0;
+  OK Load average: 18.36%, 18.51%, 15.95% | load1=18.36;90.0;98.0;0;100 load5=18.51;85.0;95.0;0;100 load15=15.95;80.0;90.0;0;100
 
 Nagios check for the free memory, specify thresholds as percentage:
 
-  # ./aws-rds-nagios-check.py -i blackbox -m memory -w 10 -c 5
-  WARN Free memory: 6.51 GB (10%) of 68 GB | free_memory=9.57;10.0;5.0;0;100
+  # ./aws-rds-nagios-check.py -i blackbox -m memory -w 5 -c 2
+  OK Free memory: 5.90 GB (9%) of 68 GB | free_memory=8.68;5.0;2.0;0;100
+  # ./aws-rds-nagios-check.py -i blackbox -m memory -u GB -w 4 -c 2
+  OK Free memory: 5.90 GB (9%) of 68 GB | free_memory=5.9;4.0;2.0;0;68
 
 Nagios check for the free storage space, specify thresholds as percentage: 
 
   # ./aws-rds-nagios-check.py -i blackbox -m storage -w 10 -c 5
-  OK Free storage: 161.69 GB (32%) of 500.0 GB | free_storage=32.34;10.0;5.0;0;100
+  OK Free storage: 162.55 GB (33%) of 500.0 GB | free_storage=32.51;10.0;5.0;0;100
+  # ./aws-rds-nagios-check.py -i blackbox -m storage -u GB -w 10 -c 5
+  OK Free storage: 162.55 GB (33%) of 500.0 GB | free_storage=162.55;10.0;5.0;0;500.0
 
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
