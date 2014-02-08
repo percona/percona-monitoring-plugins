@@ -85,7 +85,7 @@ the Agent node.
      [root@centos6 ~]# /usr/bin/php -q /var/lib/zabbix/percona/scripts/ss_get_mysql_stats.php --host localhost --items gg
      ERROR: Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)[root@centos6 ~]# 
 
-3. Configure /root/.my.cnf
+3. Configure ~zabbix/.my.cnf
 
    Example::
 
@@ -95,10 +95,10 @@ the Agent node.
 
 4. Test the script::
 
-     [root@centos6 ~]# /var/lib/zabbix/percona/scripts/get_mysql_stats_wrapper.sh running-slave
+     [root@centos6 ~]# sudo -u zabbix -H /var/lib/zabbix/percona/scripts/get_mysql_stats_wrapper.sh running-slave
      0
 
-   Should return 0 or 1 but not "Access denied".
+   Should return 0 or 1 but not the "Access denied" error.
 
 Configure Zabbix Server
 -----------------------
