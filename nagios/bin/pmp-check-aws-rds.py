@@ -334,7 +334,7 @@ Nagios check for the free memory, specify thresholds as percentage:
   # ./aws-rds-nagios-check.py -i blackbox -m memory -u GB -w 4 -c 2
   OK Free memory: 5.90 GB (9%) of 68 GB | free_memory=5.9;4.0;2.0;0;68
 
-Nagios check for the free storage space, specify thresholds as percentage: 
+Nagios check for the free storage space, specify thresholds as percentage or GB: 
 
   # ./aws-rds-nagios-check.py -i blackbox -m storage -w 10 -c 5
   OK Free storage: 162.55 GB (33%) of 500.0 GB | free_storage=32.51;10.0;5.0;0;100

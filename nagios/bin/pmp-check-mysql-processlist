@@ -4,7 +4,7 @@
 # This program is part of $PROJECT_NAME$
 # License: GPL License (see COPYING)
 # Authors:
-#  Baron Schwartz
+#  Baron Schwartz, Roman Vynar
 # ########################################################################
 
 # ########################################################################
@@ -28,6 +28,7 @@ main() {
    # Get options
    for o; do
       case "${o}" in
+         -C)              shift; OPT_CHEK="${1}"; shift; ;;
          -c)              shift; OPT_CRIT="${1}"; shift; ;;
          --defaults-file) shift; OPT_DEFT="${1}"; shift; ;;
          -H)              shift; OPT_HOST="${1}"; shift; ;;
@@ -41,8 +42,7 @@ main() {
          -*)              echo "Unknown option ${o}.  Try --help."; exit 1; ;;
       esac
    done
-   OPT_CRIT=${OPT_CRIT:-32}
-   OPT_WARN=${OPT_WARN:-16}
+   OPT_CHEK="${OPT_CHEK:-states_count}"
    if [ -e '/etc/nagios/mysql.cnf' ]; then
       OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
    fi
@@ -56,36 +56,86 @@ main() {
    # Get processlist into a temp file.
    local TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
    trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
-   mysql_exec 'SHOW PROCESSLIST\G' > "${TEMP}"
-   if [ $? = 0 ]; then
-      # Capture a number of types of states, add some together, take the max,
-      # and compare to the threshold.
-      UNAUTH=$(count_mysql_processlist "${TEMP}" "User" "unauthenticated user")
-      LOCKED1=$(count_mysql_processlist "${TEMP}" "State" "Locked")
-      LOCKED2=$(count_mysql_processlist "${TEMP}" "State" "Waiting for .* lock")
-      LOCKED3=$(count_mysql_processlist "${TEMP}" "State" "Table lock")
-      LOCKED4=$(count_mysql_processlist "${TEMP}" "State" "Waiting for table flush")
-      LOCKED5=$(count_mysql_processlist "${TEMP}" "State" "Waiting for tables") 
-      COPYIN=$(count_mysql_processlist "${TEMP}" "State" ".*opy.* to.* table.*")
-      STATIS=$(count_mysql_processlist "${TEMP}" "State" "statistics")
-      LOCKED=$((${LOCKED1:-0} + ${LOCKED2:-0} + ${LOCKED3:-0} + ${LOCKED4:-0} + ${LOCKED5:-0}))
-      NOTE="${UNAUTH} unauthenticated, ${LOCKED} locked,"
-      NOTE="${NOTE} ${COPYIN} copy to table, ${STATIS} statistics"
-      MAX="$(max "${UNAUTH:-0}" "${LOCKED:-0}" "${COPYIN:-0}" "${STATIS:-0}")"
-      if [ "${MAX:-0}" -gt "${OPT_CRIT}" ]; then
-         NOTE="CRIT $NOTE"
-      elif [ "${MAX:-0}" -gt "${OPT_WARN}" ]; then
-         NOTE="WARN $NOTE"
-      else
-         NOTE="OK $NOTE"
-      fi
 
-      # Build the common perf data output for graph trending
-      PERFDATA="processes=${MAX:-0};${OPT_WARN};${OPT_CRIT};0;"
-      NOTE="$NOTE | $PERFDATA"
-   else
-      NOTE="UNK could not retrieve MySQL processlist"
-   fi
+   case "${OPT_CHEK}" in
+      states_count)
+         OPT_WARN=${OPT_WARN:-16}
+         OPT_CRIT=${OPT_CRIT:-32}
+
+        # Capture a number of types of states, add some together, take the max,
+        # and compare to the threshold.
+        mysql_exec 'SHOW PROCESSLIST\G' > "${TEMP}"
+        if [ $? = 0 ]; then
+           UNAUTH=$(count_mysql_processlist "${TEMP}" "User" "unauthenticated user")
+           LOCKED1=$(count_mysql_processlist "${TEMP}" "State" "Locked")
+           LOCKED2=$(count_mysql_processlist "${TEMP}" "State" "Waiting for .* lock")
+           LOCKED3=$(count_mysql_processlist "${TEMP}" "State" "Table lock")
+           LOCKED4=$(count_mysql_processlist "${TEMP}" "State" "Waiting for table flush")
+           LOCKED5=$(count_mysql_processlist "${TEMP}" "State" "Waiting for tables")
+           COPYIN=$(count_mysql_processlist "${TEMP}" "State" ".*opy.* to.* table.*")
+           STATIS=$(count_mysql_processlist "${TEMP}" "State" "statistics")
+           LOCKED=$((${LOCKED1:-0} + ${LOCKED2:-0} + ${LOCKED3:-0} + ${LOCKED4:-0} + ${LOCKED5:-0}))
+           NOTE="${UNAUTH} unauthenticated, ${LOCKED} locked,"
+           NOTE="${NOTE} ${COPYIN} copy to table, ${STATIS} statistics"
+           MAX="$(max "${UNAUTH:-0}" "${LOCKED:-0}" "${COPYIN:-0}" "${STATIS:-0}")"
+           if [ "${MAX:-0}" -gt "${OPT_CRIT}" ]; then
+              NOTE="CRIT $NOTE"
+           elif [ "${MAX:-0}" -gt "${OPT_WARN}" ]; then
+              NOTE="WARN $NOTE"
+           else
+              NOTE="OK $NOTE"
+           fi
+
+           # Build the common perf data output for graph trending
+           PERFDATA="processes=${MAX:-0};${OPT_WARN};${OPT_CRIT};0;"
+           NOTE="$NOTE | $PERFDATA"
+        else
+           NOTE="UNK could not retrieve MySQL processlist"
+        fi
+        ;;
+      max_user_conn)
+         OPT_WARN=${OPT_WARN:-90}
+         OPT_CRIT=${OPT_CRIT:-95}
+
+         # Check if @@max_user_connections is set on MySQL
+         MAX_USER_CONN=$(mysql_exec 'SELECT @@max_user_connections')
+         if [ $? = 0 ]; then
+            if [ ${MAX_USER_CONN:-0} -gt 0 ]; then
+               # Capture a number of connections per user from the processlist, take the max,
+               # and compare to the threshold.
+               mysql_exec 'SHOW PROCESSLIST\G' > "${TEMP}"
+               if [ $? = 0 ]; then
+                  MAX_USER=$(cat ${TEMP}|grep User|awk '{print $2}'|sort|uniq -c|sort -n|tail -1)
+                  CNT=$(echo ${MAX_USER} | awk '{print $1}')
+                  USER=$(echo ${MAX_USER} | awk '{print $2}')
+                  MAX=$(expr ${CNT} \* 100 / ${MAX_USER_CONN})
+                  NOTE="User with max connections: ${USER} (${CNT}) = ${MAX}%"
+                  if [ "${MAX:-0}" -gt "${OPT_CRIT}" ]; then
+                     NOTE="CRIT $NOTE"
+                  elif [ "${MAX:-0}" -gt "${OPT_WARN}" ]; then
+                     NOTE="WARN $NOTE"
+                  else
+                     NOTE="OK $NOTE"
+                  fi
+
+                  # Build the common perf data output for graph trending
+                  PERFDATA="max_user_conn=${MAX:-0};${OPT_WARN};${OPT_CRIT};0;100"
+                  NOTE="$NOTE | $PERFDATA"
+               else
+                  NOTE="UNK could not retrieve MySQL processlist"
+               fi
+            else
+               NOTE="OK @@max_user_connections is not configured."
+            fi
+         else
+            NOTE="UNK could not retrieve @@max_user_connections"
+         fi
+         ;;
+      *)
+         echo "Unknown value for -C: '${OPT_CHEK}'. Consult the documentation.";
+         exit 1;
+         ;;
+   esac
 
    echo $NOTE
 }
@@ -164,7 +214,9 @@ pmp-check-mysql-processlist - Alert when MySQL processlist has dangerous pattern
 
   Usage: pmp-check-mysql-processlist [OPTIONS]
   Options:
-    -c CRIT         Critical threshold; default 32.
+    -C CHECK        What to alert on; default states_count.
+                    Other options: max_user_conn.
+    -c CRIT         Critical threshold; default varies.
     --defaults-file FILE Only read mysql options from the given file.
                     Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
@@ -172,7 +224,7 @@ pmp-check-mysql-processlist - Alert when MySQL processlist has dangerous pattern
     -p PASS         MySQL password.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
-    -w WARN         Warning threshold; default 16.
+    -w WARN         Warning threshold; default varies.
     --help          Print help and exit.
     --version       Print version and exit.
   Options must be given as --option value, not --option=value or -Ovalue.
@@ -180,33 +232,44 @@ pmp-check-mysql-processlist - Alert when MySQL processlist has dangerous pattern
 
 =head1 DESCRIPTION
 
-This Nagios plugin examines MySQL's processlist and alerts when there are too
-many processes in various states.  The list of checks is as follows:
+This Nagios plugin examines MySQL processlist in several ways,
+depending on the value of the -C option:
 
 =over
 
-=item Unauthenticated users
+=item states_count
+
+Alerts when there are too many processes in various states.
+The list of checks is as follows:
 
 Unauthenticated users appear when DNS resolution is slow, and can be a warning
 sign of DNS performance problems that could cause a sudden denial of service to
 the server.
 
-=item Locked processes
-
 Locked processes are the signature of MyISAM tables, but can also appear for
 other reasons.
-
-=item Copying to temporary tables
 
 Too many processes copying to various kinds of temporary tables at one time is a
 typical symptom of a storm of poorly optimized queries.
 
-=item Statistics
-
 Too many processes in the "statistics" state is a signature of InnoDB
 concurrency problems causing query execution plan generation to take too long.
 
+=item max_user_conn
+
+Alerts when C<@@max_user_connections> is configured on MySQL and any user reaches
+this limit. The output of this check will display the user with maximum
+connections consumed, its count and percentage of the actual limit.
+
 =back
+
+Examples:
+
+  # /usr/lib64/nagios/plugins/pmp-check-mysql-processlist
+  OK 0 unauthenticated, 0 locked, 0 copy to table, 0 statistics | processes=0;16;32;0;
+
+  # /usr/lib64/nagios/plugins/pmp-check-mysql-processlist -C max_user_conn
+  OK User with max connections: myappuser (70) = 2% | max_user_conn=2;90;95;0;100
 
 =head1 PRIVILEGES
 
@@ -216,7 +279,11 @@ This plugin executes the following commands against MySQL:
 
 =item *
 
-C<SHOW PROCESSLIST>.
+C<SHOW PROCESSLIST;>
+
+=item *
+
+C<SELECT @@max_user_connections;>
 
 =back
 
