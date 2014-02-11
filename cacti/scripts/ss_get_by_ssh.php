@@ -170,10 +170,13 @@ function extract_desired ( $options, $text ) {
 # Validate that the command-line options are here and correct
 # ============================================================================
 function validate_options($options) {
-   debug($options);
    $opts = array('host', 'port', 'items', 'nocache', 'type', 'url', 'http-user',
                  'file', 'http-password', 'server', 'port2', 'use-ssh', 
                  'device', 'volume', 'threadpool');
+   # Show help
+   if ( array_key_exists('help', $options) ) {
+      usage('');
+   }
    # Required command-line options
    foreach ( array('host', 'items', 'type') as $option ) {
       if ( !isset($options[$option]) || !$options[$option] ) {
@@ -193,19 +196,15 @@ function validate_options($options) {
 function usage($message) {
    $usage = <<<EOF
 $message
-Usage: php ss_get_by_ssh.php --host <host> --items <item,...> [OPTION]
-
-Command-line options ALWAYS require a value after them.  If you specify an
-option without a value after it, the option is ignored.  For options such as
---nocache, you can say "--nocache 1".
+Usage: php ss_get_by_ssh.php --host <host> --type <type> --items <item,...> [OPTION]
 
 General options:
 
-   --device          The device name for diskstats and netdev
-   --file            Get input from this file instead of via SSH command
    --host            Hostname to connect to (via SSH)
+   --type            One of apache, nginx, proc_stat, w, memory, memcached,
+                     diskstats, openvz, redis, jmx, mongodb, df, netdev,
+                     netstat, vmstat (more are TODO)
    --items           Comma-separated list of the items whose data you want
-   --nocache         Do not cache results in a file
    --port            SSH port to connect to (SSH port, not application port!)
    --port2           Port on which the application listens, such as memcached
                      port, redis port, or apache port.
@@ -214,15 +213,16 @@ General options:
                      stats and --host for memcached stats. If you specify
                      '--use-ssh 0' then default is --host for HTTP stats too.
    --threadpool      Name of ThreadPool in JMX (i.e. http-8080 or jk-8009)
-   --type            One of apache, nginx, proc_stat, w, memory, memcached,
-                     diskstats, openvz, redis, jmx, mongodb, df, netdev, 
-                     netstat, vmstat (more are TODO)
    --url             The url, such as /server-status, where server status lives
    --use-ssh         Whether to connect via SSH to gather info (default yes).
+   --file            Get input from this file instead of via SSH command
    --http-user       The HTTP authentication user
    --http-password   The HTTP authentication password
    --openvz_cmd      The command to use when fetching OpenVZ statistics
+   --device          The device name for diskstats and netdev
    --volume          The volume name for df
+   --nocache         Do not cache results in a file
+   --help            Show usage
 
 EOF;
    die($usage);
@@ -233,18 +233,23 @@ EOF;
 # return them as an array ( arg => value )
 # ============================================================================
 function parse_cmdline( $args ) {
-   $result = array();
-   for ( $i = 0; $i < count($args); ++$i ) {
-      if ( strpos($args[$i], '--') === 0 ) {
-         if ( $i + 1 < count($args) && strpos($args[$i + 1], '--') !== 0 ) {
-            # The next element should be the value for this option.
-            $result[substr($args[$i], 2)] = $args[$i + 1];
-            ++$i;
+   $options = array();
+   while (list($tmp, $p) = each($args)) {
+      if (strpos($p, '--') === 0) {
+         $param = substr($p, 2);
+         $value = null;
+         $nextparam = current($args);
+         if ($nextparam !== false && strpos($nextparam, '--') !==0) {
+            list($tmp, $value) = each($args);
          }
+         $options[$param] = $value;
       }
    }
-   debug($result);
-   return $result;
+   if ( array_key_exists('host', $options) ) {
+      $options['host'] = substr($options['host'], 0, 4) == 'tcp:' ? substr($options['host'], 4) : $options['host'];
+   }
+   debug($options);
+   return $options;
 }
 
 # ============================================================================
@@ -269,7 +274,7 @@ function ss_get_by_ssh( $options ) {
 
    # Check the cache.
    $fp = null;
-   if ( !isset($options['file']) && $cache_dir && !isset($options['nocache'])
+   if ( !isset($options['file']) && $cache_dir && !array_key_exists('nocache', $options)
       && function_exists($caching_func)
    ) {
       $cache_file = call_user_func($caching_func, $options);
@@ -605,10 +610,13 @@ function get_command_result($cmd, $options) {
    $pipes = array();
    $endtime = time() + $cmd_tout;
    $process = proc_open($final_cmd, $descriptorspec, $pipes);
+   $result = "";
    if (is_resource($process)) {
       do {
          $read = array($pipes[1]);
-         stream_select($read, $write = NULL, $exeptions = NULL, 1, NULL);
+         $write  = NULL;
+         $exeptions = NULL;
+         stream_select($read, $write, $exeptions, 1, NULL);
          if (!empty($read)) {
             $result .= fread($pipes[1], 8192);
          }

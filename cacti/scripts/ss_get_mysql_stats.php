@@ -164,7 +164,6 @@ if ( !function_exists('array_change_key_case') ) {
 # Validate that the command-line options are here and correct
 # ============================================================================
 function validate_options($options) {
-   debug($options);
    $opts = array('host', 'items', 'user', 'pass', 'nocache', 'port', 'server-id');
    # Show help
    if ( array_key_exists('help', $options) ) {
@@ -224,6 +223,10 @@ function parse_cmdline( $args ) {
          $options[$param] = $value;
       }
    }
+   if ( array_key_exists('host', $options) ) {
+      $options['host'] = substr($options['host'], 0, 4) == 'tcp:' ? substr($options['host'], 4) : $options['host'];
+   }
+   debug($options);
    return $options;
 }
 
@@ -249,7 +252,7 @@ function ss_get_mysql_stats( $options ) {
 
    # First, check the cache.
    $fp = null;
-   if ( !array_key_exists('nocache', $options) ) {
+   if ( $cache_dir && !array_key_exists('nocache', $options) ) {
       if ( $fp = fopen($cache_file, 'a+') ) {
          $locked = flock($fp, 1); # LOCK_SH
          if ( $locked ) {
@@ -291,7 +294,7 @@ function ss_get_mysql_stats( $options ) {
       }
    }
    else {
-      debug("Not using the cache file");
+      debug("Caching is disabled.");
    }
 
    # Connect to MySQL.
