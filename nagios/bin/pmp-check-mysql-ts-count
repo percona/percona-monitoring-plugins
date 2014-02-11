@@ -63,7 +63,7 @@ main() {
    if [ "${OPT_TARGET}" == "kills" ]; then 
       OPT_TABLE="${OPT_TABLE:-percona.kill_log}"
       OPT_TIMESTAMP="${OPT_TIMESTAMP:-timestamp}"
-   elsif [ "${OPT_TARGET}" == "fkerrors" ]; then
+   elif [ "${OPT_TARGET}" == "fkerrors" ]; then
       OPT_TABLE="${OPT_TABLE:-percona.foreign_key_errors}"
       OPT_TIMESTAMP="${OPT_TIMESTAMP:-ts}"
    else
