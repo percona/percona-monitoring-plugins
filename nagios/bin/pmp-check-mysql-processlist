@@ -255,11 +255,17 @@ typical symptom of a storm of poorly optimized queries.
 Too many processes in the "statistics" state is a signature of InnoDB
 concurrency problems causing query execution plan generation to take too long.
 
+The thresholds should be given as count. The default critical level is 32,
+and warning is 16.
+
 =item max_user_conn
 
 Alerts when C<@@max_user_connections> is configured on MySQL and any user reaches
 this limit. The output of this check will display the user with maximum
 connections consumed, its count and percentage of the actual limit.
+
+The thresholds should be given as percentage. The default critical level is 95,
+and warning is 90.
 
 =back
 

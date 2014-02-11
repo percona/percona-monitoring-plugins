@@ -341,6 +341,51 @@ Nagios check for the free storage space, specify thresholds as percentage or GB:
   # ./aws-rds-nagios-check.py -i blackbox -m storage -u GB -w 10 -c 5
   OK Free storage: 162.55 GB (33%) of 500.0 GB | free_storage=162.55;10.0;5.0;0;500.0
 
+=head1 CONFIGURATION
+
+Here is the excerpt of potential Nagios config:
+
+  define servicedependency{
+        hostgroup_name                  mysql-servers
+        service_description             RDS Status
+        dependent_service_description   RDS Load Average, RDS Free Storage, RDS Free Memory 
+        execution_failure_criteria      w,c,u,p
+        notification_failure_criteria   w,c,u,p
+        }
+  
+  define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             RDS Status
+        check_command                   check_rds!status!0!0
+        }
+       
+  define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             RDS Load Average
+        check_command                   check_rds!load!90,85,80!98,95,90
+        }
+  
+  define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             RDS Free Storage
+        check_command                   check_rds!storage!10!5
+        }
+  
+  define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             RDS Free Memory
+        check_command                   check_rds!memory!5!2
+        }
+  
+  define command{
+        command_name    check_rds
+        command_line    /usr/local/rdba/bin/aws-rds-nagios-check.py -i $HOSTALIAS$ -m $ARG1$ -w $ARG2$ -c $ARG3$
+        }
+
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
 This program is copyright 2014 Percona LLC and/or its affiliates.

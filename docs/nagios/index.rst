@@ -56,6 +56,24 @@ These plugins can be used locally or via NRPE.  NRPE is the suggested
 configuration.  Some plugins execute commands that require privileges, so you
 may need to specify a command prefix to execute them with ``sudo``.
 
+To avoid passing MySQL access credentials as command arguments, say for security reasons,
+you can create /etc/nagios/mysql.cnf so the plugins will use it. For example::
+
+   [root@centos6 ~]# cat /etc/nagios/mysql.cnf
+   [client]
+   user = root
+   password = s3cret
+   [root@centos6 ~]# chown root:nagios /etc/nagios/mysql.cnf
+   [root@centos6 ~]# chmod 640 /etc/nagios/mysql.cnf
+
+Here you can find an excerpt of potential Nagios config :download:`click here <config-example.txt>`.
+
+And here is an excerpt of related NRPE config::
+
+   command[rdba_unix_memory]=/usr/lib64/nagios/plugins/pmp-check-unix-memory -d -w 96 -c 98
+   command[rdba_mysql_pidfile]=/usr/lib64/nagios/plugins/pmp-check-mysql-pidfile 
+
+
 Support Options
 ===============
 

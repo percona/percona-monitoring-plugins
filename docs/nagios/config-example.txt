@@ -1,0 +1,257 @@
+#
+# Excerpt of Nagios config
+#
+
+#
+# HOSTS
+#
+
+define host{
+        use                     mysql-host
+        host_name               master1
+        alias                   master1
+        address                 192.168.56.1
+        }
+
+define host{
+        use                     mysql-host
+        host_name               slave1
+        alias                   slave1
+        address                 192.168.56.2
+        }
+
+#
+# HOSTGROUPS
+#
+
+define hostgroup{
+        hostgroup_name          mysql-servers
+        alias                   MySQL Servers
+        members                 master1, slave1
+        }
+
+define hostgroup{
+        hostgroup_name          mysql-masters
+        alias                   MySQL Masters
+        members                 master1
+        register                0 
+        }
+
+define hostgroup{
+        hostgroup_name          mysql-slaves
+        alias                   MySQL slaves
+        members                 slave1
+        register                0
+        }
+
+#
+# SERVICE DEPENDENCIES
+#
+
+define servicedependency{
+        hostgroup_name                  mysql-servers
+        service_description             NRPE Service
+        dependent_service_description   Free Memory, MySQL PID
+        execution_failure_criteria      w,c,u,p
+        notification_failure_criteria   w,c,u,p
+        } 
+
+define servicedependency{
+        hostgroup_name                  mysql-servers
+        service_description             MySQL Service
+        dependent_service_description   MySQL PID, MySQL Processlist, MySQL User Connections, MySQL Connections, MySQL Active Threads, MySQL InnoDB Idle Blocker, MySQL InnoDB Long Transaction, MySQL InnoDB Lock Waits, MySQL Replication Running, MySQL Replication Delay
+        execution_failure_criteria      w,c,u,p
+        notification_failure_criteria   w,c,u,p
+        }
+
+define servicedependency{
+        hostgroup_name                  mysql-servers
+        service_description             MySQL Replication Running
+        dependent_service_description   MySQL Replication Delay
+        execution_failure_criteria      w,c,u,p
+        notification_failure_criteria   w,c,u,p
+        }
+
+define servicedependency{
+        hostgroup_name                  mysql-masters
+        service_description             MySQL Service 
+        dependent_service_description   MySQL Deadlocks
+        execution_failure_criteria      w,c,u,p
+        notification_failure_criteria   w,c,u,p
+        }
+
+define servicedependency{
+        hostgroup_name                  mysql-slaves
+        service_description             MySQL Service
+        dependent_service_description   MySQL Table Checksums
+        execution_failure_criteria      w,c,u,p
+        notification_failure_criteria   w,c,u,p
+        }
+
+#
+# SERVICES
+#
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             NRPE Service
+        check_command                   check_nrpe_service
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             MySQL Service
+        check_command                   check_mysql_service
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             Free Memory
+        check_command                   check_nrpe!rdba_unix_memory
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             MySQL PID
+        check_command                   check_nrpe!rdba_mysql_pidfile
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             MySQL Processlist
+        check_command                   check_mysql_processlist!states_count!16!32
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             MySQL User Connections 
+        check_command                   check_mysql_processlist!max_user_conn!90!95
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             MySQL Connections
+        check_command                   check_mysql_connections
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             MySQL Active Threads
+        check_command                   check_mysql_active_threads!40!400
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             MySQL InnoDB Idle Blocker
+        check_command                   check_mysql_innodb!idle_blocker_duration!60!600
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             MySQL InnoDB Long Transaction 
+        check_command                   check_mysql_innodb!max_duration!86400!172800
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             MySQL InnoDB Lock Waits 
+        check_command                   check_mysql_innodb!waiter_count!10!25
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             MySQL Replication Running
+        check_command                   check_mysql_replication_running
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-servers
+        service_description             MySQL Replication Delay
+        check_command                   check_mysql_replication_delay!300!600
+        }
+
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-masters
+        service_description             MySQL Deadlocks
+        check_command                   check_mysql_deadlocks
+        }
+        
+define service{
+        use                             active-service
+        hostgroup_name                  mysql-slaves
+        service_description             MySQL Table Checksums
+        check_command                   check_mysql_table_checksum
+        }
+
+#
+# COMMANDS
+#
+
+define command{
+        command_name    check_nrpe_service
+        command_line    $USER1$/check_nrpe -H $HOSTADDRESS$
+        }
+
+define command{
+        command_name    check_mysql_service
+        command_line    $USER1$/check_mysql -H $HOSTADDRESS$ --extra-opts=client@/etc/nagios/mysql.cnf
+        }
+
+define command{
+        command_name    check_nrpe
+        command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
+        }
+
+define command{
+        command_name    check_mysql_connections
+        command_line    $USER1$/pmp-check-mysql-status -H $HOSTADDRESS$ -x Threads_connected -o / -y max_connections -T pct -w 80 -c 95
+        }
+
+define command{
+        command_name    check_mysql_active_threads
+        command_line    $USER1$/pmp-check-mysql-status -H $HOSTADDRESS$ -x Threads_running -w $ARG1$ -c $ARG2$
+        }
+
+define command{
+        command_name    check_mysql_processlist
+        command_line    $USER1$/pmp-check-mysql-processlist -H $HOSTADDRESS$ -C $ARG1$ -w $ARG2$ -c $ARG3$
+        }
+
+define command {
+        command_name    check_mysql_innodb
+        command_line    $USER1$/pmp-check-mysql-innodb -H $HOSTADDRESS$ -C $ARG1$ -w $ARG2$ -c $ARG3$
+        }
+
+define command{
+        command_name    check_mysql_replication_delay
+        command_line    $USER1$/pmp-check-mysql-replication-delay -H $HOSTADDRESS$ -w $ARG1$ -c $ARG2$
+        }
+
+define command{
+        command_name    check_mysql_replication_running
+        command_line    $USER1$/pmp-check-mysql-replication-running -H $HOSTADDRESS$ -c 1
+        }
+
+define command{
+        command_name    check_mysql_deadlocks
+        command_line    $USER1$/pmp-check-mysql-deadlocks -H $HOSTADDRESS$ -i 5 -w 12 -c 60
+        }
+
+define command{
+        command_name    check_mysql_table_checksum
+        command_line    $USER1$/pmp-check-pt-table-checksum -H $HOSTADDRESS$
+        }
