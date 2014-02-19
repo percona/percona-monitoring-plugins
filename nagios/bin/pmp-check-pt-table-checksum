@@ -4,7 +4,7 @@
 # This program is part of $PROJECT_NAME$
 # License: GPL License (see COPYING)
 # Authors:
-#  Baron Schwartz
+#  Baron Schwartz, Roman Vynar
 # ########################################################################
 
 # ########################################################################
@@ -31,6 +31,7 @@ main() {
          -c)              shift; OPT_CRIT="${1}"; shift; ;;
          --defaults-file) shift; OPT_DEFT="${1}"; shift; ;;
          -H)              shift; OPT_HOST="${1}"; shift; ;;
+         -i)              shift; OPT_INTERVAL="${1}"; shift; ;;
          -l)              shift; OPT_USER="${1}"; shift; ;;
          -p)              shift; OPT_PASS="${1}"; shift; ;;
          -P)              shift; OPT_PORT="${1}"; shift; ;;
@@ -42,6 +43,7 @@ main() {
          -*)              echo "Unknown option ${o}.  Try --help."; exit 1; ;;
       esac
    done
+   OPT_INTERVAL=${OPT_INTERVAL:-0}
    OPT_TABLE="${OPT_TABLE:-percona.checksums}"
    if [ -e '/etc/nagios/mysql.cnf' ]; then
       OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
@@ -72,6 +74,17 @@ main() {
          fi
       else
          NOTE="OK pt-table-checksum found no out-of-sync tables"
+         if [ "${OPT_INTERVAL}" -gt 0 ]; then
+            RECENT_CHUNKS=$(mysql_exec "SELECT IF(COALESCE(MAX(ts), NOW()) > NOW() - INTERVAL ${OPT_INTERVAL} DAY, 1, 0) FROM ${OPT_TABLE}")
+            if [ "${RECENT_CHUNKS}" = 0 ]; then
+               NOTE="pt-table-checksum was not run over last ${OPT_INTERVAL} days"
+               if [ "${OPT_CRIT}" ]; then
+                  NOTE="CRIT $NOTE"
+               else
+                  NOTE="WARN $NOTE"
+               fi
+            fi
+         fi
       fi
    else
       if grep "Table '${OPT_TABLE}' doesn't exist" "${TEMP}" >/dev/null 2>&1; then
@@ -145,6 +158,8 @@ pmp-check-pt-table-checksum - Alert when pt-table-checksum finds data difference
     -p PASS         MySQL password.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
+    -i INTERVAL     Interval over which to ensure pt-table-checksum was run,
+                    in days; default - not to check.
     -T TABLE        The checksum table; default percona.checksums
     -w WARN         Warning threshold; ignored.
     --help          Print help and exit.
@@ -174,11 +189,12 @@ server's data matches its master's:
 The word CHECKSUM_TABLE is replaced by the value of the -T option.  If the table
 specified by -T does not exist, unknown is raised.
 
+Optionally, if you specify an interval in days over which to ensure pt-table-checksum
+was run, the plugin will check for that in two cases: no diffs are found and the
+checksum table is not empty, in order to override the status.
+
 Alerts are raised at a WARNING level by default, but specifying the -c option
 with any value will change this to CRITICAL instead.
-
-This check should be backwards compatible with Maatkit's mk-table-checksum tool
-as well.
 
 =head1 PRIVILEGES
 
