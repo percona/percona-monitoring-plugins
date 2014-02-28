@@ -48,7 +48,7 @@ $chk_options = array (
    'master'  => true,    # Do you want to check binary logging?
    'slave'   => true,    # Do you want to check slave status?
    'procs'   => true,    # Do you want to check SHOW PROCESSLIST?
-   'get_qrt' => true,    # Get query response times from Percona Server?
+   'get_qrt' => true,    # Get query response times from Percona Server or MariaDB?
 );
 
 $use_ss    = FALSE; # Whether to use the script server or not
@@ -480,10 +480,12 @@ function ss_get_mysql_stats( $options ) {
       $istatus_text = $result[0]['Status'];
       $istatus_vals = get_innodb_array($istatus_text);
 
-      # Get response time histogram from Percona Server if enabled.
+      # Get response time histogram from Percona Server or MariaDB if enabled.
       if ( $chk_options['get_qrt']
-           && isset($status['have_response_time_distribution'])
-           &&      ($status['have_response_time_distribution'] == 'YES'))
+           && (( isset($status['have_response_time_distribution'])
+           && $status['have_response_time_distribution'] == 'YES')
+           || (isset($status['query_response_time_stats'])
+           && $status['query_response_time_stats'] == 'ON')) )
       {
          debug('Getting query time histogram');
          $i = 0;
