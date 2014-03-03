@@ -1,3 +1,14 @@
+2014-03-04: version 1.1.2
+-------------------------
+* Added Nagios plugin and Cacti template for Amazon RDS 
+* Added Nagios config template to the documentation
+* Added an option to pmp-check-pt-table-checksum to check MAX(ts) of latest checksum
+* Added generic Nagios plugin for PT tables
+* Extended pmp-check-mysql-processlist with max user connections check
+* Zabbix MySQL.running-slave item failed with MySQL 5.6 (bug 1272358)
+* ss_get_mysql_stats and MariaDB does not use have_response_time_distribution (bug 1285888)
+* Cacti Monitoring plugins and SNMP via TCP (bug 1268552)
+
 2013-12-30: version 1.1.1
 -------------------------
 * Cacti mysql graphs stop working with data input field "server-id" after 1.1 upgrade (bug 1264814)

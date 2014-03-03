@@ -342,7 +342,7 @@ the name.
 .. image:: images/mysql_mysql_query_response_time.png
 
 The MySQL Query Response Time (Microseconds) graph displays a histogram of the
-`query response time distribution available in Percona Server 5.1/5.5 only
+`query response time distribution available in Percona Server 5.1/5.5
 <http://www.percona.com/docs/wiki/percona-server:features:response_time_distribution>`_.
 Because the time units are user-configurable, exact unit labels are not
 displayed; rather, the graph simply shows the values.  There are 14 time units
@@ -354,10 +354,12 @@ queries of various lengths.  See the Percona documentation for more.  The units
 are in microseconds on the graph, because RRDtool cannot store floating-point
 values.
 
+This also may work with MariaDB.
+
 .. image:: images/mysql_mysql_query_time_histogram.png
 
 The MySQL Query Time Histogram (Count) graph displays a histogram of the
-`query response time distribution available in Percona Server 5.1/5.5 only
+`query response time distribution available in Percona Server 5.1/5.5
 <http://www.percona.com/docs/wiki/percona-server:features:response_time_distribution>`_.
 Because the time units are user-configurable, exact unit labels are not
 displayed; rather, the graph simply shows the values.  There are 14 time units
@@ -365,6 +367,8 @@ by default in Percona Server, so there are 13 entries on the graph (the 14th is
 non-numeric, so we omit it).
 
 The graph displays the number of queries that fell into each time division.  See the Percona documentation for more.
+
+This also may work with MariaDB.
 
 .. image:: images/mysql_mysql_replication.png
 
