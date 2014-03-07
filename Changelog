@@ -1,4 +1,4 @@
-2014-03-04: version 1.1.2
+2014-03-11: version 1.1.2
 -------------------------
 * Added Nagios plugin and Cacti template for Amazon RDS 
 * Added Nagios config template to the documentation

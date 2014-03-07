@@ -383,7 +383,7 @@ Here is the excerpt of potential Nagios config:
   
   define command{
         command_name    check_rds
-        command_line    /usr/local/rdba/bin/aws-rds-nagios-check.py -i $HOSTALIAS$ -m $ARG1$ -w $ARG2$ -c $ARG3$
+        command_line    $USER1$/pmp-check-aws-rds.py -i $HOSTALIAS$ -m $ARG1$ -w $ARG2$ -c $ARG3$
         }
 
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
