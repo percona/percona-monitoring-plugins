@@ -50,7 +50,7 @@ Configure Zabbix Agent
 2. Copy Zabbix Agent config::
 
       mkdir -p /etc/zabbix_agentd.conf.d/
-      cp /var/lib/zabbix/percona/userparameter_percona_mysql.conf /etc/zabbix_agentd.conf.d/userparameter_percona_mysql.conf
+      cp /var/lib/zabbix/percona/templates/userparameter_percona_mysql.conf /etc/zabbix_agentd.conf.d/userparameter_percona_mysql.conf
      
 3. Ensure /etc/zabbix_agentd.conf contains the line: ``Include=/etc/zabbix_agentd.conf.d/``
 
@@ -112,7 +112,8 @@ Configure Zabbix Server
 3. Import the XML template using Zabbix UI (Configuration -> Templates -> Import)
    by additionally choosing "Screens".
 
-4. Edit hosts to assign them "Percona Templates" group and link the template. 
+4. Create/edit hosts by assigning them "Percona Templates" group and linking the template
+   "Percona MySQL Server Template" (Templates tab).
 
 You are done.
 
