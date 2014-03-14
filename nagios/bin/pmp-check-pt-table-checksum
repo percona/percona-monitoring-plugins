@@ -189,9 +189,10 @@ server's data matches its master's:
 The word CHECKSUM_TABLE is replaced by the value of the -T option.  If the table
 specified by -T does not exist, unknown is raised.
 
-Optionally, if you specify an interval in days over which to ensure pt-table-checksum
-was run, the plugin will check for that in two cases: no diffs are found and the
-checksum table is not empty, in order to override the status.
+Optionally, you can specify an interval in days over which to ensure pt-table-checksum
+was run. It is useful in cases when the cron job doing the checksumming suddenly
+stopped working. This option will have an effect when no diffs are found and the
+checksum table is not empty.
 
 Alerts are raised at a WARNING level by default, but specifying the -c option
 with any value will change this to CRITICAL instead.
