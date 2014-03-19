@@ -131,6 +131,11 @@ If you need a more complex configuration setup, such as connecting to a
 different SSH port on different servers, follow the instructions to customize
 the data templates and accept input in each data source.
 
+Securing Your Setup
+-------------------
+Ensure that any files under  ``scripts/`` are not accessible from Web.
+Check out :ref:`Hardening Cacti setup <hardening_cacti_setup>` guide.
+
 Testing the Setup
 -----------------
 

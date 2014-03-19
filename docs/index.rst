@@ -95,6 +95,7 @@ intuitive point-and-click configuration and browsing of graphs and metrics.
    cacti/redis-templates
    cacti/rds-templates
    cacti/developer-documentation
+   cacti/hardening-cacti-setup
    cacti/upgrading-templates
 
 Templates for Zabbix 

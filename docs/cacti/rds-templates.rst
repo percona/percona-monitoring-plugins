@@ -31,6 +31,9 @@ For example::
    [root@centos6 ~]# chown cacti ~cacti/.boto
    [root@centos6 ~]# chmod 600 ~cacti/.boto
 
+**IMPORTANT:** Ensure the file ``.boto`` is not accessible from Web.
+Check out :ref:`Hardening Cacti setup <hardening_cacti_setup>` guide.
+
 Test the script assuming DB instance identifier is ``blackbox``::
 
    [root@centos6 ~]# sudo -u cacti ~cacti/scripts/ss_get_rds_stats.py --ident=blackbox --metric=CPUUtilization

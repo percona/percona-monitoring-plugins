@@ -177,6 +177,11 @@ username and password for each host or each graph, it won't work.
 A MySQL user should be configured with :ref:`the proper privileges
 <mysql-templates-user-privileges>`.
 
+Securing Your Setup
+-------------------
+Ensure that any files under  ``scripts/`` are not accessible from Web.
+Check out :ref:`Hardening Cacti setup <hardening_cacti_setup>` guide.
+
 Passing Command-Line Arguments
 ------------------------------
 
@@ -191,9 +196,9 @@ available options.  For example::
 
       --host      MySQL host
       --items     Comma-separated list of the items whose data you want
-      --user      MySQL username; defaults to cactiuser if not given
-      --pass      MySQL password; defaults to cactiuser if not given
-      --port      MySQL port; defaults to 3306 if not given
+      --user      MySQL username
+      --pass      MySQL password
+      --port      MySQL port
       --server-id Server id to associate with a heartbeat if heartbeat usage is enabled
       --nocache   Do not cache results in a file
       --help      Show usage
