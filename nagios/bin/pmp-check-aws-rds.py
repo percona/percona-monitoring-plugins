@@ -295,6 +295,10 @@ Example:
   [Credentials]
   aws_access_key_id = THISISATESTKEY
   aws_secret_access_key = thisisatestawssecretaccesskey
+
+If you do not use this config with other tools such as our Cacti script,
+you can secure this file the following way:
+
   [root@centos6 ~]# chown nagios /etc/boto.cfg
   [root@centos6 ~]# chmod 600 /etc/boto.cfg
 

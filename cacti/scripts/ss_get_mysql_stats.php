@@ -61,11 +61,15 @@ $debug_log = FALSE; # If $debug_log is a filename, it'll be used.
 $version = '$VERSION$';
 
 # ============================================================================
-# Include settings from an external config file (issue 39).
+# Include settings from an external config file.
 # ============================================================================
-if ( file_exists(__FILE__ . '.cnf' ) ) {
-   debug("Found configuration file " . __FILE__ . ".cnf");
+if ( file_exists('/etc/cacti/' . basename(__FILE__) . '.cnf' ) ) {
+   require('/etc/cacti/' . basename(__FILE__) . '.cnf');
+   debug('Found configuration file /etc/cacti/' . basename(__FILE__) . '.cnf');
+}
+elseif ( file_exists(__FILE__ . '.cnf' ) ) {
    require(__FILE__ . '.cnf');
+   debug('Found configuration file ' . __FILE__ . '.cnf');
 }
 
 # Make this a happy little script even when there are errors.
@@ -195,9 +199,9 @@ Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
 
    --host      MySQL host
    --items     Comma-separated list of the items whose data you want
-   --user      MySQL username; defaults to $mysql_user if not given
-   --pass      MySQL password; defaults to $mysql_pass if not given
-   --port      MySQL port; defaults to $mysql_port if not given
+   --user      MySQL username
+   --pass      MySQL password
+   --port      MySQL port
    --server-id Server id to associate with a heartbeat if heartbeat usage is enabled
    --nocache   Do not cache results in a file
    --help      Show usage

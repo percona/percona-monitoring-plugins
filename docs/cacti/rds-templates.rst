@@ -24,14 +24,19 @@ should have permissions to read the config /etc/boto.cfg or ~cacti/.boto.
 
 For example::
 
-   [root@centos6 ~]# cat ~cacti/.boto 
+   [root@centos6 ~]# cat /etc/boto.cfg
    [Credentials]
    aws_access_key_id = THISISATESTKEY
    aws_secret_access_key = thisisatestawssecretaccesskey 
-   [root@centos6 ~]# chown cacti ~cacti/.boto
-   [root@centos6 ~]# chmod 600 ~cacti/.boto
 
-**IMPORTANT:** Ensure the file ``.boto`` is not accessible from Web.
+If you do not use this config with other tools such as our Nagios plugin,
+you can secure this file the following way::
+
+   [root@centos6 ~]# chown cacti /etc/boto.cfg
+   [root@centos6 ~]# chmod 600 /etc/boto.cfg
+
+**IMPORTANT:** If you decide to create ``~cacti/.boto`` instead, which is not secure
+as it falls under the web directory, ensure this file is not accessible from Web.
 Check out :ref:`Hardening Cacti setup <hardening_cacti_setup>` guide.
 
 Test the script assuming DB instance identifier is ``blackbox``::

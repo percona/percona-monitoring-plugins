@@ -120,11 +120,11 @@ and set the proper configuration variables.  This example shows how to do it
 with an external configuration file, but you can do it any way you please::
 
    debian:~# cp scripts/ss_get_by_ssh.php /usr/share/cacti/site/scripts/
-   debian:~# cat > /usr/share/cacti/site/scripts/ss_get_by_ssh.php.cnf
+   debian:~# cat > /etc/cacti/ss_get_by_ssh.php.cnf
    <?php
    $ssh_user   = 'cacti';
    $ssh_iden   = '-i /etc/cacti/id_rsa';
-   ?>
+
    CTRL-D
 
 If you need a more complex configuration setup, such as connecting to a
@@ -133,7 +133,11 @@ the data templates and accept input in each data source.
 
 Securing Your Setup
 -------------------
-Ensure that any files under  ``scripts/`` are not accessible from Web.
+You can also place ``.cnf`` file in the same directory as the PHP script file
+(just to keep the backward compatibility)
+but this is a security risk as ``scripts/`` folder falls under the web directory.
+So ``/etc/cacti/`` is the recommended location for ``.cnf`` file.
+In any case, ensure that any files under ``scripts/`` are not accessible from Web.
 Check out :ref:`Hardening Cacti setup <hardening_cacti_setup>` guide.
 
 Testing the Setup

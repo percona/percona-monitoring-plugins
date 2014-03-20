@@ -25,13 +25,13 @@ Unfortunately, the folder ``/usr/share/cacti/scripts/`` is not closed by default
 We strongly recommend to close any access from the web for these additional directories or files:
 
 * /usr/share/cacti/scripts/
+* /usr/share/cacti/site/scripts/ (for Debian systems)
 * /usr/share/cacti/cli/
-* /usr/share/cacti/.ssh/
 * /usr/share/cacti/.boto
 
 Here is an example of httpd configuration that can harden your setup (goes to ``/etc/httpd/conf.d/cacti.conf``)::
 
-   <Directory ~ "/usr/share/cacti/(log|rra|scripts|cli|\.ssh|\.boto|.*\.cnf)">
+   <Directory ~ "/usr/share/cacti/(log|rra|scripts|site/scripts|cli|\.boto|\.ssh|.*\.cnf)">
 	<IfModule mod_rewrite.c>
 		Redirect 404 /
 	</IfModule>
@@ -48,3 +48,8 @@ Here is an example of httpd configuration that can harden your setup (goes to ``
 
 Even if you fully password-protected your Cacti installation using HTTP authentication, it is still recommended to double-secure the directories and files listed above.
 
+Outlining the basic rules:
+
+* keep your PHP config files ``ss_get_mysql_stats.php.cnf`` and ``ss_get_by_ssh.php.cnf`` outside the web directory ``/usr/share/cacti/scripts/``. The recommended location is ``/etc/cacti/``.
+* do not put any SSH keys under cacti user home directory which is still the web directory.
+* avoid placing ``.boto`` file under ``~cacti/``, use ``/etc/boto.cfg`` instead (that's for RDS plugins).

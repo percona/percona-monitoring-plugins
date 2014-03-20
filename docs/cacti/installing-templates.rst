@@ -152,12 +152,13 @@ A Configuration File
 --------------------
 
 If you don't want to store the configuration options directly into the PHP
-script file, you can create another file with the same name and the filename
-extension ``.cnf``.  Place this in the same directory as the PHP script file,
-and ensure it is valid PHP.  This file will be included by the PHP script file,
+script file or you want to preserve your settings after the package update,
+you can create another file with the same name and the filename
+extension ``.cnf``.  Place this under ``/etc/cacti/`` and ensure it is valid PHP.
+This file will be included by the PHP script file,
 so you can define the same configuration options there that you might define in
 the PHP script file.  For example, you might create
-``scripts/ss_get_mysql_stats.php.cnf`` with the following contents::
+``/etc/cacti/ss_get_mysql_stats.php.cnf`` with the following contents::
 
    <?php
    $mysql_user = "root";
@@ -179,7 +180,11 @@ A MySQL user should be configured with :ref:`the proper privileges
 
 Securing Your Setup
 -------------------
-Ensure that any files under  ``scripts/`` are not accessible from Web.
+You can also place ``.cnf`` file in the same directory as the PHP script file
+(just to keep the backward compatibility)
+but this is a security risk as ``scripts/`` folder falls under the web directory.
+So ``/etc/cacti/`` is the recommended location for ``.cnf`` file.
+In any case, ensure that any files under ``scripts/`` are not accessible from Web.
 Check out :ref:`Hardening Cacti setup <hardening_cacti_setup>` guide.
 
 Passing Command-Line Arguments

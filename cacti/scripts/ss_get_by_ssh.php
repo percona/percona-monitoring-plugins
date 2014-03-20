@@ -61,9 +61,13 @@ $version = '$VERSION$';
 # ============================================================================
 # Include settings from an external config file.
 # ============================================================================
-if ( file_exists(__FILE__ . '.cnf' ) ) {
-   debug("Found configuration file " . __FILE__ . ".cnf");
+if ( file_exists('/etc/cacti/' . basename(__FILE__) . '.cnf' ) ) {
+   require('/etc/cacti/' . basename(__FILE__) . '.cnf');
+   debug('Found configuration file /etc/cacti/' . basename(__FILE__) . '.cnf');
+}
+elseif ( file_exists(__FILE__ . '.cnf' ) ) {
    require(__FILE__ . '.cnf');
+   debug('Found configuration file ' . __FILE__ . '.cnf');
 }
 
 # Make this a happy little script even when there are errors.
@@ -1213,7 +1217,7 @@ function openvz_parse ( $options, $output ) {
             # An intro line or a dummy line
             continue;
          }
-         else if ( $words[0] === 'uid' ) {
+         elseif ( $words[0] === 'uid' ) {
             # It's the header row.  Get the headers into the header array,
             # except for the UID header, which we don't need, and the resource
             # header, which just defines the leftmost header that's in every
