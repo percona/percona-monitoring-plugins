@@ -34,7 +34,8 @@ install -m 0755 cacti/bin/* $RPM_BUILD_ROOT/usr/share/cacti/resource/percona/bin
 install -m 0644 cacti/definitions/* $RPM_BUILD_ROOT/usr/share/cacti/resource/percona/definitions
 install -m 0644 cacti/misc/* $RPM_BUILD_ROOT/usr/share/cacti/resource/percona/misc
 install -m 0644 cacti/templates/* $RPM_BUILD_ROOT/usr/share/cacti/resource/percona/templates
-install -m 0644 cacti/scripts/* $RPM_BUILD_ROOT/usr/share/cacti/scripts
+install -m 0644 cacti/scripts/*.php $RPM_BUILD_ROOT/usr/share/cacti/scripts
+install -m 0755 cacti/scripts/*.py $RPM_BUILD_ROOT/usr/share/cacti/scripts
 
 %clean
 rm -rf $RPM_BUILD_ROOT
