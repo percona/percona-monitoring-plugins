@@ -63,7 +63,7 @@ main() {
       else
          NOW_FUNC='UNIX_TIMESTAMP(UTC_TIMESTAMP)'
       fi
-      SQL="SELECT MAX(${NOW_FUNC} - UNIX_TIMESTAMP(ts)) AS delay
+      SQL="SELECT MAX(${NOW_FUNC} - ROUND(UNIX_TIMESTAMP(ts))) AS delay
          FROM ${OPT_TABLE} WHERE (${OPT_SRVID:-0} = 0 OR server_id = ${OPT_SRVID:-0})"
       LEVEL=$(mysql_exec "${SQL}")
       MYSQL_CONN=$?
