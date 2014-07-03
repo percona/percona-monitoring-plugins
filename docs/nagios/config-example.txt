@@ -243,7 +243,7 @@ define command{
 
 define command{
         command_name    check_mysql_replication_running
-        command_line    $USER1$/pmp-check-mysql-replication-running -H $HOSTADDRESS$ -c 1
+        command_line    $USER1$/pmp-check-mysql-replication-running -H $HOSTADDRESS$
         }
 
 define command{

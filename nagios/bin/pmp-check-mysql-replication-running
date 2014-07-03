@@ -4,7 +4,7 @@
 # This program is part of $PROJECT_NAME$
 # License: GPL License (see COPYING)
 # Authors:
-#  Baron Schwartz
+#  Baron Schwartz, Roman Vynar
 # ########################################################################
 
 # ########################################################################
@@ -30,6 +30,7 @@ main() {
       case "${o}" in
          -c)              shift; OPT_CRIT="${1}"; shift; ;;
          --defaults-file) shift; OPT_DEFT="${1}"; shift; ;;
+         -d)              shift; OPT_DELD=1; shift; ;;
          -H)              shift; OPT_HOST="${1}"; shift; ;;
          -l)              shift; OPT_USER="${1}"; shift; ;;
          -p)              shift; OPT_PASS="${1}"; shift; ;;
@@ -70,6 +71,11 @@ main() {
          NOTE=$(awk '$1 ~ /_Running:|Last_Error:/{print substr($0, 1, 100)}' "${TEMP}")
          if grep 'Last_Error: .' "${TEMP}" >/dev/null 2>&1; then
             NOTE="CRIT $NOTE"
+         # pt-slave-delayed slave
+         elif [ -n "${OPT_DELD}" ] &&
+              grep 'Slave_IO_Running: Yes' "${TEMP}" >/dev/null 2>&1 &&
+              grep 'Slave_SQL_Running: No' "${TEMP}" >/dev/null 2>&1; then
+            NOTE="OK (delayed slave) $NOTE"
          elif egrep "_Running: (No|Connecting)" "${TEMP}" >/dev/null 2>&1; then
             if [ "${OPT_CRIT}" ]; then
                NOTE="CRIT $NOTE"
@@ -141,9 +147,11 @@ pmp-check-mysql-replication-running - Alert when MySQL replication stops.
 
   Usage: pmp-check-mysql-replication-running [OPTIONS]
   Options:
-    -c CRIT         Report CRITICAL when replication is stopped without errors.
+    -c CRIT         Report CRITICAL when replication is stopped with or w/o errors.
     --defaults-file FILE Only read mysql options from the given file.
                     Defaults to /etc/nagios/mysql.cnf if it exists.
+    -d              Useful for slaves delayed by pt-slave-delay. It will not alert
+                    when IO thread is running, SQL one is not and no errors.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
     -p PASS         MySQL password.
