@@ -22,3 +22,12 @@ main -w 100 samples/empty
 
 echo "should print UNK could not determine replication status"
 main samples/doesnt-exist
+
+echo "should print OK (delayed slave) Slave_IO_Running: Yes Slave_SQL_Running: No Last_Error:"
+main -d 1 samples/show-slave-status-003.txt
+
+echo "should print CRIT Slave_IO_Running: No Slave_SQL_Running: No Last_Error:"
+main -d 1 samples/show-slave-status-004.txt
+
+echo "should print CRIT Slave_IO_Running: Yes Slave_SQL_Running: No Last_Error: Error 'Table 'mydb.mytable' doesn't exist' on query. Default database:"
+main -d 1 samples/show-slave-status-005.txt

@@ -4,7 +4,7 @@
 # This program is part of $PROJECT_NAME$
 # License: GPL License (see COPYING)
 # Authors:
-#  Baron Schwartz
+#  Baron Schwartz, Roman Vynar
 # ########################################################################
 
 # ########################################################################
@@ -29,6 +29,7 @@ main() {
    for o; do
       case "${o}" in
          -c)              shift; OPT_CRIT="${1}"; shift; ;;
+         -m)              shift; OPT_MIN="${1}"; shift; ;;
          --defaults-file) shift; OPT_DEFT="${1}"; shift; ;;
          -H)              shift; OPT_HOST="${1}"; shift; ;;
          -l)              shift; OPT_USER="${1}"; shift; ;;
@@ -46,6 +47,7 @@ main() {
    done
    OPT_WARN=${OPT_WARN:-300}
    OPT_CRIT=${OPT_CRIT:-600}
+   OPT_MIN=${OPT_MIN:-0}
    if [ -e '/etc/nagios/mysql.cnf' ]; then
       OPT_DEFT="${OPT_DEFT:-/etc/nagios/mysql.cnf}"
    fi
@@ -91,6 +93,9 @@ main() {
       NOTE="${LEVEL:-0} seconds of replication delay"
       if [ "${LEVEL:-""}" = "NULL" ]; then
          NOTE="UNK replica is stopped"
+      # pt-slave-delayed slave
+      elif [ "${LEVEL:-0}" -lt "${OPT_MIN}" ]; then
+         NOTE="CRIT (delayed slave) $NOTE | $PERFDATA"
       elif [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
          NOTE="CRIT $NOTE | $PERFDATA"
       elif [ "${LEVEL:-0}" -gt "${OPT_WARN}" ]; then
@@ -153,6 +158,7 @@ pmp-check-mysql-replication-delay - Alert when MySQL replication becomes delayed
   Usage: pmp-check-mysql-replication-delay [OPTIONS]
   Options:
     -c CRIT         Critical threshold; default 600.
+    -m CRIT         Minimal threshold to ensure for delayed slaves; default 0.
     --defaults-file FILE Only read mysql options from the given file.
                     Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
@@ -178,6 +184,10 @@ column from this command is unreliable, so it is better to use pt-heartbeat from
 Percona Toolkit instead.  Use the -T option to specify which table pt-heartbeat
 updates.  Use the -s option to specify the master's server_id to compare
 against; otherwise the plugin reports the maximum delay from any server.
+
+If you want to run this check against the delayed slaves, e.g. those running
+with pt-slave-delay tool, you may want to use -m option specifying the minimal
+delay that should be ongoing, otherwise the plugin will alert critical.
 
 =head1 PRIVILEGES
 

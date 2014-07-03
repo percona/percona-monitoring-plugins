@@ -11,3 +11,8 @@
 ../../nagios/bin/pmp-check-mysql-deleted-files
 ../../nagios/bin/pmp-check-mysql-file-privs
 ../../nagios/bin/pmp-check-lvm-snapshots
+for d in `find . -maxdepth 1 -type d -name "pmp-*"`; do
+    cd $d
+    sh check-functions.sh
+    cd ..
+done

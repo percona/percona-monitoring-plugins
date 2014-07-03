@@ -182,6 +182,10 @@ produces no output, which means it is not configured as a replica.  By default,
 this plugin will report that replication is healthy when a server isn't
 configured as a replica.
 
+If you want to run this check against the delayed slaves, e.g. those running
+with pt-slave-delay tool, you may want to specify -d option. It will not alert
+when Slave_IO_Running is Yes, Slave_SQL_Running is No and there are no errors.
+
 =head1 PRIVILEGES
 
 This plugin executes the following commands against MySQL:
