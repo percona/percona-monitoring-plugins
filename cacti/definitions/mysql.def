@@ -2630,7 +2630,7 @@
                hash => 'hash_08_VER_bd472a4caad3aaf17971489dd98d146e',
             },
             Handler_savepoint_rollback => {
-               data_source_type_id => '1',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_0cb8145c779a473ff1c7f8afb44c1824',
             },
          },
