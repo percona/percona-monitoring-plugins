@@ -56,8 +56,9 @@ These plugins can be used locally or via NRPE.  NRPE is the suggested
 configuration.  Some plugins execute commands that require privileges, so you
 may need to specify a command prefix to execute them with ``sudo``.
 
-To avoid passing MySQL access credentials as command arguments, say for security reasons,
-you can create /etc/nagios/mysql.cnf so the plugins will use it. For example::
+For security reasons, it is recommended to not pass MySQL access credentials in
+the arguments. You can create /etc/nagios/mysql.cnf and the plugins will use it
+like the default .my.cnf file. For example::
 
    [root@centos6 ~]# cat /etc/nagios/mysql.cnf
    [client]
@@ -65,6 +66,12 @@ you can create /etc/nagios/mysql.cnf so the plugins will use it. For example::
    password = s3cret
    [root@centos6 ~]# chown root:nagios /etc/nagios/mysql.cnf
    [root@centos6 ~]# chmod 640 /etc/nagios/mysql.cnf
+
+Also with MySQL 5.6 client you can use the login-path instead of the password
+or .my.cnf, /etc/nagios/mysql.cnf files. For this, you need to specify ``-L``
+option, e.g. ``-L safelogin``. The actual .mylogin.cnf file should be created
+with ``mysql_config_editor`` tool and in case of Nagios, placed into nagios user
+home directory.
 
 Here you can find an excerpt of potential Nagios config :download:`click here <config-example.txt>`.
 

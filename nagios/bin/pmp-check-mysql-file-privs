@@ -33,6 +33,7 @@ main() {
          -g)              shift; OPT_UNIX_GROUP="${1}"; shift; ;;
          -H)              shift; OPT_HOST="${1}"; shift; ;;
          -l)              shift; OPT_USER="${1}"; shift; ;;
+         -L)              shift; OPT_LOPA="${1}"; shift; ;;
          -p)              shift; OPT_PASS="${1}"; shift; ;;
          -P)              shift; OPT_PORT="${1}"; shift; ;;
          -S)              shift; OPT_SOCK="${1}"; shift; ;;
@@ -125,7 +126,7 @@ main() {
 mysql_exec() {
    mysql ${OPT_DEFT:+--defaults-file="${OPT_DEFT}"} ${OPT_HOST:+-h"${OPT_HOST}"} ${OPT_USER:+-u"${OPT_USER}"} \
       ${OPT_PASS:+-p"${OPT_PASS}"} ${OPT_SOCK:+-S"${OPT_SOCK}"} ${OPT_PORT:+-P"${OPT_PORT}"} \
-      -ss -e "$1"
+      ${OPT_LOPA:+--login-path="${OPT_LOPA}"} -ss -e "$1"
 }
 
 # ########################################################################
@@ -183,6 +184,7 @@ pmp-check-mysql-file-privs - Alert if MySQL data directory privileges are wrong.
     -g GROUP        The Unix group who should own the files; default mysql.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
+    -L LOGIN-PATH   Use login-path to access MySQL (with MySQL client 5.6).
     -p PASS         MySQL password.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
