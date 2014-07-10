@@ -369,7 +369,11 @@ function ss_get_mysql_stats( $options ) {
 
    # Get SHOW SLAVE STATUS, and add it to the $status array.
    if ( $chk_options['slave'] ) {
-      $result = run_query("SHOW SLAVE STATUS", $conn);
+      # Leverage lock-free SHOW SLAVE STATUS NOLOCK with Percona Server
+      $result = run_query("SHOW SLAVE STATUS NOLOCK", $conn);
+      if ( !$result ) {
+         $result = run_query("SHOW SLAVE STATUS", $conn);
+      } 
       $slave_status_rows_gotten = 0;
       foreach ( $result as $row ) {
          $slave_status_rows_gotten++;
@@ -1233,7 +1237,7 @@ function run_query($sql, $conn) {
    global $debug;
    debug($sql);
    $result = @mysqli_query($conn, $sql);
-   if ( $debug ) {
+   if ( $debug && $sql != 'SHOW SLAVE STATUS NOLOCK') {
       $error = @mysqli_error($conn);
       if ( $error ) {
          debug(array($sql, $error));

@@ -29,10 +29,10 @@ main() {
    for o; do
       case "${o}" in
          -c)              shift; OPT_CRIT="${1}"; shift; ;;
-         -m)              shift; OPT_MIN="${1}"; shift; ;;
          --defaults-file) shift; OPT_DEFT="${1}"; shift; ;;
          -H)              shift; OPT_HOST="${1}"; shift; ;;
          -l)              shift; OPT_USER="${1}"; shift; ;;
+         -m)              shift; OPT_MIN="${1}"; shift; ;;
          -p)              shift; OPT_PASS="${1}"; shift; ;;
          -P)              shift; OPT_PORT="${1}"; shift; ;;
          -S)              shift; OPT_SOCK="${1}"; shift; ;;
@@ -73,7 +73,8 @@ main() {
       local TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
       trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
       if [ -z "$1" ]; then
-         mysql_exec 'SHOW SLAVE STATUS\G' > "${TEMP}"
+         # Leverage lock-free SHOW SLAVE STATUS NOLOCK with Percona Server
+         mysql_exec "SHOW SLAVE STATUS NOLOCK\G" > "${TEMP}" 2>/dev/null || mysql_exec "SHOW SLAVE STATUS\G" > "${TEMP}"
          MYSQL_CONN=$?
       else
          # This is for testing only.
@@ -158,11 +159,11 @@ pmp-check-mysql-replication-delay - Alert when MySQL replication becomes delayed
   Usage: pmp-check-mysql-replication-delay [OPTIONS]
   Options:
     -c CRIT         Critical threshold; default 600.
-    -m CRIT         Minimal threshold to ensure for delayed slaves; default 0.
     --defaults-file FILE Only read mysql options from the given file.
                     Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
+    -m CRIT         Minimal threshold to ensure for delayed slaves; default 0.
     -p PASS         MySQL password.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
@@ -197,7 +198,9 @@ This plugin executes the following commands against MySQL:
 
 =item *
 
-C<SHOW SLAVE STATUS>.
+C<SHOW SLAVE STATUS NOLOCK> with Percona Server and w/o NOLOCK otherwise.
+
+or 
 
 =item *
 

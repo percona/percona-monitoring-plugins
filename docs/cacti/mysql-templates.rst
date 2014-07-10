@@ -53,7 +53,7 @@ and how to disable if it's unwanted:
 ``SHOW ENGINES``
    This query requires no special privileges and is necessary for core functionality.
 ``SHOW SLAVE STATUS``
-   This query requires either SUPER or REPLICATION CLIENT.  It is necessary for tracking replication lag on replication slaves, which is enabled by default.  To disable, edit the ``$chk_options`` array in the configuration.  Alternatively, use ``pt-heartbeat`` and grant SELECT on the heartbeat table.  If disabled, parts of the the MySQL Replication Status and MySQL Binary/Relay logs graphs will be empty.
+   This query requires either SUPER or REPLICATION CLIENT.  It is necessary for tracking replication lag on replication slaves, which is enabled by default.  To disable, edit the ``$chk_options`` array in the configuration.  Alternatively, use ``pt-heartbeat`` and grant SELECT on the heartbeat table.  If disabled, parts of the the MySQL Replication Status and MySQL Binary/Relay logs graphs will be empty. With Percona Server, the script leverages lock-free ``SHOW SLAVE STATUS NOLOCK`` instead.
 ``SHOW MASTER LOGS``
    This query is used to count up the size of binary logs.  It requires the SUPER privilege.  If disabled in the ``$chk_options`` array, then part of the MySQL Binary/Relay logs graph will be empty.
 ``SHOW PROCESSLIST``

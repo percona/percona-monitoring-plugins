@@ -58,7 +58,8 @@ main() {
    local TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
    trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
    if [ -z "$1" ]; then
-      mysql_exec 'SHOW SLAVE STATUS\G' > "${TEMP}"
+      # Leverage lock-free SHOW SLAVE STATUS NOLOCK with Percona Server
+      mysql_exec "SHOW SLAVE STATUS NOLOCK\G" > "${TEMP}" 2>/dev/null || mysql_exec "SHOW SLAVE STATUS\G" > "${TEMP}"
    else
       # This is just for testing.  /dev/null it.
       cat "$1" > "${TEMP}" 2>/dev/null
@@ -194,7 +195,7 @@ This plugin executes the following commands against MySQL:
 
 =item *
 
-C<SHOW SLAVE STATUS>.
+C<SHOW SLAVE STATUS NOLOCK> with Percona Server and w/o NOLOCK otherwise.
 
 =back
 
