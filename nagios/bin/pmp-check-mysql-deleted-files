@@ -190,7 +190,7 @@ pmp-check-mysql-deleted-files - Alert when MySQL's files are deleted.
                     Defaults to /etc/nagios/mysql.cnf if it exists.
     -H HOST         MySQL hostname.
     -l USER         MySQL username.
-    -L LOGIN-PATH   Use login-path file with the credentials (MySQL 5.6 and higher).
+    -L LOGIN-PATH   Use login-path to access MySQL (with MySQL client 5.6).
     -p PASS         MySQL password.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
