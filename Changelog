@@ -1,3 +1,14 @@
+2014-07-21: version 1.1.4
+-------------------------
+* Added login-path support to Nagios plugins with MySQL client 5.6 (bug 1338549)
+* Added a new threshold option for delayed slaves to pmp-check-mysql-replication-delay (bug 1318280)
+* Added delayed slave support to pmp-check-mysql-replication-running (bug 1332082)
+* Updated Nagios plugins and Cacti script to leverage lock-free SHOW SLAVE STATUS in Percona Server (bug 1297442)
+* Fixed pmp-check-mysql-replication-delay integer-float issue with MariaDB and MySQL 5.6 (bugs 1245934, 1295795)
+* ss_get_rds_stats.py was not installed with 755 permissions from the package (bug 1316943)
+* Cacti MySQL template item "handler_savepoint_rollback" was GAUGE type instead of DERIVE (bug 1334173)
+* Fixed Zabbix running-slave check issue on some Debian systems (bug 1310723)
+
 2014-03-21: version 1.1.3
 -------------------------
 * Introduced more secure location of PHP script configs to harden a Cacti setup (bug #1295006)

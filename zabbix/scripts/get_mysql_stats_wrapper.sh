@@ -16,7 +16,7 @@ CACHEFILE="/tmp/$HOST-mysql_cacti_stats.txt"
 
 if [ "$ITEM" = "running-slave" ]; then
     # Check for running slave
-    RES=`mysql -e 'SHOW SLAVE STATUS\G' | egrep '(Slave_IO_Running|Slave_SQL_Running):' | awk -F: '{print $2}' | tr '\n' ','`
+    RES=`HOME=~zabbix mysql -e 'SHOW SLAVE STATUS\G' | egrep '(Slave_IO_Running|Slave_SQL_Running):' | awk -F: '{print $2}' | tr '\n' ','`
     if [ "$RES" = " Yes, Yes," ]; then
         echo 1
     else
