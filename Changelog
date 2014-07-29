@@ -8,6 +8,7 @@
 * ss_get_rds_stats.py was not installed with 755 permissions from the package (bug 1316943)
 * Cacti MySQL template item "handler_savepoint_rollback" was GAUGE type instead of DERIVE (bug 1334173)
 * Fixed Zabbix running-slave check issue on some Debian systems (bug 1310723)
+* Fixed paths in percona-cacti-templates package (bug 1349564)
 
 2014-03-21: version 1.1.3
 -------------------------
