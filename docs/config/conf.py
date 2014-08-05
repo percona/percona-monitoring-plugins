@@ -49,7 +49,7 @@ html_theme_path = ['.', './percona-theme']
 html_title = 'Percona Monitoring Plugins Documentation'
 html_short_title = 'Monitoring Plugins'
 
-html_favicon = 'http://s1.percona.com/percona_favicon.ico'
+html_favicon = '_static/percona_favicon.ico'
 
 #html_last_updated_fmt = ''
 
