@@ -31,7 +31,7 @@ We strongly recommend to close any access from the web for these additional dire
 
 Here is an example of httpd configuration that can harden your setup (goes to ``/etc/httpd/conf.d/cacti.conf``)::
 
-   <Directory ~ "/usr/share/cacti/(log|rra|scripts|site/scripts|cli|\.boto|\.ssh|.*\.cnf)">
+   <Directory ~ "/usr/share/cacti/(log/|rra/|scripts/|site/scripts/|cli/|\.ssh/|\.boto|.*\.cnf)">
 	<IfModule mod_rewrite.c>
 		Redirect 404 /
 	</IfModule>
