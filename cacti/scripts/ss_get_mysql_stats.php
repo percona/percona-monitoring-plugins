@@ -36,7 +36,7 @@ $mysql_ssl_cert = '/etc/pki/tls/certs/mysql/client-cert.pem';
 $mysql_ssl_ca   = '/etc/pki/tls/certs/mysql/ca-cert.pem';
 
 $heartbeat = FALSE;        # Whether to use pt-heartbeat table for repl. delay calculation.
-$heartbeat_utc = FALSE;    # Whether pt-heartbeat is run with --utc option.  
+$heartbeat_utc = FALSE;    # Whether pt-heartbeat is run with --utc option.
 $heartbeat_server_id = 0;  # Server id to associate with a heartbeat. Leave 0 if no preference.
 $heartbeat_table = 'percona.heartbeat'; # db.tbl.
 
@@ -241,7 +241,7 @@ function parse_cmdline( $args ) {
 function ss_get_mysql_stats( $options ) {
    # Process connection options.
    global $debug, $mysql_user, $mysql_pass, $cache_dir, $poll_time, $chk_options,
-          $mysql_port, $mysql_ssl, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca, 
+          $mysql_port, $mysql_ssl, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca,
           $heartbeat, $heartbeat_table, $heartbeat_server_id, $heartbeat_utc;
 
    $user = isset($options['user']) ? $options['user'] : $mysql_user;
@@ -373,7 +373,7 @@ function ss_get_mysql_stats( $options ) {
       $result = run_query("SHOW SLAVE STATUS NOLOCK", $conn);
       if ( !$result ) {
          $result = run_query("SHOW SLAVE STATUS", $conn);
-      } 
+      }
       $slave_status_rows_gotten = 0;
       foreach ( $result as $row ) {
          $slave_status_rows_gotten++;
@@ -392,7 +392,7 @@ function ss_get_mysql_stats( $options ) {
                $now_func = 'UNIX_TIMESTAMP()';
             }
             $result2 = run_query(
-               "SELECT MAX($now_func - UNIX_TIMESTAMP(ts))"
+               "SELECT MAX($now_func - ROUND(UNIX_TIMESTAMP(ts)))"
                . " AS delay FROM $heartbeat_table"
                . " WHERE $heartbeat_server_id = 0 OR server_id = $heartbeat_server_id", $conn);
             $slave_delay_rows_gotten = 0;
