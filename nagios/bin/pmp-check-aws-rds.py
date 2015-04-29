@@ -1,42 +1,47 @@
 #!/usr/bin/env python
-"""
-Nagios plugin for Amazon RDS monitoring.
+"""Nagios plugin for Amazon RDS monitoring.
 
 This program is part of $PROJECT_NAME$
 License: GPL License (see COPYING)
 
 Author Roman Vynar
-Copyright 2014 Percona LLC and/or its affiliates
+Copyright 2014-2015 Percona LLC and/or its affiliates
 """
 
 import boto
+import boto.rds
+import boto.ec2.cloudwatch
 import datetime
 import optparse
 import pprint
 import sys
 
-def get_rds_info(indentifier=None):
+
+def get_rds_info(region, identifier=None):
     """Function for fetching RDS details"""
-    rds = boto.connect_rds()
+    rds = boto.rds.connect_to_region(region)
     try:
-        if indentifier:
-            info = rds.get_all_dbinstances(indentifier)[0]
+        if identifier:
+            info = rds.get_all_dbinstances(identifier)[0]
         else:
             info = rds.get_all_dbinstances()
-    except boto.exception.BotoServerError:
+    except (boto.exception.BotoServerError, AttributeError):
         info = None
     return info
 
-def get_rds_stats(step, start_time, end_time, metric, indentifier):
+
+def get_rds_stats(region, identifier, metric, start_time, end_time, step):
     """Function for fetching RDS statistics from CloudWatch"""
-    cw = boto.connect_cloudwatch()
-    result = cw.get_metric_statistics(step,
+    cw = boto.ec2.cloudwatch.connect_to_region(region)
+    result = cw.get_metric_statistics(
+        step,
         start_time,
         end_time,
         metric,
         'AWS/RDS',
         'Average',
-        dimensions={'DBInstanceIdentifier': [indentifier]})
+        dimensions={'DBInstanceIdentifier': [identifier]}
+    )
     if result:
         if len(result) > 1:
             # Get the last point
@@ -44,6 +49,7 @@ def get_rds_stats(step, start_time, end_time, metric, indentifier):
             result.reverse()
         result = float('%.2f' % result[0]['Average'])
     return result
+
 
 def main():
     """Main function"""
@@ -53,27 +59,47 @@ def main():
     WARNING = 1
     CRITICAL = 2
     UNKNOWN = 3
-    short_status = {OK: 'OK',
-                    WARNING: 'WARN',
-                    CRITICAL: 'CRIT',
-                    UNKNOWN: 'UNK'}
+    short_status = {
+        OK: 'OK',
+        WARNING: 'WARN',
+        CRITICAL: 'CRIT',
+        UNKNOWN: 'UNK'
+    }
 
-    # DB instance classes as listed on http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html
-    db_classes = {'db.t1.micro': 0.61,
-                  'db.m1.small': 1.7,
-                  'db.m1.medium': 3.75,
-                  'db.m1.large': 7.5,
-                  'db.m1.xlarge': 15,
-                  'db.m2.xlarge': 17.1,
-                  'db.m2.2xlarge': 34,
-                  'db.m2.4xlarge': 68,
-                  'db.cr1.8xlarge': 244}
+    # DB instance classes as listed on
+    # http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html
+    db_classes = {
+        'db.t1.micro': 0.615,
+        'db.m1.small': 1.7,
+        'db.m3.medium': 3.75,
+        'db.m3.large': 7.5,
+        'db.m3.xlarge': 15,
+        'db.m3.2xlarge': 30,
+        'db.r3.large': 15,
+        'db.r3.xlarge': 30.5,
+        'db.r3.2xlarge': 61,
+        'db.r3.4xlarge': 122,
+        'db.r3.8xlarge': 244,
+        'db.t2.micro': 1,
+        'db.t2.small': 2,
+        'db.t2.medium': 4,
+        'db.m2.xlarge': 17.1,
+        'db.m2.2xlarge': 34.2,
+        'db.m2.4xlarge': 68.4,
+        'db.cr1.8xlarge': 244,
+        'db.m1.medium': 3.75,
+        'db.m1.large': 7.5,
+        'db.m1.xlarge': 15
+    }
 
-    # RDS metrics as listed on http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/rds-metricscollected.html
-    metrics = {'status': 'RDS availability',
-               'load': 'CPUUtilization',
-               'memory': 'FreeableMemory',
-               'storage': 'FreeStorageSpace'}
+    # RDS metrics as listed on
+    # http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/rds-metricscollected.html
+    metrics = {
+        'status': 'RDS availability',
+        'load': 'CPUUtilization',
+        'memory': 'FreeableMemory',
+        'storage': 'FreeStorageSpace'
+    }
 
     units = ('percent', 'GB')
 
@@ -81,22 +107,33 @@ def main():
     parser = optparse.OptionParser()
     parser.add_option('-l', '--list', help='list of all DB instances',
                       action='store_true', default=False, dest='db_list')
+    parser.add_option('-r', '--region', help='AWS region. Default: us-east-1',
+                      default='us-east-1')
     parser.add_option('-i', '--ident', help='DB instance identifier')
     parser.add_option('-p', '--print', help='print status and other details for a given DB instance',
                       action='store_true', default=False, dest='info')
     parser.add_option('-m', '--metric', help='metric to check: [%s]' % ', '.join(metrics.keys()))
     parser.add_option('-w', '--warn', help='warning threshold')
     parser.add_option('-c', '--crit', help='critical threshold')
-    parser.add_option('-u', '--unit', help='unit of thresholds for "storage" and "memory" metrics: [%s]. Default: percent' % ', '.join(units),
-                      default='percent')
+    parser.add_option('-u', '--unit', help='unit of thresholds for "storage" and "memory" metrics: [%s]. '
+                      'Default: percent' % ', '.join(units), default='percent')
+    parser.add_option('-t', '--time', help='time period in minutes to query. Default: 5',
+                      type='int', default=5)
+    parser.add_option('-a', '--avg', help='time average in minutes to request. Default: 1',
+                      type='int', default=1)
+    parser.add_option('-d', '--debug', help='enable debug output',
+                      action='store_true', default=False)
     options, args = parser.parse_args()
+
+    if options.debug:
+        boto.set_stream_logger('boto')
 
     # Check args
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit()
     elif options.db_list:
-        info = get_rds_info()
+        info = get_rds_info(options.region)
         print 'List of all DB instances:'
         pprint.pprint(info)
         sys.exit()
@@ -104,7 +141,7 @@ def main():
         parser.print_help()
         parser.error('DB identifier is not set.')
     elif options.info:
-        info = get_rds_info(options.ident)
+        info = get_rds_info(options.region, options.ident)
         if info:
             pprint.pprint(vars(info))
         else:
@@ -119,15 +156,21 @@ def main():
     elif not options.crit and options.metric != 'status':
         parser.print_help()
         parser.error('Critical threshold is not set.')
+    elif options.avg <= 0 and options.metric != 'status':
+        parser.print_help()
+        parser.error('Average must be greater than zero.')
+    elif options.time <= 0 and options.metric != 'status':
+        parser.print_help()
+        parser.error('Time must be greater than zero.')
 
-    tm = datetime.datetime.utcnow()
+    now = datetime.datetime.utcnow()
     status = None
     note = ''
     perf_data = None
 
     # RDS Status
     if options.metric == 'status':
-        info = get_rds_info(options.ident)
+        info = get_rds_info(options.region, options.ident)
         if not info:
             status = UNKNOWN
             note = 'Unable to get RDS instance'
@@ -162,8 +205,8 @@ def main():
                 n = 5
             else:
                 n = i
-            load = get_rds_stats(i * 60, tm - datetime.timedelta(seconds=n * 60), tm,
-                                 metrics[options.metric], options.ident)
+            load = get_rds_stats(options.region, options.ident, metrics[options.metric],
+                                 now - datetime.timedelta(seconds=n * 60), now, i * 60)
             if not load:
                 status = UNKNOWN
                 note = 'Unable to get RDS statistics'
@@ -204,9 +247,9 @@ def main():
             parser.print_help()
             parser.error('Unit is not valid.')
 
-        info = get_rds_info(options.ident)
-        free = get_rds_stats(60, tm - datetime.timedelta(seconds=60), tm,
-                             metrics[options.metric], options.ident)
+        info = get_rds_info(options.region, options.ident)
+        free = get_rds_stats(options.region, options.ident, metrics[options.metric],
+                             now - datetime.timedelta(seconds=options.time * 60), now, options.avg * 60)
         if not info or not free:
             status = UNKNOWN
             note = 'Unable to get RDS details and statistics'
@@ -246,6 +289,7 @@ def main():
         print '%s %s' % (short_status[status], note)
     sys.exit(status)
 
+
 if __name__ == '__main__':
     main()
 
@@ -266,6 +310,8 @@ pmp-check-aws-rds.py - Check Amazon RDS metrics.
   Options:
     -h, --help            show this help message and exit
     -l, --list            list of all DB instances
+    -r REGION, --region=REGION
+                          AWS region. Default: us-east-1
     -i IDENT, --ident=IDENT
                           DB instance identifier
     -p, --print           print status and other details for a given DB instance
@@ -275,8 +321,14 @@ pmp-check-aws-rds.py - Check Amazon RDS metrics.
     -c CRIT, --crit=CRIT  critical threshold
     -u UNIT, --unit=UNIT  unit of thresholds for "storage" and "memory" metrics:
                           [percent, GB]. Default: percent
+    -t TIME, --time=TIME  time period (prior to now) to query, in minutes.
+                          Default: 5
+    -a AVG, --avg=AVG     period to request an average over, in minutes.
+                          Default: 1
+    -d DEBUG, --debug=DEBUG
+                          enable debugging level
 
-=head1 REQUIREMENTS 
+=head1 REQUIREMENTS
 
 This plugin is written on Python and utilizes the module C<boto> (Python interface
 to Amazon Web Services) to get various RDS metrics from CloudWatch and compare
@@ -313,78 +365,85 @@ The plugin provides 4 checks and some options to list and print RDS details:
 
 To get the list of all RDS instances under AWS account:
 
-  # ./aws-rds-nagios-check.py -l
+  # ./pmp-check-aws-rds.py -l
 
-To get the detailed status of RDS instance identified as C<blackbox>: 
+To get the detailed status of RDS instance identified as C<blackbox>:
 
-  # ./aws-rds-nagios-check.py -i blackbox -p
+  # ./pmp-check-aws-rds.py -i blackbox -p
 
 Nagios check for the overall status. Useful if you want to set the rest
 of the checks dependent from this one:
 
-  # ./aws-rds-nagios-check.py -i blackbox -m status
+  # ./pmp-check-aws-rds.py -i blackbox -m status
   OK mysql 5.1.63. Status: available
 
 Nagios check for CPU utilization, specify thresholds as percentage of
-1-min., 5-min., 15-min. average accordingly: 
+1-min., 5-min., 15-min. average accordingly:
 
-  # ./aws-rds-nagios-check.py -i blackbox -m load -w 90,85,80 -c 98,95,90
+  # ./pmp-check-aws-rds.py -i blackbox -m load -w 90,85,80 -c 98,95,90
   OK Load average: 18.36%, 18.51%, 15.95% | load1=18.36;90.0;98.0;0;100 load5=18.51;85.0;95.0;0;100 load15=15.95;80.0;90.0;0;100
 
 Nagios check for the free memory, specify thresholds as percentage:
 
-  # ./aws-rds-nagios-check.py -i blackbox -m memory -w 5 -c 2
+  # ./pmp-check-aws-rds.py -i blackbox -m memory -w 5 -c 2
   OK Free memory: 5.90 GB (9%) of 68 GB | free_memory=8.68;5.0;2.0;0;100
-  # ./aws-rds-nagios-check.py -i blackbox -m memory -u GB -w 4 -c 2
+  # ./pmp-check-aws-rds.py -i blackbox -m memory -u GB -w 4 -c 2
   OK Free memory: 5.90 GB (9%) of 68 GB | free_memory=5.9;4.0;2.0;0;68
 
-Nagios check for the free storage space, specify thresholds as percentage or GB: 
+Nagios check for the free storage space, specify thresholds as percentage or GB:
 
-  # ./aws-rds-nagios-check.py -i blackbox -m storage -w 10 -c 5
+  # ./pmp-check-aws-rds.py -i blackbox -m storage -w 10 -c 5
   OK Free storage: 162.55 GB (33%) of 500.0 GB | free_storage=32.51;10.0;5.0;0;100
-  # ./aws-rds-nagios-check.py -i blackbox -m storage -u GB -w 10 -c 5
+  # ./pmp-check-aws-rds.py -i blackbox -m storage -u GB -w 10 -c 5
   OK Free storage: 162.55 GB (33%) of 500.0 GB | free_storage=162.55;10.0;5.0;0;500.0
 
 =head1 CONFIGURATION
 
 Here is the excerpt of potential Nagios config:
 
+  define host{
+        use                             mysql-host
+        host_name                       blackbox
+        alias                           blackbox
+        address                         blackbox.abcdefgh.us-east-1.rds.amazonaws.com
+        }
+
   define servicedependency{
-        hostgroup_name                  mysql-servers
+        host_name                       blackbox
         service_description             RDS Status
-        dependent_service_description   RDS Load Average, RDS Free Storage, RDS Free Memory 
+        dependent_service_description   RDS Load Average, RDS Free Storage, RDS Free Memory
         execution_failure_criteria      w,c,u,p
         notification_failure_criteria   w,c,u,p
         }
-  
+
   define service{
         use                             active-service
-        hostgroup_name                  mysql-servers
+        host_name                       blackbox
         service_description             RDS Status
         check_command                   check_rds!status!0!0
         }
-       
+
   define service{
         use                             active-service
-        hostgroup_name                  mysql-servers
+        host_name                       blackbox
         service_description             RDS Load Average
         check_command                   check_rds!load!90,85,80!98,95,90
         }
-  
+
   define service{
         use                             active-service
-        hostgroup_name                  mysql-servers
+        host_name                       blackbox
         service_description             RDS Free Storage
         check_command                   check_rds!storage!10!5
         }
-  
+
   define service{
         use                             active-service
-        hostgroup_name                  mysql-servers
+        host_name                       blackbox
         service_description             RDS Free Memory
         check_command                   check_rds!memory!5!2
         }
-  
+
   define command{
         command_name    check_rds
         command_line    $USER1$/pmp-check-aws-rds.py -i $HOSTALIAS$ -m $ARG1$ -w $ARG2$ -c $ARG3$
