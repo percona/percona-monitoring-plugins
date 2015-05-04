@@ -38,6 +38,7 @@ main() {
          -P)              shift; OPT_PORT="${1}"; shift; ;;
          -S)              shift; OPT_SOCK="${1}"; shift; ;;
          -w)              shift; OPT_WARN="${1}"; shift; ;;
+         --master-conn)   shift; OPT_MASTERCONN="${1}"; shift; ;;
          --version)       grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
          --help)          perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
          -*)              echo "Unknown option ${o}.  Try --help."; exit 1; ;;
@@ -59,8 +60,15 @@ main() {
    local TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
    trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
    if [ -z "$1" ]; then
-      # Leverage lock-free SHOW SLAVE STATUS NOLOCK with Percona Server
-      mysql_exec "SHOW SLAVE STATUS NOLOCK\G" > "${TEMP}" 2>/dev/null || mysql_exec "SHOW SLAVE STATUS\G" > "${TEMP}"
+      if [ "${OPT_MASTERCONN}" ]; then
+         # MariaDB multi-source replication
+         mysql_exec "SHOW SLAVE '${OPT_MASTERCONN}' STATUS\G" > "${TEMP}"
+      else
+         # Leverage lock-free SHOW SLAVE STATUS if available
+         mysql_exec "SHOW SLAVE STATUS NONBLOCKING\G" > "${TEMP}" 2>/dev/null ||
+         mysql_exec "SHOW SLAVE STATUS NOLOCK\G" > "${TEMP}" 2>/dev/null ||
+         mysql_exec "SHOW SLAVE STATUS\G" > "${TEMP}"
+      fi
    else
       # This is just for testing.  /dev/null it.
       cat "$1" > "${TEMP}" 2>/dev/null
@@ -161,6 +169,7 @@ pmp-check-mysql-replication-running - Alert when MySQL replication stops.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
     -w WARN         Report WARNING when SHOW SLAVE STATUS output is empty.
+    --master-conn NAME  Master connection name for MariaDB multi-source replication.
     --help          Print help and exit.
     --version       Print version and exit.
   Options must be given as --option value, not --option=value or -Ovalue.
@@ -197,11 +206,11 @@ This plugin executes the following commands against MySQL:
 
 =item *
 
-C<SHOW SLAVE STATUS NOLOCK> with Percona Server and w/o NOLOCK otherwise.
+C<SHOW SLAVE STATUS [NONBLOCKING|NOLOCK]>
 
 =back
 
-This plugin executes no UNIX commands that may need special privileges. 
+This plugin executes no UNIX commands that may need special privileges.
 
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
