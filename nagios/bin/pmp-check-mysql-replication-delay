@@ -68,31 +68,20 @@ main() {
       else
          NOW_FUNC='UNIX_TIMESTAMP(UTC_TIMESTAMP)'
       fi
+      if [ "${OPT_SRVID}" == "MASTER" ]; then
+        get_slave_status $1
+        if [ "${MYSQL_CONN}" = 0 ]; then
+          OPT_SRVID=$(awk '/Master_Server_Id/{print $2}' "${TEMP_SLAVEDATA}")
+        fi
+      fi
       SQL="SELECT MAX(${NOW_FUNC} - ROUND(UNIX_TIMESTAMP(ts))) AS delay
          FROM ${OPT_TABLE} WHERE (${OPT_SRVID:-0} = 0 OR server_id = ${OPT_SRVID:-0})"
       LEVEL=$(mysql_exec "${SQL}")
       MYSQL_CONN=$?
    else
-      local TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
-      trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
-      if [ -z "$1" ]; then
-         if [ "${OPT_MASTERCONN}" ]; then
-            # MariaDB multi-source replication
-            mysql_exec "SHOW SLAVE '${OPT_MASTERCONN}' STATUS\G" > "${TEMP}"
-         else
-            # Leverage lock-free SHOW SLAVE STATUS if available
-            mysql_exec "SHOW SLAVE STATUS NONBLOCKING\G" > "${TEMP}" 2>/dev/null ||
-            mysql_exec "SHOW SLAVE STATUS NOLOCK\G" > "${TEMP}" 2>/dev/null ||
-            mysql_exec "SHOW SLAVE STATUS\G" > "${TEMP}"
-         fi
-         MYSQL_CONN=$?
-      else
-         # This is for testing only.
-         cat "$1" > "${TEMP}" 2>/dev/null
-         MYSQL_CONN=0
-      fi
+      get_slave_status $1
       if [ "${MYSQL_CONN}" = 0 ]; then
-         LEVEL=$(awk '/Seconds_Behind_Master/{print $2}' "${TEMP}")
+         LEVEL=$(awk '/Seconds_Behind_Master/{print $2}' "${TEMP_SLAVEDATA}")
       fi
    fi
 
@@ -140,6 +129,30 @@ is_not_sourced() {
 }
 
 # ########################################################################
+# Captures the "SHOW SLAVE STATUS" output into a temp file.
+# ########################################################################
+get_slave_status() {
+  TEMP_SLAVEDATA=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
+  trap "rm -f '${TEMP_SLAVEDATA}' >/dev/null 2>&1" EXIT
+  if [ -z "$1" ]; then
+     if [ "${OPT_MASTERCONN}" ]; then
+        # MariaDB multi-source replication
+        mysql_exec "SHOW SLAVE '${OPT_MASTERCONN}' STATUS\G" > "${TEMP_SLAVEDATA}"
+     else
+        # Leverage lock-free SHOW SLAVE STATUS if available
+        mysql_exec "SHOW SLAVE STATUS NONBLOCKING\G" > "${TEMP_SLAVEDATA}" 2>/dev/null ||
+        mysql_exec "SHOW SLAVE STATUS NOLOCK\G" > "${TEMP_SLAVEDATA}" 2>/dev/null ||
+        mysql_exec "SHOW SLAVE STATUS\G" > "${TEMP_SLAVEDATA}"
+     fi
+     MYSQL_CONN=$?
+  else
+     # This is for testing only.
+     cat "$1" > "${TEMP_SLAVEDATA}" 2>/dev/null
+     MYSQL_CONN=0
+  fi
+}
+
+# ########################################################################
 # Execute the program if it was not included from another file.
 # This makes it possible to include without executing, and thus test.
 # ########################################################################
@@ -180,7 +193,9 @@ pmp-check-mysql-replication-delay - Alert when MySQL replication becomes delayed
     -p PASS         MySQL password.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
-    -s SERVERID     MySQL server ID of master, if using pt-heartbeat table.
+    -s SERVERID     MySQL server ID of master, if using pt-heartbeat table. If
+                    the parameter is set to "MASTER" the plugin will lookup the
+                    server_id of the master
     -T TABLE        Heartbeat table used by pt-heartbeat.
     -u              Use UTC time to count the delay in case pt-heartbeat is run
                     with --utc option.
@@ -199,7 +214,8 @@ default it uses SHOW SLAVE STATUS, but the output of the Seconds_behind_master
 column from this command is unreliable, so it is better to use pt-heartbeat from
 Percona Toolkit instead.  Use the -T option to specify which table pt-heartbeat
 updates.  Use the -s option to specify the master's server_id to compare
-against; otherwise the plugin reports the maximum delay from any server.
+against; otherwise the plugin reports the maximum delay from any server. Use
+the -s options with the value "MASTER" to have plugin lookup the master's server_id
 
 If you want to run this check against the delayed slaves, e.g. those running
 with pt-slave-delay tool, you may want to use -m option specifying the minimal
