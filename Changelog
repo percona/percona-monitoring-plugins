@@ -1,3 +1,12 @@
+2015-06-22: version 1.1.5
+-------------------------
+* Added more DB instance classes to pmp-check-aws-rds.py (issue 1398911)
+* Added configurable query period and average time to pmp-check-aws-rds.py (issue 1436943)
+* Added region support to pmp-check-aws-rds.py (issue 1442980)
+* Added an option to alert when server is not configured as replica to pmp-check-mysql-replication-delay (issue 1357017)
+* Improved usage of lock-free SHOW SLAVE STATUS query (issue 1380690)
+* Fixed reporting of slave lag in ss_get_mysql_stats.php (issue 1389769)
+
 2014-07-21: version 1.1.4
 -------------------------
 * Added login-path support to Nagios plugins with MySQL client 5.6 (bug 1338549)
