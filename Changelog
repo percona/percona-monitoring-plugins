@@ -4,6 +4,7 @@
 * Added configurable query period and average time to pmp-check-aws-rds.py (issue 1436943)
 * Added region support to pmp-check-aws-rds.py (issue 1442980)
 * Added an option to alert when server is not configured as replica to pmp-check-mysql-replication-delay (issue 1357017)
+* Added an option to specify master connection to monitor MariaDB multi-source replication
 * Improved usage of lock-free SHOW SLAVE STATUS query (issue 1380690)
 * Fixed reporting of slave lag in ss_get_mysql_stats.php (issue 1389769)
 
