@@ -37,6 +37,23 @@ check_lvm_snapshot_fullness() {
 }
 
 # ########################################################################
+# Print the name and age of every LVM snapshot that is open.
+# The input is the file with 'lvs', and the allowable age.
+# In many cases lvs will report "File descriptor %d (...) leaked" and we ignore
+# this, as it's only a warning that usually happens from a shell.
+# ########################################################################
+check_lvm_snapshot_age() {
+   local FILE="$1"
+   local AGE=$(date -d "-$2 days" -u +%s)
+   awk -v age="$AGE" '
+      $1 != "LV" && $1 != "File" && $3 ~ /snapshot/ {
+         "date -d \""$6" "$7" "$8"\" -u +%s" | getline mydate
+         if (mydate < age)
+             print $2 "/" $1 "[" $4 "]:" $6
+      }' "${FILE}"
+}
+
+# ########################################################################
 # Run the program.
 # ########################################################################
 main() {
@@ -46,6 +63,8 @@ main() {
       case "${o}" in
          -w)        shift; OPT_WARN="${1}"; shift; ;;
          -c)        shift; OPT_CRIT="${1}"; shift; ;;
+         -W)        shift; OPT_WARN_AGE="${1}"; shift; ;;
+         -C)        shift; OPT_CRIT_AGE="${1}"; shift; ;;
          --version) grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
          --help)    perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
          -*)        echo "Unknown option ${o}.  Try --help."; exit 1; ;;
@@ -53,6 +72,8 @@ main() {
    done
    OPT_WARN=${OPT_WARN:-90}
    OPT_CRIT=${OPT_CRIT:-95}
+   OPT_WARN_AGE=${OPT_WARN_AGE:-0}
+   OPT_CRIT_AGE=${OPT_CRIT_AGE:-0}
    if is_not_sourced; then
       if [ -n "$1" ]; then
          echo "WARN spurious command-line options: $@"
@@ -60,7 +81,9 @@ main() {
       fi
    fi
 
-   local NOTE="OK no full LVM snapshot volumes"
+   local NOTE=""
+   local NOTE1="OK no full LVM snapshot volumes"
+   local NOTE2="OK no old LVM snapshot volumes"
    local TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
    trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
 
@@ -71,7 +94,7 @@ main() {
    # the output of lvs.
    PATH="$PATH:/usr/sbin:/sbin"
    if [ -z "$1" ]; then
-      lvs --noheadings -o lv_name,vg_name,role,origin,snap_percent > "${TEMP}" 2>&1
+      lvs --noheadings -o lv_name,vg_name,role,origin,snap_percent,time > "${TEMP}" 2>&1
    else
       cat "$1" > "${TEMP}" 2>/dev/null # For testing only
    fi
@@ -83,12 +106,27 @@ main() {
    else
       local VOLS=$(check_lvm_snapshot_fullness "${TEMP}" "${OPT_CRIT}")
       if [ "${VOLS}" ]; then
-         NOTE="CRIT LVM snapshot volumes over ${OPT_CRIT}% full: ${VOLS}"
+         NOTE1="CRIT LVM snapshot volumes over ${OPT_CRIT}% full: ${VOLS}"
       else
          VOLS=$(check_lvm_snapshot_fullness "${TEMP}" "${OPT_WARN}")
          if [ "${VOLS}" ]; then
-            NOTE="WARN LVM snapshot volumes over ${OPT_WARN}% full: ${VOLS}"
+            NOTE1="WARN LVM snapshot volumes over ${OPT_WARN}% full: ${VOLS}"
          fi
+      fi
+      VOLS=""
+      if [ ${OPT_CRIT_AGE} -gt 0 -o ${OPT_WARN_AGE} -gt 0 ]; then
+          VOLS=$(check_lvm_snapshot_age "${TEMP}" "${OPT_CRIT_AGE}")
+          if [ "${VOLS}" -a ${OPT_CRIT_AGE} -gt 0 ]; then
+             NOTE2="CRIT LVM snapshot volumes over ${OPT_CRIT_AGE} days old: ${VOLS}"
+          else
+             VOLS=$(check_lvm_snapshot_age "${TEMP}" "${OPT_WARN_AGE}")
+             if [ "${VOLS}" -a ${OPT_WARN_AGE} -gt 0 ]; then
+                NOTE2="WARN LVM snapshot volumes over ${OPT_WARN_AGE} days old: ${VOLS}"
+             fi
+          fi
+          NOTE="$NOTE1 / $NOTE2"
+      else
+          NOTE="$NOTE1"
       fi
    fi
 
@@ -111,10 +149,10 @@ if is_not_sourced; then
    OUTPUT=$(main "$@")
    EXITSTATUS=$STATE_UNKNOWN
    case "${OUTPUT}" in
-      UNK*)  EXITSTATUS=$STATE_UNKNOWN;  ;;
-      OK*)   EXITSTATUS=$STATE_OK;       ;;
-      WARN*) EXITSTATUS=$STATE_WARNING;  ;;
-      CRIT*) EXITSTATUS=$STATE_CRITICAL; ;;
+      *CRIT*) EXITSTATUS=$STATE_CRITICAL; ;;
+      *WARN*) EXITSTATUS=$STATE_WARNING;  ;;
+      *UNK*)  EXITSTATUS=$STATE_UNKNOWN;  ;;
+      *OK*)   EXITSTATUS=$STATE_OK;       ;;
    esac
    echo "${OUTPUT}"
    exit $EXITSTATUS
@@ -134,8 +172,10 @@ pmp-check-lvm-snapshots - Alert when LVM snapshots are running out of copy-on-wr
 
   Usage: pmp-check-lvm-snapshots [OPTIONS]
   Options:
-    -c CRIT     Critical threshold; default 95%.
-    -w WARN     Warning threshold; default 90%.
+    -c CRIT     Critical fill threshold; default 95%.
+    -w WARN     Warning fill threshold; default 90%.
+    -C CRIT     Critical age threshold; default is not to check age.
+    -W WARN     Warning age threshold; default is not to check age.
     --help      Print help and exit.
     --version   Print version and exit.
   Options must be given as --option value, not --option=value or -Ovalue.
