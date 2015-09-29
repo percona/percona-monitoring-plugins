@@ -10,6 +10,7 @@ Copyright 2014-2015 Percona LLC and/or its affiliates
 
 import boto
 import boto.rds
+import boto.ec2
 import boto.ec2.cloudwatch
 import datetime
 import optparse
@@ -42,23 +43,37 @@ def get_rds_info(region, identifier=None):
 
 def get_rds_stats(region, identifier, metric, start_time, end_time, step):
     """Function for fetching RDS statistics from CloudWatch"""
-    cw = boto.ec2.cloudwatch.connect_to_region(region)
-    result = cw.get_metric_statistics(
-        step,
-        start_time,
-        end_time,
-        metric,
-        'AWS/RDS',
-        'Average',
-        dimensions={'DBInstanceIdentifier': [identifier]}
-    )
-    if result:
-        if len(result) > 1:
-            # Get the last point
-            result = sorted(result, key=lambda k: k['Timestamp'])
-            result.reverse()
-        result = float('%.2f' % result[0]['Average'])
-    return result
+    
+    if region.lower() == 'all':
+        regions_list = [ region.name for region in boto.ec2.regions() ]
+    else:
+        regions_list = [ region ]
+    
+    for region in regions_list:
+        cw = boto.ec2.cloudwatch.connect_to_region(region)
+        
+        try:
+            result = cw.get_metric_statistics(
+                step,
+                start_time,
+                end_time,
+                metric,
+                'AWS/RDS',
+                'Average',
+                dimensions={'DBInstanceIdentifier': [identifier]}
+            )
+        except boto.exception.BotoServerError:
+            continue
+        
+        if result:
+            if len(result) > 1:
+                # Get the last point
+                result = sorted(result, key=lambda k: k['Timestamp'])
+                result.reverse()
+            result = float('%.2f' % result[0]['Average'])
+            return result
+    
+    return None
 
 
 def main():
