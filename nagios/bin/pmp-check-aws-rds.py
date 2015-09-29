@@ -19,14 +19,24 @@ import sys
 
 def get_rds_info(region, identifier=None):
     """Function for fetching RDS details"""
-    rds = boto.rds.connect_to_region(region)
-    try:
-        if identifier:
-            info = rds.get_all_dbinstances(identifier)[0]
-        else:
-            info = rds.get_all_dbinstances()
-    except (boto.exception.BotoServerError, AttributeError):
-        info = None
+    
+    if region.lower() == 'all':
+        regions_list = [ region.name for region in boto.rds.regions() ]
+    else:
+        regions_list = [ region ]
+    
+    info = []
+    
+    for region in regions_list:
+        rds = boto.rds.connect_to_region(region)
+        try:
+            # rds.get_all_dbinstances(None) is the same as rds.get_all_dbinstances()
+            info.extend(rds.get_all_dbinstances(identifier))
+        except (boto.exception.BotoServerError, AttributeError):
+            pass
+    
+    if identifier: return info[0] if len(info) > 0 else None
+    
     return info
 
 
@@ -311,7 +321,8 @@ pmp-check-aws-rds.py - Check Amazon RDS metrics.
     -h, --help            show this help message and exit
     -l, --list            list of all DB instances
     -r REGION, --region=REGION
-                          AWS region. Default: us-east-1
+                          AWS region. Can use 'all' to search in all regions. 
+                          Default: us-east-1
     -i IDENT, --ident=IDENT
                           DB instance identifier
     -p, --print           print status and other details for a given DB instance
