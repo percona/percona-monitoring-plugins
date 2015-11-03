@@ -17,9 +17,9 @@ import pprint
 import sys
 
 
-def get_rds_info(region, identifier=None):
+def get_rds_info(region, identifier=None, profile_name=None):
     """Function for fetching RDS details"""
-    rds = boto.rds.connect_to_region(region)
+    rds = boto.rds.connect_to_region(region, profile_name=profile_name)
     try:
         if identifier:
             info = rds.get_all_dbinstances(identifier)[0]
@@ -30,9 +30,9 @@ def get_rds_info(region, identifier=None):
     return info
 
 
-def get_rds_stats(region, identifier, metric, start_time, end_time, step):
+def get_rds_stats(region, identifier, metric, start_time, end_time, step, profile_name=None):
     """Function for fetching RDS statistics from CloudWatch"""
-    cw = boto.ec2.cloudwatch.connect_to_region(region)
+    cw = boto.ec2.cloudwatch.connect_to_region(region, profile_name=profile_name)
     result = cw.get_metric_statistics(
         step,
         start_time,
@@ -107,6 +107,8 @@ def main():
     parser = optparse.OptionParser()
     parser.add_option('-l', '--list', help='list of all DB instances',
                       action='store_true', default=False, dest='db_list')
+    parser.add_option('-n', '--profile-name', help='AWS profile to use from boto.cfg Default: None (Uses fallback "credentials")',
+                      default=None)
     parser.add_option('-r', '--region', help='AWS region. Default: us-east-1',
                       default='us-east-1')
     parser.add_option('-i', '--ident', help='DB instance identifier')
@@ -133,7 +135,7 @@ def main():
         parser.print_help()
         sys.exit()
     elif options.db_list:
-        info = get_rds_info(options.region)
+        info = get_rds_info(options.region, profile_name=options.profile_name)
         print 'List of all DB instances:'
         pprint.pprint(info)
         sys.exit()
@@ -141,7 +143,7 @@ def main():
         parser.print_help()
         parser.error('DB identifier is not set.')
     elif options.info:
-        info = get_rds_info(options.region, options.ident)
+        info = get_rds_info(options.region, options.ident, profile_name=options.profile_name)
         if info:
             pprint.pprint(vars(info))
         else:
@@ -170,7 +172,7 @@ def main():
 
     # RDS Status
     if options.metric == 'status':
-        info = get_rds_info(options.region, options.ident)
+        info = get_rds_info(options.region, options.ident, profile_name=options.profile_name)
         if not info:
             status = UNKNOWN
             note = 'Unable to get RDS instance'
@@ -206,7 +208,8 @@ def main():
             else:
                 n = i
             load = get_rds_stats(options.region, options.ident, metrics[options.metric],
-                                 now - datetime.timedelta(seconds=n * 60), now, i * 60)
+                                 now - datetime.timedelta(seconds=n * 60), now, i * 60,
+                                 profile_name=options.profile_name)
             if not load:
                 status = UNKNOWN
                 note = 'Unable to get RDS statistics'
@@ -247,9 +250,10 @@ def main():
             parser.print_help()
             parser.error('Unit is not valid.')
 
-        info = get_rds_info(options.region, options.ident)
+        info = get_rds_info(options.region, options.ident, profile_name=options.profile_name)
         free = get_rds_stats(options.region, options.ident, metrics[options.metric],
-                             now - datetime.timedelta(seconds=options.time * 60), now, options.avg * 60)
+                             now - datetime.timedelta(seconds=options.time * 60),
+                             now, options.avg * 60, profile_name=options.profile_name)
         if not info or not free:
             status = UNKNOWN
             note = 'Unable to get RDS details and statistics'
@@ -310,6 +314,9 @@ pmp-check-aws-rds.py - Check Amazon RDS metrics.
   Options:
     -h, --help            show this help message and exit
     -l, --list            list of all DB instances
+    -n PROFILE_NAME, --profile-name=PROFILE_NAME
+                          AWS profile to use from boto.cfg Default: None
+                          (Uses fallback "Credentials")
     -r REGION, --region=REGION
                           AWS region. Default: us-east-1
     -i IDENT, --ident=IDENT
