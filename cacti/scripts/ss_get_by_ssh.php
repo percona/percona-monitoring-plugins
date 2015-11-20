@@ -877,7 +877,7 @@ function memory_cachefile ( $options ) {
 }
 
 function memory_cmdline ( $options ) {
-   return "free -ob";
+   return "cat /proc/meminfo";
 }
 
 function memory_parse ( $options, $output ) {
@@ -893,15 +893,27 @@ function memory_parse ( $options, $output ) {
    foreach ( explode("\n", $output) as $line ) {
       if ( preg_match_all('/\S+/', $line, $words) ) {
          $words = $words[0];
-         if ( $words[0] == "Mem:" ) {
-            $result['STAT_memcached'] = $words[6];
-            $result['STAT_membuffer'] = $words[5];
-            $result['STAT_memshared'] = $words[4];
-            $result['STAT_memfree']   = $words[3];
-            $result['STAT_memtotal']  = $words[1];
-            $result['STAT_memused']   = sprintf('%.0f',
-               $words[2] - $words[4] - $words[5] - $words[6]);
+         if ( $words[0] == "MemTotal:" ) {
+            $result['STAT_memtotal']  = sprintf('%.0f',$words[1]*1024);
          }
+         if ( $words[0] == "MemFree:" ) {
+            $result['STAT_memfree']  = sprintf('%.0f',$words[1]*1024);
+         }
+         if ( $words[0] == "Buffers:" ) {
+            $result['STAT_membuffer']  = sprintf('%.0f',$words[1]*1024);
+         }
+         if ( $words[0] == "Cached:" ) {
+            $result['STAT_memcached']  = sprintf('%.0f',$words[1]*1024);
+         }
+         if ( $words[0] == "Shmem:" ) {
+            $result['STAT_memshared']  = sprintf('%.0f',$words[1]*1024);
+         }
+         $result['STAT_memused']   = sprintf('%.0f', 
+            $result['STAT_memtotal'] - 
+            $result['STAT_memfree'] - 
+            $result['STAT_membuffer'] - 
+            $result['STAT_memcached'] - 
+            $result['STAT_memshared']);
       }
    }
    return $result;
@@ -1538,7 +1550,8 @@ function netstat_parse ( $options, $output ) {
 
     foreach(explode("\n", $output) as $line) {
         if(preg_match('/^tcp/', $line)){
-            $array['NETSTAT_'.strtolower(end(preg_split('/[\s]+/', trim($line))))]++;
+            $tmp = preg_split('/[\s]+/', trim($line));
+            $array['NETSTAT_'.strtolower(end($tmp))]++;
         }
     }
     return $array;
