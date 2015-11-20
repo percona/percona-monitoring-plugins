@@ -1,0 +1,393 @@
+# This is the template definition file.  To use it, see pmp-cacti-template.
+#
+# This program is copyright (c) 2008 Baron Schwartz. Feedback and improvements
+# are welcome.
+#
+# THIS PROGRAM IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+# MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, version 2.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA.
+
+# Autobuild: ss_get_by_ssh.php
+
+{
+   name   => 'NFS3 CLient',
+   hash   => 'hash_02_VER_b4e4cdd475db625eea6a31b51bb4718b',
+   version => {
+      version => '1.1.5',
+      hash    => 'hash_06_VER_5d96fa2ca406a2e0a4dcbb67219748e1',
+   },
+   checksum => 'hash_06_VER_c726c76923e1a2e8baed814a8a65340a',
+   graphs => [
+      {  name       => 'NFS3 Client Operations',
+         base_value => '1000',
+         hash       => 'hash_00_VER_16b5cce91079d6020e59c6b7759b4a9f',
+         dt         => {
+            hash       => 'hash_01_VER_bb8104edd394e01511faab7b1aee3eb8',
+            input      => 'Get NFS3 Stats',
+            NFS3_getattr => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_a70af544a1b939d2e4e35150f6ba2fd5'
+            },
+            NFS3_setattr => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_a35eb1ec40b47052c1655ed6c39522bf'
+            },
+            NFS3_lookup => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_8d6c8da4f0527dc279e8f066767703ae'
+            },
+            NFS3_access => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_070c875bfa782e4090a32458084762ae'
+            },
+            NFS3_readlink => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_b50f02205734b47850be36a30a696cd7'
+            },
+            NFS3_read => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_b192e897c971c3bd9a34cc0a8e4dde7f'
+            },
+            NFS3_write => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_cd90167a03a2bdfd64d2d159ec724fa5'
+            },
+            NFS3_create => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_06afed3e84f9b4eff6f286e9ad5cea5a'
+            },
+            NFS3_mkdir => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_a5e0d13cdd608c88896514bfcf05d25f'
+            },
+            NFS3_symlink => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_925127fabfe7af455760ae2daf48d0bf'
+            },
+            NFS3_mknod => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_d4931510eae7c3b519856e1b171a8486'
+            },
+            NFS3_remove => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_d4a433ac6b1a05a75983f47d1987ccb7'
+            },
+            NFS3_rmdir => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_bf11665581617816a4d9d0f17bad7fce'
+            },
+            NFS3_rename => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_8a87cd9c579d7c0c3da1afd6646204b3'
+            },
+            NFS3_link => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_64e2e176dbad3b4f043d0a23834d8d3e'
+            },
+            NFS3_readdir => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_cd2cf99f66ba96709a8bcdac24e3cc5e'
+            },
+            NFS3_readdirplus => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_a0211626de10e2b8cfcfa88c94108f63'
+            },
+            NFS3_fsstat => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_c3a5335b0595f0022f495670edaac486'
+            },
+            NFS3_fsinfo => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_ecb2fa4359805f3cc66fc65423ab4bcf'
+            },
+            NFS3_pathconf => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_1fc9833e3a3e5c3ea1f9118fed8e6ac1'
+            },
+            NFS3_commit => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_1d29158ef1da65943f5912aac7beb000'
+            },
+         },
+         items => [
+            {  item   => 'NFS3_getattr',
+               color  => '00CF00',
+               task   => 'hash_09_VER_219bbf7e474450f8305f7f996e33e6ea',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_17882cfd9f8fd247c044f4c2eba9cb81',
+                  'hash_10_VER_d9daa8f6e3f584b97c9e64734a4f26ae',
+                  'hash_10_VER_c6a23f5a98dc3a3301304855f08fba69',
+                  'hash_10_VER_b335f3e9d0f785cb2b9c786ad33b3d1c'
+               ],
+            },
+            {  item   => 'NFS3_setattr',
+               color  => '0000FF',
+               task   => 'hash_09_VER_92df1a4a247581fb61fc031881616152',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_26d523523cbc21cc8b6e7ac22a185ae8',
+                  'hash_10_VER_b41cff1b723cf408a9bc4ad55b67c245',
+                  'hash_10_VER_1f2d1c21abeae67df9ed0cad3518e917',
+                  'hash_10_VER_c365151343bbf59ed87670da2d43b07e'
+               ],
+            },
+            {  item   => 'NFS3_lookup',
+               color  => 'FF0000',
+               task   => 'hash_09_VER_9ec7aa14538eeba9d47c307893e48841',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_61c4c5dc4481302f6723d33efb9293de',
+                  'hash_10_VER_7e66eb38f23741ace03a77b93865f31a',
+                  'hash_10_VER_f1a055ffcee3e3b2e6ef3f29ba535b7c',
+                  'hash_10_VER_a0971cc97e4efb4750f4b7f3dfe4ef2b'
+               ],
+            },
+            {  item   => 'NFS3_access',
+               color  => '12B3B5',
+               task   => 'hash_09_VER_e6b3145b5f0d802ed15f3e07fec2c0cf',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_349955675b11931490c90fbc92e2cd76',
+                  'hash_10_VER_9d6a5fe3ce5debb925efabdc9812ae29',
+                  'hash_10_VER_2e6859377ab2fad8f2a51cc3797f05b3',
+                  'hash_10_VER_e1e1d628b2c8d4f5cbd1ecb4b4f4e470'
+               ],
+            },
+            {  item   => 'NFS3_readlink',
+               color  => 'FF00FF',
+               task   => 'hash_09_VER_98a3ea691c4001107315003f86694b55',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_53c0f8fd29552a1743cb0f48ff21490c',
+                  'hash_10_VER_1d32aed6ad93c437abc691438897cede',
+                  'hash_10_VER_f8ded914a981e8eca721f58cbf87b14c',
+                  'hash_10_VER_4304867df6ef7d4662643c0e41656daf'
+               ],
+            },
+            {  item   => 'NFS3_read',
+               color  => 'EA8F00',
+               task   => 'hash_09_VER_db2c038bed6fd98963331c5c2dae6892',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_1b61391cf2eb18b06598da90f64d3c65',
+                  'hash_10_VER_0c85df8eb1ce8d3409c79e7b97c88c8e',
+                  'hash_10_VER_587889e6cfc8c8eb33b86611e1e27193',
+                  'hash_10_VER_5a4ecea1ee0e24850195e6002b288e3e'
+               ],
+            },
+            {  item   => 'NFS3_write',
+               color  => '942D0C',
+               task   => 'hash_09_VER_d9835e701ad958790be2dc1539c17390',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_acf27b3b21922a2c80add97cee600164',
+                  'hash_10_VER_e3cb79e9fd20c54a5becd21728a07c24',
+                  'hash_10_VER_7d14b128f03a09d724f66bf0db09bdc2',
+                  'hash_10_VER_18509b6f16186e2ae458bfb6af38ca92'
+               ],
+            },
+            {  item   => 'NFS3_create',
+               color  => '8D85F3',
+               task   => 'hash_09_VER_84465b612a35ee2c35a03fc309a7853b',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_f7dbe0355e5138f89758a49040ee7c14',
+                  'hash_10_VER_3793f4a0ae1a408c3532fed1eae8f171',
+                  'hash_10_VER_3805e1915b2b501f224337ebe62716d5',
+                  'hash_10_VER_a0575d0605bf55045972c209f1151202'
+               ],
+            },
+            {  item   => 'NFS3_mkdir',
+               color  => 'FFC3C0',
+               task   => 'hash_09_VER_3d05e9fe5c3febf28f53a9146434aba5',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_0a54e209f360a33ae1ad1190945f56c4',
+                  'hash_10_VER_e8b1c147ce0500b75b0551e9b7d4b47b',
+                  'hash_10_VER_fcac25bcd83d748809e606f5378d7b95',
+                  'hash_10_VER_39eaaeb2dce4061cd2d4d2c60d7d115c'
+               ],
+            },
+            {  item   => 'NFS3_symlink',
+               color  => 'C0C0C0',
+               task   => 'hash_09_VER_f16c4997ede39a59502ece07f46511eb',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_5af1a8d9bedc5b52544d7dc6e3d029ea',
+                  'hash_10_VER_41c2123a2ff8c68a48f5b9c13b9ca80d',
+                  'hash_10_VER_dbdb766f52dca1ac4812aee1fb8fb06a',
+                  'hash_10_VER_b36db7d5c48ecfc3b2714ed80955bfbc'
+               ],
+            },
+            {  item   => 'NFS3_mknod',
+               color  => 'ED5394',
+               task   => 'hash_09_VER_f84d2f03f57af54c7cb96d2c614e7ad0',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_1e140e4036949c9096fd3dc5ec532936',
+                  'hash_10_VER_cf45bc61f16c73f9f5581ea6c200fb3e',
+                  'hash_10_VER_83e5b41b01b50c704164710a9cce0379',
+                  'hash_10_VER_e8215f6b68f17918ca89eff0bba79877'
+               ],
+            },
+            {  item   => 'NFS3_remove',
+               color  => '00BED9',
+               task   => 'hash_09_VER_5bc23df848f17c1031182fb16a170713',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_f4b18fbb7e415133a8f84e83cfe2be80',
+                  'hash_10_VER_f23ed608a6972fede267b33dcdda196a',
+                  'hash_10_VER_9d11f307d2a80289dd69bac6bae984b2',
+                  'hash_10_VER_31f960e7048a56d9b0bf18caebd0b1ee'
+               ],
+            },
+            {  item   => 'NFS3_rmdir',
+               color  => '35962B',
+               task   => 'hash_09_VER_e3fbe5669c89b42a2de515997b66007e',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_2be75f43f10bda5f8daa403b6593a843',
+                  'hash_10_VER_1e074dea60472c5d242638972c078a55',
+                  'hash_10_VER_e9365b081e4977a9031d6a9594dbdfc1',
+                  'hash_10_VER_ed9ae45bc9c15f034dacb5065b54f3f2'
+               ],
+            },
+            {  item   => 'NFS3_rename',
+               color  => '002A97',
+               task   => 'hash_09_VER_7e7628906814cfbd2ccb30e1866d42b2',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_dc88e1ec617f13ae1ddb2aade99e2fda',
+                  'hash_10_VER_2842cdef469a260c0071e6193476f10b',
+                  'hash_10_VER_cbc8260e27000b2139965365c3995687',
+                  'hash_10_VER_d947944691a5eccc8d215c73d89f0b6a'
+               ],
+            },
+            {  item   => 'NFS3_link',
+               color  => 'D8ACE0',
+               task   => 'hash_09_VER_997cf2bdac08c337bd4c61fffb6a6b01',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_87ef5e2000e231d838750ccadb1b36ea',
+                  'hash_10_VER_ab0d7fa6d86899c05f50d2b62a496b52',
+                  'hash_10_VER_fe13938dfed2aa90220ed83e736bbf02',
+                  'hash_10_VER_7ebbb0d398f710bc0ae68feeb32d7012'
+               ],
+            },
+            {  item   => 'NFS3_readdir',
+               color  => 'FFF200',
+               task   => 'hash_09_VER_db8280fdec95cfbf407254cf18ec1043',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_8216cdefb847b5d1ea6b9d8c8552b3b6',
+                  'hash_10_VER_ae4dc320d44b6e5612ace739f3ea4eec',
+                  'hash_10_VER_9fae491f0a714b44bbf58518c3ea88bc',
+                  'hash_10_VER_2a11b2ec0f9ddb6d340ced42b3bf6b91'
+               ],
+            },
+            {  item   => 'NFS3_readdirplus',
+               color  => 'FFD660',
+               task   => 'hash_09_VER_9ed0d3cdeaf30d3235151a6274a2457f',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_71f498cf327bbe09c06be7aab9c53b0c',
+                  'hash_10_VER_fb9ed160aaecc74fe50e14c88102d9f4',
+                  'hash_10_VER_a344b8247ac9aa3c792d4761daf169ea',
+                  'hash_10_VER_b4f10a85c9747fee82a2a185b54691f3'
+               ],
+            },
+            {  item   => 'NFS3_fsstat',
+               color  => '00A0C1',
+               task   => 'hash_09_VER_5a7cb85345ce0e2a6d733983d29123a5',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_4cfd3ad8a64baef4bd848e6c022437c9',
+                  'hash_10_VER_81ea94b7a51a1d98a35833444d81faa7',
+                  'hash_10_VER_a039aaf22174d2d67673e494b830f509',
+                  'hash_10_VER_189d719f9a0f23d16a5756fb9d52829a'
+               ],
+            },
+            {  item   => 'NFS3_fsinfo',
+               color  => 'FF5700',
+               task   => 'hash_09_VER_83b7cf2c4d9fab93f01de6aab4c27731',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_089616b487c655c8c28753e754585256',
+                  'hash_10_VER_265dd9dde74a6d68ee28cf7c3656434f',
+                  'hash_10_VER_7773f2575bada2a6bd89fc9e5ed0b9fc',
+                  'hash_10_VER_92640d3ebf01ea792f9e4b9aeacc9b02'
+               ],
+            },
+            {  item   => 'NFS3_pathconf',
+               color  => 'DA4725',
+               task   => 'hash_09_VER_e2b9a8213ff1ac02a048a768e72eb7e0',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_9551ed1dcc42d4daa09c43666e43e12a',
+                  'hash_10_VER_5837f08e35a5c29bd3169d52d8ae60ef',
+                  'hash_10_VER_cd0e5bc7e77ed1262e52aafca2499ebb',
+                  'hash_10_VER_7d11553e2b8ecaa99d284647cb436e9d'
+               ],
+            },
+            {  item   => 'NFS3_commit',
+               color  => 'F24AC8',
+               task   => 'hash_09_VER_b0cb8b1e17d3326f92b4ec30f6caa002',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_66aa75932cce95fb812d7f5232cc582c',
+                  'hash_10_VER_e67836882c7ac81df8c3be5eb03470dd',
+                  'hash_10_VER_7552656f512f34bac0f516c40dda5af2',
+                  'hash_10_VER_980e741597b779053dacad1535f4bad0'
+               ],
+            },
+         ],
+      },
+   ],
+   inputs => {
+      'Get NFS3 Stats' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_796717406d0e2f2182f449c9175d2771',
+         input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
+                       . '--host <hostname> --type nfs3 --items <items> '
+                       ,
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_4010dc7c50f3330f298c4700185ccc3c',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            NFS3_getattr     => 'hash_07_VER_ae2ce4b35008fd5a6738b14fce3d5a66',
+            NFS3_setattr     => 'hash_07_VER_4be304f29a6613a9f62b6a66e59aa161',
+            NFS3_lookup      => 'hash_07_VER_9da7f0f848800ee2f740377162b5babc',
+            NFS3_access      => 'hash_07_VER_1c3d8dfe93c0860c4ce24ad40323d8c7',
+            NFS3_readlink    => 'hash_07_VER_1561e53b32cb21be4ce5c6646b17a403',
+            NFS3_read        => 'hash_07_VER_461f5aeb2748bf08a05213af4ba5b038',
+            NFS3_write       => 'hash_07_VER_4d43b09e56a4f8bf8df79fe2eced30a7',
+            NFS3_create      => 'hash_07_VER_2887d593838a69d21d31feb5bbd1ed91',
+            NFS3_mkdir       => 'hash_07_VER_d7975d7cb2c6630000d73d2fb82cff88',
+            NFS3_symlink     => 'hash_07_VER_7309c750b92793116deb6dd2fe8a1de7',
+            NFS3_mknod       => 'hash_07_VER_89df617cc32d3781fa78d296ba9d25fb',
+            NFS3_remove      => 'hash_07_VER_4b1829f9cdb1e5f238f573493c6c325c',
+            NFS3_rmdir       => 'hash_07_VER_57706d16c0ee8dcecc53609852dab1f2',
+            NFS3_rename      => 'hash_07_VER_d5398c6a0a7b4b825574b7219d363eb0',
+            NFS3_link        => 'hash_07_VER_d67acee1955538dbc466033493bf91b4',
+            NFS3_readdir     => 'hash_07_VER_3d47f3e619e530611d2b54d987ab17ae',
+            NFS3_readdirplus => 'hash_07_VER_492a2b18e892e1319f36c5df5b95c92a',
+            NFS3_fsstat      => 'hash_07_VER_167c8ef1aa80df9d05f8b0800b569e03',
+            NFS3_fsinfo      => 'hash_07_VER_ca30834d626aefc18011e61f203890d6',
+            NFS3_pathconf    => 'hash_07_VER_c33f2f11db836d33a0585c0f4959f5b4',
+            NFS3_commit      => 'hash_07_VER_afe07aff22a62b16430072ab31bd5a8e',
+         },
+      },
+   },
+};
