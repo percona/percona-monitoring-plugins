@@ -320,6 +320,12 @@ function ss_get_mysql_stats( $options ) {
       die("ERROR: " . mysqli_connect_error());
    }
 
+   # MySQL server version.
+   # The form of this version number is main_version * 10000 + minor_version * 100 + sub_version
+   # i.e. version 5.5.44 is 50544.
+   $mysql_version = mysqli_get_server_version($conn);
+   debug("MySQL server version is " . $mysql_version);
+
    # Set up variables.
    $status = array( # Holds the result of SHOW STATUS, SHOW INNODB STATUS, etc
       # Define some indexes so they don't cause errors with += operations.
@@ -489,7 +495,7 @@ function ss_get_mysql_stats( $options ) {
    ) {
       $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
       $istatus_text = $result[0]['Status'];
-      $istatus_vals = get_innodb_array($istatus_text);
+      $istatus_vals = get_innodb_array($istatus_text, $mysql_version);
 
       # Get response time histogram from Percona Server or MariaDB if enabled.
       if ( $chk_options['get_qrt']
@@ -835,7 +841,7 @@ function ss_get_mysql_stats( $options ) {
 # MySQL 5.0, and XtraDB or enhanced InnoDB from Percona if applicable.  Note
 # that extra leading spaces are ignored due to trim().
 # ============================================================================
-function get_innodb_array($text) {
+function get_innodb_array($text, $mysql_version) {
    $results  = array(
       'spin_waits'  => array(),
       'spin_rounds' => array(),
@@ -940,16 +946,32 @@ function get_innodb_array($text) {
       elseif ( strpos($line, 'Trx id counter') === 0 ) {
          # The beginning of the TRANSACTIONS section: start counting
          # transactions
-         # Trx id counter 0 1170664159
-         # Trx id counter 861B144C
-         $results['innodb_transactions'] = make_bigint(
-            $row[3], (isset($row[4]) ? $row[4] : null));
+         if ( $mysql_version < 50600 ) {
+            # For versions prior 5.6: two decimals or one hex
+            # Trx id counter 0 1170664159
+            # Trx id counter 861B144C
+            $results['innodb_transactions'] = isset($row[4]) ? make_bigint(
+               $row[3], $row[4]) : base_convert($row[3], 16, 10);
+         }
+         else {
+            # For versions 5.6+ and MariaDB 10.x: one decimal
+            # Trx id counter 2903813
+            $results['innodb_transactions'] = $row[3];
+         }
          $txn_seen = TRUE;
       }
       elseif ( strpos($line, 'Purge done for trx') === 0 ) {
-         # Purge done for trx's n:o < 0 1170663853 undo n:o < 0 0
-         # Purge done for trx's n:o < 861B135D undo n:o < 0
-         $purged_to = make_bigint($row[6], $row[7] == 'undo' ? null : $row[7]);
+         if ( $mysql_version < 50600 ) {
+            # For versions prior 5.6: two decimals or one hex
+            # Purge done for trx's n:o < 0 1170663853 undo n:o < 0 0
+            # Purge done for trx's n:o < 861B135D undo n:o < 0
+            $purged_to = $row[7] == 'undo' ? base_convert($row[6], 16, 10) : make_bigint($row[6], $row[7]);
+         }
+         else {
+            # For versions 5.6+ and MariaDB 10.x: one decimal
+            # Purge done for trx's n:o < 2903354 undo n:o < 0 state: running but idle
+            $purged_to = $row[6];
+         }
          $results['unpurged_txns']
             = big_sub($results['innodb_transactions'], $purged_to);
       }
@@ -1192,20 +1214,14 @@ function get_innodb_array($text) {
 
 
 # ============================================================================
-# Returns a bigint from two ulint or a single hex number.  This is tested in
+# Returns a bigint from two ulint.  This is tested in
 # t/mysql_stats.php and copied, without tests, to ss_get_by_ssh.php.
 # ============================================================================
-function make_bigint ($hi, $lo = null) {
+function make_bigint ($hi, $lo) {
    debug(array($hi, $lo));
-   if ( is_null($lo) ) {
-      # Assume it is a hex string representation.
-      return base_convert($hi, 16, 10);
-   }
-   else {
-      $hi = $hi ? $hi : '0'; # Handle empty-string or whatnot
-      $lo = $lo ? $lo : '0';
-      return big_add(big_multiply($hi, 4294967296), $lo);
-   }
+   $hi = $hi ? $hi : '0'; # Handle empty-string or whatnot
+   $lo = $lo ? $lo : '0';
+   return big_add(big_multiply($hi, 4294967296), $lo);
 }
 
 # ============================================================================
