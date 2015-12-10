@@ -226,7 +226,7 @@
                ],
             },
          ],
-      },     
+      },
       {  name       => 'RDS Swap Usage',
          base_value => '1024',
          hash       => 'hash_00_VER_aee8656af0361c9cba37ca623b8455db',
@@ -251,7 +251,7 @@
                ],
             },
          ],
-      },       
+      },
       {  name       => 'RDS Disk IOPS',
          base_value => '1000',
          hash       => 'hash_00_VER_839a4773c29fe6c5dbe03494083916fc',
@@ -381,11 +381,22 @@
          type_id      => 1,
          hash         => 'hash_03_VER_fc8d744c6fc9960984779e437e32c548',
          input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--region=_<region> --profile=_<profile> '
                        . '--ident=<hostname> --metric=BinLogDiskUsage',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_fdc8284e6c7c3cfc9c109fa203bd962c',
                name        => 'hostname'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_1e9d56146e2a3b754cde4aba8e03223a',
+               name        => 'region',
+               override    => 1,
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_69b8f7df386fc9f6ec2c18214046fbf5',
+               name        => 'profile',
+               override    => 1,
             },
          ],
          outputs => {
@@ -396,11 +407,22 @@
          type_id      => 1,
          hash         => 'hash_03_VER_96e0af6c7f13ba8917e80fc29937a7f5',
          input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--region=_<region> --profile=_<profile> '
                        . '--ident=<hostname> --metric=CPUUtilization',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_e869f35a1a45b6660020310c6b6ac686',
                name        => 'hostname'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_03305c7749b2b4e93a14e2995a7a4e3b',
+               name        => 'region',
+               override    => 1,
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_6b4b67bc9bcbcd2e45d54bccd3b87d2c',
+               name        => 'profile',
+               override    => 1,
             },
          ],
          outputs => {
@@ -411,11 +433,22 @@
          type_id      => 1,
          hash         => 'hash_03_VER_625f125c254cd97956073472fa0e7535',
          input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--region=_<region> --profile=_<profile> '
                        . '--ident=<hostname> --metric=DatabaseConnections',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_102976dd7aac4093c47ff42ad85ba4dc',
                name        => 'hostname'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_f1d0601b4738cc7dc32977230827c740',
+               name        => 'region',
+               override    => 1,
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_ac2421f0ddeab6cc741fcdc06a06ee64',
+               name        => 'profile',
+               override    => 1,
             },
          ],
          outputs => {
@@ -426,11 +459,22 @@
          type_id      => 1,
          hash         => 'hash_03_VER_b36f4ebb970120a31074717d5f0a73f1',
          input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--region=_<region> --profile=_<profile> '
                        . '--ident=<hostname> --metric=DiskQueueDepth',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_edbc034709d78d91c5d1bd3698576c69',
                name        => 'hostname'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_fc69fbe79f6f30f853b5258a995cc52a',
+               name        => 'region',
+               override    => 1,
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_9e58d9b5926d2c86c34010cea65ebc70',
+               name        => 'profile',
+               override    => 1,
             },
          ],
          outputs => {
@@ -441,11 +485,22 @@
          type_id      => 1,
          hash         => 'hash_03_VER_47ffad13db87eeae30f3c65d72d5b57d',
          input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--region=_<region> --profile=_<profile> '
                        . '--ident=<hostname> --metric=ReplicaLag',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_51ec8d07efd0df7f569efc1b73dfde49',
                name        => 'hostname'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_fe78caf4e8a769aada669d0388e4f532',
+               name        => 'region',
+               override    => 1,
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_e5fb828b7af9d72f75f6acd7173c455d',
+               name        => 'profile',
+               override    => 1,
             },
          ],
          outputs => {
@@ -456,11 +511,22 @@
          type_id      => 1,
          hash         => 'hash_03_VER_3104e6b585cf079559c6cede8dcb57ac',
          input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--region=_<region> --profile=_<profile> '
                        . '--ident=<hostname> --metric=SwapUsage',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_9e79ee2e86b6ecc19369e1087294bacd',
                name        => 'hostname'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_9ed81a3951d843fa020f78c6c4fc3149',
+               name        => 'region',
+               override    => 1,
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_21b9a13b23a4fd685b6ec3615b67824c',
+               name        => 'profile',
+               override    => 1,
             },
          ],
          outputs => {
@@ -471,11 +537,22 @@
          type_id      => 1,
          hash         => 'hash_03_VER_46ad0ef622223d9ac921c44140484e9c',
          input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--region=_<region> --profile=_<profile> '
                        . '--ident=<hostname> --metric=FreeableMemory',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_34fc76345eea2b7d4bea5e9490d02297',
                name        => 'hostname'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_14b3e9b4cc5d540dd5f65cb0b81316c9',
+               name        => 'region',
+               override    => 1,
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_a9c65376ce29bbe3c11b98517d27708b',
+               name        => 'profile',
+               override    => 1,
             },
          ],
          outputs => {
@@ -487,15 +564,26 @@
          type_id      => 1,
          hash         => 'hash_03_VER_cb7b04b7099a83ecc6e183270e1813d7',
          input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--region=_<region> --profile=_<profile> '
                        . '--ident=<hostname> --metric=FreeStorageSpace',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_2203c1f4a38c6c9ff37bc4349ec2ed35',
                name        => 'hostname'
             },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_225fab104129a3ce6ce630c8fb3ffbe6',
+               name        => 'region',
+               override    => 1,
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_f7e1afc478befc38fb788a01b72c16c6',
+               name        => 'profile',
+               override    => 1,
+            },
          ],
          outputs => {
-            used_space => 'hash_07_VER_dd9c4c4457d1ba587c4b44884c36b823',         
+            used_space => 'hash_07_VER_dd9c4c4457d1ba587c4b44884c36b823',
             total_space => 'hash_07_VER_083e9569124218902b0cf59e4d932d18',
          },
       },
@@ -503,27 +591,49 @@
          type_id      => 1,
          hash         => 'hash_03_VER_10bd7f6024df803c6e3eb8cca35ad486',
          input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--region=_<region> --profile=_<profile> '
                        . '--ident=<hostname> --metric=ReadIOPS,WriteIOPS',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_47324c46e6bce5d569c752a1cb8e65da',
                name        => 'hostname'
             },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_1517c1c826e70b00ffe57c86d61c4cb8',
+               name        => 'region',
+               override    => 1,
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_b96104d999fdbb1260f8aaa53d289bcf',
+               name        => 'profile',
+               override    => 1,
+            },
          ],
          outputs => {
             read_iops => 'hash_07_VER_da2b79b87db0418645905b3d8cd965b6',
-            write_iops => 'hash_07_VER_0778f413bfecd7e3d2b7e53e9b7d1d30',            
+            write_iops => 'hash_07_VER_0778f413bfecd7e3d2b7e53e9b7d1d30',
          },
       },
       'Get RDS Stats/DiskLatency' => {
          type_id      => 1,
          hash         => 'hash_03_VER_a44b051f5f06a884b421e5b3743a4709',
          input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--region=_<region> --profile=_<profile> '
                        . '--ident=<hostname> --metric=ReadLatency,WriteLatency',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_bf218821df58890e3fa186086e7c440e',
                name        => 'hostname'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_2efa5f057bdf38554bbfe7f8ec6ef3a3',
+               name        => 'region',
+               override    => 1,
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_74292f44820f873e5a80abc80e9c354a',
+               name        => 'profile',
+               override    => 1,
             },
          ],
          outputs => {
@@ -535,17 +645,28 @@
          type_id      => 1,
          hash         => 'hash_03_VER_0614689e78516b287caa366473ac072c',
          input_string => '<path_cacti>/scripts/ss_get_rds_stats.py '
+                       . '--region=_<region> --profile=_<profile> '
                        . '--ident=<hostname> --metric=ReadThroughput,WriteThroughput',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_64c79bfc359ba6c0e214b75c08018770',
                name        => 'hostname'
             },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_a6724756214cb704da471d276c5ca2e9',
+               name        => 'region',
+               override    => 1,
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_a8c15dac00bb976aefa2508506e05918',
+               name        => 'profile',
+               override    => 1,
+            },
          ],
          outputs => {
-            read_throughput => 'hash_07_VER_6a33e92ba50edcf1c4da6ddcdb029445',         
+            read_throughput => 'hash_07_VER_6a33e92ba50edcf1c4da6ddcdb029445',
             write_throughput => 'hash_07_VER_58bc74ba5ca40cbb211fe9423a86ebe6',
          },
-      },      
-   },    
+      },
+   },
 };

@@ -27,7 +27,7 @@ For example::
    [root@centos6 ~]# cat /etc/boto.cfg
    [Credentials]
    aws_access_key_id = THISISATESTKEY
-   aws_secret_access_key = thisisatestawssecretaccesskey 
+   aws_secret_access_key = thisisatestawssecretaccesskey
 
 If you do not use this config with other tools such as our Nagios plugin,
 you can secure this file the following way::
@@ -52,6 +52,13 @@ To check RDS details you can run::
 Now, you can add a device to the Cacti using Amazon RDS Server template and graph it.
 
 **NOTE**: you need to specify DB instance identifier as ``Hostname`` on adding device page.
+
+By default, the region is set to ``us-east-1``. You can re-define it globally in boto config or
+specify per instance on data source level in Cacti. You can also set region to ``all`` which will
+have the script to find region for a given instance automatically. However, this will work much slower
+than specifying region explicitly.
+
+Also you can specify boto profile name on data source level in Cacti in case you have multiple in use.
 
 Sample Graphs
 -------------
@@ -90,7 +97,7 @@ The average number of bytes read from/written to disk per second.
 
 The amount of used random access memory. The total available memory is the value
 according to the instance class.
-See http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html 
+See http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html
 
 .. image:: images/rds_replica_lag.png
 
