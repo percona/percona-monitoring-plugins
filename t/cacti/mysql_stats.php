@@ -20,7 +20,7 @@ is_deeply(parse_cmdline(explode(' ', '--host localhost --items gg --user  --pass
                 'pass' => '',
                 'port' => '3341',
                 'server-id' => ''),
-          'parse_cmdline "--host localhost --items gg --user  --pass  --port 3341 --server-id "' 
+          'parse_cmdline "--host localhost --items gg --user  --pass  --port 3341 --server-id "'
 );
 
 is(
@@ -33,12 +33,6 @@ is(
    make_bigint('1', '504617703'),
    '4799584999',
    'make_bigint 1 504617703'
-);
-
-is(
-   make_bigint('EF861B144C'),
-   '1028747105356',
-   'make_bigint EF861B144C'
 );
 
 is(
@@ -55,7 +49,7 @@ is(
 
 is(
    big_multiply('74900191315', '1170664159'),
-   '87682969474713583616',
+   '87682969474713579085',
    'big_multiply 74900191315 and 1170664159'
 );
 
@@ -66,7 +60,7 @@ is(
 );
 
 is_deeply(
-   get_innodb_array(file_get_contents('samples/innodb-001.txt')),
+   get_innodb_array(file_get_contents('samples/innodb-001.txt'), 50544),
    array(
       'spin_waits'                => '8317256878',
       'spin_rounds'               => '247280272495',
@@ -132,7 +126,7 @@ is_deeply(
 );
 
 is_deeply(
-   get_innodb_array(file_get_contents('samples/innodb-002.txt')),
+   get_innodb_array(file_get_contents('samples/innodb-002.txt'), 50544),
    array(
       'spin_waits'                => '88127914',
       'spin_rounds'               => '157459864',
@@ -197,7 +191,7 @@ is_deeply(
 );
 
 is_deeply(
-   get_innodb_array(file_get_contents('samples/innodb-006.txt')),
+   get_innodb_array(file_get_contents('samples/innodb-006.txt'), 50544),
    array(
       'spin_waits'                => '31',
       'spin_rounds'               => '220',
@@ -268,7 +262,7 @@ is_deeply(
 );
 
 is_deeply(
-   get_innodb_array(file_get_contents('samples/innodb-009.txt')),
+   get_innodb_array(file_get_contents('samples/innodb-009.txt'), 50544),
    array(
       'spin_waits'                => '820880',
       'spin_rounds'               => '3373874',
@@ -336,7 +330,7 @@ is_deeply(
 /* TODO: I am not sure anymore what this file is meant to test.  Got pulled away
  * in the midst of working on it, now can't remember what I was doing.
 is_deeply(
-   get_innodb_array(file_get_contents('samples/innodb-014.txt')),
+   get_innodb_array(file_get_contents('samples/innodb-014.txt'), 50544),
    array(
       'spin_waits'                => '335',
       'spin_rounds'               => '1682',
@@ -400,7 +394,7 @@ is_deeply(
 */
 
 is_deeply(
-   get_innodb_array(file_get_contents('samples/innodb-015.txt')),
+   get_innodb_array(file_get_contents('samples/innodb-015.txt'), 50544),
    array(
       'spin_waits'                => '134636510',
       'spin_rounds'               => '388647989',
@@ -469,7 +463,7 @@ is_deeply(
 );
 
 is_deeply(
-   get_innodb_array(file_get_contents('samples/innodb-016.txt')),
+   get_innodb_array(file_get_contents('samples/innodb-016.txt'), 50544),
    array(
       'spin_waits'                => '15',
       'spin_rounds'               => '11',
@@ -498,7 +492,7 @@ is_deeply(
       'rows_deleted'              => '0',
       'rows_read'                 => '0',
       'innodb_transactions'       => '1280',
-      'unpurged_txns'             => '1280',
+      'unpurged_txns'             => '1264',
       'history_list'              => '0',
       'current_transactions'      => '1',
       'hash_index_cells_total'    => '276707',
@@ -537,4 +531,72 @@ is_deeply(
    'samples/innodb-016.txt'
 );
 
+is_deeply(
+   get_innodb_array(file_get_contents('samples/innodb-016.txt'), 50625),
+   array(
+      'spin_waits'                => '15',
+      'spin_rounds'               => '11',
+      'os_waits'                  => '108',
+      'pending_normal_aio_reads'  => '0',
+      'file_reads'                => '153',
+      'file_writes'               => '3',
+      'file_fsyncs'               => '3',
+      'ibuf_inserts'              => '4',
+      'ibuf_merged'               => '17',
+      'ibuf_merges'               => '9',
+      'log_bytes_written'         => '1595675',
+      'unflushed_log'             => '0',
+      'log_bytes_flushed'         => '1595675',
+      'log_writes'                => '8',
+      'pool_size'                 => '8192',
+      'free_pages'                => '8050',
+      'database_pages'            => '142',
+      'modified_pages'            => '0',
+      'pages_read'                => '142',
+      'pages_created'             => '0',
+      'pages_written'             => '0',
+      'read_views'                => '1',
+      'rows_inserted'             => '0',
+      'rows_updated'              => '0',
+      'rows_deleted'              => '0',
+      'rows_read'                 => '0',
+      'innodb_transactions'       => '500',
+      'unpurged_txns'             => '490',
+      'history_list'              => '0',
+      'current_transactions'      => '1',
+      'hash_index_cells_total'    => '276707',
+      'total_mem_alloc'           => '137363456',
+      'additional_pool_alloc'     => '0',
+      'last_checkpoint'           => '1595675',
+      'uncheckpointed_bytes'      => '0',
+      'ibuf_used_cells'           => '1',
+      'ibuf_free_cells'           => '0',
+      'ibuf_cell_count'           => '2',
+      'innodb_tables_in_use'      => '0',
+      'innodb_locked_tables'      => '0',
+      'active_transactions'       => '0',
+      'innodb_lock_structs'       => '0',
+      'innodb_sem_waits'          => null,
+      'innodb_sem_wait_time_ms'   => null,
+      'pending_normal_aio_writes' => '0',
+      'pending_ibuf_aio_reads'    => '0',
+      'pending_aio_log_ios'       => '0',
+      'pending_aio_sync_ios'      => '0',
+      'pending_log_flushes'       => '0',
+      'pending_buf_pool_flushes'  => '0',
+      'pending_log_writes'        => '0',
+      'pending_chkp_writes'       => '0',
+      'queries_inside'            => '0',
+      'queries_queued'            => '0',
+      'hash_index_cells_used'     => '0',
+      'adaptive_hash_memory'      => NULL,
+      'page_hash_memory'          => NULL,
+      'dictionary_cache_memory'   => NULL,
+      'file_system_memory'        => NULL,
+      'lock_system_memory'        => NULL,
+      'recovery_system_memory'    => NULL,
+      'thread_hash_memory'        => NULL,
+      ),
+   'samples/innodb-016.txt'
+);
 ?>
