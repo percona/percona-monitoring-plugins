@@ -182,7 +182,8 @@
             },
             {  allow_nulls => 'on',
                hash        => 'hash_07_VER_b10c7a20a84e2c20200bd48da6689541',
-               name        => 'url'
+               name        => 'url',
+               override    => 1,
             },
             {  allow_nulls => 'on',
                hash        => 'hash_07_VER_74f1e0b4ffb166b059b0d30c69995db0',
