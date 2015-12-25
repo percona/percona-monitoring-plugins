@@ -34,6 +34,7 @@ $mysql_ssl  = FALSE;   # Whether to use SSL to connect to MySQL.
 $mysql_ssl_key  = '/etc/pki/tls/certs/mysql/client-key.pem';
 $mysql_ssl_cert = '/etc/pki/tls/certs/mysql/client-cert.pem';
 $mysql_ssl_ca   = '/etc/pki/tls/certs/mysql/ca-cert.pem';
+$mysql_connection_timeout = 1;
 
 $heartbeat = FALSE;        # Whether to use pt-heartbeat table for repl. delay calculation.
 $heartbeat_utc = FALSE;    # Whether pt-heartbeat is run with --utc option.
@@ -197,14 +198,15 @@ function usage($message) {
 $message
 Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
 
-   --host      MySQL host
-   --items     Comma-separated list of the items whose data you want
-   --user      MySQL username
-   --pass      MySQL password
-   --port      MySQL port
-   --server-id Server id to associate with a heartbeat if heartbeat usage is enabled
-   --nocache   Do not cache results in a file
-   --help      Show usage
+   --host               MySQL host
+   --items              Comma-separated list of the items whose data you want
+   --user               MySQL username
+   --pass               MySQL password
+   --port               MySQL port
+   --connection-timeout MySQL connection timeout
+   --server-id          Server id to associate with a heartbeat if heartbeat usage is enabled
+   --nocache            Do not cache results in a file
+   --help               Show usage
 
 EOF;
    die($usage);
@@ -242,12 +244,14 @@ function ss_get_mysql_stats( $options ) {
    # Process connection options.
    global $debug, $mysql_user, $mysql_pass, $cache_dir, $poll_time, $chk_options,
           $mysql_port, $mysql_ssl, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca,
+          $mysql_connection_timeout,
           $heartbeat, $heartbeat_table, $heartbeat_server_id, $heartbeat_utc;
 
    $user = isset($options['user']) ? $options['user'] : $mysql_user;
    $pass = isset($options['pass']) ? $options['pass'] : $mysql_pass;
    $host = $options['host'];
    $port = isset($options['port']) ? $options['port'] : $mysql_port;
+   $connection_timeout = isset($options['connection-timeout']) ? $options['connection-timeout'] : $mysql_connection_timeout;
    $heartbeat_server_id = isset($options['server-id']) ? $options['server-id'] : $heartbeat_server_id;
 
    $sanitized_host = str_replace(array(":", "/"), array("", "_"), $host);
@@ -309,11 +313,14 @@ function ss_get_mysql_stats( $options ) {
    }
    if ( $mysql_ssl ) {
       $conn = mysqli_init();
+      $conn->options(MYSQLI_OPT_CONNECT_TIMEOUT, $connection_timeout);
       mysqli_ssl_set($conn, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca, NULL, NULL);
       mysqli_real_connect($conn, $host, $user, $pass, NULL, $port);
    }
    else {
-      $conn = mysqli_connect($host, $user, $pass, NULL, $port);
+      $conn = mysqli_init();
+      $conn->options(MYSQLI_OPT_CONNECT_TIMEOUT, $connection_timeout);
+      mysqli_real_connect($conn, $host, $user, $pass, NULL, $port);
    }
    if ( mysqli_connect_errno() ) {
       debug("MySQL connection failed: " . mysqli_connect_error());
