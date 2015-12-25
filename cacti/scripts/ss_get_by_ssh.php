@@ -175,7 +175,7 @@ function extract_desired ( $options, $text ) {
 # ============================================================================
 function validate_options($options) {
    $opts = array('host', 'port', 'items', 'nocache', 'type', 'url', 'http-user',
-                 'file', 'http-password', 'server', 'port2', 'use-ssh', 
+                 'file', 'http-password', 'server', 'port2', 'use-ssh',
                  'device', 'volume', 'threadpool');
    # Show help
    if ( array_key_exists('help', $options) ) {
@@ -667,7 +667,7 @@ function to_int ( $str ) {
 function to_float ( $str ) {
    debug($str);
    global $debug;
-   preg_match('{([0-9.]+)}', $str, $m); 
+   preg_match('{([0-9.]+)}', $str, $m);
    if ( isset($m[1]) ) {
       return $m[1];
    }
@@ -867,10 +867,10 @@ function proc_stat_parse ( $options, $output ) {
 }
 
 # ============================================================================
-# Gets and parses the 'free' command from Linux.
+# Gets and parses the '/proc/meminfo' file from Linux.
 # Options used: none.
 # You can test it like this, as root:
-# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type memory --host 127.0.0.1 --items hq,hr
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type memory --host 127.0.0.1 --items hq,hr,hs,ht,hu,hv
 # ============================================================================
 function memory_cachefile ( $options ) {
    return sanitize_filename($options, array('host', 'port'), 'memory');
@@ -894,28 +894,28 @@ function memory_parse ( $options, $output ) {
       if ( preg_match_all('/\S+/', $line, $words) ) {
          $words = $words[0];
          if ( $words[0] == "MemTotal:" ) {
-            $result['STAT_memtotal']  = sprintf('%.0f',$words[1]*1024);
+            $result['STAT_memtotal']  = sprintf('%.0f', $words[1]*1024);
          }
-         if ( $words[0] == "MemFree:" ) {
-            $result['STAT_memfree']  = sprintf('%.0f',$words[1]*1024);
+         elseif ( $words[0] == "MemFree:" ) {
+            $result['STAT_memfree']  = sprintf('%.0f', $words[1]*1024);
          }
-         if ( $words[0] == "Buffers:" ) {
-            $result['STAT_membuffer']  = sprintf('%.0f',$words[1]*1024);
+         elseif ( $words[0] == "Buffers:" ) {
+            $result['STAT_membuffer']  = sprintf('%.0f', $words[1]*1024);
          }
-         if ( $words[0] == "Cached:" ) {
-            $result['STAT_memcached']  = sprintf('%.0f',$words[1]*1024);
+         elseif ( $words[0] == "Cached:" ) {
+            $result['STAT_memcached']  = sprintf('%.0f', $words[1]*1024);
          }
-         if ( $words[0] == "Shmem:" ) {
-            $result['STAT_memshared']  = sprintf('%.0f',$words[1]*1024);
+         elseif ( $words[0] == "Shmem:" ) {
+            $result['STAT_memshared']  = sprintf('%.0f', $words[1]*1024);
          }
-         $result['STAT_memused']   = sprintf('%.0f', 
-            $result['STAT_memtotal'] - 
-            $result['STAT_memfree'] - 
-            $result['STAT_membuffer'] - 
-            $result['STAT_memcached'] - 
-            $result['STAT_memshared']);
       }
    }
+   $result['STAT_memused']   = sprintf('%.0f',
+     $result['STAT_memtotal'] -
+     $result['STAT_memfree'] -
+     $result['STAT_membuffer'] -
+     $result['STAT_memcached'] -
+     $result['STAT_memshared']);
    return $result;
 }
 

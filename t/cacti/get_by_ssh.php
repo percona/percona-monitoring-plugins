@@ -55,7 +55,7 @@ is(
       'file'    => 'samples/proc_stat-001.txt',
       'type'    => 'proc_stat',
       'host'    => 'localhost',
-      'items'   => 'gw,gx,gy,gz,hg,hh,hi,hj,hk,hl,hm,hn' 
+      'items'   => 'gw,gx,gy,gz,hg,hh,hi,hj,hk,hl,hm,hn'
    )),
    'gw:24198 gx:0 gy:69614 gz:2630536 hg:558 hh:5872 hi:1572 hj:0 hk:0'
    . ' hl:339490 hm:697948 hn:11558',
@@ -63,40 +63,40 @@ is(
 );
 
 is_deeply(
-   memory_parse( null, file_get_contents('samples/free-001.txt') ),
+   memory_parse( null, file_get_contents('samples/meminfo-001.txt') ),
    array(
-      'STAT_memcached' => '22106112',
-      'STAT_membuffer' => '1531904',
-      'STAT_memshared' => '0',
-      'STAT_memfree'   => '17928192',
-      'STAT_memused'   => '21389312',
-      'STAT_memtotal'  => '62955520',
+      'STAT_memcached' => '68993024',
+      'STAT_membuffer' => '20701184',
+      'STAT_memshared' => '233472',
+      'STAT_memfree'   => '39145472',
+      'STAT_memused'   => '385396736',
+      'STAT_memtotal'  => '514469888',
    ),
-   'samples/free-001.txt'
+   'samples/meminfo-001.txt'
 );
 
 is_deeply(
-   memory_parse( null, file_get_contents('samples/free-002.txt') ),
+   memory_parse( null, file_get_contents('samples/meminfo-002.txt') ),
    array(
-      'STAT_memcached' => '1088184320',
-      'STAT_membuffer' => '131469312',
-      'STAT_memshared' => '0',
-      'STAT_memfree'   => '189325312',
-      'STAT_memused'   => '7568291328',
-      'STAT_memtotal'  => '8977270272',
+      'STAT_memcached' => '4612304896',
+      'STAT_membuffer' => '417128448',
+      'STAT_memshared' => '1069056',
+      'STAT_memfree' => '739078144',
+      'STAT_memused' => '2484736000',
+      'STAT_memtotal' => '8254316544',
    ),
-   'samples/free-002.txt (issue 102)'
+   'samples/meminfo-002.txt'
 );
 
 is(
    ss_get_by_ssh( array(
-      'file'    => 'samples/free-001.txt',
+      'file'    => 'samples/meminfo-001.txt',
       'type'    => 'memory',
       'host'    => 'localhost',
       'items'   => 'hq,hr,hs,ht,hu,hv'
    )),
-   'hq:22106112 hr:1531904 hs:0 ht:17928192 hu:21389312 hv:62955520',
-   'main(samples/free-001.txt)'
+   'hq:68993024 hr:20701184 hs:233472 ht:39145472 hu:385396736 hv:514469888',
+   'main(samples/meminfo-001.txt)'
 );
 
 is_deeply(

@@ -27,7 +27,7 @@ See the following screenshot for an example:
 .. image:: images/add_unix_disk_graph.png
 
 You should append ``sda`` in every textbox shown in that screenshot, if you want
-to monitor ``/dev/sda``. 
+to monitor ``/dev/sda``.
 
 However, for "Disk Space" graph you have to specify the volume.
 
@@ -57,14 +57,14 @@ Example with logical volumes:
                          700G  198G  503G  29% /mnt/mysql-fs
    [root@localhost ~]# lsblk
    NAME                              MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
-   sda                                 8:0    0 278.9G  0 disk 
+   sda                                 8:0    0 278.9G  0 disk
    |-sda1                              8:1    0   250M  0 part /boot
-   `-sda2                              8:2    0 278.6G  0 part 
+   `-sda2                              8:2    0 278.6G  0 part
      |-vglocal02-swap00 (dm-0)       253:0    0     2G  0 lvm  [SWAP]
      |-vglocal02-root00 (dm-1)       253:1    0 274.6G  0 lvm  /
      `-vglocal02-tmp00 (dm-3)        253:3    0     2G  0 lvm  /tmp
-   sdb                                 8:16   0   744G  0 disk 
-   `-sdb1                              8:17   0   744G  0 part 
+   sdb                                 8:16   0   744G  0 disk
+   `-sdb1                              8:17   0   744G  0 part
      `-vglocal01-mysql00 (dm-2)      253:2    0   700G  0 lvm  /mnt/mysql-fs
 
 Device is ``sdb1`` and volume is ``/dev/mapper/vglocal01-mysql00`` in this
@@ -105,7 +105,7 @@ intervals, which is redundant.  RRDTool is natively capable of doing that.
 
 .. image:: images/linux_memory.png
 
-The system's memory usage, as reported by the "free" command.
+The system's memory usage.
 
 .. image:: images/linux_number_users.png
 
