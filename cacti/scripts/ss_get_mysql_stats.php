@@ -34,7 +34,7 @@ $mysql_ssl  = FALSE;   # Whether to use SSL to connect to MySQL.
 $mysql_ssl_key  = '/etc/pki/tls/certs/mysql/client-key.pem';
 $mysql_ssl_cert = '/etc/pki/tls/certs/mysql/client-cert.pem';
 $mysql_ssl_ca   = '/etc/pki/tls/certs/mysql/ca-cert.pem';
-$mysql_connection_timeout = 1;
+$mysql_connection_timeout = 5;
 
 $heartbeat = FALSE;        # Whether to use pt-heartbeat table for repl. delay calculation.
 $heartbeat_utc = FALSE;    # Whether pt-heartbeat is run with --utc option.
