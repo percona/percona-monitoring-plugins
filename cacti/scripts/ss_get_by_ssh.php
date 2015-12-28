@@ -1119,8 +1119,15 @@ function memcached_cachefile ( $options ) {
 }
 
 function memcached_cmdline ( $options ) {
-   global $memcache_host, $memcache_port, $nc_cmd;
-   $srv = isset($options['server']) ? $options['server'] : $memcache_host;
+   global $use_ssh, $memcache_host, $memcache_port, $nc_cmd;
+   $use_ssh = isset($options['use-ssh']) ? $options['use-ssh'] : $use_ssh;
+   $srv = $memcache_host;
+   if ( isset($options['server']) ) {
+      $srv = $options['server'];
+   }
+   elseif ( ! $use_ssh ) {
+      $srv = $options['host'];
+   }
    $prt = isset($options['port2'])  ? $options['port2']  : $memcache_port;
    return "echo stats | $nc_cmd $srv $prt";
 }
@@ -1275,8 +1282,15 @@ function redis_cachefile ( $options ) {
 # different in different systems.  We really need the -C option, but some nc
 # don't have -C.
 function redis_cmdline ( $options ) {
-   global $redis_host, $redis_port, $nc_cmd;
-   $srv = isset($options['server']) ? $options['server'] : $redis_host;
+   global $use_ssh, $redis_host, $redis_port, $nc_cmd;
+   $use_ssh = isset($options['use-ssh']) ? $options['use-ssh'] : $use_ssh;
+   $srv = $redis_host;
+   if ( isset($options['server']) ) {
+      $srv = $options['server'];
+   }
+   elseif ( ! $use_ssh ) {
+      $srv = $options['host'];
+   }
    $prt = isset($options['port2'])  ? $options['port2']  : $redis_port;
    return "echo INFO | $nc_cmd $srv $prt";
 }
