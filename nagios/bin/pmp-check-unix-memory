@@ -49,7 +49,7 @@ main() {
    NOTE="UNK cannot find memory statistics"
    TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
    trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
-   if which free > /dev/null && free -m > "${TEMP}" ; then
+   if [ -e /proc/meminfo ] && cat /proc/meminfo > "${TEMP}" ; then
       USD_PCT=$(get_used_memory_linux "${TEMP}")
    elif which sysctl > /dev/null && sysctl -a > "${TEMP}" ; then
       USD_PCT=$(get_used_memory_bsd "${TEMP}")
@@ -84,19 +84,19 @@ get_largest_process () {
 }
 
 # ########################################################################
-# Get the used memory (excluding buffers/cache) from the output of 'free -m'
-#              total       used       free     shared    buffers     cached
-# Mem:         16046      15212        834          0       4020       7402
-# -/+ buffers/cache:       3788      12258
-# Swap:         1983          0       1983
-# This shows 12258MB free (834 + 4020 + 7402) out of 16046MB.  The percent
-# free should be 12258/16046 = 76.4%, and used should be 3788/16046.
+# Get the used memory from /proc/meminfo
+# Consider MemAvailable if available in the file (starting procps-ng 3.3.10).
+# See https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=34e431b0ae398fc54ea69ff85ec700722c9da773
 # ########################################################################
 get_used_memory_linux() {
-   awk '/Mem:/ {total = $2;}
-        /cache:/ {printf "%d\n", $3 / total * 100}' "$1"
+awk '/^MemTotal:/ {total = $2;}
+     /^MemFree:/ {free = $2;}
+     /^MemAvailable:/ {avail = $2;}
+     /^Buffers:/ {buffers = $2;}
+     /^Cached:/ {cached = $2;
+        if (avail == "") avail = free + buffers + cached;
+        printf "%d\n", (total - avail) / total * 100;}' "$1"
 }
-
 # ########################################################################
 # Get the used memory from sysctl for BSD systems
 # ########################################################################
@@ -158,7 +158,7 @@ pmp-check-unix-memory - Alert on low memory.
 
 =head1 DESCRIPTION
 
-This Nagios plugin examines the output of C<free> (Linux) or C<sysctl> (BSD)
+This Nagios plugin examines C</proc/meminfo> (Linux) or the output of C<sysctl> (BSD)
 to check whether the system is running out of memory and finds the largest
 process in memory from C<ps> output.
 
@@ -174,7 +174,7 @@ This plugin executes the following UNIX commands that may need special privilege
 
 =item *
 
-free (Linux), sysctl (BSD)
+cat /proc/meminfo (Linux), sysctl (BSD)
 
 =item *
 
