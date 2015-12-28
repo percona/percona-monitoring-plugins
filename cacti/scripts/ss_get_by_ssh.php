@@ -48,7 +48,9 @@ $status_url    = '/server-status';        # The URL path to HTTP status
 $http_user     = '';                      # HTTP authentication
 $http_pass     = '';                      # HTTP authentication
 $http_port     = 80;                      # Which port Apache listens on
+$memcache_host = 'localhost';             # Which address memcached listens on
 $memcache_port = 11211;                   # Which port memcached listens on
+$redis_host    = 'localhost';             # Which address redis listens on
 $redis_port    = 6379;                    # Which port redis listens on
                                           # How to get openvz stats
 $openvz_cmd    = 'cat /proc/user_beancounters';
@@ -213,8 +215,8 @@ General options:
    --port2           Port on which the application listens, such as memcached
                      port, redis port, or apache port.
    --server          The server (DNS name or IP address) from which to fetch the
-                     desired data after SSHing.  Default is 'localhost' for HTTP
-                     stats and --host for memcached stats. If you specify
+                     desired data after SSHing.  Default is 'localhost' for HTTP,
+                     memcached and redis stats. If you specify
                      '--use-ssh 0' then default is --host for HTTP stats too.
    --threadpool      Name of ThreadPool in JMX (i.e. http-8080 or jk-8009)
    --url             The url, such as /server-status, where server status lives
@@ -1117,8 +1119,8 @@ function memcached_cachefile ( $options ) {
 }
 
 function memcached_cmdline ( $options ) {
-   global $memcache_port, $nc_cmd;
-   $srv = isset($options['server']) ? $options['server'] : $options['host'];
+   global $memcache_host, $memcache_port, $nc_cmd;
+   $srv = isset($options['server']) ? $options['server'] : $memcache_host;
    $prt = isset($options['port2'])  ? $options['port2']  : $memcache_port;
    return "echo stats | $nc_cmd $srv $prt";
 }
@@ -1265,7 +1267,6 @@ function openvz_parse ( $options, $output ) {
 # sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type redis --host 127.0.0.1 --items ln,lo
 # ============================================================================
 function redis_cachefile ( $options ) {
-   global $status_server, $redis_port;
    return sanitize_filename($options, array('host', 'port', 'port2', 'server'), 'redis');
 }
 
@@ -1274,8 +1275,8 @@ function redis_cachefile ( $options ) {
 # different in different systems.  We really need the -C option, but some nc
 # don't have -C.
 function redis_cmdline ( $options ) {
-   global $redis_port, $nc_cmd;
-   $srv = isset($options['server']) ? $options['server'] : $options['host'];
+   global $redis_host, $redis_port, $nc_cmd;
+   $srv = isset($options['server']) ? $options['server'] : $redis_host;
    $prt = isset($options['port2'])  ? $options['port2']  : $redis_port;
    return "echo INFO | $nc_cmd $srv $prt";
 }
