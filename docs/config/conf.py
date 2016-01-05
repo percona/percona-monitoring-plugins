@@ -12,7 +12,7 @@ templates_path = ['_templates']
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = []
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -22,7 +22,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'$PROJECT_NAME$'
-copyright = u'2012, Percona Inc'
+copyright = u'Percona LLC and/or its affiliates 2009-2015'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -49,7 +49,7 @@ html_theme_path = ['.', './percona-theme']
 html_title = 'Percona Monitoring Plugins Documentation'
 html_short_title = 'Monitoring Plugins'
 
-html_favicon = '_static/percona_favicon.ico'
+html_favicon = 'percona_favicon.ico'
 
 #html_last_updated_fmt = ''
 
@@ -91,7 +91,7 @@ latex_documents = [
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
-latex_logo = '_static/percona-logo.jpg'
+latex_logo = 'percona-logo.jpg'
 
 # -- Options for manual page output --------------------------------------------
 
