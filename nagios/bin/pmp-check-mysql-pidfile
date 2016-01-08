@@ -119,9 +119,11 @@ main() {
 # Execute a MySQL command.
 # ########################################################################
 mysql_exec() {
-   mysql ${OPT_DEFT:+--defaults-file="${OPT_DEFT}"} ${OPT_HOST:+-h"${OPT_HOST}"} ${OPT_USER:+-u"${OPT_USER}"} \
-      ${OPT_PASS:+-p"${OPT_PASS}"} ${OPT_SOCK:+-S"${OPT_SOCK}"} ${OPT_PORT:+-P"${OPT_PORT}"} \
-      ${OPT_LOPA:+--login-path="${OPT_LOPA}"} -ss -e "$1"
+   mysql ${OPT_DEFT:+--defaults-file="${OPT_DEFT}"} \
+      ${OPT_LOPA:+--login-path="${OPT_LOPA}"} \
+      ${OPT_HOST:+-h"${OPT_HOST}"} ${OPT_PORT:+-P"${OPT_PORT}"} \
+      ${OPT_USER:+-u"${OPT_USER}"} ${OPT_PASS:+-p"${OPT_PASS}"} \
+      ${OPT_SOCK:+-S"${OPT_SOCK}"} -ss -e "$1"
 }
 
 # ########################################################################
