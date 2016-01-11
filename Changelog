@@ -1,3 +1,21 @@
+2016-01-12: version 1.1.6
+-------------------------
+* Added new RDS instance classes to RDS scripts.
+* Added boto profile support to RDS scripts.
+* Added AWS region support and ability to specify all regions to RDS scripts.
+* Added ability to set AWS region and boto profile on data source level in Cacti.
+* Added period, average time and debug options to pmp-check-aws-rds.py.
+* Added ability to override Nginx server status URL path on data source level in Cacti.
+* Made Memcached and Redis host configurable for Cacti script.
+* Added the ability to lookup the master's server_id when using pt-heartbeat with pmp-check-mysql-replication-delay.
+* Changed how memory stats are collected by Cacti script and pmp-check-unix-memory.
+  Now /proc/meminfo is parsed instead of running `free` command. This also fixes pmp-check-unix-memory for EL7.
+* Set default MySQL connect timeout to 5s for Cacti script. Can be overridden in the config.
+* Fixed innodb transactions count on the Cacti graph for MySQL 5.6 and higher.
+* Fixed --login-path option in Nagios scripts when using it along with other credential options.
+
+Thanks to contributors: David Andruczyk, Denis Baklikov, Mischa ter Smitten, Mitch Hagstrand.
+
 2015-06-22: version 1.1.5
 -------------------------
 * Added more DB instance classes to pmp-check-aws-rds.py (issue 1398911)
@@ -27,7 +45,7 @@
 
 2014-03-14: version 1.1.2
 -------------------------
-* Added Nagios plugin and Cacti template for Amazon RDS 
+* Added Nagios plugin and Cacti template for Amazon RDS
 * Added Nagios config template to the documentation
 * Added an option to pmp-check-pt-table-checksum to check MAX(ts) of latest checksum
 * Added generic Nagios plugin for PT tables
@@ -52,7 +70,7 @@
 2013-10-02: version 1.0.5
 -------------------------
 
-* Added mysql-ca option to ss_get_mysql_stats.php (bug 1213857) 
+* Added mysql-ca option to ss_get_mysql_stats.php (bug 1213857)
 * Added user info to the idle_blocker_duration check of pmp-check-mysql-innodb (bug 1215317)
 * Extended pmp-check-mysql-processlist with more locking states (bug 1213859)
 * ss_get_mysql_stats.php did not work with custom mysql port (bug 1213862)
@@ -104,7 +122,7 @@ Threads", Linux "Network Traffic".
 * Created Debian and RPM packages
 * Added "Disk IOPS" graph to Cacti Linux Templates
 * Added an option to pmp-check-unix-memory to disable overriding the status based on the largest process in memory (bug 1052368)
-* Added '!=' comparison operator to pmp-check-mysql-status (bug 1048627) 
+* Added '!=' comparison operator to pmp-check-mysql-status (bug 1048627)
 * pmp-check-mysql-replication-delay didn't alert if second behing master is NULL (bug 1040528)
 * pmp-check-pt-table-checksum reported OK when checksums table does not exist (bug 1114425)
 * pmp-check-pt-table-checksum threw "Bad substitution" error on Debian (bug 1071802)
