@@ -1,5 +1,5 @@
-Name:          	percona-cacti-templates 
-Summary:       	Percona Monitoring Plugins for Cacti
+Name:           percona-cacti-templates
+Summary:        Percona Monitoring Plugins for Cacti
 Version:        %{version}
 Release:        %{release}
 Group:          Applications/Databases
@@ -9,7 +9,7 @@ URL:            http://www.percona.com/software/percona-monitoring-plugins
 Source:         percona-cacti-templates-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch:      noarch
-Requires:	cacti >= 0.8.6
+Requires:       cacti >= 0.8.6
 AutoReq:        no
 
 %description
@@ -36,6 +36,8 @@ install -m 0644 cacti/misc/* $RPM_BUILD_ROOT/usr/share/cacti/resource/percona/mi
 install -m 0644 cacti/templates/* $RPM_BUILD_ROOT/usr/share/cacti/resource/percona/templates
 install -m 0644 cacti/scripts/*.php $RPM_BUILD_ROOT/usr/share/cacti/scripts
 install -m 0755 cacti/scripts/*.py $RPM_BUILD_ROOT/usr/share/cacti/scripts
+# exit 0 disables running helpers which generates *.pyc, *.pyo files.
+exit 0
 
 %clean
 rm -rf $RPM_BUILD_ROOT

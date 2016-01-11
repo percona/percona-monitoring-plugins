@@ -1,5 +1,5 @@
-Name:          	percona-zabbix-templates 
-Summary:       	Percona Monitoring Plugins for Zabbix
+Name:           percona-zabbix-templates
+Summary:        Percona Monitoring Plugins for Zabbix
 Version:        %{version}
 Release:        %{release}
 Group:          Applications/Databases
