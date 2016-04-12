@@ -93,7 +93,7 @@ main() {
       NOTE="${LEVEL:-0} seconds of replication delay"
       if [ "${LEVEL:-""}" = "NULL" ]; then
          NOTE="UNK replica is stopped"
-      elif [ "-z ${LEVEL}" -a "${OPT_REPLNOTSET}" ]; then
+      elif [ -z "${LEVEL}" -a "${OPT_REPLNOTSET}" ]; then
          NOTE="UNK This server is not configured as a replica."
       # pt-slave-delayed slave
       elif [ "${LEVEL:-0}" -lt "${OPT_MIN}" ]; then
