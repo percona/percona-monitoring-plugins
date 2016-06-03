@@ -30,6 +30,8 @@ if ( !array_key_exists('SCRIPT_FILENAME', $_SERVER)
 $mysql_user = 'cactiuser';
 $mysql_pass = 'cactiuser';
 $mysql_port = 3306;
+$mysql_socket = NULL;
+$mysql_flags = 0;
 $mysql_ssl  = FALSE;   # Whether to use SSL to connect to MySQL.
 $mysql_ssl_key  = '/etc/pki/tls/certs/mysql/client-key.pem';
 $mysql_ssl_cert = '/etc/pki/tls/certs/mysql/client-cert.pem';
@@ -243,7 +245,8 @@ function parse_cmdline( $args ) {
 function ss_get_mysql_stats( $options ) {
    # Process connection options.
    global $debug, $mysql_user, $mysql_pass, $cache_dir, $poll_time, $chk_options,
-          $mysql_port, $mysql_ssl, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca,
+          $mysql_port, $mysql_socket, $mysql_flags,
+          $mysql_ssl, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca,
           $mysql_connection_timeout,
           $heartbeat, $heartbeat_table, $heartbeat_server_id, $heartbeat_utc;
 
@@ -251,6 +254,8 @@ function ss_get_mysql_stats( $options ) {
    $pass = isset($options['pass']) ? $options['pass'] : $mysql_pass;
    $host = $options['host'];
    $port = isset($options['port']) ? $options['port'] : $mysql_port;
+   $socket = isset($options['socket']) ? $options['socket'] : $mysql_socket;
+   $flags = isset($options['flags']) ? $options['flags'] : $mysql_flags;
    $connection_timeout = isset($options['connection-timeout']) ? $options['connection-timeout'] : $mysql_connection_timeout;
    $heartbeat_server_id = isset($options['server-id']) ? $options['server-id'] : $heartbeat_server_id;
 
@@ -315,12 +320,12 @@ function ss_get_mysql_stats( $options ) {
       $conn = mysqli_init();
       $conn->options(MYSQLI_OPT_CONNECT_TIMEOUT, $connection_timeout);
       mysqli_ssl_set($conn, $mysql_ssl_key, $mysql_ssl_cert, $mysql_ssl_ca, NULL, NULL);
-      mysqli_real_connect($conn, $host, $user, $pass, NULL, $port);
+      mysqli_real_connect($conn, $host, $user, $pass, NULL, $port, $socket, $flags);
    }
    else {
       $conn = mysqli_init();
       $conn->options(MYSQLI_OPT_CONNECT_TIMEOUT, $connection_timeout);
-      mysqli_real_connect($conn, $host, $user, $pass, NULL, $port);
+      mysqli_real_connect($conn, $host, $user, $pass, NULL, $port, $socket, $flags);
    }
    if ( mysqli_connect_errno() ) {
       debug("MySQL connection failed: " . mysqli_connect_error());
