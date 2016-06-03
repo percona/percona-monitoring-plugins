@@ -205,6 +205,8 @@ Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
    --user               MySQL username
    --pass               MySQL password
    --port               MySQL port
+   --socket             MySQL socket
+   --flags              MySQL flags
    --connection-timeout MySQL connection timeout
    --server-id          Server id to associate with a heartbeat if heartbeat usage is enabled
    --nocache            Do not cache results in a file
