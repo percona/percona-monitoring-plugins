@@ -1,7 +1,9 @@
 #!/usr/bin/env python2.7
 """MongoDB Nagios check script
+
 This program is part of $PROJECT_NAME$
 License: GPL License (see COPYING)
+
 Author David Murphy
 Copyright 2014-2015 Percona LLC and/or its affiliates
 """
