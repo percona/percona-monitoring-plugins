@@ -1,23 +1,10 @@
 #!/usr/bin/env python2.7
-
-#
-# A MongoDB Nagios check script
-#
-
-# A re-envision  based on : https://github.com/mzupan/nagios-plugin-mongodb
-# This script tried to update and simply some of the existing code. Additionally things used for "monitoring"
-# have been removed and this is more simple to be aligned to alerting versus monitoring.
-#
-# Attempts have been made to make it more readable by introducting some class structure with the re-use of
-# files  from the last check to make delta calculation much cheaper on the system.
-#
-# Main Author
-#   - David Murphy <david.murphy@percona.com>
-#
-# USAGE
-#
-# See the README.md
-#
+"""MongoDB Nagios check script
+This program is part of $PROJECT_NAME$
+License: GPL License (see COPYING)
+Author David Murphy
+Copyright 2014-2015 Percona LLC and/or its affiliates
+"""
 
 import sys
 import time
