@@ -76,7 +76,8 @@ main() {
 # Find the largest process
 # ########################################################################
 get_largest_process () {
-   BIGGEST=$(ps axo pid,%mem,ucomm | sort -k2 -nr | head -1)
+   ALL_PROCS=$(ps axo pid,%mem,ucomm | sort -k2 -nr)
+   BIGGEST=$(echo $ALL_PROCS | head -n 1)
    BIG_PID=$(echo $BIGGEST | cut -d' ' -f1)
    BIG_MEM=$(echo $BIGGEST | cut -d' ' -f2)
    BIG_COMMAND=$(echo $BIGGEST | cut -d' ' -f3)
