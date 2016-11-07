@@ -86,6 +86,9 @@ main() {
       fi
    fi
 
+   # Check for SQL thread errors
+   LAST_SLAVE_ERRNO=$(awk '/Last_SQL_Errno/{print $2}' "${TEMP_SLAVEDATA}")
+
    # Build the common perf data output for graph trending
    PERFDATA="replication_delay=${LEVEL:-0};${OPT_WARN};${OPT_CRIT};0;"
 
@@ -93,7 +96,9 @@ main() {
    if [ "$MYSQL_CONN" = 0 ]; then
       NOTE="${LEVEL:-0} seconds of replication delay"
       if [ "${LEVEL:-""}" = "NULL" ]; then
-         test ${MIN_DELAY_SET} -eq 0 && NOTE="UNK replica is stopped" || NOTE="OK NULL seconds of replication delay"
+         test ${MIN_DELAY_SET} -eq 1 && \
+         test ${LAST_SLAVE_ERRNO} -eq 0 && \
+            NOTE="OK NULL seconds of replication delay" || NOTE="UNK replica is stopped"
       elif [ -z "${LEVEL}" -a "${OPT_REPLNOTSET}" ]; then
          NOTE="UNK This server is not configured as a replica."
       # pt-slave-delayed slave
