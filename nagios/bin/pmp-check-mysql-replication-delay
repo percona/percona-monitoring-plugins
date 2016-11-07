@@ -26,6 +26,7 @@ STATE_DEPENDENT=4
 # ########################################################################
 main() {
    # Get options
+   MIN_DELAY_SET=0
    for o; do
       case "${o}" in
          -c)              shift; OPT_CRIT="${1}"; shift; ;;
@@ -33,7 +34,7 @@ main() {
          -H)              shift; OPT_HOST="${1}"; shift; ;;
          -l)              shift; OPT_USER="${1}"; shift; ;;
          -L)              shift; OPT_LOPA="${1}"; shift; ;;
-         -m)              shift; OPT_MIN="${1}"; shift; ;;
+         -m)              shift; OPT_MIN="${1}"; MIN_DELAY_SET=1; shift; ;;
          -p)              shift; OPT_PASS="${1}"; shift; ;;
          -P)              shift; OPT_PORT="${1}"; shift; ;;
          -S)              shift; OPT_SOCK="${1}"; shift; ;;
@@ -92,7 +93,7 @@ main() {
    if [ "$MYSQL_CONN" = 0 ]; then
       NOTE="${LEVEL:-0} seconds of replication delay"
       if [ "${LEVEL:-""}" = "NULL" ]; then
-         NOTE="UNK replica is stopped"
+         test ${MIN_DELAY_SET} -eq 0 && NOTE="UNK replica is stopped" || NOTE="OK NULL seconds of replication delay"
       elif [ -z "${LEVEL}" -a "${OPT_REPLNOTSET}" ]; then
          NOTE="UNK This server is not configured as a replica."
       # pt-slave-delayed slave
