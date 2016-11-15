@@ -103,6 +103,7 @@ main() {
          OPT_WARN=${OPT_WARN:-60}
          OPT_CRIT=${OPT_CRIT:-600}
          OUTPUT=$(mysql_exec "
+            SET @@time_zone='SYSTEM';
             SELECT   UNIX_TIMESTAMP() - UNIX_TIMESTAMP(t.trx_started),
                      p.id,
                      CONCAT(p.user, '@', p.host)
