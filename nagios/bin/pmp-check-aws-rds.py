@@ -5,23 +5,33 @@ This program is part of $PROJECT_NAME$
 License: GPL License (see COPYING)
 
 Author Roman Vynar
-Copyright 2014-2015 Percona LLC and/or its affiliates
+Copyright 2014-2016 Percona LLC and/or its affiliates
 """
 
 import datetime
 import optparse
+import os
 import pprint
 import sys
+import time
 
 import boto
 import boto.rds
 import boto.ec2.cloudwatch
+
+THROTTLE_FILE = '/tmp/pmp-check-aws-rds.throttle'
 
 # Nagios status codes
 OK = 0
 WARNING = 1
 CRITICAL = 2
 UNKNOWN = 3
+SHORT_STATUS = {
+    OK: 'OK',
+    WARNING: 'WARN',
+    CRITICAL: 'CRIT',
+    UNKNOWN: 'UNK'
+}
 
 
 class RDS(object):
@@ -45,8 +55,16 @@ class RDS(object):
                 try:
                     rds = boto.rds.connect_to_region(reg, profile_name=self.profile)
                     self.info = rds.get_all_dbinstances(self.identifier)
-                except (boto.provider.ProfileNotFoundError, boto.exception.BotoServerError) as msg:
+                except boto.provider.ProfileNotFoundError as msg:
                     debug(msg)
+                except boto.exception.BotoServerError as msg:
+                    debug(msg)
+                    if msg.body.find('Rate exceeded') > 0:
+                        with open(THROTTLE_FILE, 'w') as _file:
+                            _file.write(str(time.time()))
+
+                        print '%s Throttling in progress' % (SHORT_STATUS[UNKNOWN],)
+                        sys.exit(UNKNOWN)
                 else:
                     # Exit on the first region and identifier match
                     self.region = reg
@@ -66,23 +84,42 @@ class RDS(object):
             try:
                 rds = boto.rds.connect_to_region(reg, profile_name=self.profile)
                 result[reg] = rds.get_all_dbinstances()
-            except (boto.provider.ProfileNotFoundError, boto.exception.BotoServerError) as msg:
+            except boto.provider.ProfileNotFoundError as msg:
                 debug(msg)
+            except boto.exception.BotoServerError as msg:
+                debug(msg)
+                if msg.body.find('Rate exceeded') > 0:
+                    with open(THROTTLE_FILE, 'w') as _file:
+                        _file.write(str(time.time()))
+
+                    print '%s Throttling in progress' % (SHORT_STATUS[UNKNOWN],)
+                    sys.exit(UNKNOWN)
 
         return result
 
     def get_metric(self, metric, start_time, end_time, step):
         """Get RDS metric from CloudWatch"""
-        cw_conn = boto.ec2.cloudwatch.connect_to_region(self.region, profile_name=self.profile)
-        result = cw_conn.get_metric_statistics(
-            step,
-            start_time,
-            end_time,
-            metric,
-            'AWS/RDS',
-            'Average',
-            dimensions={'DBInstanceIdentifier': [self.identifier]}
-        )
+        result = None
+        try:
+            cw_conn = boto.ec2.cloudwatch.connect_to_region(self.region, profile_name=self.profile)
+            result = cw_conn.get_metric_statistics(
+                step,
+                start_time,
+                end_time,
+                metric,
+                'AWS/RDS',
+                'Average',
+                dimensions={'DBInstanceIdentifier': [self.identifier]}
+           )
+        except boto.exception.BotoServerError as msg:
+            debug(msg)
+            if msg.body.find('Rate exceeded') > 0:
+                with open(THROTTLE_FILE, 'w') as _file:
+                    _file.write(str(time.time()))
+
+                print '%s Throttling in progress' % (SHORT_STATUS[UNKNOWN],)
+                sys.exit(UNKNOWN)
+
         if result:
             if len(result) > 1:
                 # Get the last point
@@ -104,13 +141,6 @@ def debug(val):
 def main():
     """Main function"""
     global options
-
-    short_status = {
-        OK: 'OK',
-        WARNING: 'WARN',
-        CRITICAL: 'CRIT',
-        UNKNOWN: 'UNK'
-    }
 
     # DB instance classes as listed on
     # http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html
@@ -177,7 +207,18 @@ def main():
                       type='int', default=1)
     parser.add_option('-d', '--debug', help='enable debug output',
                       action='store_true', default=False)
+    parser.add_option('--throttle', help='time in seconds to wait until throttling complete. Default: 5',
+                      type='int', default=5)
     options, _ = parser.parse_args()
+
+    # Check for throttling
+    if os.path.isfile(THROTTLE_FILE):
+        with open(THROTTLE_FILE, 'r') as _file:
+            chk = float(_file.read())
+
+        if time.time() - chk < options.throttle:
+            print '%s Waiting until throttling complete...' % (SHORT_STATUS[UNKNOWN],)
+            sys.exit(UNKNOWN)
 
     if options.debug:
         boto.set_stream_logger('boto')
@@ -257,14 +298,13 @@ def main():
         fail = False
         j = 0
         perf_data = []
+        points = options.time
         for i in [1, 5, 15]:
-            if i == 1:
-                # Some stats are delaying to update on CloudWatch.
-                # Let's pick a few points for 1-min load avg and get the last point.
-                points = 5
-            else:
-                points = i
+            if i == 15:
+                points = max(options.time, 15)
 
+            # The stats are delaying to update on CloudWatch.
+            # Usually, there is no data for the last minute and we should request at least last 5 min. data.
             load = rds.get_metric(metrics[options.metric], now - datetime.timedelta(seconds=points * 60), now, i * 60)
             if not load:
                 status = UNKNOWN
@@ -350,9 +390,9 @@ def main():
 
     # Final output
     if status != UNKNOWN and perf_data:
-        print '%s %s | %s' % (short_status[status], note, perf_data)
+        print '%s %s | %s' % (SHORT_STATUS[status], note, perf_data)
     else:
-        print '%s %s' % (short_status[status], note)
+        print '%s %s' % (SHORT_STATUS[status], note)
 
     sys.exit(status)
 
@@ -395,6 +435,7 @@ pmp-check-aws-rds.py - Check Amazon RDS metrics.
                           [percent, GB]. Default: percent
     -t TIME, --time=TIME  time period in minutes to query. Default: 5
     -a AVG, --avg=AVG     time average in minutes to request. Default: 1
+    --throttle=TIME       time in seconds to wait until throttling complete. Default: 5
     -d, --debug           enable debug output
 
 =head1 REQUIREMENTS
