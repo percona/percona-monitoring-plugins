@@ -1,0 +1,6 @@
+release/cacti/bin/* /usr/share/cacti/resource/percona/bin
+release/cacti/definitions/* /usr/share/cacti/resource/percona/definitions
+release/cacti/misc/* /usr/share/cacti/resource/percona/misc
+release/cacti/templates/* /usr/share/cacti/resource/percona/templates
+release/cacti/scripts/*.php /usr/share/cacti/site/scripts
+release/cacti/scripts/*.py /usr/share/cacti/site/scripts
