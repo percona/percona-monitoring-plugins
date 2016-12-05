@@ -1,0 +1,2 @@
+release/zabbix/scripts/* /var/lib/zabbix/percona/scripts
+release/zabbix/templates/* /var/lib/zabbix/percona/templates
