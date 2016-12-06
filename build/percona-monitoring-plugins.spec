@@ -1,4 +1,4 @@
-Name:           Percona-Monitoring-Plugins
+Name:           percona-monitoring-plugins
 Summary:        Percona Monitoring Plugins are high-quality components to add enterprise-class MySQL monitoring and graphing capabilities to your existing on-premise monitoring solutions.
 Group:          Applications/Databases
 Version:        %{version}
@@ -11,7 +11,12 @@ Packager:       Percona MySQL Development Team <mysqldev@percona.com>
 Vendor:         Percona
 BuildArch:      noarch
 BuildRoot:    %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  perl-Digest-MD5 PyYAML
+BuildRequires:  PyYAML
+%if 0%{?rhel} > 6
+BuildRequires: perl-Digest-MD5
+%else
+BuildRequires: perl-MD5
+%endif
 
 
 %description
