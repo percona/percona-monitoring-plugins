@@ -75,8 +75,6 @@ and are delivered in the form of templates, plugins, and scripts.
 
 %build
 ./make.sh nodocs
-TARFILE=$(basename $(find . -name 'percona-monitoring-plugins-*.tar.gz' | sort | tail -n1))
-tar -zxvf ${TARFILE}
 
 %install
 
