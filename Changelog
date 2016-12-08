@@ -1,3 +1,14 @@
+2016-12-09: version 1.1.7
+-------------------------
+* New Nagios script pmp-check-mongo.py for MongoDB.
+* Added MySQL socket and flag options to Cacti php script.
+* Added disk volume check on "Mounted on" in addition to "Filesystem" to Cacti php script to allow monitoring of tmpfs mounts.
+* Allow delayed slave to have SQL thread stopped on pmp-check-mysql-replication-delay check.
+* Fix for --unconfigured flag of pmp-check-mysql-replication-delay.
+* Fix for max_duration check of pmp-check-mysql-innodb when system and MySQL timezones mismatch.
+* Fix rare nrpe broken pipe error on pmp-check-unix-memory check.
+* Updated package spec files.
+
 2016-01-12: version 1.1.6
 -------------------------
 * Added new RDS instance classes to RDS scripts.
