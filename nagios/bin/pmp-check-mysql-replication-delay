@@ -26,6 +26,8 @@ STATE_DEPENDENT=4
 # ########################################################################
 main() {
    # Get options
+   OPT_ENSURE_SBM=0
+   MIN_DELAY_SET=0
    for o; do
       case "${o}" in
          -c)              shift; OPT_CRIT="${1}"; shift; ;;
@@ -33,7 +35,7 @@ main() {
          -H)              shift; OPT_HOST="${1}"; shift; ;;
          -l)              shift; OPT_USER="${1}"; shift; ;;
          -L)              shift; OPT_LOPA="${1}"; shift; ;;
-         -m)              shift; OPT_MIN="${1}"; shift; ;;
+         -m)              shift; OPT_MIN="${1}"; MIN_DELAY_SET=1; shift; ;;
          -p)              shift; OPT_PASS="${1}"; shift; ;;
          -P)              shift; OPT_PORT="${1}"; shift; ;;
          -S)              shift; OPT_SOCK="${1}"; shift; ;;
@@ -43,6 +45,7 @@ main() {
          -w)              shift; OPT_WARN="${1}"; shift; ;;
          --master-conn)   shift; OPT_MASTERCONN="${1}"; shift; ;;
          --unconfigured)  shift; OPT_REPLNOTSET=1; ;;
+         --ensure-sbm)    shift; OPT_ENSURE_SBM=1; ;;
          --version)       grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
          --help)          perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
          -*)              echo "Unknown option ${o}.  Try --help."; exit 1; ;;
@@ -85,6 +88,9 @@ main() {
       fi
    fi
 
+   # Check for SQL thread errors
+   LAST_SLAVE_ERRNO=$(awk '/Last_SQL_Errno/{print $2}' "${TEMP_SLAVEDATA}")
+
    # Build the common perf data output for graph trending
    PERFDATA="replication_delay=${LEVEL:-0};${OPT_WARN};${OPT_CRIT};0;"
 
@@ -92,7 +98,10 @@ main() {
    if [ "$MYSQL_CONN" = 0 ]; then
       NOTE="${LEVEL:-0} seconds of replication delay"
       if [ "${LEVEL:-""}" = "NULL" ]; then
-         NOTE="UNK replica is stopped"
+         test ${MIN_DELAY_SET} -eq 1 && \
+         test ${LAST_SLAVE_ERRNO} -eq 0 && \
+         test ${OPT_ENSURE_SBM} -eq 0 && \
+            NOTE="OK NULL seconds of replication delay" || NOTE="UNK replica is stopped"
       elif [ -z "${LEVEL}" -a "${OPT_REPLNOTSET}" ]; then
          NOTE="UNK This server is not configured as a replica."
       # pt-slave-delayed slave
@@ -204,6 +213,7 @@ pmp-check-mysql-replication-delay - Alert when MySQL replication becomes delayed
     -w WARN         Warning threshold; default 300.
     --master-conn NAME  Master connection name for MariaDB multi-source replication.
     --unconfigured  Alert when replica is not configured at all; default no.
+    --ensure-sbm    Disallow Seconds_Behind_Master to be NULL for delayed slaves when -m is used
     --help          Print help and exit.
     --version       Print version and exit.
   Options must be given as --option value, not --option=value or -Ovalue.
