@@ -213,7 +213,7 @@ pmp-check-mysql-replication-delay - Alert when MySQL replication becomes delayed
     -w WARN         Warning threshold; default 300.
     --master-conn NAME  Master connection name for MariaDB multi-source replication.
     --unconfigured  Alert when replica is not configured at all; default no.
-    --ensure-sbm    Force Seconds_Behind_Master to be valid (i.e. not NULL) 
+    --ensure-sbm    Disallow Seconds_Behind_Master to be NULL for delayed slaves when -m is used
     --help          Print help and exit.
     --version       Print version and exit.
   Options must be given as --option value, not --option=value or -Ovalue.
