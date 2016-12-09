@@ -1,1 +1,1 @@
-release/nagios/bin/pmp-* /usr/lib64/lib/nagios/plugins
+release/nagios/bin/pmp-* /usr/lib64/nagios/plugins
