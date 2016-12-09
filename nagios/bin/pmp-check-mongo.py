@@ -521,3 +521,74 @@ class NagiosMongoChecks:
 #
 if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))
+
+# ############################################################################
+# Documentation
+# ############################################################################
+"""
+=pod
+
+=head1 NAME
+
+pmp-check-mongo.py - MongoDB Nagios check script.
+
+=head1 SYNOPSIS
+
+  Usage: pmp-check-mongo.py [options]
+
+  Options:
+    -h, --help            show this help message and exit
+    -H HOST, --host=HOST  The hostname you want to connect to
+    -P PORT, --port=PORT  The port mongodb is running on
+    -u USER, --user=USER  The username you want to login as
+    -p PASSWD, --password=PASSWD
+                          The password you want to use for that user
+    -W WARNING, --warning=WARNING
+                          The warning threshold you want to set
+    -C CRITICAL, --critical=CRITICAL
+                          The critical threshold you want to set
+    -A ACTION, --action=ACTION
+                          The action you want to take. Valid choices are
+                          (check_connections, check_election, check_lock_pct,
+                          check_repl_lag, check_flushing, check_total_indexes,
+                          check_balance, check_queues, check_cannary_test,
+                          check_have_primary, check_oplog, check_index_ratio,
+                          check_connect) Default: check_connect
+    -s SSL, --ssl=SSL     Connect using SSL
+    -r REPLICASET, --replicaset=REPLICASET
+                          Connect to replicaset
+    -c COLLECTION, --collection=COLLECTION
+                          Specify the collection in check_cannary_test
+    -d DATABASE, --database=DATABASE
+                          Specify the database in check_cannary_test
+    -q QUERY, --query=QUERY
+                          Specify the query     in check_cannary_test
+    --statusfile=STATUS_FILENAME
+                          File to current store state data in for delta checks
+    --backup-statusfile=STATUS_FILENAME_BACKUP
+                          File to previous store state data in for delta checks
+    --max-stale=MAX_STALE
+                          Age of status file to make new checks (seconds)
+
+=head1 COPYRIGHT, LICENSE, AND WARRANTY
+
+This program is copyright 2014 Percona LLC and/or its affiliates.
+Feedback and improvements are welcome.
+
+THIS PROGRAM IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, version 2.  You should have received a copy of the GNU General
+Public License along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+
+=head1 VERSION
+
+$PROJECT_NAME$ pmp-check-mongo.py $VERSION$
+
+=cut
+
+"""
