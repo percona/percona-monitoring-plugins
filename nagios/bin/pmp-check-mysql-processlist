@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # ########################################################################
 # This program is part of $PROJECT_NAME$
