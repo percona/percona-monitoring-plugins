@@ -77,6 +77,7 @@ main() {
           OPT_SRVID=$(awk '/Master_Server_Id/{print $2}' "${TEMP_SLAVEDATA}")
         fi
       fi
+      get_slave_status $1
       SQL="SELECT MAX(${NOW_FUNC} - ROUND(UNIX_TIMESTAMP(ts))) AS delay
          FROM ${OPT_TABLE} WHERE (${OPT_SRVID:-0} = 0 OR server_id = ${OPT_SRVID:-0})"
       LEVEL=$(mysql_exec "${SQL}")
