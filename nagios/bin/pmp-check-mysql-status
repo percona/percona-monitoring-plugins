@@ -133,9 +133,9 @@ main() {
          # Build the common perf data output for graph trending
          if [ "${OPT_TRAN}" = 'pct' ]; then
             PERFDATA_MAX=100
+            PERFDATA="${OPT_VAR1}${OPT_OPER}${OPT_VAR2}=${LEVEL};${OPT_WARN};${OPT_CRIT};0;${PERFDATA_MAX}"
+            NOTE="$NOTE | $PERFDATA"
          fi
-         PERFDATA="${OPT_VAR1}${OPT_OPER}${OPT_VAR2}=${LEVEL};${OPT_WARN};${OPT_CRIT};0;${PERFDATA_MAX}"
-         NOTE="$NOTE | $PERFDATA"
       fi
    else
       NOTE="UNK could not get MySQL status/variables."
