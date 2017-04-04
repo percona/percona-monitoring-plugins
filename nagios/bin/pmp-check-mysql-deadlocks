@@ -60,7 +60,7 @@ main() {
       fi
    fi
 
-   LEVEL=$(mysql_exec "SELECT COUNT(*) FROM ${OPT_TABLE} WHERE ts >= NOW() - INTERVAL ${OPT_INTERVAL}*60 SECOND")
+   LEVEL=$(mysql_exec "SELECT COUNT(*) FROM ${OPT_TABLE} WHERE server = '${OPT_HOST}' AND ts >= NOW() - INTERVAL ${OPT_INTERVAL}*60 SECOND")
    if [ $? = 0 ]; then
       NOTE="${LEVEL:-UNKNOWN} deadlocks in last ${OPT_INTERVAL} minutes"
       if [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
@@ -163,7 +163,7 @@ C<SELECT> from the C<pt-deadlock-logger> table.
 
 =back
 
-This plugin executes no UNIX commands that may need special privileges. 
+This plugin executes no UNIX commands that may need special privileges.
 
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 
