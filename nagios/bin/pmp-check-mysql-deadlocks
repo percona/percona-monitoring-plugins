@@ -60,9 +60,6 @@ main() {
       fi
    fi
 
-   # Sanitise variables for SQL
-
-
    LEVEL=$(mysql_exec "SELECT COUNT(*) FROM ${OPT_TABLE} WHERE server IN ('${OPT_HOST}', @@hostname) AND ts >= NOW() - INTERVAL ${OPT_INTERVAL}*60 SECOND")
    if [ $? = 0 ]; then
       NOTE="${LEVEL:-UNKNOWN} deadlocks in last ${OPT_INTERVAL} minutes"
