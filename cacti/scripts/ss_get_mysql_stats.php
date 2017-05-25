@@ -259,7 +259,7 @@ function ss_get_mysql_stats( $options ) {
    $socket = isset($options['socket']) ? $options['socket'] : $mysql_socket;
    $flags = isset($options['flags']) ? $options['flags'] : $mysql_flags;
    $connection_timeout = isset($options['connection-timeout']) ? $options['connection-timeout'] : $mysql_connection_timeout;
-   $heartbeat_server_id = isset($options['server-id']) ? $options['server-id'] : $heartbeat_server_id;
+   $heartbeat_server_id = isset($options['server-id']) && ($options['server-id'] != '') ? $options['server-id'] : $heartbeat_server_id;
 
    $sanitized_host = str_replace(array(":", "/"), array("", "_"), $host);
    $cache_file = "$cache_dir/$sanitized_host-mysql_cacti_stats.txt" . ($port != 3306 ? ":$port" : '');
