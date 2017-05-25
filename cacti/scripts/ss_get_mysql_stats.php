@@ -252,14 +252,14 @@ function ss_get_mysql_stats( $options ) {
           $mysql_connection_timeout,
           $heartbeat, $heartbeat_table, $heartbeat_server_id, $heartbeat_utc;
 
-   $user = isset($options['user']) && ($options['user'] != '') ? $options['user'] : $mysql_user;
-   $pass = isset($options['pass']) && ($options['pass'] != '') ? $options['pass'] : $mysql_pass;
+   $user = isset($options['user']) && !empty($options['user']) ? $options['user'] : $mysql_user;
+   $pass = isset($options['pass']) && !empty($options['pass']) ? $options['pass'] : $mysql_pass;
    $host = $options['host'];
    $port = isset($options['port']) && ($options['port'] != '')? $options['port'] : $mysql_port;
    $socket = isset($options['socket']) ? $options['socket'] : $mysql_socket;
    $flags = isset($options['flags']) ? $options['flags'] : $mysql_flags;
    $connection_timeout = isset($options['connection-timeout']) ? $options['connection-timeout'] : $mysql_connection_timeout;
-   $heartbeat_server_id = isset($options['server-id']) && ($options['server-id'] != '') ? $options['server-id'] : $heartbeat_server_id;
+   $heartbeat_server_id = isset($options['server-id']) && !empty($options['server-id']) ? $options['server-id'] : $heartbeat_server_id;
 
    $sanitized_host = str_replace(array(":", "/"), array("", "_"), $host);
    $cache_file = "$cache_dir/$sanitized_host-mysql_cacti_stats.txt" . ($port != 3306 ? ":$port" : '');
