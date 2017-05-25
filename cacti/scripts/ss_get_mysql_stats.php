@@ -255,7 +255,7 @@ function ss_get_mysql_stats( $options ) {
    $user = isset($options['user']) && !empty($options['user']) ? $options['user'] : $mysql_user;
    $pass = isset($options['pass']) && !empty($options['pass']) ? $options['pass'] : $mysql_pass;
    $host = $options['host'];
-   $port = isset($options['port']) && ($options['port'] != '')? $options['port'] : $mysql_port;
+   $port = isset($options['port']) && !empty($options['port']) ? $options['port'] : $mysql_port;
    $socket = isset($options['socket']) ? $options['socket'] : $mysql_socket;
    $flags = isset($options['flags']) ? $options['flags'] : $mysql_flags;
    $connection_timeout = isset($options['connection-timeout']) ? $options['connection-timeout'] : $mysql_connection_timeout;
