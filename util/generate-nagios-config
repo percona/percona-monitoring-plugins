@@ -4,7 +4,7 @@ set -e
 set -u
 
 PRJ="Percona Monitoring Plugins"
-TEMP=$(mktemp "/tmp/${0##*/}-nagios-setup.XXXX")
+TEMP=$(mktemp "/tmp/${0##*/}-nagios-setup.XXXXXX")
 trap 'rm -rf "${TEMP}" >/dev/null 2>&1' EXIT
 read -e -p "Configuration file prefix to use [/etc/nagios/objects]: " DIR
 DIR="${DIR:-/etc/nagios/objects}"
