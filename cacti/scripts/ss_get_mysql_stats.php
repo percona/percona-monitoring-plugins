@@ -1098,8 +1098,14 @@ function get_innodb_array($text, $mysql_version) {
          # TODO: graph syncs and checkpoints
          $results['log_writes'] = to_int($row[0]);
       }
-      elseif (strpos($line, " pending log writes, ") > 0 ) {
+      elseif ($mysql_version < 50700 && strpos($line, " pending log writes, ") > 0 ) {
          # 0 pending log writes, 0 pending chkp writes
+         $results['pending_log_writes']  = to_int($row[0]);
+         $results['pending_chkp_writes'] = to_int($row[4]);
+      }
+      elseif ($mysql_version >= 50700 && strpos($line, " pending log flushes, ") > 0 ) {
+         # Post 5.7.x SHOW ENGINE INNODB STATUS syntax
+         # 0 pending log flushes, 0 pending chkp writes
          $results['pending_log_writes']  = to_int($row[0]);
          $results['pending_chkp_writes'] = to_int($row[4]);
       }
