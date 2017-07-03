@@ -64,7 +64,17 @@ main() {
 
    # Get the query from the documentation and execute it.
    SQL=$(get_magic_query "${0}" checksum_diff_query)
-   PROBLEMS=$(mysql_exec "${SQL/CHECKSUM_TABLE/${OPT_TABLE}}" 2>"${TEMP}")
+   REPLICATION_FILTER=$(mysql_exec "SHOW SLAVE STATUS\G" 2>"${TEMP}" \
+      | grep 'Replicate_Wild_Ignore_Table' \
+      | awk -F: '{print $2}' \
+      | sed -e 's/ //')
+   IFS=',' read -r -a array <<< "$REPLICATION_FILTER"
+   for e in "${array[@]}"; do
+     OPT_IGNORE=${OPT_IGNORE}" AND CONCAT(db,'.',tbl) not like '${e}'"
+   done
+
+   SQL_IGNORE="${SQL/--IGNORE/${OPT_IGNORE}}"
+   PROBLEMS=$(mysql_exec "${SQL_IGNORE/CHECKSUM_TABLE/${OPT_TABLE}}" 2>"${TEMP}")
    if [ $? = 0 ]; then
       if [ "${PROBLEMS}" ]; then
          NOTE="pt-table-checksum found ${PROBLEMS}"
@@ -186,8 +196,9 @@ server's data matches its master's:
       ' tables, including ',
       MIN(CONCAT(db, '.', tbl)))
    FROM CHECKSUM_TABLE
-   WHERE master_cnt <> this_cnt OR master_crc <> this_crc
-      OR ISNULL(master_crc) <> ISNULL(this_crc)
+   WHERE (master_cnt <> this_cnt OR master_crc <> this_crc
+      OR ISNULL(master_crc) <> ISNULL(this_crc))
+   --IGNORE
    HAVING COUNT(*) > 0
 
 The word CHECKSUM_TABLE is replaced by the value of the -T option.  If the table
