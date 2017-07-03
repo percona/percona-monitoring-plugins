@@ -65,6 +65,7 @@ main() {
       fi
    fi
 
+   get_slave_status $1
    # Get replication delay from a heartbeat table or from SHOW SLAVE STATUS.
    get_slave_status $1
    if [ "${OPT_TABLE}" ]; then
