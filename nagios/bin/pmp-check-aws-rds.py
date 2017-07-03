@@ -169,12 +169,15 @@ def main():
     parser.add_option('-m', '--metric', help='metric to check: [%s]' % ', '.join(metrics.keys()))
     parser.add_option('-w', '--warn', help='warning threshold')
     parser.add_option('-c', '--crit', help='critical threshold')
-    parser.add_option('-u', '--unit', help='unit of thresholds for "storage" and "memory" metrics: [%s]. '
+    parser.add_option('-u', '--unit', help='unit of thresholds for "storage" and "memory" metrics: [%s].'
                       'Default: percent' % ', '.join(units), default='percent')
     parser.add_option('-t', '--time', help='time period in minutes to query. Default: 5',
                       type='int', default=5)
     parser.add_option('-a', '--avg', help='time average in minutes to request. Default: 1',
                       type='int', default=1)
+    parser.add_option('-f', '--forceunknown', help='force alerts on unknown status. This prevents issues related to '
+                      'AWS Cloudwatch throttling limits Default: False',
+                      action='store_true', default=False)
     parser.add_option('-d', '--debug', help='enable debug output',
                       action='store_true', default=False)
     options, _ = parser.parse_args()
@@ -351,6 +354,9 @@ def main():
     # Final output
     if status != UNKNOWN and perf_data:
         print '%s %s | %s' % (short_status[status], note, perf_data)
+    elif status == UNKNOWN and not options.forceunknown:
+        print '%s %s | null' % ('OK', note)
+        sys.exit(0)
     else:
         print '%s %s' % (short_status[status], note)
 
@@ -395,6 +401,9 @@ pmp-check-aws-rds.py - Check Amazon RDS metrics.
                           [percent, GB]. Default: percent
     -t TIME, --time=TIME  time period in minutes to query. Default: 5
     -a AVG, --avg=AVG     time average in minutes to request. Default: 1
+    -f, --forceunknown    force alerts on unknown status. This prevents issues
+                          related to AWS Cloudwatch throttling limits Default:
+                          False
     -d, --debug           enable debug output
 
 =head1 REQUIREMENTS
