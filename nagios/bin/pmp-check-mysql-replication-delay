@@ -66,6 +66,7 @@ main() {
    fi
 
    # Get replication delay from a heartbeat table or from SHOW SLAVE STATUS.
+   get_slave_status $1
    if [ "${OPT_TABLE}" ]; then
       if [ -z "${OPT_UTC}" ]; then
          NOW_FUNC='UNIX_TIMESTAMP()'
@@ -73,7 +74,6 @@ main() {
          NOW_FUNC='UNIX_TIMESTAMP(UTC_TIMESTAMP)'
       fi
       if [ "${OPT_SRVID}" == "MASTER" ]; then
-        get_slave_status $1
         if [ "${MYSQL_CONN}" = 0 ]; then
           OPT_SRVID=$(awk '/Master_Server_Id/{print $2}' "${TEMP_SLAVEDATA}")
         fi
@@ -83,7 +83,6 @@ main() {
       LEVEL=$(mysql_exec "${SQL}")
       MYSQL_CONN=$?
    else
-      get_slave_status $1
       if [ "${MYSQL_CONN}" = 0 ]; then
          LEVEL=$(awk '/Seconds_Behind_Master/{print $2}' "${TEMP_SLAVEDATA}")
       fi
