@@ -105,7 +105,7 @@ main() {
       elif [ -z "${LEVEL}" -a "${OPT_REPLNOTSET}" ]; then
          NOTE="UNK This server is not configured as a replica."
       # pt-slave-delayed slave
-      elif [ "${LEVEL:-0}" -lt "${OPT_MIN}" ]; then
+      elif [ ${MIN_DELAY_SET} -eq 1 ] && [ "${LEVEL:-0}" -lt "${OPT_MIN}" ]; then
          NOTE="CRIT (delayed slave) $NOTE | $PERFDATA"
       elif [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
          NOTE="CRIT $NOTE | $PERFDATA"
