@@ -1146,11 +1146,7 @@ function get_innodb_array($text, $mysql_version) {
          # Post 5.7.x SHOW ENGINE INNODB STATUS syntax
          # Total large memory allocated 2198863872
          $results['total_mem_alloc']       = to_int($row[4]);
-      }
-      elseif ( $mysql_version >= 50700 && strpos($line, "Dictionary memory allocated") === 0 ) {
-         # Post 5.7.x SHOW ENGINE INNODB STATUS doesn't print 'additional pool', so use "Dictionary memory allocated" instead
-         # Dictionary memory allocated 776332
-         $results['additional_pool_alloc'] = to_int($row[3]);
+         $results['additional_pool_alloc'] = 0;
       }
       elseif(strpos($line, 'Adaptive hash index ') === 0 ) {
          #   Adaptive hash index 1538240664 	(186998824 + 1351241840)
