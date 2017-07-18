@@ -1098,8 +1098,14 @@ function get_innodb_array($text, $mysql_version) {
          # TODO: graph syncs and checkpoints
          $results['log_writes'] = to_int($row[0]);
       }
-      elseif (strpos($line, " pending log writes, ") > 0 ) {
+      elseif ($mysql_version < 50700 && strpos($line, " pending log writes, ") > 0 ) {
          # 0 pending log writes, 0 pending chkp writes
+         $results['pending_log_writes']  = to_int($row[0]);
+         $results['pending_chkp_writes'] = to_int($row[4]);
+      }
+      elseif ($mysql_version >= 50700 && strpos($line, " pending log flushes, ") > 0 ) {
+         # Post 5.7.x SHOW ENGINE INNODB STATUS syntax
+         # 0 pending log flushes, 0 pending chkp writes
          $results['pending_log_writes']  = to_int($row[0]);
          $results['pending_chkp_writes'] = to_int($row[4]);
       }
@@ -1130,11 +1136,17 @@ function get_innodb_array($text, $mysql_version) {
       }
 
       # BUFFER POOL AND MEMORY
-      elseif (strpos($line, "Total memory allocated") === 0 && strpos($line, "in additional pool allocated") > 0 ) {
+      elseif ( $mysql_version < 50700 && strpos($line, "Total memory allocated") === 0 && strpos($line, "in additional pool allocated") > 0 ) {
          # Total memory allocated 29642194944; in additional pool allocated 0
          # Total memory allocated by read views 96
          $results['total_mem_alloc']       = to_int($row[3]);
          $results['additional_pool_alloc'] = to_int($row[8]);
+      }
+      elseif ( $mysql_version >= 50700 && strpos($line, "Total large memory allocated") === 0 ) {
+         # Post 5.7.x SHOW ENGINE INNODB STATUS syntax
+         # Total large memory allocated 2198863872
+         $results['total_mem_alloc']       = to_int($row[4]);
+         $results['additional_pool_alloc'] = 0;
       }
       elseif(strpos($line, 'Adaptive hash index ') === 0 ) {
          #   Adaptive hash index 1538240664 	(186998824 + 1351241840)
