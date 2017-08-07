@@ -1,3 +1,11 @@
+2017-08-10: version 1.1.8
+-------------------------
+* Fix for MySQL Multi-Source replication.  Issue #25. Thanks to @altmannmarcelo
+* Slaves alert due to deadlocks on the master. Thanks to  @cezmunsta 
+* If using pt-heartbeat, get_slave_status is only called when -s is set to MASTER. Issue  #52. Thanks to @cezmunsta 
+* Disable UNK alerts by default. Thanks to @pondix
+* Fixed false-positive when a calculated delay was <0 and -m was not set. Thanks to @dankow
+
 2016-12-09: version 1.1.7
 -------------------------
 * New Nagios script pmp-check-mongo.py for MongoDB.
