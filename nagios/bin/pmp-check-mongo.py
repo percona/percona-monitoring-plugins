@@ -29,6 +29,7 @@ import traceback
 import pprint
 
 from types import FunctionType
+from datetime import datetime
 # Not yet implemented
 # import DeepDiff
 
@@ -555,9 +556,9 @@ class NagiosMongoChecks:
         critical_level = critical_level or self.get_default('check_cannary_test', 'critical')
         # this does not check for a timeout, we assume NRPE or Nagios will alert on that timeout.
         try:
-            start = time.time()
+            start = datetime.now()
             self.connection[self.database][self.collection].find_one(self.query)
-            time_range = (time.time() - start).total_seconds
+            time_range = (datetime.now() - start).seconds
             message = "Collection %s.%s  query took: %d s" % (self.database, self.collection, time_range)
             return self.check_levels(time_range, warning_level, critical_level, message)
         except Exception, e:
