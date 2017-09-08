@@ -1,12 +1,23 @@
 #!/usr/bin/env python2.7
-"""MongoDB Nagios check script
 
-This program is part of $PROJECT_NAME$
-License: GPL License (see COPYING)
+#
+# A MongoDB Nagios check script
+#
 
-Author David Murphy
-Copyright 2014-2015 Percona LLC and/or its affiliates
-"""
+# A re-envision  based on : https://github.com/mzupan/nagios-plugin-mongodb
+# This script tried to update and simply some of the existing code. Additionally things used for "monitoring"
+# have been removed and this is more simple to be aligned to alerting versus monitoring.
+#
+# Attempts have been made to make it more readable by introducting some class structure with the re-use of
+# files  from the last check to make delta calculation much cheaper on the system.
+#
+# Main Author
+#   - David Murphy <david.murphy@percona.com>
+#
+# USAGE
+#
+# See the README.md
+#
 
 import sys
 import time
@@ -18,22 +29,15 @@ import traceback
 import pprint
 
 from types import FunctionType
+from datetime import datetime
 # Not yet implemented
 # import DeepDiff
 
 try:
     import pymongo
 except ImportError, e:
-    print e
+    print "Could not load pymongo: %s!" % e
     sys.exit(2)
-
-# As of pymongo v 1.9 the SON API is part of the BSON package, therefore attempt
-# to import from there and fall back to pymongo in cases of older pymongo
-if pymongo.version >= "1.9":
-    import bson.son as son
-else:
-    import pymongo.son as son
-
 
 # Adding special behavior for optparse
 class OptionParsingError(RuntimeError):
@@ -55,7 +59,6 @@ def parse_options(args):
         if type(item_type) is FunctionType and item_name.startswith("check_") and item_name is not 'check_levels':
             funcList.append(item_name)
     p = ModifiedOptionParser()
-
     p.add_option('-H', '--host', action='store', type='string', dest='host', default='127.0.0.1', help='The hostname you want to connect to')
     p.add_option('-P', '--port', action='store', type='int', dest='port', default=27017, help='The port mongodb is running on')
     p.add_option('-u', '--user', action='store', type='string', dest='user', default=None, help='The username you want to login as')
@@ -69,19 +72,18 @@ def parse_options(args):
     p.add_option('-c', '--collection', action='store', dest='collection', default='foo', help='Specify the collection in check_cannary_test')
     p.add_option('-d', '--database', action='store', dest='database', default='tmp', help='Specify the database in check_cannary_test')
     p.add_option('-q', '--query', action='store', dest='query', default='{"_id":1}', help='Specify the query     in check_cannary_test')
-    p.add_option('--statusfile', action='store', dest='status_filename', default='status.dat', help='File to current store state data in for delta checks')
-    p.add_option('--backup-statusfile', action='store', dest='status_filename_backup', default='status_backup.dat',
-                 help='File to previous store state data in for delta checks')
-    p.add_option('--max-stale', action='store', dest='max_stale', type='int', default=60, help='Age of status file to make new checks (seconds)')
+    p.add_option('--statusdir', action='store', dest='status_dir', default='/tmp/check_mongo', help='Dir to store state files, 1 file per host/port')
+    #p.add_option('--max-stale', action='store', dest='max_stale', type='int', default=60, help='Age of status file to make new checks (seconds)')
+
     # Add options for output stat file
     try:
         result = p.parse_args()
     except OptionParsingError, e:
         if 'no such option' in e.msg:
-            sys.exit("UNKNOWN - No such options of %s" % e.msg.split(":")[1])
+            return return_result("critical", "No such options of %s" % e.msg.split(":")[1])
         if 'invalid choice' in e.msg:
             error_item = e.msg.split(":")[2].split("'")[1]
-            sys.exit('UNKNOWN - No such action of %s found!' % error_item)
+            return return_result("critical", 'No such action of %s found!' % error_item)
     return result
 
 
@@ -97,7 +99,7 @@ def return_result(result_type, message):
         sys.exit(1)
     else:
         print "UNKNOWN - " + message
-        sys.exit(2)
+        sys.exit(3)
 
 
 def main(argv):
@@ -116,6 +118,12 @@ def check(args, check_name):
         return_result("critical", str(e))
     return_result(result_type, message)
 
+def get_primary_host(rsStatus):
+    for member in rsStatus["members"]:
+        if member['stateStr'] == "PRIMARY":
+            return member['name']
+    return None
+
 
 class NagiosMongoChecks:
     # need to initialize variables and such still
@@ -133,17 +141,23 @@ class NagiosMongoChecks:
         self.collection = 'foo'
         self.database = 'tmp'
         self.query = '{"_id":1}'
-        self.status_filename = 'status.dat'
-        self.status_filename_backup = 'status_backup.dat'
+        self.status_dir = '/tmp/check_mongo'
         self.max_stale = 60
+        self.isMaster = None
+        self.setName = None
+        self.isArbiter = False
+        self.nodetype = "Standalone"
 
         for option in vars(args):
             setattr(self, option, getattr(args, option))
 
-        # Fix filepaths to be relative
-        if not self.status_filename.startswith("/") or not self.status_filename.startswith(".."):
-            self.status_filename_backup = "%s/%s" % (os.curdir, self.status_filename_backup)
-            self.status_filename = "%s/%s" % (os.curdir, self.status_filename)
+        # create the status dir, if not exists:
+        if not os.path.isdir(self.status_dir):
+            os.mkdir(self.status_dir)
+
+        # set up state filenames
+        self.status_filename = '%s/status.%s-%s.dat' % (self.status_dir, self.host, self.port)
+        self.status_filename_backup = '%s/status_backup.%s-%s.dat' % (self.status_dir, self.host, self.port)
 
         # ammend known intenal values we will need
         self.current_status = {}
@@ -154,18 +168,22 @@ class NagiosMongoChecks:
 
         self.connect()
 
-        if self.file_age(self.status_filename) <= self.max_stale:
-            # Save status_file contents status as current_status
-            self.get_last_status(True)
-            # Save status_filename_backup contents as last_status
-            self.get_last_status(False, self.status_filename_backup)
-        else:
-            if self.connection is None:
-                raise pymongo.errors.ConnectionFailure(self.pyMongoError or "No connection Found, did connect fail?")
-            # Get fresh current_status from server
+        ## Commented-out to disable loading current_status from file, which breaks serverStatus checks
+        ## Only check_elections() should load state from disk
+        #if self.file_age(self.status_filename) <= self.max_stale:
+        #    # Save status_file contents status as current_status
+        #    self.get_last_status(True)
+        #    # Save status_filename_backup contents as last_status
+        #    self.get_last_status(False, self.status_filename_backup)
+        #else:
+
+        if self.connection is None:
+            raise pymongo.errors.ConnectionFailure(self.pyMongoError or "No connection Found, did connect fail?")
+        # Get fresh current_status from server
+        if not self.isArbiter:
             self.current_status = self.sanatize(self.get_server_status())
-	    # user last status_filename contents as last_status
-            self.get_last_status(False, self.status_filename)
+        # user last status_filename contents as last_status
+        self.get_last_status(False, self.status_filename)
         # Not yet implemented
         # self.compute_deltas()
 
@@ -174,7 +192,16 @@ class NagiosMongoChecks:
         # set last/current to self.current_status
         pass
 
+    def close(self):
+        if self.connection:
+            self.connection.close()
+
+    def return_result(self, result_type, message):
+        self.close()
+        return return_result(result_type, message)
+
     def get_last_status(self, returnAsCurrent, forceFile=None):
+        fileObject = None
         # Open file using self.file
         try:
             file_name = forceFile if forceFile is not None else self.status_filename
@@ -183,51 +210,53 @@ class NagiosMongoChecks:
                 self.last_status = pickle.load(fileObject)
             else:
                 self.current_status = pickle.load(fileObject)
+            fileObject.close()
         except Exception:
-                return False
+            if fileObject:
+                fileObject.close()
+            return False
         return True
 
     def get_server_status(self):
         try:
-            data = self.connection['admin'].command(pymongo.son_manipulator.SON([('serverStatus', 1)]))
-        except:
-            try:
-		data = self.connection['admin'].command(son.SON([('serverStatus', 1)]))
-	    except Exception, e:
-		if type(e).__name__ == "OperationFailure":
-		    sys.exit("UNKNOWN - Not authorized!")
-		else:
-		    sys.exit("UNKNOWN - Unable to run serverStatus: %s::%s" % (type(e).__name__, unicode_truncate(e.message, 45)))
+            data = self.connection['admin'].command('serverStatus')
+        except pymongo.errors.OperationFailure, e:
+            return self.return_result("critical", "Not authorized: %s!" % e)
+        except Exception, e:
+            return self.return_result("critical", "Unable to run serverStatus: %s::%s" % (type(e).__name__, unicode_truncate(e.message, 45)))
 
         if self.current_status is None:
             self.current_status = data
 
         return data
 
-    # figure out how to use this one later
-    def rotate_files(self):
-        # 1)this needs to rename  self.status_filename to status_filename_backup
-        # 2) Save current_status to  self.status_filename ( new file )
-        if self.last_status == {}:
-            # Build the last status file for future deltas from current data
-            self.save_file(self.status_filename_backup, self.current_status)
-            # Set the current status file to empty to set the aging clock
-            self.save_file(self.status_filename, {})
-            sys.exit("UNKNOWN - No status data present, please try again in %s seconds" % self.max_stale)
-	else:
-	    self.save_file(self.status_filename_backup, self.last_status)
-	    self.save_file(self.status_filename, self.current_status)
-
+    ## figure out how to use this one later
+    #def rotate_files(self):
+    #    # 1)this needs to rename  self.status_filename to status_filename_backup
+    #    # 2) Save current_status to  self.status_filename ( new file )
+    #    if self.last_status == {}:
+    #        # Build the last status file for future deltas from current data
+    #        self.save_file(self.status_filename_backup, self.current_status)
+    #        # Set the current status file to empty to set the aging clock
+    #        self.save_file(self.status_filename, {})
+    #        return self.return_result("critical", "No status data present, please try again in %s seconds" % self.max_stale)
+    #    else:
+    #        self.save_file(self.status_filename_backup, self.last_status)
+    #        self.save_file(self.status_filename, self.current_status)
 
     def save_file(self, filename, contents):
+            f = None
             try:
-                pickle.dump(contents, open(filename, "wb"))
+                f = open(filename, "wb")
+                pickle.dump(contents, f)
             except Exception, e:
-                sys.exit("UNKNOWN - Error saving stat file %s: %s" % (filename, e.message))
+                return self.return_result("critical", "Error saving stat file %s: %s" % (filename, e.message))
+            finally:
+                if f:
+                    f.close()
 
     # TODO - Fill in all check defaults
     def get_default(self, key, level):
-
         defaults = {
             'check_connections':    {'warning': 15000,   'critical': 19000},
             'check_connect':        {'warning': 50,      'critical': 100},
@@ -243,9 +272,9 @@ class NagiosMongoChecks:
         try:
             return defaults[key][level]
         except KeyError:
-            sys.exit("UNKNOWN - Missing defaults found for %s please use -w and -c" % key)
+            return self.return_result("critical", "Missing defaults found for %s please use -w and -c" % key)
 
-    # Not yet implemented
+    ## Not yet implemented - commented-out
     # def compute_deltas(self):
     #    deltas = []
     #    for item in DeepDiff(self.last_status, self.current_status)['values_changed']:
@@ -259,47 +288,75 @@ class NagiosMongoChecks:
     #    self.delta_data = deltas
     #    return True
 
-    def file_age(self, filename):
-        try:
-            age = time.time() - os.stat(filename)[stat.ST_CTIME]
-        except OSError:
-            age = 999999
-        return age
+    ## Not yet implemented - commented-out
+    #def file_age(self, filename):
+    #    try:
+    #        age = time.time() - os.stat(filename)[stat.ST_CTIME]
+    #    except OSError:
+    #        age = 999999
+    #    return age
 
     # TODO - Add meat to this if needed, here for future planning
     def sanatize(self, status_output):
         return status_output
 
-    def connect(self):
+    # Parse isMaster to determine nodetype
+    def parse_isMaster(self, con):
+        try:
+            self.isMaster = con['admin'].command('isMaster')
+            if 'setName' in self.isMaster:
+                self.setName = self.isMaster['setName']
+                if self.isMaster['ismaster']:
+                    self.nodetype = "%s PRIMARY" % self.setName
+                elif 'secondary' in self.isMaster and self.isMaster['secondary']:
+                    self.nodetype = "%s SECONDARY" % self.setName
+                elif 'arbiterOnly' in self.isMaster and self.isMaster['arbiterOnly']:
+                    self.nodetype = "%s ARBITER" % self.setName
+                    self.isArbiter = True
+                else:
+                    self.nodetype = "%s OTHER" % self.setName
+            elif self.isMaster['ismaster'] and 'msg' in self.isMaster and self.isMaster['msg'] == 'isdbgrid':
+                self.nodetype = "Mongos"
+            if 'configsvr' in self.isMaster and self.isMaster['configsvr']:
+                self.nodetype = "%s (configsvr)" % self.nodetype
+        except Exception, e:
+            return self.return_result("critical", "Could not connect or exec 'isMaster' command: '%s'" % e)
+
+    def connect(self, connectTimeout=5000):
         start_time = time.time()
         try:
             # ssl connection for pymongo > 2.3
             if self.replicaset is None:
-                con = pymongo.MongoClient(self.host, self.port, ssl=self.ssl, serverSelectionTimeoutMS=2500)
+                con = pymongo.MongoClient(self.host, self.port, ssl=self.ssl, serverSelectionTimeoutMS=connectTimeout)
             else:
-                con = pymongo.MongoClient(self.host, self.port, ssl=self.ssl, replicaSet=self.replicaset, serverSelectionTimeoutMS=2500)
-            if (self.user and self.passwd) and not con['admin'].authenticate(self.user, self.passwd):
-                sys.exit("CRITICAL - Username and password incorrect")
+                con = pymongo.MongoClient(self.host, self.port, ssl=self.ssl, replicaSet=self.replicaset, serverSelectionTimeoutMS=connectTimeout)
+            # parse isMaster command output
+            self.parse_isMaster(con)
+            if self.user and self.passwd and not self.isArbiter:
+                try:
+                    con['admin'].authenticate(self.user, self.passwd)
+                except Exception, e:
+                    return self.return_result("critical", "Problem with auth: %s" % e)
         except Exception, e:
             raise
-            if isinstance(e, pymongo.errors.AutoReconnect) and str(e).find(" is an arbiter") != -1:
+            if isinstance(e, pymongo.errors.AutoReconnect) and self.isArbiter:
                 # We got a pymongo AutoReconnect exception that tells us we connected to an Arbiter Server
                 # This means: Arbiter is reachable and can answer requests/votes - this is all we need to know from an arbiter
-                print "OK - State: 7 (Arbiter)"
-                sys.exit(0)
+                return self.return_result("ok", "State: 7 (Arbiter)")
             con = None
             self.pyMongoError = str(e)
         if con is not None:
-	    try:
-                con['admin'].command(pymongo.son_manipulator.SON([('ping', 1)]))
+            try:
+                con['admin'].command('ping')
             except Exception, e:
-                sys.exit("UNKNOWN - Unable to run commands, possible auth issue: %s" % e.message)
+                return self.return_result("critical", "Unable to run commands, possible auth issue: %s" % e.message)
             self.connection_time = round(time.time() - start_time, 2)
             version = con.server_info()['version'].split('.')
             self.mongo_version = (version[0], version[1], version[2])
             self.connection = con
 
     def check_levels(self, check_result, warning_level, critical_level, message):
+        self.close()
         if check_result < warning_level:
             return "ok", message
         elif check_result > critical_level:
@@ -313,10 +370,12 @@ class NagiosMongoChecks:
         warning_level = warning_level or self.get_default('check_connect', 'warning')
         critical_level = critical_level or self.get_default('check_connect', 'critical')
         con_time = self.connection_time
-        message = "Connection time %.2f ms" % con_time
+        message = "Connection time %.2fms, %s" % (con_time, self.nodetype)
         return self.check_levels(float(con_time), float(warning_level), float(critical_level), message)
 
     def check_connections(self, args, warning_level, critical_level):
+        if self.isArbiter:
+            return self.return_result("unknown", "No connection counts to check on arbiter hosts!")
         warning_level = warning_level or self.get_default('check_connections', 'warning')
         critical_level = critical_level or self.get_default('check_connections', 'critical')
         connections = self.current_status['connections']
@@ -328,8 +387,8 @@ class NagiosMongoChecks:
     def check_lock_pct(self, args, warning_level, critical_level):
         warning_level = warning_level or self.get_default('check_lock_pct', 'warning')
         critical_level = critical_level or self.get_default('check_lock_pct', 'critical')
-        if self.mongo_version >= ('2', '7', '0'):
-            return "ok",  "Mongo 3.0 and above do not have lock %"
+        if self.mongo_version >= ('2', '7', '0') or self.isArbiter:
+            return "ok",  "Mongo 3.0 and above and/or arbiters do not have lock %"
         lockTime = self.current_status['globalLock']['lockTime'] - self.last_status['globalLock']['lockTime']
         totalTime = self.current_status['globalLock']['totalTime'] - self.last_status['globalLock']['totalTime']
         lock_percent = int((lockTime / totalTime) * 100)
@@ -337,6 +396,8 @@ class NagiosMongoChecks:
         return self.check_levels(lock_percent, warning_level, critical_level, message)
 
     def check_flushing(self, args, warning_level, critical_level):
+        if self.isArbiter:
+            return self.return_result("unknown", "No flushing stats to check on arbiter hosts!")
         warning_level = warning_level or self.get_default('check_flushing', 'warning')
         critical_level = critical_level or self.get_default('check_flushing', 'critical')
         flushData = self.current_status['backgroundFlushing']
@@ -355,6 +416,8 @@ class NagiosMongoChecks:
         critical_level = critical_level or self.get_default('check_index_ratio', 'critical')
         message = None
 
+        if self.isArbiter:
+            return self.return_result("unknown", "No index counts to check on arbiter hosts!")
         indexCounters = self.current_status['indexCounters']
         if 'note' in indexCounters:
             ratio = 1.0
@@ -368,11 +431,22 @@ class NagiosMongoChecks:
         return self.check_levels(ratio, warning_level, critical_level, message)
 
     def check_have_primary(self, args, warning_level, critical_level):
-        replset_status = self.connection['admin'].command("replSetGetStatus")
+        replset_primary = None
+        replset_votes   = 0
+        replset_status  = self.connection['admin'].command("replSetGetStatus")
+        replset_config  = self.connection['admin'].command("replSetGetConfig")
+        for member in replset_config['config']['members']:
+            replset_votes += member['votes']
         for member in replset_status['members']:
             if member['state'] == 1:
-                return "ok", "Cluster has primary"
-        return "critical", "Cluster has no primary!"
+                replset_primary = member
+        if (replset_votes % 2 == 0):
+            if replset_primary and 'name' in replset_primary:
+                return "critical", "Cluster has an even number of votes (%i)! Primary: %s" % (replset_votes, replset_primary['name'])
+            return "critical", "Cluster an even number of votes (%i) AND no Primary!" % replset_votes
+        if replset_primary and 'name' in replset_primary:
+            return "ok", "Cluster has Primary %s and %i voting members" % (replset_primary['name'], replset_votes)
+        return "critical", "Cluster has no Primary and %i voting members!" % replset_votes
 
     def check_total_indexes(self, args, warning_level, critical_level):
         warning_level = warning_level or self.get_default('check_total_indexes', 'warning')
@@ -388,12 +462,14 @@ class NagiosMongoChecks:
         return self.check_levels(index_count, warning_level, critical_level, message)
 
     def check_queues(self, args, warning_level, critical_level):
+        if self.isArbiter:
+            return self.return_result("unknown", "No queues to check on arbiter hosts!")
         warning_level = warning_level or self.get_default('check_queues', 'warning')
         critical_level = critical_level or self.get_default('check_queues', 'critical')
-	currentQueue = self.current_status['globalLock']['currentQueue']
+        currentQueue = self.current_status['globalLock']['currentQueue']
         currentQueue['total'] = currentQueue['readers'] + currentQueue['writers']
         message = "Queue Sizes:  read (%d)  write(%d) total (%d)" % (currentQueue['readers'], currentQueue['writers'], currentQueue['total'])
-        return self.check_levels(currentQueue['total'], warning_level, critical_level, message)
+        return self.check_levels(int(currentQueue['total']), int(warning_level), int(critical_level), message)
 
     def check_oplog(self, args, warning_level, critical_level):
         warning_level = warning_level or self.get_default('check_oplog', 'warning')
@@ -409,17 +485,24 @@ class NagiosMongoChecks:
         return self.check_levels(int(oplog_range_hours), warning_level, critical_level, message)
 
     def check_election(self, args, warning_level, critical_level):
-        replset_status = self.connection['admin'].command("replSetGetStatus")
-        for member in replset_status['members']:
-            if member['stateStr'] == "PRIMARY":
-                #last_primary = member.name
-                last_primary = member['name']
-        for member in replset_status['members']:
-            if member['stateStr'] == "PRIMARY":
-                current_primary = member['name']
+        if not self.setName or self.isArbiter:
+            return "unknown", "This check is for non-arbiter replicaset members only!"
+        current_status  = self.connection['admin'].command("replSetGetStatus")
+        current_primary = get_primary_host(current_status)
+        self.get_last_status(False)
+        if not self.last_status:
+            self.last_status = { "replSetGetStatus": current_status }
+        elif "replSetGetStatus" not in self.last_status:
+            self.last_status["replSetGetStatus"] = current_status
+        last_primary = get_primary_host(self.last_status["replSetGetStatus"])
+        self.save_file(self.status_filename, { "replSetGetStatus": current_status })
         message = "Old PRI: %s New PRI: %s" % (last_primary, current_primary)
-        if current_primary == last_primary:
+        if current_primary and current_primary == last_primary:
             return "ok", message
+        elif current_primary and not last_primary:
+            return "ok", message
+        elif not current_primary:
+            return "critical", "No primary!"
         else:
             return "critical", message
 
@@ -473,9 +556,9 @@ class NagiosMongoChecks:
         critical_level = critical_level or self.get_default('check_cannary_test', 'critical')
         # this does not check for a timeout, we assume NRPE or Nagios will alert on that timeout.
         try:
-            start = time.time()
+            start = datetime.now()
             self.connection[self.database][self.collection].find_one(self.query)
-            time_range = (time.time() - start).total_seconds
+            time_range = (datetime.now() - start).seconds
             message = "Collection %s.%s  query took: %d s" % (self.database, self.collection, time_range)
             return self.check_levels(time_range, warning_level, critical_level, message)
         except Exception, e:
@@ -483,6 +566,8 @@ class NagiosMongoChecks:
             return "critical", message
 
     def check_repl_lag(self, args, warning_level, critical_level):
+        if self.isArbiter:
+            return self.return_result("unknown", "Cannot check replication lag on arbiter hosts!")
         warning_level = warning_level or self.get_default('check_repl_lag', 'warning')
         critical_level = critical_level or self.get_default('check_repl_lag', 'critical')
 
@@ -521,74 +606,3 @@ class NagiosMongoChecks:
 #
 if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))
-
-# ############################################################################
-# Documentation
-# ############################################################################
-"""
-=pod
-
-=head1 NAME
-
-pmp-check-mongo.py - MongoDB Nagios check script.
-
-=head1 SYNOPSIS
-
-  Usage: pmp-check-mongo.py [options]
-
-  Options:
-    -h, --help            show this help message and exit
-    -H HOST, --host=HOST  The hostname you want to connect to
-    -P PORT, --port=PORT  The port mongodb is running on
-    -u USER, --user=USER  The username you want to login as
-    -p PASSWD, --password=PASSWD
-                          The password you want to use for that user
-    -W WARNING, --warning=WARNING
-                          The warning threshold you want to set
-    -C CRITICAL, --critical=CRITICAL
-                          The critical threshold you want to set
-    -A ACTION, --action=ACTION
-                          The action you want to take. Valid choices are
-                          (check_connections, check_election, check_lock_pct,
-                          check_repl_lag, check_flushing, check_total_indexes,
-                          check_balance, check_queues, check_cannary_test,
-                          check_have_primary, check_oplog, check_index_ratio,
-                          check_connect) Default: check_connect
-    -s SSL, --ssl=SSL     Connect using SSL
-    -r REPLICASET, --replicaset=REPLICASET
-                          Connect to replicaset
-    -c COLLECTION, --collection=COLLECTION
-                          Specify the collection in check_cannary_test
-    -d DATABASE, --database=DATABASE
-                          Specify the database in check_cannary_test
-    -q QUERY, --query=QUERY
-                          Specify the query     in check_cannary_test
-    --statusfile=STATUS_FILENAME
-                          File to current store state data in for delta checks
-    --backup-statusfile=STATUS_FILENAME_BACKUP
-                          File to previous store state data in for delta checks
-    --max-stale=MAX_STALE
-                          Age of status file to make new checks (seconds)
-
-=head1 COPYRIGHT, LICENSE, AND WARRANTY
-
-This program is copyright 2014 Percona LLC and/or its affiliates.
-Feedback and improvements are welcome.
-
-THIS PROGRAM IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
-WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, version 2.  You should have received a copy of the GNU General
-Public License along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
-
-=head1 VERSION
-
-$PROJECT_NAME$ pmp-check-mongo.py $VERSION$
-
-=cut
-
-"""
