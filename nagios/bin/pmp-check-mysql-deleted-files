@@ -100,7 +100,7 @@ main() {
 # command name to match.
 # ########################################################################
 _pidof() {
-   if ! pidof "${1}" 2>/dev/null; then
+   if ! pidof -s "${1}" 2>/dev/null; then
       ps axo pid,ucomm | awk -v comm="${1}" '$2 == comm { print $1 }'
    fi
 }
