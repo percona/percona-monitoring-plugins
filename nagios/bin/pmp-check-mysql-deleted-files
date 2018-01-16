@@ -30,6 +30,7 @@ main() {
       case "${o}" in
          -c)              shift; OPT_CRIT="${1}"; shift; ;;
          --defaults-file) shift; OPT_DEFT="${1}"; shift; ;;
+         --sudo)          shift; OPT_SUDO=1;             ;;
          -H)              shift; OPT_HOST="${1}"; shift; ;;
          -l)              shift; OPT_USER="${1}"; shift; ;;
          -L)              shift; OPT_LOPA="${1}"; shift; ;;
@@ -122,9 +123,9 @@ mysql_exec() {
 # ########################################################################
 _lsof() {
    PATH="$PATH:/usr/sbin:/sbin"
-   if ! lsof -p $1 2>/dev/null; then
-      if ! /bin/ls -l /proc/$1/fd 2>/dev/null; then
-         fstat -p $1 2>/dev/null
+   if ! ${OPT_SUDO:+sudo }lsof -p $1 2>/dev/null; then
+      if ! ${OPT_SUDO:+sudo }/bin/ls -l /proc/$1/fd 2>/dev/null; then
+         ${OPT_SUDO:+sudo }fstat -p $1 2>/dev/null
       fi
    fi
 }
@@ -196,6 +197,7 @@ pmp-check-mysql-deleted-files - Alert when MySQL's files are deleted.
     -p PASS         MySQL password.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
+    --sudo          Run lsof/ls/fstat as root via sudo.
     -w WARN         Warning threshold; changes the alert to WARN instead of CRIT.
     --help          Print help and exit.
     --version       Print version and exit.
