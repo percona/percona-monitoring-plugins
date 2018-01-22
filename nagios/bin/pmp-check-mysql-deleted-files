@@ -30,6 +30,7 @@ main() {
       case "${o}" in
          -c)              shift; OPT_CRIT="${1}"; shift; ;;
          --defaults-file) shift; OPT_DEFT="${1}"; shift; ;;
+         --exclude)       shift; OPT_EXCLUDE="${1}"; shift; ;;
          --sudo)          shift; OPT_SUDO=1;             ;;
          -H)              shift; OPT_HOST="${1}"; shift; ;;
          -l)              shift; OPT_USER="${1}"; shift; ;;
@@ -74,7 +75,7 @@ main() {
          # mysqld 15287 ... /proc/15287/cwd (readlink: Permission denied)
          # We have to detect this and return UNK.
          if grep -v -e denied -e COMMAND "${TEMP}" >/dev/null 2>&1; then
-            local FILES=$(check_deleted_files "${TEMP}" "${OPT_TMPDIR}")
+            local FILES=$(check_deleted_files "${TEMP}" "${OPT_TMPDIR}${OPT_EXCLUDE:+|${OPT_EXCLUDE}}")
             NOTE="open but deleted files: ${FILES}"
             if [ "${FILES}" -a -z "${OPT_WARN}" ]; then
                NOTE="CRIT $NOTE"
@@ -132,13 +133,14 @@ _lsof() {
 
 # ########################################################################
 # Generate a list of file handles that MySQL has open, but which are deleted,
-# and are not temp files such as /tmp/ib* files (InnoDB) or /tmp/ML* files
-# (binary logging).  The first argument is a file containing the output of lsof
-# or ls -l for the open files.  The second argument is the server's tmpdir.
+# and are not in the exclude list, such as /tmp/ib* files (InnoDB) or /tmp/ML*
+# files (binary logging).  The first argument is a file containing the output
+# of lsof or ls -l for the open files.  The second argument is an exclude list,
+# which always includes the server's tmpdir.
 # ########################################################################
 check_deleted_files() {
-   awk -v tmpdir="${2}" '
-   /\(deleted\)/ { if ( index($0, tmpdir) == 0 ) {
+   awk -v exclude=${2} '
+   /\(deleted\)/ { if ( $0 !~ exclude ) {
       if ( $NF ~ /deleted/ ) {
          lf=NF-1;
       }
@@ -197,6 +199,7 @@ pmp-check-mysql-deleted-files - Alert when MySQL's files are deleted.
     -p PASS         MySQL password.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
+    --exclude PATTERN Exclude RegEx PATTERN from results.
     --sudo          Run lsof/ls/fstat as root via sudo.
     -w WARN         Warning threshold; changes the alert to WARN instead of CRIT.
     --help          Print help and exit.
