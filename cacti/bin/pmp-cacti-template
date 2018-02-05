@@ -22,7 +22,8 @@ use warnings FATAL => 'all';
 
 our $VERSION = '@VERSION@';
 our $DISTRIB = '@DISTRIB@';
-our $SVN_REV = sprintf("%d", map { $_ || 0 } q$Revision: 555 $ =~ m/(\d*)/g);
+#our $SVN_REV = sprintf("%d", map { $_ || 0 } q$Revision: 555 $ =~ m/(\d*)/g);
+our $SVN_REV = 42;
 
 # ###########################################################################
 # OptionParser package 1844
