@@ -2,9 +2,9 @@
 2018-02-05: version 1.1.8
 --------------------------------------------------------------------------------
 * Add MySQL 5.7 support
-* Changed cannary check to use timestamp.now() and return a timedelta.seconds
+* Changed canary check to use timestamp.now() and return a timedelta.seconds
 * Remove an additional condition for the Dictionary memory allocated
-* Fixed a *false-positive* problem when the calculated delay was less than 0 and the :option:`-m` was not set.
+* Fixed a *false-positive* problem when the calculated delay was less than 0 and the -m was not set.
 * Fixed the problem where slaves would alert due to deadlocks on the master.
 * If using pt-heartbeat, get_slave_status was only called when the -s option is set to *MASTER*
 * Disabled UNK alerts by default (it is possible to enable them explicitly).
@@ -12,11 +12,11 @@
 * The graph *Percona InnoDB Memory Allocation* showed zeroes for the
   metrics *Total memory* (data source item nl) and *Dictionary memory*
   (data source item nm) when used for MySQL 5.7.18, because the syntax
-  of SHOW ENGINE INNODB STATUS has changed in MySQL 5.7 (see https://dev.mysql.com/doc/refman/5.7/en/innodb-standard-monitor.html). 
+  of SHOW ENGINE INNODB STATUS has changed in MySQL 5.7 (see https://dev.mysql.com/doc/refman/5.7/en/innodb-standard-monitor.html).
 * The graph *Percona InnoDB I/O Pending* showed *NaN* for the metrics
   *Pending Log Writes* (data source item hn) and *Pending Chkp Writes*
   (data source item hk) when used for MySQL 5.7.18, because the syntax
-  of SHOW ENGINE INNODB STATUS has changed in MySQL 5.7 (see https://dev.mysql.com/doc/refman/5.7/en/innodb-standard-monitor.html). 
+  of SHOW ENGINE INNODB STATUS has changed in MySQL 5.7 (see https://dev.mysql.com/doc/refman/5.7/en/innodb-standard-monitor.html).
 * Added server @@hostname as a possible match to avoid DNS lookups whilst allowing hostname-match.
 
 2016-12-09: version 1.1.7
