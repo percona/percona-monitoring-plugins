@@ -4,7 +4,7 @@
 * Add MySQL 5.7 support
 * Changed canary check to use timestamp.now() and return a timedelta.seconds
 * Remove an additional condition for the Dictionary memory allocated
-* Fixed a *false-positive* problem when the calculated delay was less than 0 and the :option:`-m` was not set.
+* Fixed a *false-positive* problem when the calculated delay was less than 0 and the -m was not set.
 * Fixed the problem where slaves would alert due to deadlocks on the master.
 * If using pt-heartbeat, get_slave_status was only called when the -s option is set to *MASTER*
 * Disabled UNK alerts by default (it is possible to enable them explicitly).
