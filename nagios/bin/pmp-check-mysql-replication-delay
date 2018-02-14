@@ -73,7 +73,7 @@ main() {
       else
          NOW_FUNC='UNIX_TIMESTAMP(UTC_TIMESTAMP)'
       fi
-      if [ "${OPT_SRVID}" == "MASTER" ]; then
+      if [ "${OPT_SRVID}" = "MASTER" ]; then
         if [ "${MYSQL_CONN}" = 0 ]; then
           OPT_SRVID=$(awk '/Master_Server_Id/{print $2}' "${TEMP_SLAVEDATA}")
         fi
