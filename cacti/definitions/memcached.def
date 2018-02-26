@@ -301,7 +301,7 @@
          hash         => 'hash_03_VER_9f11276b966fcf44ba08973c39e5c4ac',
          input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
                        . '--host <hostname> --type memcached --items <items> '
-                       . '--server <server>',
+                       . '--server <server> --port2 <port2>',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_1ac2b66fa9aa43f3c9b9b919277b4b01',
