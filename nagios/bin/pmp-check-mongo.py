@@ -77,7 +77,7 @@ def parse_options(args):
 
     # Add options for output stat file
     try:
-        result = p.parse_args()
+        result = p.parse_args(args)
     except OptionParsingError, e:
         if 'no such option' in e.msg:
             return return_result("critical", "No such options of %s" % e.msg.split(":")[1])
