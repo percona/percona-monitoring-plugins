@@ -227,7 +227,7 @@ function parse_cmdline( $args ) {
          $param = substr($p, 2);
          $value = null;
          $nextparam = current($args);
-         if ($nextparam !== false && strpos($nextparam, '--') !==0) {
+         if (!empty($nextparam) && strpos($nextparam, '--') !==0) {
             list($tmp, $value) = each($args);
          }
          $options[$param] = $value;
