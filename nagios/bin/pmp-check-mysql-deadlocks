@@ -147,7 +147,7 @@ pmp-check-mysql-deadlocks - Alert when pt-deadlock-logger has recorded too many 
 
 =head1 DESCRIPTION
 
-This Nagios plugin looks at the table that pt-deadlock-logger (part of Percona
+This Nagios plugin looks at the table that pt-deadlock-logger (https://www.percona.com/doc/percona-toolkit/3.0/pt-deadlock-logger.html, the part of Percona
 Toolkit) maintains, and when there have been too many recent deadlocks, it
 alerts.
 
