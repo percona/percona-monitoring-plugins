@@ -537,7 +537,7 @@ class NagiosMongoChecks:
         # Loop through each ns and determine if it's balanced or not
         for ns in chunks:
             balanced = chunks[ns]['total'] / shardsCount
-            for shard in chunks[ns]['shards']:
+            for shard in chunks[ns]['shards'].values():
                 if shard > balanced - threshold and shard < balanced + threshold:
                     pass
                 else:
