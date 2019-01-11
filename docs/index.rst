@@ -53,7 +53,7 @@ staff can help.
 You can download the Percona Monitoring Plugins from the `Percona Software
 Downloads <http://www.percona.com/downloads/percona-monitoring-plugins/>`_
 directory, including our `Apt and Yum repositories
-<http://www.percona.com/software/repositories>`_. For specific installation
+<https://www.percona.com/doc/percona-repo-config/index.html>`_. For specific installation
 instructions, read the detailed documentation on each type of components below.
 
 Plugins for Nagios
