@@ -1,7 +1,7 @@
 #!/bin/sh
 SOURCE_DIR=$1
 DEST_DIR=$2
-LIBDIR=/usr/lib64
+LIBDIR=/usr/lib
 cd $SOURCE_DIR
 install -m 0755 -d $DEST_DIR/$LIBDIR/nagios/plugins
 install -m 0755 nagios/bin/pmp-* $DEST_DIR/$LIBDIR/nagios/plugins
