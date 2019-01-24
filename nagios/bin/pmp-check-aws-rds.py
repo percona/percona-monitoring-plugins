@@ -178,7 +178,8 @@ def main():
         'status': 'RDS availability',
         'load': 'CPUUtilization',
         'memory': 'FreeableMemory',
-        'storage': 'FreeStorageSpace'
+        'storage': 'FreeStorageSpace',
+        'connections': 'DatabaseConnections'
     }
 
     units = ('percent', 'GB')
@@ -379,6 +380,41 @@ def main():
 
             note = 'Free %s: %s GB (%.0f%%) of %s GB' % (options.metric, free, float(free_pct), storage)
             perf_data = 'free_%s=%s;%s;%s;0;%s' % (options.metric, val, warn, crit, val_max)
+
+    # RDS Connection Count
+    elif options.metric == 'connections':
+        # Check thresholds
+        try:
+            warn = int(options.warn)
+            crit = int(options.crit)
+        except:
+            parser.error('Warning and critical thresholds should be integers.')
+
+        if crit < warn:
+            parser.error('Parameter inconsistency: warning threshold is greater than critical.')
+
+        perf_data = []
+
+        # Grab the last 5 minutes worth of connection counts from CloudWatch and whittle down to the most recent.
+        connections = int(rds.get_metric(metrics[options.metric], now - datetime.timedelta(seconds=300), now, 60))
+        if not connections:
+            status = UNKNOWN
+            note = 'Unable to get RDS statistics'
+            perf_data = None
+        else:
+            # Generate output
+            note = 'database connections: %s' % connections
+            perf_data = 'connections=%s;%s;%s' % (connections, warn, crit)
+
+            # Compare thresholds
+            if connections >= crit:
+                status = CRITICAL
+            elif connections >= warn:
+                status = WARNING
+
+            if status != UNKNOWN:
+                if status is None:
+                    status = OK
 
     # Final output
     if status != UNKNOWN and perf_data:
