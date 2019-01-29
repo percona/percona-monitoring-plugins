@@ -139,7 +139,7 @@ _lsof() {
 # which always includes the server's tmpdir.
 # ########################################################################
 check_deleted_files() {
-   awk -v exclude=${2} '
+   awk -v exclude="${2}" '
    /\(deleted\)/ { if ( $0 !~ exclude ) {
       if ( $NF ~ /deleted/ ) {
          lf=NF-1;
