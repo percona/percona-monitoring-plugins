@@ -200,7 +200,7 @@ pmp-check-mysql-deleted-files - Alert when MySQL's files are deleted.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
     --exclude PATTERN Exclude RegEx PATTERN from results.
-    --sudo          Run lsof/ls/fstat as root via sudo.
+    --sudo          Run lsof/ls/fstat as root via sudo (requires NOPASSWD).
     -w WARN         Warning threshold; changes the alert to WARN instead of CRIT.
     --help          Print help and exit.
     --version       Print version and exit.
@@ -259,6 +259,9 @@ ps
 =item *
 
 C<lsof> or C<ls /proc/$pid/fd> (Linux), C<fstat> (BSD)
+
+If using the C<--sudo> option, this requires access to one of those commands
+in the user's sudo list, as root and using the C<NOPASSWD> tag.
 
 =back
 
