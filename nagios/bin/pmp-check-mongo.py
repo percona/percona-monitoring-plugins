@@ -357,14 +357,19 @@ class NagiosMongoChecks:
 
     def check_levels(self, check_result, warning_level, critical_level, message):
         self.close()
-        if check_result < warning_level:
-            return "ok", message
-        elif check_result > critical_level:
-            return "critical", message
-        elif check_result > warning_level and check_result < critical_level:
-            return "warning", message
+        if warning_level == critical_level:
+            return "unknown", "Warning and critical levels must be different"
+        if warning_level < critical_level:
+            if check_result < warning_level:
+              return "ok", message
+            if check_result < critical_level:
+              return "warning", message
         else:
-            return "unknown", "Unable to parse %s into a result" % check_result
+            if warning_level < check_result:
+              return "ok", message
+            if critical_level < check_result:
+              return "warning", message
+        return "critical", message
 
     def check_connect(self, args, warning_level, critical_level):
         warning_level = warning_level or self.get_default('check_connect', 'warning')
