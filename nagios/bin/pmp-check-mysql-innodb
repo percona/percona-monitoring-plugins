@@ -106,7 +106,8 @@ main() {
             SET @@time_zone='SYSTEM';
             SELECT   UNIX_TIMESTAMP() - UNIX_TIMESTAMP(t.trx_started),
                      p.id,
-                     CONCAT(p.user, '@', p.host)
+                     CONCAT(p.user, '@', p.host),
+                     p.info
             FROM     INFORMATION_SCHEMA.INNODB_TRX  AS t
             JOIN     INFORMATION_SCHEMA.PROCESSLIST AS p ON p.id = t.trx_mysql_thread_id
             ORDER BY t.trx_started LIMIT 1" 2>"${TEMP}")
@@ -136,6 +137,7 @@ main() {
    if [ -n "${OUTPUT}" ]; then
       LEVEL="$(echo ${OUTPUT} | awk '{print $1}')"
       INFO="$(echo ${OUTPUT} | awk '{print "(thread "$2" by "$3")"}')"
+      QUERY="$(echo ${OUTPUT} | awk '{print "(Query Ran: "$4")"}')"
 
       case "${OPT_CHEK}" in
          idle_blocker_duration)
@@ -150,9 +152,9 @@ main() {
             ;;
       esac
       if [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
-         NOTE="CRIT $NOTE $INFO"
+         NOTE="CRIT $NOTE $INFO $QUERY"
       elif [ "${LEVEL:-0}" -gt "${OPT_WARN}" ]; then
-         NOTE="WARN $NOTE $INFO"
+         NOTE="WARN $NOTE $INFO $QUERY"
       else
          NOTE="OK $NOTE"
       fi
