@@ -44,7 +44,7 @@ main() {
          -u)              shift; OPT_UTC=1; ;;
          -w)              shift; OPT_WARN="${1}"; shift; ;;
          --master-conn)   shift; OPT_MASTERCONN="${1}"; shift; ;;
-	 --channel)	  shift; OPT_CHANNEL="${1}"; shift; ;;
+         --channel)	  shift; OPT_CHANNEL="${1}"; shift; ;;
          --unconfigured)  shift; OPT_REPLNOTSET=1; ;;
          --ensure-sbm)    shift; OPT_ENSURE_SBM=1; ;;
          --version)       grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
@@ -91,6 +91,9 @@ main() {
    # Check for SQL thread errors
    LAST_SLAVE_ERRNO=$(awk '/Last_SQL_Errno/{print $2}' "${TEMP_SLAVEDATA}")
 
+   # Prevent Negative value due to NTP
+   # Keep the highest value between 0 and level
+   LEVEL=$([ "${LEVEL:-0}" -le "0" ] && echo 0 || echo $LEVEL)
    # Build the common perf data output for graph trending
    PERFDATA="replication_delay=${LEVEL:-0};${OPT_WARN};${OPT_CRIT};0;"
 
@@ -150,7 +153,7 @@ get_slave_status() {
         # MariaDB multi-source replication
         mysql_exec "SHOW SLAVE '${OPT_MASTERCONN}' STATUS\G" > "${TEMP_SLAVEDATA}"
      elif [ "${OPT_CHANNEL}" ]; then
-	mysql_exec "SHOW SLAVE STATUS FOR CHANNEL '${OPT_CHANNEL}'\G" > "${TEMP_SLAVEDATA}"
+         mysql_exec "SHOW SLAVE STATUS FOR CHANNEL '${OPT_CHANNEL}'\G" > "${TEMP_SLAVEDATA}"
      else
         # Leverage lock-free SHOW SLAVE STATUS if available
         mysql_exec "SHOW SLAVE STATUS NONBLOCKING\G" > "${TEMP_SLAVEDATA}" 2>/dev/null ||
