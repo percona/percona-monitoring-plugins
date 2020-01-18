@@ -209,7 +209,7 @@ General options:
    --host            Hostname to connect to (via SSH)
    --type            One of apache, nginx, proc_stat, w, memory, memcached,
                      diskstats, openvz, redis, jmx, mongodb, df, netdev,
-                     netstat, vmstat (more are TODO)
+                     netstat, vmstat, nfs3 (more are TODO)
    --items           Comma-separated list of the items whose data you want
    --port            SSH port to connect to (SSH port, not application port!)
    --port2           Port on which the application listens, such as memcached
@@ -490,6 +490,27 @@ function ss_get_by_ssh( $options ) {
       'NETSTAT_unknown'                   =>  'on',
       'VMSTAT_pswpin'                     =>  'oo',
       'VMSTAT_pswpout'                    =>  'op',
+      'NFS3_getattr'                      =>  'oq',
+      'NFS3_setattr'                      =>  'or',
+      'NFS3_lookup'                       =>  'os',
+      'NFS3_access'                       =>  'ot',
+      'NFS3_readlink'                     =>  'ou',
+      'NFS3_read'                         =>  'ov',
+      'NFS3_write'                        =>  'ow',
+      'NFS3_create'                       =>  'ox',
+      'NFS3_mkdir'                        =>  'oy',
+      'NFS3_symlink'                      =>  'oz',
+      'NFS3_mknod'                        =>  'pg',
+      'NFS3_remove'                       =>  'ph',
+      'NFS3_rmdir'                        =>  'pi',
+      'NFS3_rename'                       =>  'pj',
+      'NFS3_link'                         =>  'pk',
+      'NFS3_readdir'                      =>  'pl',
+      'NFS3_readdirplus'                  =>  'pm',
+      'NFS3_fsstat'                       =>  'pn',
+      'NFS3_fsinfo'                       =>  'po',
+      'NFS3_pathconf'                     =>  'pp',
+      'NFS3_commit'                       =>  'pq',
    );
 
    # Prepare and return the output.  The output we have right now is the whole
@@ -1606,4 +1627,82 @@ function vmstat_cachefile ( $options ) {
 function vmstat_cmdline ( $options ) {
    return "cat /proc/vmstat";
 }
+
+# ============================================================================
+# Gets NFS3 client stats from /proc
+# You can test it like this, as root:
+# sudo -u cacti php /usr/share/cacti/scripts/ss_get_by_ssh.php --type nfs3 --host 127.0.0.1 --items oq,or,os,ot,ou,ov,ow,ox,oy,oz,pg,ph,pi,pj,pk,pl,pm,po,pq
+# ============================================================================
+function nfs3_parse ( $options, $output ) {
+   $fields = array();
+   $result = array(
+      'NFS3_getattr'     => null,
+      'NFS3_setattr'     => null,
+      'NFS3_lookup'      => null,
+      'NFS3_access'      => null,
+      'NFS3_readlink'    => null,
+      'NFS3_read'        => null,
+      'NFS3_write'       => null,
+      'NFS3_create'      => null,
+      'NFS3_mkdir'       => null,
+      'NFS3_symlink'     => null,
+      'NFS3_mknod'       => null,
+      'NFS3_remove'      => null,
+      'NFS3_rmdir'       => null,
+      'NFS3_rename'      => null,
+      'NFS3_link'        => null,
+      'NFS3_readdir'     => null,
+      'NFS3_readdirplus' => null,
+      'NFS3_fsstat'      => null,
+      'NFS3_fsinfo'      => null,
+      'NFS3_pathconf'    => null,
+      'NFS3_commit'      => null,
+   );
+
+   foreach ( explode("\n", $output) as $line ) {
+      if ( preg_match_all('/\S+/', $line, $fields) ) {
+         $fields = $fields[0];
+         $result['NFS3_getattr']     = $fields[3];
+         $result['NFS3_setattr']     = $fields[4];
+         $result['NFS3_lookup']      = $fields[5];
+         $result['NFS3_access']      = $fields[6];
+         $result['NFS3_readlink']    = $fields[7];
+         $result['NFS3_read']        = $fields[8];
+         $result['NFS3_write']       = $fields[9];
+         $result['NFS3_create']      = $fields[10];
+         $result['NFS3_mkdir']       = $fields[11];
+         $result['NFS3_symlink']     = $fields[12];
+         $result['NFS3_mknod']       = $fields[13];
+         $result['NFS3_remove']      = $fields[14];
+         $result['NFS3_rmdir']       = $fields[15];
+         $result['NFS3_rename']      = $fields[16];
+         $result['NFS3_link']        = $fields[17];
+         $result['NFS3_readdir']     = $fields[18];
+         $result['NFS3_readdirplus'] = $fields[19];
+         $result['NFS3_fsstat']      = $fields[20];
+         $result['NFS3_fsinfo']      = $fields[21];
+         $result['NFS3_pathconf']    = $fields[22];
+         $result['NFS3_commit']      = $fields[23];
+      }
+   }
+   return $result;
+}
+
+function nfs3_cachefile ( $options ) {
+   return sanitize_filename($options, array('host', 'port'), 'nfs3');
+}
+
+function nfs3_cmdline ( $options ) {
+   global $use_ssh, $status_server;
+   $use_ssh = isset($options['use-ssh']) ? $options['use-ssh'] : $use_ssh;
+   $srv = $status_server;
+   if ( isset($options['server']) ) {
+      $srv = $options['server'];
+   }
+   elseif ( ! $use_ssh ) {
+      $srv = $options['host'];
+   }
+   return "grep proc3 /proc/net/rpc/nfs";
+}
+
 
