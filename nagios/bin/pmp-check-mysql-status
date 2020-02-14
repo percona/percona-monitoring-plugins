@@ -172,7 +172,7 @@ compare_result() {
                exit $STATE_CRITICAL
             }
          } else {
-            if ( ${VAR} ${CMP} ${CRIT:-0} ) {
+            if ( \"${VAR}\" ${CMP} \"${CRIT:-0}\" ) {
                exit $STATE_CRITICAL
             }
          }
@@ -183,7 +183,7 @@ compare_result() {
                exit $STATE_WARNING
             }
          } else {
-            if ( ${VAR} ${CMP} ${WARN:-0} ) {
+            if ( \"${VAR}\" ${CMP} \"${WARN:-0}\" ) {
                exit $STATE_WARNING
             }
          }
