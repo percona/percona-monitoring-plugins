@@ -98,7 +98,7 @@ def debug(val):
     """Debugging output"""
     global options
     if options.debug:
-        print 'DEBUG: %s' % val
+        print('DEBUG: %s' % val)
 
 
 def main():
@@ -222,7 +222,7 @@ def main():
         sys.exit()
     elif options.db_list:
         info = rds.get_list()
-        print 'List of all DB instances in %s region(s):' % (options.region,)
+        print('List of all DB instances in %s region(s):' % (options.region,))
         pprint.pprint(info)
         sys.exit()
     elif not options.ident:
@@ -233,7 +233,7 @@ def main():
         if info:
             pprint.pprint(vars(info))
         else:
-            print 'No DB instance "%s" found on your AWS account and %s region(s).' % (options.ident, options.region)
+            print('No DB instance "%s" found on your AWS account and %s region(s).' % (options.ident, options.region))
 
         sys.exit()
     elif not options.metric or options.metric not in metrics.keys():
@@ -356,7 +356,7 @@ def main():
                 try:
                     storage = db_classes[info.instance_class]
                 except:
-                    print 'Unknown DB instance class "%s"' % info.instance_class
+                    print('Unknown DB instance class "%s"' % info.instance_class)
                     sys.exit(CRITICAL)
 
             free = '%.2f' % (free / 1024 ** 3)
@@ -382,12 +382,12 @@ def main():
 
     # Final output
     if status != UNKNOWN and perf_data:
-        print '%s %s | %s' % (short_status[status], note, perf_data)
+        print('%s %s | %s' % (short_status[status], note, perf_data))
     elif status == UNKNOWN and not options.forceunknown:
-        print '%s %s | null' % ('OK', note)
+        print('%s %s | null' % ('OK', note))
         sys.exit(0)
     else:
-        print '%s %s' % (short_status[status], note)
+        print('%s %s' % (short_status[status], note))
 
     sys.exit(status)
 
