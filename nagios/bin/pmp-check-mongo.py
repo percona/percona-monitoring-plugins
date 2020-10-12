@@ -300,10 +300,21 @@ class NagiosMongoChecks:
     def sanatize(self, status_output):
         return status_output
 
+    # Run the isMaster command
+    def run_isMaster(self, con):
+        for i in range(5):
+            try:
+                self.isMaster = con['admin'].command('isMaster')
+                break
+            except pymongo.errors.ServerSelectionTimeoutError:
+                time.sleep(1)
+            except Exception, e:
+                return self.return_result("critical", "Could not connect or exec 'isMaster' command: '%s'" % e)
+
+
     # Parse isMaster to determine nodetype
-    def parse_isMaster(self, con):
+    def parse_isMaster(self):
         try:
-            self.isMaster = con['admin'].command('isMaster')
             if 'setName' in self.isMaster:
                 self.setName = self.isMaster['setName']
                 if self.isMaster['ismaster']:
@@ -331,7 +342,8 @@ class NagiosMongoChecks:
             else:
                 con = pymongo.MongoClient(self.host, self.port, ssl=self.ssl, replicaSet=self.replicaset, serverSelectionTimeoutMS=connectTimeout)
             # parse isMaster command output
-            self.parse_isMaster(con)
+            self.run_isMaster(con)
+            self.parse_isMaster()
             if self.user and self.passwd and not self.isArbiter:
                 try:
                     con['admin'].authenticate(self.user, self.passwd)
