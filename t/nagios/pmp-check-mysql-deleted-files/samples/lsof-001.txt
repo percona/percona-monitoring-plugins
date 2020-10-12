@@ -1,0 +1,53 @@
+COMMAND  PID  USER   FD   TYPE     DEVICE     SIZE    NODE NAME
+mysqld  2159 mysql  cwd    DIR      253,0     4096 1147154 /var/lib/mysql
+mysqld  2159 mysql  rtd    DIR      253,0     4096       2 /
+mysqld  2159 mysql  txt    REG      253,0  7020332 1193496 /usr/libexec/mysqld
+mysqld  2159 mysql  mem    REG      253,0   610836 1193402 /usr/lib/libkrb5.so.3.3
+mysqld  2159 mysql  mem    REG      253,0    46680 3145768 /lib/libnss_files-2.5.so
+mysqld  2159 mysql  mem    REG      253,0   157304 1193401 /usr/lib/libk5crypto.so.3.1
+mysqld  2159 mysql  mem    REG      253,0     7880 3145731 /lib/libkeyutils-1.2.so
+mysqld  2159 mysql  mem    REG      253,0    33680 1193400 /usr/lib/libkrb5support.so.0.1
+mysqld  2159 mysql  mem    REG      253,0     7748 3145745 /lib/libcom_err.so.2.1
+mysqld  2159 mysql  mem    REG      253,0   190712 1193403 /usr/lib/libgssapi_krb5.so.2.2
+mysqld  2159 mysql  mem    REG      253,0   125736 3147322 /lib/ld-2.5.so
+mysqld  2159 mysql  mem    REG      253,0  1611564 3147323 /lib/libc-2.5.so
+mysqld  2159 mysql  mem    REG      253,0    16428 3147327 /lib/libdl-2.5.so
+mysqld  2159 mysql  mem    REG      253,0   129716 3147334 /lib/libpthread-2.5.so
+mysqld  2159 mysql  mem    REG      253,0   208352 3147326 /lib/libm-2.5.so
+mysqld  2159 mysql  mem    REG      253,0   245376 3147332 /lib/libsepol.so.1
+mysqld  2159 mysql  mem    REG      253,0    93508 3147333 /lib/libselinux.so.1
+mysqld  2159 mysql  mem    REG      253,0    44060 3147335 /lib/librt-2.5.so
+mysqld  2159 mysql  mem    REG      253,0    75028 1193303 /usr/lib/libz.so.1.2.3
+mysqld  2159 mysql  mem    REG      253,0    46636 3147328 /lib/libgcc_s-4.1.2-20080825.so.1
+mysqld  2159 mysql  mem    REG      253,0    45288 3147338 /lib/libcrypt-2.5.so
+mysqld  2159 mysql  mem    REG      253,0   936908 1189810 /usr/lib/libstdc++.so.6.0.8
+mysqld  2159 mysql  mem    REG      253,0   101404 3147342 /lib/libnsl-2.5.so
+mysqld  2159 mysql  mem    REG      253,0    76400 3147346 /lib/libresolv-2.5.so
+mysqld  2159 mysql  mem    REG      253,0  1296932 3147341 /lib/libcrypto.so.0.9.8e
+mysqld  2159 mysql  mem    REG      253,0   293108 3145752 /lib/libssl.so.0.9.8e
+mysqld  2159 mysql    0r   CHR        1,3             1132 /dev/null
+mysqld  2159 mysql    1w   REG      253,0     2741 1081665 /var/log/mysqld.log
+mysqld  2159 mysql    2w   REG      253,0     2741 1081665 /var/log/mysqld.log
+mysqld  2159 mysql    3uW  REG      253,0 10485760 1147207 /var/lib/mysql/ibdata1
+mysqld  2159 mysql    4u   REG      253,0        0 2686979 /tmp/ibVANarW (deleted)
+mysqld  2159 mysql    5u   REG      253,0        0 2686980 /tmp/ibsmCHGy (deleted)
+mysqld  2159 mysql    6u   REG      253,0        0 2686981 /tmp/ibr2QeWa (deleted)
+mysqld  2159 mysql    7u   REG      253,0        0 2686982 /tmp/ibc9nDcN (deleted)
+mysqld  2159 mysql    8uW  REG      253,0  5242880 1147208 /var/lib/mysql/ib_logfile0
+mysqld  2159 mysql    9uW  REG      253,0  5242880 1147209 /var/lib/mysql/ib_logfile1
+mysqld  2159 mysql   10u  IPv4       6537              TCP *:mysql (LISTEN)
+mysqld  2159 mysql   11u   REG      253,0        0 2686983 /tmp/ibX7zEzp (deleted)
+mysqld  2159 mysql   12u  unix 0xcec4dac0             6538 /var/lib/mysql/mysql.sock
+mysqld  2159 mysql   13u   REG      253,0     1024 1147160 /var/lib/mysql/mysql/host.MYI
+mysqld  2159 mysql   14u   REG      253,0        0 1147161 /var/lib/mysql/mysql/host.MYD
+mysqld  2159 mysql   15u   REG      253,0     2048 1147163 /var/lib/mysql/mysql/user.MYI
+mysqld  2159 mysql   16u   REG      253,0      256 1147164 /var/lib/mysql/mysql/user.MYD
+mysqld  2159 mysql   17u   REG      253,0     4096 1147157 /var/lib/mysql/mysql/db.MYI
+mysqld  2159 mysql   18u   REG      253,0      876 1147158 /var/lib/mysql/mysql/db.MYD
+mysqld  2159 mysql   19u   REG      253,0     1024 1147169 /var/lib/mysql/mysql/tables_priv.MYI
+mysqld  2159 mysql   20u   REG      253,0        0 1147170 /var/lib/mysql/mysql/tables_priv.MYD
+mysqld  2159 mysql   21u   REG      253,0     1024 1147172 /var/lib/mysql/mysql/columns_priv.MYI
+mysqld  2159 mysql   22u   REG      253,0        0 1147173 /var/lib/mysql/mysql/columns_priv.MYD
+mysqld  2159 mysql   23u   REG      253,0     1024 1147205 /var/lib/mysql/mysql/procs_priv.MYI
+mysqld  2159 mysql   24u   REG      253,0        0 1147206 /var/lib/mysql/mysql/procs_priv.MYD
+mysqld  2159 mysql   25u  unix 0xc9eb5200           135265 /var/lib/mysql/mysql.sock

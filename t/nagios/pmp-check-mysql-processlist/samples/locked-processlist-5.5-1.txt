@@ -1,0 +1,60 @@
+*************************** 1. row ***************************
+           Id: 77
+         User: root
+         Host: localhost:62439
+           db: test
+      Command: Query
+         Time: 480
+        State: Waiting for table level lock
+         Info: select * from test.t
+    Rows_sent: 0
+Rows_examined: 0
+    Rows_read: 1
+*************************** 2. row ***************************
+           Id: 78
+         User: root
+         Host: localhost:62441
+           db: NULL
+      Command: Query
+         Time: 403
+        State: Waiting for table level lock
+         Info: update test.t set a=sleep(500)
+    Rows_sent: 0
+Rows_examined: 0
+    Rows_read: 1
+*************************** 3. row ***************************
+           Id: 79
+         User: root
+         Host: localhost:62444
+           db: NULL
+      Command: Sleep
+         Time: 399
+        State: 
+         Info: NULL
+    Rows_sent: 0
+Rows_examined: 0
+    Rows_read: 2
+*************************** 4. row ***************************
+           Id: 80
+         User: root
+         Host: localhost:62447
+           db: test
+      Command: Query
+         Time: 493
+        State: User sleep
+         Info: update t set a=sleep(5000)
+    Rows_sent: 0
+Rows_examined: 1
+    Rows_read: 1
+*************************** 5. row ***************************
+           Id: 85
+         User: root
+         Host: localhost:62484
+           db: NULL
+      Command: Query
+         Time: 0
+        State: NULL
+         Info: show full processlist
+    Rows_sent: 0
+Rows_examined: 0
+    Rows_read: 1

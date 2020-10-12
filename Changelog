@@ -1,0 +1,188 @@
+
+2018-02-05: version 1.1.8
+--------------------------------------------------------------------------------
+* Add MySQL 5.7 support
+* Changed canary check to use timestamp.now() and return a timedelta.seconds
+* Remove an additional condition for the Dictionary memory allocated
+* Fixed a *false-positive* problem when the calculated delay was less than 0 and the -m was not set.
+* Fixed the problem where slaves would alert due to deadlocks on the master.
+* If using pt-heartbeat, get_slave_status was only called when the -s option is set to *MASTER*
+* Disabled UNK alerts by default (it is possible to enable them explicitly).
+* A fix was added for MySQL Multi-Source replication.
+* The graph *Percona InnoDB Memory Allocation* showed zeroes for the
+  metrics *Total memory* (data source item nl) and *Dictionary memory*
+  (data source item nm) when used for MySQL 5.7.18, because the syntax
+  of SHOW ENGINE INNODB STATUS has changed in MySQL 5.7 (see https://dev.mysql.com/doc/refman/5.7/en/innodb-standard-monitor.html).
+* The graph *Percona InnoDB I/O Pending* showed *NaN* for the metrics
+  *Pending Log Writes* (data source item hn) and *Pending Chkp Writes*
+  (data source item hk) when used for MySQL 5.7.18, because the syntax
+  of SHOW ENGINE INNODB STATUS has changed in MySQL 5.7 (see https://dev.mysql.com/doc/refman/5.7/en/innodb-standard-monitor.html).
+* Added server @@hostname as a possible match to avoid DNS lookups whilst allowing hostname-match.
+
+2016-12-09: version 1.1.7
+-------------------------
+* New Nagios script pmp-check-mongo.py for MongoDB.
+* Added MySQL socket and flag options to Cacti php script.
+* Added disk volume check on "Mounted on" in addition to "Filesystem" to Cacti php script to allow monitoring of tmpfs mounts.
+* Allow delayed slave to have SQL thread stopped on pmp-check-mysql-replication-delay check.
+* Fix for --unconfigured flag of pmp-check-mysql-replication-delay.
+* Fix for max_duration check of pmp-check-mysql-innodb when system and MySQL timezones mismatch.
+* Fix rare nrpe broken pipe error on pmp-check-unix-memory check.
+* Updated package spec files.
+
+2016-01-12: version 1.1.6
+-------------------------
+* Added new RDS instance classes to RDS scripts.
+* Added boto profile support to RDS scripts.
+* Added AWS region support and ability to specify all regions to RDS scripts.
+* Added ability to set AWS region and boto profile on data source level in Cacti.
+* Added period, average time and debug options to pmp-check-aws-rds.py.
+* Added ability to override Nginx server status URL path on data source level in Cacti.
+* Made Memcached and Redis host configurable for Cacti script.
+* Added the ability to lookup the master's server_id when using pt-heartbeat with pmp-check-mysql-replication-delay.
+* Changed how memory stats are collected by Cacti script and pmp-check-unix-memory.
+  Now /proc/meminfo is parsed instead of running `free` command. This also fixes pmp-check-unix-memory for EL7.
+* Set default MySQL connect timeout to 5s for Cacti script. Can be overridden in the config.
+* Fixed innodb transactions count on the Cacti graph for MySQL 5.6 and higher.
+* Fixed --login-path option in Nagios scripts when using it along with other credential options.
+
+Thanks to contributors: David Andruczyk, Denis Baklikov, Mischa ter Smitten, Mitch Hagstrand.
+
+2015-06-22: version 1.1.5
+-------------------------
+* Added more DB instance classes to pmp-check-aws-rds.py (issue 1398911)
+* Added configurable query period and average time to pmp-check-aws-rds.py (issue 1436943)
+* Added region support to pmp-check-aws-rds.py (issue 1442980)
+* Added an option to alert when server is not configured as replica to pmp-check-mysql-replication-delay (issue 1357017)
+* Added an option to specify master connection to monitor MariaDB multi-source replication
+* Improved usage of lock-free SHOW SLAVE STATUS query (issue 1380690)
+* Fixed reporting of slave lag in ss_get_mysql_stats.php (issue 1389769)
+
+2014-07-21: version 1.1.4
+-------------------------
+* Added login-path support to Nagios plugins with MySQL client 5.6 (bug 1338549)
+* Added a new threshold option for delayed slaves to pmp-check-mysql-replication-delay (bug 1318280)
+* Added delayed slave support to pmp-check-mysql-replication-running (bug 1332082)
+* Updated Nagios plugins and Cacti script to leverage lock-free SHOW SLAVE STATUS in Percona Server (bug 1297442)
+* Fixed pmp-check-mysql-replication-delay integer-float issue with MariaDB and MySQL 5.6 (bugs 1245934, 1295795)
+* ss_get_rds_stats.py was not installed with 755 permissions from the package (bug 1316943)
+* Cacti MySQL template item "handler_savepoint_rollback" was GAUGE type instead of DERIVE (bug 1334173)
+* Fixed Zabbix running-slave check issue on some Debian systems (bug 1310723)
+* Fixed paths in percona-cacti-templates package (bug 1349564)
+
+2014-03-21: version 1.1.3
+-------------------------
+* Introduced more secure location of PHP script configs to harden a Cacti setup (bug #1295006)
+* Addressed CVE-2014-2569
+
+2014-03-14: version 1.1.2
+-------------------------
+* Added Nagios plugin and Cacti template for Amazon RDS
+* Added Nagios config template to the documentation
+* Added an option to pmp-check-pt-table-checksum to check MAX(ts) of latest checksum
+* Added generic Nagios plugin for PT tables
+* Extended pmp-check-mysql-processlist with max user connections check
+* Zabbix MySQL.running-slave item failed with MySQL 5.6 (bug 1272358)
+* ss_get_mysql_stats and MariaDB does not use have_response_time_distribution (bug 1285888)
+* Cacti Monitoring plugins and SNMP via TCP (bug 1268552)
+
+2013-12-30: version 1.1.1
+-------------------------
+* Cacti mysql graphs stop working with data input field "server-id" after 1.1 upgrade (bug 1264814)
+* Non-integer poller errors for MySQL Query Response Time (bug 1264353)
+
+2013-12-16: version 1.1
+-------------------------
+* Added MySQL template for Zabbix 2.0.x (first release)
+* Added FreeBSD support to Nagios plugins, partially rewritten pmp-check-unix-memory (bugs 1249575, 1244081)
+* Added new options to ss_get_mysql_stats.php to better support pt-heartbeat (bugs 1253125, 1253130)
+* ss_get_mysql_stats.php script was opening multiple connections to the server (bug 1255371)
+* sql query for idle_blocker_duraction check in pmp-check-mysql-innodb did not conform sql mode of ONLY_FULL_GROUP_BY (bug #1240417)
+
+2013-10-02: version 1.0.5
+-------------------------
+
+* Added mysql-ca option to ss_get_mysql_stats.php (bug 1213857)
+* Added user info to the idle_blocker_duration check of pmp-check-mysql-innodb (bug 1215317)
+* Extended pmp-check-mysql-processlist with more locking states (bug 1213859)
+* ss_get_mysql_stats.php did not work with custom mysql port (bug 1213862)
+* ss_get_mysql_stats.php silently failed when a query returns too many rows (bug 1225070)
+* Wrong description of percona-cacti-templates deb package (bug 1217782)
+
+2013-07-22: version 1.0.4
+-------------------------
+
+* Added Galera/MySQL Monitoring Template for Cacti
+* Added "Disk Read/Write Time per IO Request (ms)" graph
+* Added "MySQL InnoDB Buffer Pool Efficiency" graph
+* Switched ss_get_mysql_stats.php to PHP MySQLi extension and made it working with SSL (bug 1193097)
+* Added user info to the max_duration check of pmp-check-mysql-innodb plugin (bug 1185513)
+* ss_get_mysql_stats.php default values for '$status' array were null instead of 0 (bug 1070268)
+* Introduction of innodb_read_views_memory overrode the InnoDB total memory allocated output in Cacti (bug 1188519)
+* ss_get_by_ssh.php parsed MongoDB counters incorrectly when replica is set (bug 1087073)
+* Cacti graph "Redis Unsaved Changes" was empty for Redis 2.6 (bug 1110372)
+* Comparison of status variables that are strings didn't work with pmp-check-mysql-status (bug 1191305)
+* pmp-check-mysql-processlist always showed 0 for "copy to table" counter (bug 1197084)
+* percona-nagios-plugins package failed to install on Debian Squeeze when debsums is installed (bug 1194757)
+
+2013-04-17: version 1.0.3
+-------------------------
+
+* MySQL 5.6 compatibility for InnoDB graphs (bug 1124292)
+* Added performance data to Nagios plugins (bugs 1090145, 1102687)
+* Added UTC option to pmp-check-mysql-replication-delay to be compatible with pt-hearbeat 2.1.8+ (bug 1103364)
+* Added 1-second granularity to pmp-check-mysql-deadlocks (bug 1154774)
+* Added package install/update instructions and other documentation updates (bugs 1139652, 1124200, 1015981)
+* Updated documentation with the new Cacti sample images
+* Updated "Network Traffic" to be blue and green and to show bits/sec (bug 1132900)
+* Extended "MySQL Threads" graph with all kind of threads (bug 1157911)
+* Some Cacti single-item graphs were broken due to cacti hexadecimal transformation (bug 1155513)
+* Memcached graphs were broken when the wrong arguments for nc command are passed (bug 1155712)
+* ss_get_by_ssh.php didn't gather mongodb stats without SSH (bug 1050537)
+* ss_get_by_ssh.php didn't timeout commands that hang (bug 1160611)
+* pmp-check-file-privs didn't throw the proper error on directory permissions issue (bug 1024001)
+* pmp-check-mysql-replication-running reported OK when a slave is in "Connecting" state (bug 1089506)
+
+Update note: Cacti templates have to be re-imported together with the updating
+of ss_get_*.php scripts. Then make sure you rebuilt the poller cache under
+Cacti -> System Utilities. Also the following Cacti graphs need to be recreated: MySQL "MySQL
+Threads", Linux "Network Traffic".
+
+2013-02-15: version 1.0.2
+-------------------------
+
+* Created Debian and RPM packages
+* Added "Disk IOPS" graph to Cacti Linux Templates
+* Added an option to pmp-check-unix-memory to disable overriding the status based on the largest process in memory (bug 1052368)
+* Added '!=' comparison operator to pmp-check-mysql-status (bug 1048627)
+* pmp-check-mysql-replication-delay didn't alert if second behing master is NULL (bug 1040528)
+* pmp-check-pt-table-checksum reported OK when checksums table does not exist (bug 1114425)
+* pmp-check-pt-table-checksum threw "Bad substitution" error on Debian (bug 1071802)
+* Minor updates to the documentation (bugs 1021855, 1014814, 1125233)
+
+2012-06-12: version 1.0.1
+-------------------------
+
+* Cacti debug logs had a 12-hour timestamp instead of 24-hour (bug 973320).
+* Nagios checks didn't remove temporary files on some platforms (bug 977514).
+* Nagios plugins didn't use enough XXX in mktemp patterns (bug 2022766).
+* Nagios check for deleted files didn't return 0 on success (bug 1009751).
+* Nagios check for long-running txns didn't show thread ID (bug 1011625).
+
+2012-04-02: version 1.0.0
+-------------------------
+
+* Load average was 15-minute instead of 1-minute (bug 968604).
+* MySQL connection errors weren't logged (bug 958782).
+* The pmp-check-mysql-deadlocks referred to pt-heartbeat (bug 934255).
+* HTTP status was not fetched correctly when $use_ssh was disabled (bug 937017).
+* MongoDB didn't support --port2 (bug 937018).
+* Percona Server response time graph didn't tolerate <> 14 rows (bug 954118).
+* The release tarball had an extra directory (bug 934227).
+* pmp-check-mysql-status didn't remove one of its temp files (bug 959425).
+
+2012-02-16: version 0.9.0
+-------------------------
+
+* Initial release. Not backwards compatible with Better Cacti Templates.
+

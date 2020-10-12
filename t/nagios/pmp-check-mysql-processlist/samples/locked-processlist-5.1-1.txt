@@ -1,0 +1,27 @@
+*************************** 1. row ***************************
+     Id: 4
+   User: root
+   Host: localhost:37626
+     db: test
+Command: Sleep
+   Time: 36
+  State: 
+   Info: NULL
+*************************** 2. row ***************************
+     Id: 5
+   User: root
+   Host: localhost:37627
+     db: test
+Command: Query
+   Time: 27
+  State: Locked
+   Info: select * from t
+*************************** 3. row ***************************
+     Id: 6
+   User: root
+   Host: localhost:37628
+     db: test
+Command: Query
+   Time: 0
+  State: NULL
+   Info: show full processlist

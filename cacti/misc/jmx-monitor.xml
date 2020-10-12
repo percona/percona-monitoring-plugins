@@ -1,0 +1,80 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+     -->
+<project name="JMX Monitor" 
+        xmlns:jmx="antlib:org.apache.catalina.ant.jmx" 
+        default="status"
+        basedir=".">
+    <property name="jmx.server.name" value="localhost" />
+    <property name="jmx.server.port" value="9012" />
+
+    <target name="status" description="Show JMX Cluster state">
+	    <jmx:open
+		    host="${jmx.server.name}"
+		    port="${jmx.server.port}"
+		    username="controlRole"
+		    password="tomcat"/>
+	    <jmx:get
+		    name="java.lang:type=Memory" 
+		    attribute="HeapMemoryUsage"
+		    resultproperty="HeapMemoryUsage"
+		    />
+	    <jmx:get
+		    name="java.lang:type=Memory" 
+		    attribute="NonHeapMemoryUsage"
+		    resultproperty="NonHeapMemoryUsage"
+		    />
+	    <jmx:get
+		    name="java.lang:type=OperatingSystem"
+		    attribute="OpenFileDescriptorCount"
+		    resultproperty="OpenFileDescriptorCount"
+		    />
+	    <jmx:get
+		    name="java.lang:type=OperatingSystem"
+		    attribute="MaxFileDescriptorCount"
+		    resultproperty="MaxFileDescriptorCount"
+		    />
+            <jmx:get
+                    name="Catalina:type=ThreadPool,name=${jmx.catalina.threadpool.name}"
+                    attribute="currentThreadsBusy"
+                    resultproperty="currentThreadsBusy"
+                    />
+            <jmx:get
+                    name="Catalina:type=ThreadPool,name=${jmx.catalina.threadpool.name}"
+                    attribute="currentThreadCount"
+                    resultproperty="currentThreadCount"
+                    />
+            <jmx:get
+                    name="Catalina:type=ThreadPool,name=${jmx.catalina.threadpool.name}"
+                    attribute="maxThreads"
+                    resultproperty="maxThreads"
+                    />
+	<echo>heap_memory_used: ${HeapMemoryUsage.used}
+heap_memory_committed: ${HeapMemoryUsage.committed}
+heap_memory_max: ${HeapMemoryUsage.max}
+non_heap_memory_used: ${NonHeapMemoryUsage.used}
+non_heap_memory_committed: ${NonHeapMemoryUsage.committed}
+non_heap_memory_max: ${NonHeapMemoryUsage.max}
+open_file_descriptors: ${OpenFileDescriptorCount}
+max_file_descriptors: ${MaxFileDescriptorCount}
+current_threads_busy: ${currentThreadsBusy}
+current_thread_count: ${currentThreadCount}
+max_threads: ${maxThreads}
+</echo>
+    </target>
+ 
+</project>
+

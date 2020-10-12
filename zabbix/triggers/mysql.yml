@@ -1,0 +1,45 @@
+# Zabbix triggers for MySQL
+#
+# License: GPL License (see COPYING)
+# Copyright: 2013 Percona
+# Authors: Roman Vynar
+
+# MySQL process
+- name: MySQL is down on {HOST.NAME}
+  expression: '{TEMPLATE:proc.num[mysqld].last(0)}=0'
+  severity: Disaster
+ 
+# MySQL connections 
+- name: MySQL connections utilization more than 80% on {HOST.NAME}
+  expression: '{TEMPLATE:MySQL.Threads-connected.last(0)}/{TEMPLATE:MySQL.max-connections.last(0)}>0.8'
+  severity: Average
+  dependencies: ['MySQL connections utilization more than 95% on {HOST.NAME}']
+- name: MySQL connections utilization more than 95% on {HOST.NAME}
+  expression: '{TEMPLATE:MySQL.Threads-connected.last(0)}/{TEMPLATE:MySQL.max-connections.last(0)}>0.95'
+  severity: High
+  dependencies: ['MySQL is down on {HOST.NAME}']    
+  
+# MySQL active threads
+- name: MySQL active threads more than 40 on {HOST.NAME}
+  expression: '{TEMPLATE:MySQL.Threads-running.last(0)}>40'
+  severity: Average
+  dependencies: ['MySQL active threads more than 100 on {HOST.NAME}']
+- name: MySQL active threads more than 100 on {HOST.NAME}
+  expression: '{TEMPLATE:MySQL.Threads-running.last(0)}>100'
+  severity: High
+  dependencies: ['MySQL is down on {HOST.NAME}']  
+  
+# MySQL replication
+- name: MySQL slave lag more than 300 on {HOST.NAME}
+  expression: '{TEMPLATE:MySQL.slave-lag.last(0)}>300'
+  severity: Average
+  dependencies: ['MySQL slave lag more than 600 on {HOST.NAME}']
+- name: MySQL slave lag more than 600 on {HOST.NAME}
+  expression: '{TEMPLATE:MySQL.slave-lag.last(0)}>600'
+  severity: High
+  dependencies: ['Slave is stopped on {HOST.NAME}']  
+- name: Slave is stopped on {HOST.NAME}
+  expression: '{TEMPLATE:MySQL.running-slave.last(0)}=0'
+  severity: High
+  dependencies: ['MySQL is down on {HOST.NAME}']
+  

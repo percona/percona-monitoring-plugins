@@ -1,0 +1,4 @@
+#!/bin/sh
+echo
+echo "Scripts are installed to /var/lib/zabbix/percona/scripts"
+echo "Templates are installed to /var/lib/zabbix/percona/percona"

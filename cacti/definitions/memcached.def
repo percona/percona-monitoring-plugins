@@ -1,0 +1,336 @@
+# This is the template definition file.  To use it, see pmp-cacti-template.
+#
+# This program is copyright (c) 2008 Baron Schwartz. Feedback and improvements
+# are welcome.
+#
+# THIS PROGRAM IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+# MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, version 2.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA.
+
+# Autobuild: ss_get_by_ssh.php
+
+{
+   name   => 'Memcached Server',
+   hash   => 'hash_02_VER_7f7efd1ec6e7a010d305e52a55eaaf3c',
+   version => {
+      version => '$VERSION$',
+      hash    => 'hash_06_VER_d878d34cebbf66beefcc7ca6434df8c2',
+   },
+   checksum => 'hash_06_VER_08370db8a4d24c413d4c34da16b3f33b',
+   graphs => [
+      {  name       => 'Memcached Rusage',
+         base_value => '1000',
+         hash       => 'hash_00_VER_e784abb2d43636a946444dfce47aa45c',
+         dt         => {
+            hash       => 'hash_01_VER_9a39fe10d0fa5399f7b0bc9a47f8417a',
+            input      => 'Get Memcached Stats',
+            MEMC_rusage_user => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_4f63f354dd4ce4c82e46fca190adc80e'
+            },
+            MEMC_rusage_system => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_da430a0fa8d1976480dce0708985ebc9'
+            },
+         },
+         items => [
+            {  item   => 'MEMC_rusage_user',
+               color  => '91204D',
+               task   => 'hash_09_VER_050108b41d1c6a4c418501554d3beb8b',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_815d08ec6b65093237192a1f53c0e8d2',
+                  'hash_10_VER_76ef8617ca8b69e24066c0acd45f4d7a',
+                  'hash_10_VER_0a505d914c460134db5ea2acec80d8e6',
+                  'hash_10_VER_c9098fc04a259c04f925d8bf9786f53d'
+               ],
+            },
+            {  item   => 'MEMC_rusage_system',
+               color  => 'E4844A',
+               task   => 'hash_09_VER_deb69762da68030dfd25bf259f7fea37',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_69880d6592e4f0e603716c64044b0b06',
+                  'hash_10_VER_57c68ef78f38cfd193e68e9e3dd1d7db',
+                  'hash_10_VER_38af7509139b717e02aa5094d4e170fa',
+                  'hash_10_VER_a324f93ec4c484bf4b7745c9ef421698'
+               ],
+            },
+         ],
+      },
+      {  name       => 'Memcached Current Items',
+         base_value => '1000',
+         hash       => 'hash_00_VER_40966e5b6452f212558ceecd0db6e24c',
+         dt         => {
+            hash       => 'hash_01_VER_2017f8dabb4bd21792e2fcd18ea77741',
+            input      => 'Get Memcached Stats',
+            MEMC_curr_items => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_33d00d87a7490e2ffcf75588ae40ac54'
+            },
+         },
+         items => [
+            {  item   => 'MEMC_curr_items',
+               color  => '3D2610',
+               task   => 'hash_09_VER_cbac1d19cfd138a874b8285e67f32818',
+               type   => 'LINE1',
+               hashes => [
+                  'hash_10_VER_a965fa78c816b2a89d061d4d1889ab3c',
+                  'hash_10_VER_af46fc28dc5312c582baf221350f1a2b',
+                  'hash_10_VER_e715febf84b74abdb70b38fa5c36c4f3',
+                  'hash_10_VER_aa660017aaa5d7265ce0d9f0058ca547'
+               ],
+            },
+         ],
+      },
+      {  name       => 'Memcached Additions and Evictions',
+         base_value => '1000',
+         hash       => 'hash_00_VER_3a1e7c5299c374c29b3389c1853df0fc',
+         dt         => {
+            hash       => 'hash_01_VER_bdf39ff8d914b87c5cadd4351c24ade1',
+            input      => 'Get Memcached Stats',
+            MEMC_total_items => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_15413d02553829fa87ee11d94647b264'
+            },
+            MEMC_evictions => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_05894f4675c529a695c68425803037ff'
+            },
+         },
+         items => [
+            {  item   => 'MEMC_total_items',
+               color  => '324D88',
+               task   => 'hash_09_VER_b7e238dc11fdcbde061117adc9a6fb7d',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_48ad4ba59c595a0948aea27c09c89462',
+                  'hash_10_VER_8a2883cd4698ce92bfda14e827d3739a',
+                  'hash_10_VER_b7cd4b0586bb55a19b88d15cbe6364a8',
+                  'hash_10_VER_addbd8d8e882b7c367cc4f04720a3644'
+               ],
+            },
+            {  item   => 'MEMC_evictions',
+               color  => 'A03333',
+               task   => 'hash_09_VER_a1ea78e9c5f755a95a5a1d605f2dd4d9',
+               type   => 'AREA',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_af2ef7ef304cfd02a90fbdeffbed686f',
+                  'hash_10_VER_731ebf2fabddd0cc5c516688987085f9',
+                  'hash_10_VER_c666da7c51fd1bfd95b8dfdbb6b4bb8a',
+                  'hash_10_VER_a9158467449c455de71e37f1bfb10305'
+               ],
+            },
+         ],
+      },
+      {  name       => 'Memcached Memory',
+         base_value => '1024',
+         hash       => 'hash_00_VER_59b67cc5a5814cc321fd5a9a53a6bb19',
+         dt         => {
+            hash       => 'hash_01_VER_92c91d843d5726edd154cde90fb362dd',
+            input      => 'Get Memcached Stats',
+            MEMC_bytes => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_a3cc9ccd087e30c548e8eba2f6a96c1c'
+            },
+         },
+         items => [
+            {  item   => 'MEMC_bytes',
+               color  => '3C5E53',
+               task   => 'hash_09_VER_dfcfd672574c819ed156465127a4fb4b',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_f751e9e395fff210df10a5380a133f6d',
+                  'hash_10_VER_a30667b9978e4e5ff5f98cfa114c539c',
+                  'hash_10_VER_a6c637b2f1d0ae58e426ae0ae26fe581',
+                  'hash_10_VER_97422a226323ed7526db2e7ca371ec74'
+               ],
+            },
+         ],
+      },
+      {  name       => 'Memcached Connections',
+         base_value => '1000',
+         hash       => 'hash_00_VER_a03d49b958b74ab1248163eaf43aed1f',
+         dt         => {
+            hash       => 'hash_01_VER_96d2a87a20e2c37e5f1368d397573c15',
+            input      => 'Get Memcached Stats',
+            MEMC_curr_connections => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_8f989f1289e66b9366a92d63d5a823ec'
+            },
+            MEMC_total_connections => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_6c2e3658c11f6aed4dd106cc9916d5de'
+            },
+         },
+         items => [
+            {  item   => 'MEMC_curr_connections',
+               color  => '06998F',
+               task   => 'hash_09_VER_944baea38b0ba7cc3b144e510bd9017a',
+               type   => 'LINE1',
+               hashes => [
+                  'hash_10_VER_450d89e89e0cb361ff0bce55713b780a',
+                  'hash_10_VER_f3bb9eef3139e9b48c0c132b38bd8718',
+                  'hash_10_VER_e26b57215acfa43222ba50326ad7df01',
+                  'hash_10_VER_3e03b399913fd0c886395fdcec7ad7bf'
+               ],
+            },
+            {  item   => 'MEMC_total_connections',
+               color  => '105B3D',
+               task   => 'hash_09_VER_7e44af2237885b645c5d5c2deb231420',
+               type   => 'LINE1',
+               hashes => [
+                  'hash_10_VER_25df489910ba041730e40c85549747f9',
+                  'hash_10_VER_032423939dbf12ba0d74b596fb3f663a',
+                  'hash_10_VER_2372082b5f1d0dab9d575bcc9ffed836',
+                  'hash_10_VER_43683b7065456038a3c7e44409af0362'
+               ],
+            },
+         ],
+      },
+      {  name       => 'Memcached Requests',
+         base_value => '1000',
+         hash       => 'hash_00_VER_741c6d14d6d407277e1f3cc30408594a',
+         dt         => {
+            hash       => 'hash_01_VER_59fc7a38f87b02b5b29fba51ba85931d',
+            input      => 'Get Memcached Stats',
+            MEMC_cmd_get => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_e0708c89ad1d7c98424140c3bce377f5'
+            },
+            MEMC_cmd_set => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_ea4af55a930dc9a76fcd5bf840e1ef72'
+            },
+            MEMC_get_misses => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_08a90a539c1b6646e96f6015d522142a'
+            },
+         },
+         items => [
+            {  item   => 'MEMC_cmd_get',
+               color  => 'F8BE7D',
+               task   => 'hash_09_VER_177708b37f503a2f332ce61482354097',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_07ae9cc204281b08aef5eb8d35fcf9fa',
+                  'hash_10_VER_b8fb17c0f3c52ddd24e4d6589ba3a0c8',
+                  'hash_10_VER_f0cb70e493461b809813dc7ce75de7a2',
+                  'hash_10_VER_9bad4d40b5a45c745ab7e767989a6cc5'
+               ],
+            },
+            {  item   => 'MEMC_get_misses',
+               color  => 'CC1306',
+               task   => 'hash_09_VER_3bec18ed7be10c496d3f8f1cc79703e2',
+               type   => 'LINE2',
+               hashes => [
+                  'hash_10_VER_41bea756aa1e0d2f3ea89841e7dea520',
+                  'hash_10_VER_5e97ae4d0e545f01146c12be57a09e71',
+                  'hash_10_VER_146d4b71e434ca3d951c978bb3fa6139',
+                  'hash_10_VER_198569ade9a27097fe26aaf187c61bcf'
+               ],
+            },
+            {  item   => 'MEMC_cmd_set',
+               color  => '3C5E53',
+               task   => 'hash_09_VER_013a1b32612bbed7cf7229ef71d9d534',
+               type   => 'AREA',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_850212f1e3977536383c3ccbc92c94e5',
+                  'hash_10_VER_6ab59b910a9c90db580991d3e87a5700',
+                  'hash_10_VER_683d1f389df140701a664b9a501dfb04',
+                  'hash_10_VER_a0614cf07351f017fe6ade4b406e81d2'
+               ],
+            },
+         ],
+      },
+      {  name       => 'Memcached Traffic',
+         base_value => '1024',
+         hash       => 'hash_00_VER_08bf12271056b783239647380d3f1d14',
+         dt         => {
+            hash       => 'hash_01_VER_785f3bd9422b4113500476aa96a049c6',
+            input      => 'Get Memcached Stats',
+            MEMC_bytes_read => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_35e6a659c98bb6385340043141e05c3f'
+            },
+            MEMC_bytes_written => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_2d9df3794de0c4f04b87b9fc62a03fd4'
+            },
+         },
+         items => [
+            {  item   => 'MEMC_bytes_read',
+               color  => 'A38A64',
+               task   => 'hash_09_VER_f81d4c3581f12eff7868a6db99b3c9bb',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_485efaaf3d24d2d5916f60a0117f821f',
+                  'hash_10_VER_2d368583e842ff6ccf2f34da6ee76643',
+                  'hash_10_VER_ecc88b43211053850bb754ce83f77dca',
+                  'hash_10_VER_116ddfa141cf301196f57ff2732df4c5'
+               ],
+            },
+            {  item   => 'MEMC_bytes_written',
+               color  => '183030',
+               task   => 'hash_09_VER_25c6873e7d172455af7e63df4af4cda4',
+               type   => 'AREA',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_7017a398138cdae915f954cc594f3f42',
+                  'hash_10_VER_6cc3f3a156019d12fe917ff545ca9996',
+                  'hash_10_VER_d3eaa8656052069a1bf4ad321a641bb5',
+                  'hash_10_VER_ad3e0f7aa081d8891d491ecf660ee83d'
+               ],
+            },
+         ],
+      },
+   ],
+   inputs => {
+      'Get Memcached Stats' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_9f11276b966fcf44ba08973c39e5c4ac',
+         input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
+                       . '--host <hostname> --type memcached --items <items> '
+                       . '--server <server>',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_1ac2b66fa9aa43f3c9b9b919277b4b01',
+               name        => 'hostname'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_62311295e6e0232a77f78f68d90058ef',
+               name        => 'server'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_796ec9c2ab2861d0509a8fc0f2ce7b12',
+               name        => 'port2'
+            },
+         ],
+         outputs => {
+            MEMC_rusage_user       => 'hash_07_VER_3776f6cca10b6e95091a79d288a77ea8',
+            MEMC_rusage_system     => 'hash_07_VER_a3ad215491e7827ba534cb3eba6506e0',
+            MEMC_curr_items        => 'hash_07_VER_e86506a0d8cd2f0c8fb0a6f4dbf6457e',
+            MEMC_total_items       => 'hash_07_VER_0f15539394ef9bd64349421d81549750',
+            MEMC_bytes             => 'hash_07_VER_babe31dc6c33ce123a9d8b69eac02736',
+            MEMC_curr_connections  => 'hash_07_VER_813e00dee62ad2ead22c28e5d7ad939e',
+            MEMC_total_connections => 'hash_07_VER_822e1ac2177e97137f46d778b51c22ff',
+            MEMC_cmd_get           => 'hash_07_VER_7afcedfaaf58d5bbfa9f04450a677ebe',
+            MEMC_cmd_set           => 'hash_07_VER_9acd8818bb1007b37148744bd3f5867e',
+            MEMC_get_misses        => 'hash_07_VER_79984a2265ce644906f9dd0830e52651',
+            MEMC_evictions         => 'hash_07_VER_f8f0b856b687a5a82b965cfbb68b8009',
+            MEMC_bytes_read        => 'hash_07_VER_302653ee84c3cc0741edf222c0161186',
+            MEMC_bytes_written     => 'hash_07_VER_1185029d94abc82927eb68e390e00753',
+         },
+      },
+   },
+};

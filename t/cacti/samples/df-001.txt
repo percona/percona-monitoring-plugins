@@ -1,0 +1,4 @@
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/vzfs             30720000   4488715  26231285  15% /
+tmpfs                  4147072         0   4147072   0% /lib/init/rw
+tmpfs                  4147072         0   4147072   0% /dev/shm

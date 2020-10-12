@@ -1,0 +1,864 @@
+=====================================
+120124 14:50:44 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 43 seconds
+-----------------
+BACKGROUND THREAD
+-----------------
+srv_master_thread loops: 84394101 1_second, 84393788 sleeps, 843941 10_second, 457 background, 457 flush
+srv_master_thread log flush and writes: 9312729
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 23831467, signal count 28834856
+Mutex spin waits 16744583726, rounds 16008594148, OS waits 12669059
+RW-shared spins 17716985, OS waits 2796013; RW-excl spins 173323, OS waits 1233188
+Spin rounds per wait: 0.96 mutex, 11.80 RW-shared, 282.85 RW-excl
+--------
+FILE I/O
+--------
+I/O thread 0 state: waiting for i/o request (insert buffer thread)
+I/O thread 1 state: waiting for i/o request (log thread)
+I/O thread 2 state: waiting for i/o request (read thread)
+I/O thread 3 state: waiting for i/o request (read thread)
+I/O thread 4 state: waiting for i/o request (read thread)
+I/O thread 5 state: waiting for i/o request (read thread)
+I/O thread 6 state: waiting for i/o request (write thread)
+I/O thread 7 state: waiting for i/o request (write thread)
+I/O thread 8 state: waiting for i/o request (write thread)
+I/O thread 9 state: waiting for i/o request (write thread)
+Pending normal aio reads: 0, aio writes: 0,
+ ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
+Pending flushes (fsync) log: 0; buffer pool: 0
+12866537 OS file reads, 781109056 OS file writes, 421262249 OS fsyncs
+0.14 reads/s, 16384 avg bytes/read, 131.37 writes/s, 69.74 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf: size 1, free list len 1922, seg size 1924,
+1241112 inserts, 1241112 merged recs, 929924 merges
+Hash table size 283212071, node heap has 1 buffer(s)
+0.00 hash searches/s, 85543.75 non-hash searches/s
+---
+LOG
+---
+Log sequence number 2905271066924
+Log flushed up to   2905271066914
+Last checkpoint at  2905271039564
+Max checkpoint age    3396675134
+Checkpoint age target 3290529037
+Modified age          27360
+Checkpoint age        27360
+0 pending log writes, 0 pending chkp writes
+365263813 log i/o's done, 60.93 log i/o's/second
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total memory allocated 140995723264; in additional pool allocated 0
+Internal hash tables (constant factor + variable factor)
+    Adaptive hash index 2265717168  (2265696568 + 20600)
+    Page hash           141606856
+    Dictionary cache    569136572   (566425616 + 2710956)
+    File system         196720   (82672 + 114048)
+    Lock system         340159720   (339997048 + 162672)
+    Recovery system     0  (0 + 0)
+    Threads             436168   (406936 + 29232)
+Dictionary memory allocated 2710956
+Buffer pool size        8388607
+Buffer pool size, bytes 137438937088
+Free buffers            1
+Database pages          8388605
+Old database pages      3096554
+Modified db pages       68
+Pending reads 0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages made young 15093262, not young 0
+0.60 youngs/s, 0.00 non-youngs/s
+Pages read 18163142, created 4326281, written 471863922
+0.14 reads/s, 0.30 creates/s, 77.95 writes/s
+Buffer pool hit rate 1000 / 1000, young-making rate 0 / 1000 not 0 / 1000
+Pages read ahead 0.00/s, evicted without access 0.00/s
+LRU len: 8388605, unzip_LRU len: 0
+I/O sum[4164]:cur[0], unzip sum[0]:cur[0]
+--------------
+ROW OPERATIONS
+--------------
+0 queries inside InnoDB, 0 queries in queue
+10 read views open inside InnoDB
+Main thread process no. 28529, id 140437935073024, state: sleeping
+Number of rows inserted 388664027, updated 292900157, deleted 64620193, read 1483602392888
+26.93 inserts/s, 29.37 updates/s, 2.88 deletes/s, 496744.87 reads/s
+------------------------
+LATEST DETECTED DEADLOCK
+------------------------
+120123 15:06:58
+*** (1) TRANSACTION:
+TRANSACTION 9B2AB3CBC, ACTIVE 59 sec, process no 28529, OS thread id 140437701875456 starting index read
+mysql tables in use 1, locked 1
+LOCK WAIT 3 lock struct(s), heap size 1248, 2 row lock(s), undo log entries 2
+MySQL thread id 31353563, query id 11231423155 10.124.62.115 foozle Updating
+UPDATE `skus` SET `updated_at` = '2012-01-23 15:06:12', `position` = 4 WHERE `id` = 5222811
+*** (1) WAITING FOR THIS LOCK TO BE GRANTED:
+RECORD LOCKS space id 26132 page no 20920 n bits 168 index `PRIMARY` of table `foozle_production`.`skus` trx id 9B2AB3CBC lock_mode X locks rec but not gap waiting
+*** (2) TRANSACTION:
+TRANSACTION 9B2AB07FF, ACTIVE 72 sec, process no 28529, OS thread id 140437829375744 starting index read
+mysql tables in use 1, locked 1
+4 lock struct(s), heap size 1248, 3 row lock(s), undo log entries 2
+MySQL thread id 31353176, query id 11231524112 10.124.62.116 foozle Updating
+UPDATE `skus` SET `updated_at` = '2012-01-23 15:06:58', `position` = 1 WHERE `id` = 5222839
+*** (2) HOLDS THE LOCK(S):
+RECORD LOCKS space id 26132 page no 20920 n bits 168 index `PRIMARY` of table `foozle_production`.`skus` trx id 9B2AB07FF lock_mode X locks rec but not gap
+*** (2) WAITING FOR THIS LOCK TO BE GRANTED:
+RECORD LOCKS space id 26132 page no 20920 n bits 168 index `PRIMARY` of table `foozle_production`.`skus` trx id 9B2AB07FF lock_mode X locks rec but not gap waiting
+*** WE ROLL BACK TRANSACTION (1)
+------------
+TRANSACTIONS
+------------
+Trx id counter 9B61E0510
+Purge done for trx's n:o < 9B61D5093 undo n:o < 0
+History list length 1019
+... truncated...
+, process no 28529, OS thread id 140437690427136
+MySQL thread id 31570552, query id 11322848800 10.124.62.55 foozle
+---TRANSACTION 9B6168C75, not started, process no 28529, OS thread id 140437817394944
+MySQL thread id 31570467, query id 11322230358 10.124.62.52 foozle
+---TRANSACTION 9B4F323A0, not started, process no 28529, OS thread id 140437699213056
+MySQL thread id 31570416, query id 11322627583 10.124.62.58 foozle
+---TRANSACTION 9B61774C3, not started, process no 28529, OS thread id 140437692557056
+MySQL thread id 31570336, query id 11322319809 10.124.62.53 foozle
+---TRANSACTION 9B61D0E05, not started, process no 28529, OS thread id 140437708531456
+MySQL thread id 31570261, query id 11322839293 10.124.62.59 foozle
+---TRANSACTION 9B4F2ECB8, not started, process no 28529, OS thread id 140437806479104
+MySQL thread id 31570219, query id 11321738377 10.124.62.53 foozle
+---TRANSACTION 9B61DF255, not started, process no 28529, OS thread id 140437803816704
+MySQL thread id 31570176, query id 11322918494 10.124.62.59 foozle
+---TRANSACTION 9B4F2DA1C, not started, process no 28529, OS thread id 140437658744576
+MySQL thread id 31570144, query id 11322387707 10.124.62.52 foozle
+---TRANSACTION 9B61E0494, not started, process no 28529, OS thread id 140437822187264
+MySQL thread id 31569990, query id 11322925749 10.124.62.55 foozle
+---TRANSACTION 9B61C2121, not started, process no 28529, OS thread id 140437685634816
+MySQL thread id 31569485, query id 11322755308 10.124.62.53 foozle
+---TRANSACTION 9B61C0B90, not started, process no 28529, OS thread id 140437785446144
+MySQL thread id 31569484, query id 11322748182 10.124.62.52 foozle
+---TRANSACTION 9B61BF307, not started, process no 28529, OS thread id 140437831505664
+MySQL thread id 31569477, query id 11322739541 10.124.62.58 foozle
+---TRANSACTION 9B61BD881, not started, process no 28529, OS thread id 140437808875264
+MySQL thread id 31569303, query id 11322729479 10.124.62.56 foozle
+---TRANSACTION 9B61D3851, not started, process no 28529, OS thread id 140437789173504
+MySQL thread id 31569244, query id 11322855102 10.124.62.59 foozle
+---TRANSACTION 9B61D34E1, not started, process no 28529, OS thread id 140437550618368
+MySQL thread id 31569236, query id 11322852229 10.124.62.59 foozle
+---TRANSACTION 9B61DEC6A, not started, process no 28529, OS thread id 140437674718976
+MySQL thread id 31569091, query id 11322916413 10.124.62.6 foozle
+---TRANSACTION 9B61DA095, not started, process no 28529, OS thread id 140437814732544
+MySQL thread id 31569063, query id 11322889778 10.124.62.52 foozle
+---TRANSACTION 9B61D3742, not started, process no 28529, OS thread id 140437837895424
+MySQL thread id 31569062, query id 11322852978 10.124.62.53 foozle
+---TRANSACTION 9B61DFD2A, not started, process no 28529, OS thread id 140437810472704
+MySQL thread id 31569025, query id 11322922445 10.124.62.59 foozle
+---TRANSACTION 9B61CC3B1, not started, process no 28529, OS thread id 140437688297216
+MySQL thread id 31569018, query id 11322813297 10.124.62.58 foozle
+---TRANSACTION 9B61D179A, not started, process no 28529, OS thread id 140437652088576
+MySQL thread id 31568947, query id 11322842588 10.124.62.59 foozle
+---TRANSACTION 9B61C78BC, not started, process no 28529, OS thread id 140437794764544
+MySQL thread id 31568946, query id 11322786885 10.124.62.55 foozle
+---TRANSACTION 9B4F1B8F0, not started, process no 28529, OS thread id 140437828843264
+MySQL thread id 31568860, query id 11322164891 10.124.62.56 foozle
+---TRANSACTION 9B61DEC58, not started, process no 28529, OS thread id 140437704537856
+MySQL thread id 31568854, query id 11322916391 10.124.62.8 foozle
+---TRANSACTION 9B4F1B66F, not started, process no 28529, OS thread id 140437842687744
+MySQL thread id 31568840, query id 11321411732 10.124.62.56 foozle
+---TRANSACTION 9B61DE733, not started, process no 28529, OS thread id 140437693622016
+MySQL thread id 31568835, query id 11322914609 10.124.62.56 foozle
+---TRANSACTION 9B6061F67, not started, process no 28529, OS thread id 140437916137216
+MySQL thread id 31568825, query id 11320621775 10.124.62.59 foozle
+---TRANSACTION 9B6060F43, not started, process no 28529, OS thread id 140437554345728
+MySQL thread id 31568824, query id 11320616388 10.124.62.55 foozle
+---TRANSACTION 9B4F1B4D3, not started, process no 28529, OS thread id 140437804349184
+MySQL thread id 31568806, query id 11321769755 10.124.62.56 foozle
+---TRANSACTION 9B61DCDA3, not started, process no 28529, OS thread id 140437705869056
+MySQL thread id 31568775, query id 11322906005 10.124.62.55 foozle
+---TRANSACTION 9B61D5C70, not started, process no 28529, OS thread id 140437792368384
+MySQL thread id 31568774, query id 11322865743 10.124.62.59 foozle
+---TRANSACTION 9B4F1B3BE, not started, process no 28529, OS thread id 140437808609024
+MySQL thread id 31568766, query id 11321839570 10.124.62.58 foozle
+---TRANSACTION 9B4F1B28A, not started, process no 28529, OS thread id 140437661939456
+MySQL thread id 31568730, query id 11322726847 10.124.62.58 foozle
+---TRANSACTION 9B4F1B17B, not started, process no 28529, OS thread id 140437832038144
+MySQL thread id 31568696, query id 11322860448 10.124.62.58 foozle
+---TRANSACTION 9B61D86F9, not started, process no 28529, OS thread id 140437578839808
+MySQL thread id 31568563, query id 11322924563 10.124.62.122 foozle
+---TRANSACTION 9B61D86E8, not started, process no 28529, OS thread id 140437800089344
+MySQL thread id 31568544, query id 11322879944 10.124.62.121 foozle
+---TRANSACTION 9B61B3375, not started, process no 28529, OS thread id 140437706667776
+MySQL thread id 31568531, query id 11322779698 10.124.62.121 foozle
+---TRANSACTION 9B61BFB56, not started, process no 28529, OS thread id 140437838427904
+MySQL thread id 31568511, query id 11322923091 10.124.62.121 foozle
+---TRANSACTION 9B61DF5E0, not started, process no 28529, OS thread id 140437661406976
+MySQL thread id 31568509, query id 11322919795 10.124.62.90 foozle
+---TRANSACTION 9B61DF25A, not started, process no 28529, OS thread id 140437703472896
+MySQL thread id 31568510, query id 11322918501 10.124.62.90 foozle
+---TRANSACTION 9B61DFECC, not started, process no 28529, OS thread id 140437707466496
+MySQL thread id 31568508, query id 11322923114 10.124.62.130 foozle
+---TRANSACTION 9B61DF789, not started, process no 28529, OS thread id 140437702940416
+MySQL thread id 31568507, query id 11322920277 10.124.62.130 foozle
+---TRANSACTION 9B61DEED1, not started, process no 28529, OS thread id 140437841356544
+MySQL thread id 31568506, query id 11322917293 10.124.62.130 foozle
+---TRANSACTION 9B61DE6C7, not started, process no 28529, OS thread id 140437705336576
+MySQL thread id 31568505, query id 11322914441 10.124.62.130 foozle
+---TRANSACTION 9B61DBA82, not started, process no 28529, OS thread id 140437656348416
+MySQL thread id 31568500, query id 11322899245 10.124.62.130 foozle
+---TRANSACTION 9B61DFBF0, not started, process no 28529, OS thread id 140437793965824
+MySQL thread id 31568488, query id 11322921978 10.124.62.121 foozle
+---TRANSACTION 9B61DE147, not started, process no 28529, OS thread id 140437648361216
+MySQL thread id 31568473, query id 11322912457 10.124.62.121 foozle
+---TRANSACTION 9B61C545D, not started, process no 28529, OS thread id 140437688563456
+MySQL thread id 31568471, query id 11322886376 10.124.62.121 foozle
+---TRANSACTION 9B61981F2, not started, process no 28529, OS thread id 140437698148096
+MySQL thread id 31568463, query id 11322924201 10.124.62.125 foozle
+---TRANSACTION 9B61D4BCC, not started, process no 28529, OS thread id 140437663536896
+MySQL thread id 31568458, query id 11322924951 10.124.62.125 foozle
+---TRANSACTION 9B61A8888, not started, process no 28529, OS thread id 140437694154496
+MySQL thread id 31568457, query id 11322924926 10.124.62.125 foozle
+---TRANSACTION 9B61CEFDD, not started, process no 28529, OS thread id 140437666199296
+MySQL thread id 31568459, query id 11322924129 10.124.62.125 foozle
+---TRANSACTION 9B61C3D79, not started, process no 28529, OS thread id 140437574047488
+MySQL thread id 31568422, query id 11322920274 10.124.62.121 foozle
+---TRANSACTION 9B61DF3D7, not started, process no 28529, OS thread id 140437668329216
+MySQL thread id 31568431, query id 11322919008 10.124.62.128 foozle
+---TRANSACTION 9B61E00E0, not started, process no 28529, OS thread id 140437706934016
+MySQL thread id 31568429, query id 11322925372 10.124.62.128 foozle
+---TRANSACTION 9B61DD760, not started, process no 28529, OS thread id 140437711193856
+MySQL thread id 31568428, query id 11322909172 10.124.62.128 foozle
+---TRANSACTION 9B61DED27, not started, process no 28529, OS thread id 140437648094976
+MySQL thread id 31568427, query id 11322916620 10.124.62.128 foozle
+---TRANSACTION 9B61DC8F2, not started, process no 28529, OS thread id 140437683238656
+MySQL thread id 31568426, query id 11322904322 10.124.62.128 foozle
+---TRANSACTION 9B61E050F, not started, process no 28529, OS thread id 140437814200064
+MySQL thread id 31568424, query id 11322925917 10.124.62.128 foozle
+---TRANSACTION 9B61DFA42, not started, process no 28529, OS thread id 140437549020928
+MySQL thread id 31568420, query id 11322921306 10.124.62.121 foozle
+---TRANSACTION 9B61C1428, not started, process no 28529, OS thread id 140437969049344
+MySQL thread id 31568261, query id 11322925895 10.124.62.135 foozle
+---TRANSACTION 9B60EEABD, not started, process no 28529, OS thread id 140437687764736
+MySQL thread id 31568262, query id 11322923665 10.124.62.135 foozle
+---TRANSACTION 9B60FD6C4, not started, process no 28529, OS thread id 140437687498496
+MySQL thread id 31568263, query id 11322924742 10.124.62.135 foozle
+---TRANSACTION 9B6163135, not started, process no 28529, OS thread id 140437681374976
+MySQL thread id 31568321, query id 11322924142 10.124.62.135 foozle
+---TRANSACTION 9B6186532, not started, process no 28529, OS thread id 140437969315584
+MySQL thread id 31568259, query id 11322924365 10.124.62.135 foozle
+---TRANSACTION 9B61DFEF7, not started, process no 28529, OS thread id 140437804082944
+MySQL thread id 31568260, query id 11322923633 10.124.62.135 foozle
+---TRANSACTION 9B61D3A56, not started, process no 28529, OS thread id 140437687232256
+MySQL thread id 31568264, query id 11322925140 10.124.62.135 foozle
+---TRANSACTION 9B619E21E, not started, process no 28529, OS thread id 140437686966016
+MySQL thread id 31568265, query id 11322925828 10.124.62.135 foozle
+---TRANSACTION 9B615DA28, not started, process no 28529, OS thread id 140437691758336
+MySQL thread id 31568212, query id 11322920188 10.124.62.126 foozle
+---TRANSACTION 9B61CC670, not started, process no 28529, OS thread id 140437691225856
+MySQL thread id 31568218, query id 11322879750 10.124.62.122 foozle
+---TRANSACTION 9B61D079A, not started, process no 28529, OS thread id 140437689362176
+MySQL thread id 31568222, query id 11322880914 10.124.62.122 foozle
+---TRANSACTION 9B61BD284, not started, process no 28529, OS thread id 140437690959616
+MySQL thread id 31568219, query id 11322916133 10.124.62.122 foozle
+---TRANSACTION 9B61DF819, not started, process no 28529, OS thread id 140437689628416
+MySQL thread id 31568221, query id 11322921853 10.124.62.122 foozle
+---TRANSACTION 9B61DA4CA, not started, process no 28529, OS thread id 140437805680384
+MySQL thread id 31568215, query id 11322910991 10.124.62.122 foozle
+---TRANSACTION 9B61D9C75, not started, process no 28529, OS thread id 140437689894656
+MySQL thread id 31568220, query id 11322888108 10.124.62.122 foozle
+---TRANSACTION 9B61DFE87, not started, process no 28529, OS thread id 140437834966784
+MySQL thread id 31568216, query id 11322922986 10.124.62.122 foozle
+---TRANSACTION 9B61DFE69, not started, process no 28529, OS thread id 140437693355776
+MySQL thread id 31568208, query id 11322922923 10.124.62.127 foozle
+---TRANSACTION 9B61DA2BF, not started, process no 28529, OS thread id 140437694953216
+MySQL thread id 31568206, query id 11322890621 10.124.62.127 foozle
+---TRANSACTION 9B61DE29F, not started, process no 28529, OS thread id 140437653952256
+MySQL thread id 31568204, query id 11322921559 10.124.62.127 foozle
+---TRANSACTION 9B61DF833, not started, process no 28529, OS thread id 140437572183808
+MySQL thread id 31568202, query id 11322920604 10.124.62.127 foozle
+---TRANSACTION 9B61D8A71, not started, process no 28529, OS thread id 140437571118848
+MySQL thread id 31568196, query id 11322881188 10.124.62.118 foozle
+---TRANSACTION 9B5FFC580, not started, process no 28529, OS thread id 140437700544256
+MySQL thread id 31568197, query id 11322383294 10.124.62.118 foozle
+---TRANSACTION 9B610E2C7, not started, process no 28529, OS thread id 140437700810496
+MySQL thread id 31568195, query id 11322763696 10.124.62.118 foozle
+---TRANSACTION 9B6180390, not started, process no 28529, OS thread id 140437697881856
+MySQL thread id 31568199, query id 11322718882 10.124.62.118 foozle
+---TRANSACTION 9B61CC04B, not started, process no 28529, OS thread id 140437699745536
+MySQL thread id 31568198, query id 11322812095 10.124.62.118 foozle
+---TRANSACTION 9B61A88F0, not started, process no 28529, OS thread id 140437697615616
+MySQL thread id 31568200, query id 11322607516 10.124.62.118 foozle
+---TRANSACTION 9B616F8CE, not started, process no 28529, OS thread id 140437704005376
+MySQL thread id 31568188, query id 11322761062 10.124.62.124 foozle
+---TRANSACTION 9B6137442, not started, process no 28529, OS thread id 140437703739136
+MySQL thread id 31568189, query id 11322853763 10.124.62.124 foozle
+---TRANSACTION 9B60C192C, not started, process no 28529, OS thread id 140437701076736
+MySQL thread id 31568193, query id 11322849086 10.124.62.124 foozle
+---TRANSACTION 9B6127A8E, not started, process no 28529, OS thread id 140437702674176
+MySQL thread id 31568190, query id 11322899670 10.124.62.124 foozle
+---TRANSACTION 9B61BC781, not started, process no 28529, OS thread id 140437707732736
+MySQL thread id 31568186, query id 11322828356 10.124.62.124 foozle
+---TRANSACTION 9B61B93C3, not started, process no 28529, OS thread id 140437702141696
+MySQL thread id 31568191, query id 11322914883 10.124.62.124 foozle
+---TRANSACTION 9B60E822A, not started, process no 28529, OS thread id 140437705070336
+MySQL thread id 31568187, query id 11322662398 10.124.62.124 foozle
+---TRANSACTION 9B61DC4CE, not started, process no 28529, OS thread id 140437701609216
+MySQL thread id 31568192, query id 11322910766 10.124.62.124 foozle
+---TRANSACTION 9B6197CCD, not started, process no 28529, OS thread id 140437561267968
+MySQL thread id 31568179, query id 11322922133 10.124.62.126 foozle
+---TRANSACTION 9B6126AB7, not started, process no 28529, OS thread id 140437709862656
+MySQL thread id 31568184, query id 11322921991 10.124.62.126 foozle
+---TRANSACTION 9B61151FA, not started, process no 28529, OS thread id 140437563397888
+MySQL thread id 31568180, query id 11322924619 10.124.62.126 foozle
+---TRANSACTION 9B61DAA5F, not started, process no 28529, OS thread id 140437811271424
+MySQL thread id 31568183, query id 11322924742 10.124.62.126 foozle
+---TRANSACTION 9B61DF1AC, not started, process no 28529, OS thread id 140437672322816
+MySQL thread id 31568181, query id 11322922017 10.124.62.126 foozle
+---TRANSACTION 9B6148C25, not started, process no 28529, OS thread id 140437828310784
+MySQL thread id 31568182, query id 11322922614 10.124.62.126 foozle
+---TRANSACTION 9B616E464, not started, process no 28529, OS thread id 140437709596416
+MySQL thread id 31568185, query id 11322925703 10.124.62.126 foozle
+---TRANSACTION 9B610AEDC, not started, process no 28529, OS thread id 140437565794048
+MySQL thread id 31568178, query id 11322517615 10.124.62.117 foozle
+---TRANSACTION 9B61714D1, not started, process no 28529, OS thread id 140437804881664
+MySQL thread id 31568176, query id 11322282813 10.124.62.117 foozle
+---TRANSACTION 9B60D9823, not started, process no 28529, OS thread id 140437822719744
+MySQL thread id 31568175, query id 11322657885 10.124.62.117 foozle
+---TRANSACTION 9B617804A, not started, process no 28529, OS thread id 140437790504704
+MySQL thread id 31568173, query id 11322796631 10.124.62.117 foozle
+---TRANSACTION 9B6198A52, not started, process no 28529, OS thread id 140437709330176
+MySQL thread id 31568174, query id 11322520712 10.124.62.117 foozle
+---TRANSACTION 9B61BEA48, not started, process no 28529, OS thread id 140437792634624
+MySQL thread id 31568177, query id 11322892569 10.124.62.117 foozle
+---TRANSACTION 9B61C0020, not started, process no 28529, OS thread id 140437799290624
+MySQL thread id 31568129, query id 11322925787 10.124.62.125 foozle
+---TRANSACTION 9B61DCC30, not started, process no 28529, OS thread id 140437786777344
+MySQL thread id 31568143, query id 11322905514 10.124.62.129 foozle
+---TRANSACTION 9B61E04F4, not started, process no 28529, OS thread id 140437711992576
+MySQL thread id 31568150, query id 11322925882 10.124.62.129 foozle
+---TRANSACTION 9B61DF19B, not started, process no 28529, OS thread id 140437782783744
+MySQL thread id 31568147, query id 11322918219 10.124.62.129 foozle
+---TRANSACTION 9B61E0495, not started, process no 28529, OS thread id 140437712525056
+MySQL thread id 31568149, query id 11322925746 10.124.62.129 foozle
+---TRANSACTION 9B61DB157, not started, process no 28529, OS thread id 140437712791296
+MySQL thread id 31568148, query id 11322895957 10.124.62.129 foozle
+---TRANSACTION 9B61DE450, not started, process no 28529, OS thread id 140437786511104
+MySQL thread id 31568144, query id 11322913574 10.124.62.129 foozle
+---TRANSACTION 9B61BB03D, not started, process no 28529, OS thread id 140437793699584
+MySQL thread id 31568137, query id 11322925864 10.124.62.29 foozle
+---TRANSACTION 9B608671B, not started, process no 28529, OS thread id 140437795030784
+MySQL thread id 31568136, query id 11322925894 10.124.62.14 foozle
+---TRANSACTION 9B6149399, not started, process no 28529, OS thread id 140437796894464
+MySQL thread id 31568133, query id 11322925831 10.124.62.14 foozle
+---TRANSACTION 9B61A45CE, not started, process no 28529, OS thread id 140437801154304
+MySQL thread id 31568127, query id 11322925256 10.124.62.125 foozle
+---TRANSACTION 9B6184245, not started, process no 28529, OS thread id 140437800355584
+MySQL thread id 31568128, query id 11322925714 10.124.62.125 foozle
+---TRANSACTION 9B61492FD, not started, process no 28529, OS thread id 140437798758144
+MySQL thread id 31568131, query id 11322924403 10.124.62.14 foozle
+---TRANSACTION 9B61CBFC3, not started, process no 28529, OS thread id 140437805946624
+MySQL thread id 31568126, query id 11322924310 10.124.62.125 foozle
+---TRANSACTION 9B60001B2, not started, process no 28529, OS thread id 140437797426944
+MySQL thread id 31568132, query id 11322925883 10.124.62.14 foozle
+---TRANSACTION 9B60868BE, not started, process no 28529, OS thread id 140437814466304
+MySQL thread id 31568117, query id 11322925915 10.124.62.14 foozle
+---TRANSACTION 9B6107E70, not started, process no 28529, OS thread id 140437830440704
+MySQL thread id 31568114, query id 11322923244 10.124.62.29 foozle
+---TRANSACTION 9B616F167, not started, process no 28529, OS thread id 140437795297024
+MySQL thread id 31568135, query id 11322925721 10.124.62.16 foozle
+---TRANSACTION 9B6086B54, not started, process no 28529, OS thread id 140437819258624
+MySQL thread id 31568109, query id 11322925719 10.124.62.14 foozle
+---TRANSACTION 9B61665D1, not started, process no 28529, OS thread id 140437795829504
+MySQL thread id 31568134, query id 11322924456 10.124.62.24 foozle
+---TRANSACTION 9B60862AB, not started, process no 28529, OS thread id 140437825382144
+MySQL thread id 31568130, query id 11322925833 10.124.62.134 foozle
+---TRANSACTION 9B61946EF, not started, process no 28529, OS thread id 140437822453504
+MySQL thread id 31568106, query id 11322924664 10.124.62.29 foozle
+---TRANSACTION 9B618B878, not started, process no 28529, OS thread id 140437811803904
+MySQL thread id 31568121, query id 11322925030 10.124.62.24 foozle
+---TRANSACTION 9B6126AC8, not started, process no 28529, OS thread id 140437818459904
+MySQL thread id 31568105, query id 11322922459 10.124.62.29 foozle
+---TRANSACTION 9B61DF1BC, not started, process no 28529, OS thread id 140437826447104
+MySQL thread id 31568094, query id 11322925534 10.124.62.29 foozle
+---TRANSACTION 9B61DFD97, not started, process no 28529, OS thread id 140437813135104
+MySQL thread id 31568120, query id 11322924831 10.124.62.101 foozle
+---TRANSACTION 9B6148C11, not started, process no 28529, OS thread id 140437829641984
+MySQL thread id 31568102, query id 11322925847 10.124.62.29 foozle
+---TRANSACTION 9B5FC3CE3, not started, process no 28529, OS thread id 140437823518464
+MySQL thread id 31568103, query id 11322925303 10.124.62.29 foozle
+---TRANSACTION 9B60009BE, not started, process no 28529, OS thread id 140437813667584
+MySQL thread id 31568119, query id 11322925899 10.124.62.24 foozle
+---TRANSACTION 9B61BBE3D, not started, process no 28529, OS thread id 140437785978624
+MySQL thread id 31568116, query id 11322925698 10.124.62.16 foozle
+---TRANSACTION 9B61B484F, not started, process no 28529, OS thread id 140437814998784
+MySQL thread id 31568115, query id 11322925913 10.124.62.24 foozle
+---TRANSACTION 9B61DF765, not started, process no 28529, OS thread id 140437815797504
+MySQL thread id 31568113, query id 11322925865 10.124.62.101 foozle
+---TRANSACTION 9B6086B61, not started, process no 28529, OS thread id 140437816329984
+MySQL thread id 31568111, query id 11322925902 10.124.62.134 foozle
+---TRANSACTION 9B60C07FC, not started, process no 28529, OS thread id 140437838960384
+MySQL thread id 31568086, query id 11322925810 10.124.62.14 foozle
+---TRANSACTION 9B61DF69B, not started, process no 28529, OS thread id 140437819524864
+MySQL thread id 31568108, query id 11322925660 10.124.62.101 foozle
+---TRANSACTION 9B6127506, not started, process no 28529, OS thread id 140437816063744
+MySQL thread id 31568112, query id 11322925759 10.124.62.16 foozle
+---TRANSACTION 9B6086650, not started, process no 28529, OS thread id 140437820323584
+MySQL thread id 31568107, query id 11322925864 10.124.62.16 foozle
+---TRANSACTION 9B60860A0, not started, process no 28529, OS thread id 140437839759104
+MySQL thread id 31568085, query id 11322925867 10.124.62.14 foozle
+---TRANSACTION 9B60D3154, not started, process no 28529, OS thread id 140437975705344
+MySQL thread id 31568077, query id 11322922078 10.124.62.29 foozle
+---TRANSACTION 9B60AA072, not started, process no 28529, OS thread id 140437973841664
+MySQL thread id 31568078, query id 11322924212 10.124.62.29 foozle
+---TRANSACTION 9B6086059, not started, process no 28529, OS thread id 140437974640384
+MySQL thread id 31568074, query id 11322922059 10.124.62.29 foozle
+---TRANSACTION 9B61B31B2, not started, process no 28529, OS thread id 140437823784704
+MySQL thread id 31568101, query id 11322924823 10.124.62.134 foozle
+---TRANSACTION 9B60BC39D, not started, process no 28529, OS thread id 140437825914624
+MySQL thread id 31568096, query id 11322925646 10.124.62.134 foozle
+---TRANSACTION 9B6120FCA, not started, process no 28529, OS thread id 140437825115904
+MySQL thread id 31568099, query id 11322925868 10.124.62.24 foozle
+---TRANSACTION 9B611E383, not started, process no 28529, OS thread id 140437840824064
+MySQL thread id 31568098, query id 11322925872 10.124.62.24 foozle
+---TRANSACTION 9B6000535, not started, process no 28529, OS thread id 140437974107904
+MySQL thread id 31568075, query id 11322925700 10.124.62.14 foozle
+---TRANSACTION 9B60C141F, not started, process no 28529, OS thread id 140437827512064
+MySQL thread id 31568093, query id 11322925715 10.124.62.16 foozle
+---TRANSACTION 9B6195AE5, not started, process no 28529, OS thread id 140437832570624
+MySQL thread id 31568092, query id 11322924582 10.124.62.16 foozle
+---TRANSACTION 9B61D728F, not started, process no 28529, OS thread id 140437832836864
+MySQL thread id 31568091, query id 11322925088 10.124.62.134 foozle
+---TRANSACTION 9B616CEB1, not started, process no 28529, OS thread id 140437833103104
+MySQL thread id 31568090, query id 11322923921 10.124.62.133 foozle
+---TRANSACTION 9B6001E86, not started, process no 28529, OS thread id 140437694420736
+MySQL thread id 31568064, query id 11322925762 10.124.62.14 foozle
+---TRANSACTION 9B6164D06, not started, process no 28529, OS thread id 140437915870976
+MySQL thread id 31568082, query id 11322925775 10.124.62.134 foozle
+---TRANSACTION 9B61087C7, not started, process no 28529, OS thread id 140437833901824
+MySQL thread id 31568089, query id 11322925667 10.124.62.16 foozle
+---TRANSACTION 9B6147643, not started, process no 28529, OS thread id 140437835499264
+MySQL thread id 31568088, query id 11322925900 10.124.62.133 foozle
+---TRANSACTION 9B6086D8E, not started, process no 28529, OS thread id 140437914806016
+MySQL thread id 31568083, query id 11322925830 10.124.62.134 foozle
+---TRANSACTION 9B60A5542, not started, process no 28529, OS thread id 140437837629184
+MySQL thread id 31568087, query id 11322924721 10.124.62.24 foozle
+---TRANSACTION 9B6086DAE, not started, process no 28529, OS thread id 140437841889024
+MySQL thread id 31568084, query id 11322925898 10.124.62.133 foozle
+---TRANSACTION 9B61D864C, not started, process no 28529, OS thread id 140437970114304
+MySQL thread id 31568081, query id 11322925824 10.124.62.24 foozle
+---TRANSACTION 9B608628A, not started, process no 28529, OS thread id 140437697349376
+MySQL thread id 31568079, query id 11322925769 10.124.62.24 foozle
+---TRANSACTION 9B610218F, not started, process no 28529, OS thread id 140437970646784
+MySQL thread id 31568080, query id 11322925786 10.124.62.24 foozle
+---TRANSACTION 9B61DD8BA, not started, process no 28529, OS thread id 140437558871808
+MySQL thread id 31568067, query id 11322909758 10.124.62.90 foozle
+---TRANSACTION 9B6077015, not started, process no 28529, OS thread id 140437976237824
+MySQL thread id 31568072, query id 11322924451 10.124.62.133 foozle
+---TRANSACTION 9B6192AA9, not started, process no 28529, OS thread id 140582149637888
+MySQL thread id 31568070, query id 11322925290 10.124.62.133 foozle
+---TRANSACTION 9B6149BCB, not started, process no 28529, OS thread id 140437812602624
+MySQL thread id 31568068, query id 11322925564 10.124.62.16 foozle
+---TRANSACTION 9B61E03F3, not started, process no 28529, OS thread id 140437690693376
+MySQL thread id 31568069, query id 11322925891 10.124.62.16 foozle
+---TRANSACTION 9B60D38BC, not started, process no 28529, OS thread id 140582149105408
+MySQL thread id 31568071, query id 11322925891 10.124.62.16 foozle
+---TRANSACTION 9B61DD42A, not started, process no 28529, OS thread id 140437571385088
+MySQL thread id 31568066, query id 11322925707 10.124.62.133 foozle
+---TRANSACTION 9B611E1DF, not started, process no 28529, OS thread id 140437792900864
+MySQL thread id 31568063, query id 11322925453 10.124.62.134 foozle
+---TRANSACTION 9B6085F20, not started, process no 28529, OS thread id 140437682439936
+MySQL thread id 31568062, query id 11322925864 10.124.62.133 foozle
+---TRANSACTION 9B6086682, not started, process no 28529, OS thread id 140437650757376
+MySQL thread id 31568061, query id 11322925171 10.124.62.133 foozle
+---TRANSACTION 9B608D605, not started, process no 28529, OS thread id 140437799024384
+MySQL thread id 31568060, query id 11322925872 10.124.62.134 foozle
+---TRANSACTION 9B61E031D, not started, process no 28529, OS thread id 140437788374784
+MySQL thread id 31568039, query id 11322925081 10.124.62.90 foozle
+---TRANSACTION 9B6189B3E, not started, process no 28529, OS thread id 140437672855296
+MySQL thread id 31568059, query id 11322925869 10.124.62.134 foozle
+---TRANSACTION 9B61DFB1B, not started, process no 28529, OS thread id 140437562865408
+MySQL thread id 31568057, query id 11322925817 10.124.62.101 foozle
+---TRANSACTION 9B61DF7DA, not started, process no 28529, OS thread id 140437670991616
+MySQL thread id 31568058, query id 11322923251 10.124.62.104 foozle
+---TRANSACTION 9B61E01F5, not started, process no 28529, OS thread id 140437659010816
+MySQL thread id 31568054, query id 11322924560 10.124.62.97 foozle
+---TRANSACTION 9B61E02E6, not started, process no 28529, OS thread id 140437811537664
+MySQL thread id 31568051, query id 11322924975 10.124.62.101 foozle
+---TRANSACTION 9B61BF17C, not started, process no 28529, OS thread id 140437793433344
+MySQL thread id 31568055, query id 11322915200 10.124.62.123 foozle
+---TRANSACTION 9B61DFE11, not started, process no 28529, OS thread id 140437839492864
+MySQL thread id 31568056, query id 11322925756 10.124.62.101 foozle
+---TRANSACTION 9B6141F37, not started, process no 28529, OS thread id 140437805414144
+MySQL thread id 31568053, query id 11322840986 10.124.62.123 foozle
+---TRANSACTION 9B61B95F9, not started, process no 28529, OS thread id 140437838161664
+MySQL thread id 31568052, query id 11322925779 10.124.62.133 foozle
+---TRANSACTION 9B61D9EB3, not started, process no 28529, OS thread id 140437696018176
+MySQL thread id 31568041, query id 11322888934 10.124.62.90 foozle
+---TRANSACTION 9B6086CED, not started, process no 28529, OS thread id 140437794232064
+MySQL thread id 31568050, query id 11322924226 10.124.62.133 foozle
+---TRANSACTION 9B61AFA37, not started, process no 28529, OS thread id 140582149904128
+MySQL thread id 31568049, query id 11322690819 10.124.62.123 foozle
+---TRANSACTION 9B61DE1C5, not started, process no 28529, OS thread id 140437574579968
+MySQL thread id 31568034, query id 11322920615 10.124.62.90 foozle
+---TRANSACTION 9B61DFF8E, not started, process no 28529, OS thread id 140437972244224
+MySQL thread id 31568032, query id 11322923444 10.124.62.90 foozle
+---TRANSACTION 9B61DEB30, not started, process no 28529, OS thread id 140437560203008
+MySQL thread id 31568048, query id 11322925550 10.124.62.101 foozle
+---TRANSACTION 9B61D9BE4, not started, process no 28529, OS thread id 140437708265216
+MySQL thread id 31568035, query id 11322887809 10.124.62.90 foozle
+---TRANSACTION 9B61E04E0, not started, process no 28529, OS thread id 140437915604736
+MySQL thread id 31568047, query id 11322925857 10.124.62.101 foozle
+---TRANSACTION 9B61BAF2E, not started, process no 28529, OS thread id 140437818726144
+MySQL thread id 31568046, query id 11322729439 10.124.62.123 foozle
+---TRANSACTION 9B61E048B, not started, process no 28529, OS thread id 140437558073088
+MySQL thread id 31568044, query id 11322925733 10.124.62.101 foozle
+---TRANSACTION 9B61DFB89, not started, process no 28529, OS thread id 140437813933824
+MySQL thread id 31568042, query id 11322925353 10.124.62.104 foozle
+---TRANSACTION 9B61E04CC, not started, process no 28529, OS thread id 140437575911168
+MySQL thread id 31568043, query id 11322925822 10.124.62.97 foozle
+---TRANSACTION 9B61DF129, not started, process no 28529, OS thread id 140437659809536
+MySQL thread id 31568037, query id 11322925701 10.124.62.123 foozle
+---TRANSACTION 9B61DFFA3, not started, process no 28529, OS thread id 140437646763776
+MySQL thread id 31568040, query id 11322925888 10.124.62.104 foozle
+---TRANSACTION 9B61E0102, not started, process no 28529, OS thread id 140437828577024
+MySQL thread id 31568031, query id 11322925896 10.124.62.101 foozle
+---TRANSACTION 9B61DF9D6, not started, process no 28529, OS thread id 140437973042944
+MySQL thread id 31568033, query id 11322925607 10.124.62.104 foozle
+---TRANSACTION 9B6148B47, not started, process no 28529, OS thread id 140437827245824
+MySQL thread id 31568029, query id 11322755445 10.124.62.123 foozle
+---TRANSACTION 9B61DF6EB, not started, process no 28529, OS thread id 140437561001728
+MySQL thread id 31568028, query id 11322920113 10.124.62.97 foozle
+---TRANSACTION 9B61DEDEA, not started, process no 28529, OS thread id 140437796628224
+MySQL thread id 31568027, query id 11322916910 10.124.62.123 foozle
+---TRANSACTION 9B61945E4, not started, process no 28529, OS thread id 140437689095936
+MySQL thread id 31568026, query id 11322908132 10.124.62.123 foozle
+---TRANSACTION 9B61DFC1F, not started, process no 28529, OS thread id 140437828044544
+MySQL thread id 31568024, query id 11322924779 10.124.62.104 foozle
+---TRANSACTION 9B61DEA13, not started, process no 28529, OS thread id 140437666998016
+MySQL thread id 31567995, query id 11322923490 10.124.62.102 foozle
+---TRANSACTION 9B61DF778, not started, process no 28529, OS thread id 140437839226624
+MySQL thread id 31568022, query id 11322924860 10.124.62.104 foozle
+---TRANSACTION 9B61DFD8B, not started, process no 28529, OS thread id 140437646231296
+MySQL thread id 31568021, query id 11322925847 10.124.62.106 foozle
+---TRANSACTION 9B61CA081, not started, process no 28529, OS thread id 140437830973184
+MySQL thread id 31568020, query id 11322889689 10.124.62.116 foozle
+---TRANSACTION 9B61DE64E, not started, process no 28529, OS thread id 140437812868864
+MySQL thread id 31568019, query id 11322916736 10.124.62.116 foozle
+---TRANSACTION 9B61E009A, not started, process no 28529, OS thread id 140437829375744
+MySQL thread id 31567988, query id 11322924898 10.124.62.120 foozle
+---TRANSACTION 9B61DBF87, not started, process no 28529, OS thread id 140437701875456
+MySQL thread id 31568015, query id 11322900981 10.124.62.97 foozle
+---TRANSACTION 9B61DF169, not started, process no 28529, OS thread id 140437675251456
+MySQL thread id 31567987, query id 11322923138 10.124.62.120 foozle
+---TRANSACTION 9B61DEF62, not started, process no 28529, OS thread id 140437807011584
+MySQL thread id 31567991, query id 11322917471 10.124.62.120 foozle
+---TRANSACTION 9B61D3D2C, not started, process no 28529, OS thread id 140437802751744
+MySQL thread id 31568008, query id 11322854956 10.124.62.97 foozle
+---TRANSACTION 9B61DC666, not started, process no 28529, OS thread id 140437798491904
+MySQL thread id 31568010, query id 11322903429 10.124.62.97 foozle
+---TRANSACTION 9B61DAAFC, not started, process no 28529, OS thread id 140437809141504
+MySQL thread id 31568007, query id 11322893639 10.124.62.97 foozle
+---TRANSACTION 9B61DB174, not started, process no 28529, OS thread id 140437706401536
+MySQL thread id 31568006, query id 11322895997 10.124.62.97 foozle
+---TRANSACTION 9B61DFA95, not started, process no 28529, OS thread id 140437824317184
+MySQL thread id 31568004, query id 11322925753 10.124.62.106 foozle
+---TRANSACTION 9B61E00C8, not started, process no 28529, OS thread id 140437676582656
+MySQL thread id 31568005, query id 11322925753 10.124.62.106 foozle
+---TRANSACTION 9B61E04B9, not started, process no 28529, OS thread id 140437700011776
+MySQL thread id 31568002, query id 11322925796 10.124.62.104 foozle
+---TRANSACTION 9B61E041D, not started, process no 28529, OS thread id 140437835765504
+MySQL thread id 31568000, query id 11322925698 10.124.62.104 foozle
+---TRANSACTION 9B61DF3A8, not started, process no 28529, OS thread id 140437665134336
+MySQL thread id 31567986, query id 11322921261 10.124.62.120 foozle
+---TRANSACTION 9B61E0340, not started, process no 28529, OS thread id 140437817927424
+MySQL thread id 31568001, query id 11322925141 10.124.62.104 foozle
+---TRANSACTION 9B61DF5AD, not started, process no 28529, OS thread id 140437566592768
+MySQL thread id 31567999, query id 11322923548 10.124.62.104 foozle
+---TRANSACTION 9B61DCA2D, not started, process no 28529, OS thread id 140437704804096
+MySQL thread id 31567998, query id 11322904693 10.124.62.116 foozle
+---TRANSACTION 9B61DB7B8, not started, process no 28529, OS thread id 140437560735488
+MySQL thread id 31567984, query id 11322922142 10.124.62.120 foozle
+---TRANSACTION 9B61E030C, not started, process no 28529, OS thread id 140437657945856
+MySQL thread id 31567997, query id 11322925893 10.124.62.106 foozle
+---TRANSACTION 9B61DCA32, not started, process no 28529, OS thread id 140437805147904
+MySQL thread id 31567972, query id 11322922508 10.124.62.120 foozle
+---TRANSACTION 9B61D8CEA, not started, process no 28529, OS thread id 140437786244864
+MySQL thread id 31567973, query id 11322917179 10.124.62.120 foozle
+---TRANSACTION 9B61D9D68, not started, process no 28529, OS thread id 140437815265024
+MySQL thread id 31567969, query id 11322924069 10.124.62.120 foozle
+---TRANSACTION 9B61DD552, not started, process no 28529, OS thread id 140437813401344
+MySQL thread id 31567971, query id 11322925634 10.124.62.120 foozle
+---TRANSACTION 9B61DF1B2, not started, process no 28529, OS thread id 140437647030016
+MySQL thread id 31567990, query id 11322924908 10.124.62.106 foozle
+---TRANSACTION 9B61DFBC4, not started, process no 28529, OS thread id 140437554878208
+MySQL thread id 31567950, query id 11322925882 10.124.62.102 foozle
+---TRANSACTION 9B61DFFA1, not started, process no 28529, OS thread id 140437815531264
+MySQL thread id 31567985, query id 11322925815 10.124.62.105 foozle
+---TRANSACTION 9B61DFEA2, not started, process no 28529, OS thread id 140437700278016
+MySQL thread id 31567967, query id 11322924914 10.124.62.102 foozle
+---TRANSACTION 9B61DCBB2, not started, process no 28529, OS thread id 140437555144448
+MySQL thread id 31567989, query id 11322905315 10.124.62.91 foozle
+---TRANSACTION 9B61DFF1C, not started, process no 28529, OS thread id 140437695485696
+MySQL thread id 31567981, query id 11322925799 10.124.62.106 foozle
+---TRANSACTION 9B61DFD62, not started, process no 28529, OS thread id 140437782517504
+MySQL thread id 31567966, query id 11322922512 10.124.62.102 foozle
+---TRANSACTION 9B61DFA7C, not started, process no 28529, OS thread id 140437578041088
+MySQL thread id 31567983, query id 11322925824 10.124.62.105 foozle
+---TRANSACTION 9B61D9F91, not started, process no 28529, OS thread id 140437658478336
+MySQL thread id 31567982, query id 11322889388 10.124.62.89 foozle
+---TRANSACTION 9B61DF1FC, not started, process no 28529, OS thread id 140437711726336
+MySQL thread id 31567977, query id 11322925217 10.124.62.106 foozle
+---TRANSACTION 9B61E0175, not started, process no 28529, OS thread id 140437680842496
+MySQL thread id 31567980, query id 11322925836 10.124.62.106 foozle
+---TRANSACTION 9B61DF62E, not started, process no 28529, OS thread id 140437562332928
+MySQL thread id 31567979, query id 11322925672 10.124.62.105 foozle
+---TRANSACTION 9B61DC78A, not started, process no 28529, OS thread id 140437704271616
+MySQL thread id 31567961, query id 11322925212 10.124.62.102 foozle
+---TRANSACTION 9B61DBAE4, not started, process no 28529, OS thread id 140437831239424
+MySQL thread id 31567953, query id 11322925419 10.124.62.102 foozle
+---TRANSACTION 9B61DE800, not started, process no 28529, OS thread id 140437676848896
+MySQL thread id 31567976, query id 11322925888 10.124.62.106 foozle
+---TRANSACTION 9B61DF8B5, not started, process no 28529, OS thread id 140437696816896
+MySQL thread id 31567974, query id 11322925567 10.124.62.106 foozle
+---TRANSACTION 9B61DE6B9, not started, process no 28529, OS thread id 140437556209408
+MySQL thread id 31567951, query id 11322923372 10.124.62.120 foozle
+---TRANSACTION 9B61DEE3B, not started, process no 28529, OS thread id 140437817128704
+MySQL thread id 31567934, query id 11322923743 10.124.62.102 foozle
+---TRANSACTION 9B61D2CB7, not started, process no 28529, OS thread id 140437788907264
+MySQL thread id 31567962, query id 11322905397 10.124.62.114 foozle
+---TRANSACTION 9B61DAEF3, not started, process no 28529, OS thread id 140437834700544
+MySQL thread id 31567963, query id 11322894941 10.124.62.89 foozle
+---TRANSACTION 9B61DF037, not started, process no 28529, OS thread id 140437782251264
+MySQL thread id 31567964, query id 11322925759 10.124.62.105 foozle
+---TRANSACTION 9B61DF8BC, not started, process no 28529, OS thread id 140437788641024
+MySQL thread id 31567930, query id 11322923486 10.124.62.102 foozle
+---TRANSACTION 9B61E0405, not started, process no 28529, OS thread id 140437784114944
+MySQL thread id 31567914, query id 11322925521 10.124.62.102 foozle
+---TRANSACTION 9B61C8792, not started, process no 28529, OS thread id 140437680043776
+MySQL thread id 31567954, query id 11322791864 10.124.62.114 foozle
+---TRANSACTION 9B61E01C9, not started, process no 28529, OS thread id 140437784381184
+MySQL thread id 31567958, query id 11322925668 10.124.62.108 foozle
+---TRANSACTION 9B61E0398, not started, process no 28529, OS thread id 140437780653824
+MySQL thread id 31567955, query id 11322925310 10.124.62.114 foozle
+---TRANSACTION 9B61DFD74, not started, process no 28529, OS thread id 140437820856064
+MySQL thread id 31567956, query id 11322924876 10.124.62.105 foozle
+---TRANSACTION 9B61E048A, not started, process no 28529, OS thread id 140437787842304
+MySQL thread id 31567959, query id 11322925732 10.124.62.91 foozle
+---TRANSACTION 9B61DE094, not started, process no 28529, OS thread id 140437672589056
+MySQL thread id 31567952, query id 11322922668 10.124.62.119 foozle
+---TRANSACTION 9B61DFC3E, not started, process no 28529, OS thread id 140437795563264
+MySQL thread id 31567945, query id 11322925509 10.124.62.108 foozle
+---TRANSACTION 9B61DFC2B, not started, process no 28529, OS thread id 140437797160704
+MySQL thread id 31567947, query id 11322923593 10.124.62.119 foozle
+---TRANSACTION 9B61DFD1F, not started, process no 28529, OS thread id 140437833369344
+MySQL thread id 31567944, query id 11322925627 10.124.62.107 foozle
+---TRANSACTION 9B61DF24B, not started, process no 28529, OS thread id 140437563930368
+MySQL thread id 31567946, query id 11322918478 10.124.62.116 foozle
+---TRANSACTION 9B61DD079, not started, process no 28529, OS thread id 140437576177408
+MySQL thread id 31567941, query id 11322922136 10.124.62.119 foozle
+---TRANSACTION 9B61DF7AF, not started, process no 28529, OS thread id 140437683771136
+MySQL thread id 31567905, query id 11322925824 10.124.62.102 foozle
+---TRANSACTION 9B61E050E, not started, process no 28529, OS thread id 140437793167104 starting index read
+mysql tables in use 1, locked 0
+MySQL thread id 31567937, query id 11322925921 10.124.62.115 foozle Sending data
+SELECT * FROM `line_items` WHERE (`line_items`.sku_id = 6881878 AND (line_items.state = 'active')) AND ((check_out_time IS NOT NULL) AND (`line_items`.sku_id = 6881878 AND (line_items.state = 'active')))  ORDER BY check_out_time desc LIMIT 1
+---TRANSACTION 9B61DFD70, not started, process no 28529, OS thread id 140437830706944
+MySQL thread id 31567939, query id 11322925309 10.124.62.119 foozle
+---TRANSACTION 9B61E0509, not started, process no 28529, OS thread id 140437662205696
+MySQL thread id 31567940, query id 11322925918 10.124.62.119 foozle
+---TRANSACTION 9B61E03E4, not started, process no 28529, OS thread id 140437797959424
+MySQL thread id 31567938, query id 11322925466 10.124.62.91 foozle
+---TRANSACTION 9B61E0320, not started, process no 28529, OS thread id 140437824849664
+MySQL thread id 31567931, query id 11322925096 10.124.62.119 foozle
+---TRANSACTION 9B61D6C41, not started, process no 28529, OS thread id 140437972776704
+MySQL thread id 31567933, query id 11322884577 10.124.62.115 foozle
+---TRANSACTION 9B61E0444, not started, process no 28529, OS thread id 140437785712384
+MySQL thread id 31567932, query id 11322925619 10.124.62.105 foozle
+---TRANSACTION 9B61DFAA7, not started, process no 28529, OS thread id 140437553280768
+MySQL thread id 31567924, query id 11322925894 10.124.62.105 foozle
+---TRANSACTION 9B61DF0F2, not started, process no 28529, OS thread id 140437712258816
+MySQL thread id 31567927, query id 11322917905 10.124.62.116 foozle
+---TRANSACTION 9B61DF0F3, not started, process no 28529, OS thread id 140437783848704
+MySQL thread id 31567928, query id 11322917907 10.124.62.89 foozle
+---TRANSACTION 9B61DF5CF, not started, process no 28529, OS thread id 140437655017216
+MySQL thread id 31567929, query id 11322919769 10.124.62.91 foozle
+---TRANSACTION 9B61DFF17, not started, process no 28529, OS thread id 140437975971584
+MySQL thread id 31567920, query id 11322925640 10.124.62.105 foozle
+---TRANSACTION 9B61DFFD6, not started, process no 28529, OS thread id 140437781186304
+MySQL thread id 31567923, query id 11322925899 10.124.62.105 foozle
+---TRANSACTION 9B61DF7AC, not started, process no 28529, OS thread id 140437803550464
+MySQL thread id 31567922, query id 11322925875 10.124.62.105 foozle
+---TRANSACTION 9B61D81F3, not started, process no 28529, OS thread id 140437827778304
+MySQL thread id 31567916, query id 11322877715 10.124.62.91 foozle
+---TRANSACTION 9B61DD355, not started, process no 28529, OS thread id 140437842155264
+MySQL thread id 31567918, query id 11322907868 10.124.62.91 foozle
+---TRANSACTION 9B61E0201, not started, process no 28529, OS thread id 140437781452544
+MySQL thread id 31567919, query id 11322924583 10.124.62.91 foozle
+---TRANSACTION 9B61DB04E, not started, process no 28529, OS thread id 140437552748288
+MySQL thread id 31567913, query id 11322923135 10.124.62.119 foozle
+---TRANSACTION 9B61E03FE, not started, process no 28529, OS thread id 140437574313728
+MySQL thread id 31567917, query id 11322925507 10.124.62.91 foozle
+---TRANSACTION 9B61DF7A4, not started, process no 28529, OS thread id 140437566060288
+MySQL thread id 31567906, query id 11322925852 10.124.62.103 foozle
+---TRANSACTION 9B61E04E8, not started, process no 28529, OS thread id 140437554079488
+MySQL thread id 31567911, query id 11322925871 10.124.62.89 foozle
+---TRANSACTION 9B61DDB89, not started, process no 28529, OS thread id 140437669926656
+MySQL thread id 31567910, query id 11322910650 10.124.62.89 foozle
+---TRANSACTION 9B61DFBE4, not started, process no 28529, OS thread id 140437974374144
+MySQL thread id 31567912, query id 11322925894 10.124.62.108 foozle
+---TRANSACTION 9B61E03FA, not started, process no 28529, OS thread id 140437783049984
+MySQL thread id 31567907, query id 11322925502 10.124.62.89 foozle
+---TRANSACTION 9B61DFF5E, not started, process no 28529, OS thread id 140437791835904
+MySQL thread id 31567909, query id 11322923376 10.124.62.89 foozle
+---TRANSACTION 9B61DBF7C, not started, process no 28529, OS thread id 140437801420544
+MySQL thread id 31567908, query id 11322900964 10.124.62.89 foozle
+---TRANSACTION 9B61DFF6E, not started, process no 28529, OS thread id 140437822985984
+MySQL thread id 31567903, query id 11322925842 10.124.62.107 foozle
+---TRANSACTION 9B61DF9FB, not started, process no 28529, OS thread id 140437811005184
+MySQL thread id 31567902, query id 11322924096 10.124.62.103 foozle
+---TRANSACTION 9B61DFB77, not started, process no 28529, OS thread id 140437809673984
+MySQL thread id 31567894, query id 11322925721 10.124.62.103 foozle
+---TRANSACTION 9B61DF9EF, not started, process no 28529, OS thread id 140437799823104
+MySQL thread id 31567900, query id 11322924875 10.124.62.103 foozle
+---TRANSACTION 9B61E03C6, not started, process no 28529, OS thread id 140437820057344
+MySQL thread id 31567892, query id 11322925478 10.124.62.103 foozle
+---TRANSACTION 9B61DFD9C, not started, process no 28529, OS thread id 140437821122304
+MySQL thread id 31567898, query id 11322924964 10.124.62.103 foozle
+---TRANSACTION 9B61DF810, not started, process no 28529, OS thread id 140437685901056
+MySQL thread id 31567895, query id 11322925769 10.124.62.103 foozle
+---TRANSACTION 9B61DFA4A, not started, process no 28529, OS thread id 140437971977984
+MySQL thread id 31567896, query id 11322925047 10.124.62.103 foozle
+---TRANSACTION 9B61E04F2, not started, process no 28529, OS thread id 140437661140736
+MySQL thread id 31567897, query id 11322925880 10.124.62.103 foozle
+---TRANSACTION 9B61E04D3, not started, process no 28529, OS thread id 140437804615424
+MySQL thread id 31567893, query id 11322925836 10.124.62.103 foozle
+---TRANSACTION 9B61DD3B8, not started, process no 28529, OS thread id 140437710661376
+MySQL thread id 31567890, query id 11322925469 10.124.62.108 foozle
+---TRANSACTION 9B61DFF2E, not started, process no 28529, OS thread id 140437972510464
+MySQL thread id 31567901, query id 11322925898 10.124.62.107 foozle
+---TRANSACTION 9B61DF241, not started, process no 28529, OS thread id 140437790238464
+MySQL thread id 31567899, query id 11322925884 10.124.62.107 foozle
+---TRANSACTION 9B61DDC14, not started, process no 28529, OS thread id 140437557540608
+MySQL thread id 31567891, query id 11322925759 10.124.62.108 foozle
+---TRANSACTION 9B61DD51F, not started, process no 28529, OS thread id 140437672056576
+MySQL thread id 31567888, query id 11322923641 10.124.62.119 foozle
+---TRANSACTION 9B61DF470, not started, process no 28529, OS thread id 140437787309824
+MySQL thread id 31567889, query id 11322922512 10.124.62.119 foozle
+---TRANSACTION 9B61DFE44, not started, process no 28529, OS thread id 140437812070144
+MySQL thread id 31567887, query id 11322925187 10.124.62.107 foozle
+---TRANSACTION 9B61DE962, not started, process no 28529, OS thread id 140437710128896
+MySQL thread id 31567885, query id 11322925000 10.124.62.108 foozle
+---TRANSACTION 9B61E04DC, not started, process no 28529, OS thread id 140437796361984
+MySQL thread id 31567886, query id 11322925853 10.124.62.108 foozle
+---TRANSACTION 9B61D81B5, not started, process no 28529, OS thread id 140437789705984
+MySQL thread id 31567883, query id 11322884810 10.124.62.114 foozle
+---TRANSACTION 9B61DF5A3, not started, process no 28529, OS thread id 140437819791104
+MySQL thread id 31567884, query id 11322924716 10.124.62.108 foozle
+---TRANSACTION 9B61E0352, not started, process no 28529, OS thread id 140437703206656
+MySQL thread id 31567882, query id 11322925176 10.124.62.107 foozle
+---TRANSACTION 9B61DFCF5, not started, process no 28529, OS thread id 140437834434304
+MySQL thread id 31567880, query id 11322925883 10.124.62.107 foozle
+---TRANSACTION 9B61E0500, not started, process no 28529, OS thread id 140437976504064
+MySQL thread id 31567878, query id 11322925895 10.124.62.108 foozle
+---TRANSACTION 9B61DFDAA, not started, process no 28529, OS thread id 140437810206464
+MySQL thread id 31567876, query id 11322925585 10.124.62.108 foozle
+---TRANSACTION 9B61DD56C, not started, process no 28529, OS thread id 140437707998976
+MySQL thread id 31567871, query id 11322925396 10.124.62.107 foozle
+---TRANSACTION 9B61E0296, not started, process no 28529, OS thread id 140437797693184
+MySQL thread id 31567873, query id 11322925746 10.124.62.107 foozle
+---TRANSACTION 9B61DEF1D, not started, process no 28529, OS thread id 140437841622784
+MySQL thread id 31567872, query id 11322924981 10.124.62.107 foozle
+---TRANSACTION 9B61E03B0, not started, process no 28529, OS thread id 140437789439744
+MySQL thread id 7971336, query id 11322925371 localhost mkheartbeat
+---TRANSACTION 0, not started, process no 28529, OS thread id 140437915072256
+MySQL thread id 52627, query id 11322925368 Has read all relay log; waiting for the slave I/O thread to update it
+---TRANSACTION 9B61E050C, ACTIVE 0 sec, process no 28529, OS thread id 140437660342016
+mysql tables in use 1, locked 0
+2 lock struct(s), heap size 376, 1 row lock(s)
+MySQL thread id 31674394, query id 11322925922 10.124.62.6 foozle Sending data
+SELECT * FROM `shipment_orders` WHERE (`shipment_orders`.order_id = 38181642)  ORDER BY `shipment_orders`.created_at, `shipment_orders`.id
+Trx read view will not see trx with id >= 9B61E050E, sees < 9B61D4F41
+TABLE LOCK table `foozle_production`.`orders` trx id 9B61E050C lock mode IX
+RECORD LOCKS space id 26100 page no 105789 n bits 160 index `PRIMARY` of table `foozle_production`.`orders` trx id 9B61E050C lock_mode X locks rec but not gap
+---TRANSACTION 9B61E03EB, ACTIVE 0 sec, process no 28529, OS thread id 140437808342784
+mysql tables in use 3, locked 0
+2 lock struct(s), heap size 376, 1 row lock(s)
+MySQL thread id 31667093, query id 11322925526 10.124.62.6 foozle Sending data
+SELECT count(*) AS count_all FROM `sku_units` WHERE (((`sku_units`.`state` = 'available' AND `sku_units`.`onhand` = 1) AND (`sku_units`.sku_id = 1877207)) AND (`sku_units`.sku_id = 1877207))
+Trx read view will not see trx with id >= 9B61E03EF, sees < 9B61D4F41
+TABLE LOCK table `foozle_production`.`orders` trx id 9B61E03EB lock mode IX
+RECORD LOCKS space id 26100 page no 172689 n bits 160 index `PRIMARY` of table `foozle_production`.`orders` trx id 9B61E03EB lock_mode X locks rec but not gap
+---TRANSACTION 9B61E0399, ACTIVE 1 sec, process no 28529, OS thread id 140437573781248
+2 lock struct(s), heap size 376, 1 row lock(s)
+MySQL thread id 31660917, query id 11322925311 10.124.62.57 foozle
+TABLE LOCK table `foozle_production`.`cc_subscriptions` trx id 9B61E0399 lock mode IX
+RECORD LOCKS space id 18468 page no 10424 n bits 200 index `PRIMARY` of table `foozle_production`.`cc_subscriptions` trx id 9B61E0399 lock_mode X locks rec but not gap
+---TRANSACTION 9B61E022A, ACTIVE 1 sec, process no 28529, OS thread id 140437970380544
+2 lock struct(s), heap size 376, 1 row lock(s)
+MySQL thread id 31673293, query id 11322924656 10.124.62.54 foozle
+TABLE LOCK table `foozle_production`.`cc_subscriptions` trx id 9B61E022A lock mode IX
+RECORD LOCKS space id 18468 page no 5201 n bits 192 index `PRIMARY` of table `foozle_production`.`cc_subscriptions` trx id 9B61E022A lock_mode X locks rec but not gap
+---TRANSACTION 9B61E01E9, ACTIVE 1 sec, process no 28529, OS thread id 140437553014528
+2 lock struct(s), heap size 376, 1 row lock(s)
+MySQL thread id 31674395, query id 11322924542 10.124.62.8 foozle
+TABLE LOCK table `foozle_production`.`shipment_orders` trx id 9B61E01E9 lock mode IX
+RECORD LOCKS space id 18468 page no 5201 n bits 192 index `PRIMARY` of table `foozle_production`.`cc_subscriptions` trx id 9B61E022A lock_mode X locks rec but not gap
+---TRANSACTION 9B61E01E9, ACTIVE 1 sec, process no 28529, OS thread id 140437553014528
+2 lock struct(s), heap size 376, 1 row lock(s)
+MySQL thread id 31674395, query id 11322924542 10.124.62.8 foozle
+TABLE LOCK table `foozle_production`.`shipment_orders` trx id 9B61E01E9 lock mode IX
+RECORD LOCKS space id 26058 page no 49929 n bits 208 index `PRIMARY` of table `foozle_production`.`shipment_orders` trx id 9B61E01E9 lock_mode X locks rec but not gap
+---TRANSACTION 9B61E002D, ACTIVE 1 sec, process no 28529, OS thread id 140437784913664
+8 lock struct(s), heap size 1248, 4 row lock(s), undo log entries 5
+MySQL thread id 31567926, query id 11322925671 10.124.62.116 foozle
+Trx read view will not see trx with id >= 9B61E002E, sees < 9B61D4F41
+TABLE LOCK table `foozle_production`.`skus` trx id 9B61E002D lock mode IX
+RECORD LOCKS space id 26132 page no 22945 n bits 96 index `PRIMARY` of table `foozle_production`.`skus` trx id 9B61E002D lock_mode X locks rec but not gap
+TABLE LOCK table `foozle_production`.`colors` trx id 9B61E002D lock mode IX
+RECORD LOCKS space id 26204 page no 608 n bits 368 index `PRIMARY` of table `foozle_production`.`colors` trx id 9B61E002D lock_mode X locks rec but not gap
+TABLE LOCK table `foozle_production`.`product_infos` trx id 9B61E002D lock mode IX
+RECORD LOCKS space id 26148 page no 6409 n bits 96 index `PRIMARY` of table `foozle_production`.`product_infos` trx id 9B61E002D lock_mode X locks rec but not gap
+TABLE LOCK table `foozle_production`.`offers` trx id 9B61E002D lock mode IX
+RECORD LOCKS space id 25725 page no 15861 n bits 112 index `PRIMARY` of table `foozle_production`.`offers` trx id 9B61E002D lock_mode X locks rec but not gap
+---TRANSACTION 9B61DFEF2, ACTIVE 1 sec, process no 28529, OS thread id 140437831771904
+2 lock struct(s), heap size 376, 1 row lock(s)
+MySQL thread id 31569344, query id 11322923227 10.124.62.57 foozle
+Trx read view will not see trx with id >= 9B61DFEF7, sees < 9B61D4F41
+TABLE LOCK table `foozle_production`.`product_analytics` trx id 9B61DFEF2 lock mode IX
+RECORD LOCKS space id 26126 page no 1797 n bits 144 index `PRIMARY` of table `foozle_production`.`product_analytics` trx id 9B61DFEF2 lock_mode X locks rec but not gap
+---TRANSACTION 9B61DFC4A, ACTIVE 2 sec, process no 28529, OS thread id 140437840291584
+2 lock struct(s), heap size 376, 1 row lock(s)
+MySQL thread id 31569251, query id 11322923825 10.124.62.59 foozle
+Trx read view will not see trx with id >= 9B61DFC4C, sees < 9B61D4F41
+TABLE LOCK table `foozle_production`.`ns_sync_requests` trx id 9B61DFC4A lock mode IX
+RECORD LOCKS space id 26132 page no 14696 n bits 144 index `PRIMARY` of table `foozle_production`.`skus` trx id 9B61DF9CB lock_mode X locks rec but not gap
+RECORD LOCKS space id 26132 page no 26848 n bits 168 index `PRIMARY` of table `foozle_production`.`skus` trx id 9B61DF9CB lock_mode X locks rec but not gap
+TABLE LOCK table `foozle_production`.`colors` trx id 9B61DF9CB lock mode IX
+RECORD LOCKS space id 26204 page no 452 n bits 368 index `PRIMARY` of table `foozle_production`.`colors` trx id 9B61DF9CB lock_mode X locks rec but not gap
+TABLE LOCK table `foozle_production`.`product_infos` trx id 9B61DF9CB lock mode IX
+RECORD LOCKS space id 26148 page no 5181 n bits 96 index `PRIMARY` of table `foozle_production`.`product_infos` trx id 9B61DF9CB lock_mode X locks rec but not gap
+TABLE LOCK table `foozle_production`.`offers` trx id 9B61DF9CB lock mode IX
+RECORD LOCKS space id 25725 page no 9536 n bits 112 index `PRIMARY` of table `foozle_production`.`offers` trx id 9B61DF9CB lock_mode X locks rec but not gap
+---TRANSACTION 9B61DF4F8, ACTIVE 4 sec, process no 28529, OS thread id 140437836031744
+1 lock struct(s), heap size 376, 0 row lock(s), undo log entries 9
+MySQL thread id 31655813, query id 11322925837 10.124.62.114 foozle
+Trx read view will not see trx with id >= 9B61DF4FE, sees < 9B61D4F41
+TABLE LOCK table `foozle_production`.`attachments` trx id 9B61DF4F8 lock mode IX
+---TRANSACTION 9B61DD74E, ACTIVE 9 sec, process no 28529, OS thread id 140437652354816
+2 lock struct(s), heap size 376, 1 row lock(s)
+MySQL thread id 31589177, query id 11322918609 10.124.62.54 foozle
+Trx read view will not see trx with id >= 9B61DD751, sees < 9B61D4F41
+TABLE LOCK table `foozle_production`.`product_analytics` trx id 9B61DD74E lock mode IX
+RECORD LOCKS space id 26126 page no 2794 n bits 128 index `PRIMARY` of table `foozle_production`.`product_analytics` trx id 9B61DD74E lock_mode X locks rec but not gap
+---TRANSACTION 9B61D4F41, ACTIVE 40 sec, process no 28529, OS thread id 140437682706176
+3 lock struct(s), heap size 376, 1 row lock(s), undo log entries 2
+MySQL thread id 31615419, query id 11322860530 10.124.62.114 foozle
+Trx read view will not see trx with id >= 9B61D4F42, sees < 9B61CC26F
+TABLE LOCK table `foozle_production`.`audits` trx id 9B61D4F41 lock mode IX
+TABLE LOCK table `foozle_production`.`images` trx id 9B61D4F41 lock mode IX
+RECORD LOCKS space id 25747 page no 1945 n bits 200 index `PRIMARY` of table `foozle_production`.`images` trx id 9B61D4F41 lock_mode X locks rec but not gap
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================

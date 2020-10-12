@@ -1,0 +1,85 @@
+=====================================
+060815 22:00:08 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 1 seconds
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 2732706, signal count 2379850
+--Thread 1194400096 has waited at ./../include/buf0buf.ic line 621 for 0.00 seconds the semaphore:
+Mutex at 0x2a97b65cb8 created file buf0buf.c line 538, lock var 0
+waiters flag 0
+wait is ending
+--Thread 1229543776 has waited at ./../include/buf0buf.ic line 621 for 0.00 seconds the semaphore:
+Mutex at 0x2a97b65cb8 created file buf0buf.c line 538, lock var 0
+waiters flag 0
+wait is ending
+--Thread 1180023136 has waited at buf0buf.c line 1095 for 0.00 seconds the semaphore:
+Mutex at 0x2a97b65cb8 created file buf0buf.c line 538, lock var 0
+waiters flag 0
+wait is ending
+Mutex spin waits 972676265, rounds 873903174, OS waits 1082677
+RW-shared spins 1173365, OS waits 286911; RW-excl spins 2180540, OS waits 132392
+------------
+TRANSACTIONS
+------------
+Trx id counter 0 418256672
+Purge done for trx's n:o < 0 418256427 undo n:o < 0 0
+History list length 68
+Total number of lock structs in row lock hash table 9127
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 0 0, not started, process no 15072, OS thread id 1309149536
+MySQL thread id 7292664, query id 62690007 localhost baron
+SHOW /*!5 ENGINE */ INNODB STATUS
+--------
+FILE I/O
+--------
+I/O thread 0 state: waiting for i/o request (insert buffer thread)
+I/O thread 1 state: waiting for i/o request (log thread)
+I/O thread 2 state: waiting for i/o request (read thread)
+I/O thread 3 state: waiting for i/o request (write thread)
+Pending normal aio reads: 0, aio writes: 0,
+ ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
+Pending flushes (fsync) log: 0; buffer pool: 0
+54061 OS file reads, 41303508 OS file writes, 35873693 OS fsyncs
+0.00 reads/s, 0 avg bytes/read, 45.95 writes/s, 37.96 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf for space 0: size 1, free list len 5, seg size 7, is empty
+Ibuf for space 0: size 1, free list len 5, seg size 7,
+4622 inserts, 4622 merged recs, 3923 merges
+Hash table size 4425293, used cells 4229064, node heap has 20330 buffer(s)
+164964.04 hash searches/s, 8995.00 non-hash searches/s
+---
+LOG
+---
+Log sequence number 17 3726916467
+Log flushed up to   17 3726916467
+Last checkpoint at  17 3717618537
+0 pending log writes, 0 pending chkp writes
+35429003 log i/o's done, 34.97 log i/o's/second
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total memory allocated 2678883562; in additional pool allocated 18844672
+Buffer pool size   131072
+Free buffers       99
+Database pages     110571
+Modified db pages  3939
+Pending reads 0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages read 67076, created 71687, written 8872882
+0.00 reads/s, 0.00 creates/s, 18.98 writes/s
+Buffer pool hit rate 1000 / 1000
+--------------
+ROW OPERATIONS
+--------------
+0 queries inside InnoDB, 0 queries in queue
+3 read views open inside InnoDB
+Main thread process no. 15072, id 1157658976, state: sleeping
+Number of rows inserted 12652987, updated 17663832, deleted 11398378, read 83506215492
+4.00 inserts/s, 12.99 updates/s, 0.00 deletes/s, 735874.13 reads/s
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================
