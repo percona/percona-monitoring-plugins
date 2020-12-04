@@ -1048,7 +1048,7 @@ function get_innodb_array($text, $mysql_version) {
          $results['pending_ibuf_aio_reads'] = 0;
          $results['pending_aio_log_ios']    = 0;
          $results['pending_aio_sync_ios']   = 0;
-         if (count($row) === 9) {
+         if (count($row) === 10) {
             $results['pending_ibuf_aio_reads'] = to_int($row[3]);
             $results['pending_aio_log_ios']    = to_int($row[6]);
             $results['pending_aio_sync_ios']   = to_int($row[9]);
@@ -1424,4 +1424,3 @@ function debug($val) {
       $debug_log = FALSE;
    }
 }
-
