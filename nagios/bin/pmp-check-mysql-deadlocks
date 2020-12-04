@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # ########################################################################
 # This program is part of $PROJECT_NAME$
@@ -60,7 +60,7 @@ main() {
       fi
    fi
 
-   LEVEL=$(mysql_exec "SELECT COUNT(*) FROM ${OPT_TABLE} WHERE ts >= NOW() - INTERVAL ${OPT_INTERVAL}*60 SECOND")
+   LEVEL=$(mysql_exec "SELECT COUNT(*) FROM ${OPT_TABLE} WHERE server IN ('${OPT_HOST}', @@hostname) AND ts >= NOW() - INTERVAL ${OPT_INTERVAL}*60 SECOND")
    if [ $? = 0 ]; then
       NOTE="${LEVEL:-UNKNOWN} deadlocks in last ${OPT_INTERVAL} minutes"
       if [ "${LEVEL:-0}" -gt "${OPT_CRIT}" ]; then
@@ -147,7 +147,7 @@ pmp-check-mysql-deadlocks - Alert when pt-deadlock-logger has recorded too many 
 
 =head1 DESCRIPTION
 
-This Nagios plugin looks at the table that pt-deadlock-logger (part of Percona
+This Nagios plugin looks at the table that pt-deadlock-logger (https://www.percona.com/doc/percona-toolkit/3.0/pt-deadlock-logger.html, the part of Percona
 Toolkit) maintains, and when there have been too many recent deadlocks, it
 alerts.
 
@@ -163,7 +163,7 @@ C<SELECT> from the C<pt-deadlock-logger> table.
 
 =back
 
-This plugin executes no UNIX commands that may need special privileges. 
+This plugin executes no UNIX commands that may need special privileges.
 
 =head1 COPYRIGHT, LICENSE, AND WARRANTY
 

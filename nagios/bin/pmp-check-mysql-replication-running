@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # ########################################################################
 # This program is part of $PROJECT_NAME$
@@ -39,6 +39,7 @@ main() {
          -S)              shift; OPT_SOCK="${1}"; shift; ;;
          -w)              shift; OPT_WARN="${1}"; shift; ;;
          --master-conn)   shift; OPT_MASTERCONN="${1}"; shift; ;;
+	 --channel)       shift; OPT_CHANNEL="${1}"; shift; ;;
          --version)       grep -A2 '^=head1 VERSION' "$0" | tail -n1; exit 0 ;;
          --help)          perl -00 -ne 'm/^  Usage:/ && print' "$0"; exit 0 ;;
          -*)              echo "Unknown option ${o}.  Try --help."; exit 1; ;;
@@ -63,6 +64,8 @@ main() {
       if [ "${OPT_MASTERCONN}" ]; then
          # MariaDB multi-source replication
          mysql_exec "SHOW SLAVE '${OPT_MASTERCONN}' STATUS\G" > "${TEMP}"
+      elif [ "${OPT_CHANNEL}" ]; then
+        mysql_exec "SHOW SLAVE STATUS FOR CHANNEL '${OPT_CHANNEL}'\G" > "${TEMP}" 
       else
          # Leverage lock-free SHOW SLAVE STATUS if available
          mysql_exec "SHOW SLAVE STATUS NONBLOCKING\G" > "${TEMP}" 2>/dev/null ||
@@ -172,6 +175,7 @@ pmp-check-mysql-replication-running - Alert when MySQL replication stops.
     -S SOCKET       MySQL socket file.
     -w WARN         Report WARNING when SHOW SLAVE STATUS output is empty.
     --master-conn NAME  Master connection name for MariaDB multi-source replication.
+    --channel NAME  Master channel name for multi-source replication (MySQL 5.7.6+).
     --help          Print help and exit.
     --version       Print version and exit.
   Options must be given as --option value, not --option=value or -Ovalue.

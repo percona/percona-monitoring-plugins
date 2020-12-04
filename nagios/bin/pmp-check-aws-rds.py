@@ -125,15 +125,36 @@ def main():
         'db.m4.2xlarge': 32,
         'db.m4.4xlarge': 64,
         'db.m4.10xlarge': 160,
+        'db.m4.16xlarge': 256,
+        'db.m5.large': 8,
+        'db.m5.xlarge': 16,
+        'db.m5.2xlarge': 32,
+        'db.m5.4xlarge': 64,
+        'db.m5.12xlarge': 192,
+        'db.m5.24xlarge': 384,
         'db.r3.large': 15,
         'db.r3.xlarge': 30.5,
         'db.r3.2xlarge': 61,
         'db.r3.4xlarge': 122,
         'db.r3.8xlarge': 244,
+        'db.r4.large': 15.25,
+        'db.r4.xlarge': 30.5,
+        'db.r4.2xlarge': 61,
+        'db.r4.4xlarge': 122,
+        'db.r4.8xlarge': 244,
+        'db.r4.16xlarge': 488,
+        'db.r5.large': 16,
+        'db.r5.xlarge': 32,
+        'db.r5.2xlarge': 64,
+        'db.r5.4xlarge': 128,
+        'db.r5.12xlarge': 384,
+        'db.r5.24xlarge': 768,
         'db.t2.micro': 1,
         'db.t2.small': 2,
         'db.t2.medium': 4,
         'db.t2.large': 8,
+        'db.t2.xlarge': 16,
+        'db.t2.2xlarge': 32,
         'db.m3.medium': 3.75,
         'db.m3.large': 7.5,
         'db.m3.xlarge': 15,
@@ -142,6 +163,14 @@ def main():
         'db.m2.2xlarge': 34.2,
         'db.m2.4xlarge': 68.4,
         'db.cr1.8xlarge': 244,
+        'db.x1.16xlarge': 976,
+        'db.x1.32xlarge': 1952,
+        'db.x1e.xlarge': 122,
+        'db.x1e.2xlarge': 244,
+        'db.x1e.4xlarge': 488,
+        'db.x1e.8xlarge': 976,
+        'db.x1e.16xlarge': 1952,
+        'db.x1e.32xlarge': 3904,
     }
 
     # RDS metrics http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/rds-metricscollected.html
@@ -169,12 +198,15 @@ def main():
     parser.add_option('-m', '--metric', help='metric to check: [%s]' % ', '.join(metrics.keys()))
     parser.add_option('-w', '--warn', help='warning threshold')
     parser.add_option('-c', '--crit', help='critical threshold')
-    parser.add_option('-u', '--unit', help='unit of thresholds for "storage" and "memory" metrics: [%s]. '
+    parser.add_option('-u', '--unit', help='unit of thresholds for "storage" and "memory" metrics: [%s].'
                       'Default: percent' % ', '.join(units), default='percent')
     parser.add_option('-t', '--time', help='time period in minutes to query. Default: 5',
                       type='int', default=5)
     parser.add_option('-a', '--avg', help='time average in minutes to request. Default: 1',
                       type='int', default=1)
+    parser.add_option('-f', '--forceunknown', help='force alerts on unknown status. This prevents issues related to '
+                      'AWS Cloudwatch throttling limits Default: False',
+                      action='store_true', default=False)
     parser.add_option('-d', '--debug', help='enable debug output',
                       action='store_true', default=False)
     options, _ = parser.parse_args()
@@ -351,6 +383,9 @@ def main():
     # Final output
     if status != UNKNOWN and perf_data:
         print '%s %s | %s' % (short_status[status], note, perf_data)
+    elif status == UNKNOWN and not options.forceunknown:
+        print '%s %s | null' % ('OK', note)
+        sys.exit(0)
     else:
         print '%s %s' % (short_status[status], note)
 
@@ -395,6 +430,9 @@ pmp-check-aws-rds.py - Check Amazon RDS metrics.
                           [percent, GB]. Default: percent
     -t TIME, --time=TIME  time period in minutes to query. Default: 5
     -a AVG, --avg=AVG     time average in minutes to request. Default: 1
+    -f, --forceunknown    force alerts on unknown status. This prevents issues
+                          related to AWS Cloudwatch throttling limits Default:
+                          False
     -d, --debug           enable debug output
 
 =head1 REQUIREMENTS

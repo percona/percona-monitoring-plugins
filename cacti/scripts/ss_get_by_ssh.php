@@ -1479,7 +1479,7 @@ function df_parse ( $options, $output ) {
    foreach ( explode("\n", $output) as $line ) {
       if ( preg_match_all('/\S+/', $line, $words) ) {
          $words = $words[0];
-         if ( count($words) > 0 && $words[0] === $options['volume'] ) {
+         if ( count($words) > 0 && ($words[0] === $options['volume'] || $words[5] === $options['volume']) ) {
             if ( count($words) > 3 ) {
                return array(
                   'DISKFREE_used'      => $words[2]*1024,
