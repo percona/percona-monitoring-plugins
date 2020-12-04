@@ -222,13 +222,15 @@ EOF;
 # ============================================================================
 function parse_cmdline( $args ) {
    $options = array();
-   while (list($tmp, $p) = each($args)) {
+   foreach ($args as $tmp => $p) {
       if (strpos($p, '--') === 0) {
          $param = substr($p, 2);
-         $value = null;
-         $nextparam = current($args);
-         if ($nextparam !== false && strpos($nextparam, '--') !==0) {
-            list($tmp, $value) = each($args);
+         $value = $nextparam = null;
+         if (isset($args[$tmp + 1])) {
+            $nextparam = $args[$tmp + 1];
+         }
+         if (!empty($nextparam) && strpos($nextparam, '--') !== 0) {
+            $value = $nextparam;
          }
          $options[$param] = $value;
       }
@@ -1414,4 +1416,3 @@ function debug($val) {
       $debug_log = FALSE;
    }
 }
-

@@ -243,12 +243,11 @@ function parse_cmdline( $args ) {
    foreach ($args as $tmp => $p) {
       if (strpos($p, '--') === 0) {
          $param = substr($p, 2);
-         $value = null;
-         $nextparam = false;
+         $value = $nextparam = null;
          if (isset($args[$tmp + 1])) {
             $nextparam = $args[$tmp + 1];
          }
-         if ($nextparam !== false && strpos($nextparam, '--') !==0) {
+         if (!empty($nextparam) && strpos($nextparam, '--') !== 0) {
             $value = $nextparam;
          }
          $options[$param] = $value;
@@ -1609,4 +1608,3 @@ function vmstat_cachefile ( $options ) {
 function vmstat_cmdline ( $options ) {
    return "cat /proc/vmstat";
 }
-
