@@ -1,6 +1,14 @@
 Percona Monitoring Plugins
 ==========================
 
+Effective August 1, 2020, Percona is moving the Percona Monitoring Plugins to end of life status. This means that no new versions, enhancements, bug fixes, or security updates will be released. The software will continue to be available at our download site (https://www.percona.com/downloads/percona-monitoring-plugins/LATEST/).
+
+The Monitoring Plugins provide a suite of predefined monitoring tools for use with other monitoring products. Since the release of Percona Monitoring and Management (https://www.percona.com/software/database-tools/percona-monitoring-and-management) , the Monitoring Plugins became redundant.
+
+We thank all of the users of Percona Monitoring Plugins for their support over the years and are happy to discuss alternatives. Please contact info@percona.com for more information.
+
+--------------
+
 The Percona Monitoring Plugins are high-quality components to add
 enterprise-grade MySQL capabilities to your existing in-house, on-premises
 monitoring solutions.  The components are designed to integrate seamlessly with
