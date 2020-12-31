@@ -162,7 +162,7 @@
          type_id      => 1,
          hash         => 'hash_03_VER_6cb78e25c814d7c81748d9017ef34050',
          input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
-                       . '--host <hostname> --type redis --items <items> ',
+                       . '--host <hostname> --type redis --items <items> --port2 <port2>',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_ceefc4380d71467ed5401804c0013316',
