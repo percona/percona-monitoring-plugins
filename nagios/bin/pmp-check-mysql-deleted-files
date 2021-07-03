@@ -30,6 +30,8 @@ main() {
       case "${o}" in
          -c)              shift; OPT_CRIT="${1}"; shift; ;;
          --defaults-file) shift; OPT_DEFT="${1}"; shift; ;;
+         --exclude)       shift; OPT_EXCLUDE="${1}"; shift; ;;
+         --sudo)          shift; OPT_SUDO=1;             ;;
          -H)              shift; OPT_HOST="${1}"; shift; ;;
          -l)              shift; OPT_USER="${1}"; shift; ;;
          -L)              shift; OPT_LOPA="${1}"; shift; ;;
@@ -61,19 +63,18 @@ main() {
       OPT_TMPDIR="${TMPDIR:-/tmp/}"
    fi
 
-   # TODO: We could auto-check every running instance, not just one.
    local NOTE="OK no deleted files"
-   local PROC_ID=$(_pidof mysqld | head -n1)
-   if [ "${PROC_ID}" ]; then
+   local PROC_IDS=$(_pidof mysqld | head -n1)  # could be multiple PIDs
+   if [ "${PROC_IDS}" ]; then
       local TEMP=$(mktemp -t "${0##*/}.XXXXXX") || exit $?
       trap "rm -f '${TEMP}' >/dev/null 2>&1" EXIT
-      if _lsof "${PROC_ID}" > "${TEMP}" ; then
+      if _lsof "${PROC_IDS}" > "${TEMP}" ; then
          # If lsof exists, but you run it as non-root, you'll get a file with a
          # bunch of this stuff:
          # mysqld 15287 ... /proc/15287/cwd (readlink: Permission denied)
          # We have to detect this and return UNK.
          if grep -v -e denied -e COMMAND "${TEMP}" >/dev/null 2>&1; then
-            local FILES=$(check_deleted_files "${TEMP}" "${OPT_TMPDIR}")
+            local FILES=$(check_deleted_files "${TEMP}" "${OPT_TMPDIR}${OPT_EXCLUDE:+|${OPT_EXCLUDE}}")
             NOTE="open but deleted files: ${FILES}"
             if [ "${FILES}" -a -z "${OPT_WARN}" ]; then
                NOTE="CRIT $NOTE"
@@ -96,11 +97,14 @@ main() {
 
 # ########################################################################
 # A wrapper around pidof, which might not exist. The first argument is the
-# command name to match.
+# command name to match.  This will return multiple PIDs as a
+# comma-delimited list.
 # ########################################################################
 _pidof() {
-   if ! pidof "${1}" 2>/dev/null; then
-      ps axo pid,ucomm | awk -v comm="${1}" '$2 == comm { print $1 }'
+   if ! pidof "${1}" | tr ' ' , 2>/dev/null; then
+      ps axo pid,ucomm | \
+        awk -v comm="bash" -v ORS="," '$2 == comm { print $1 }' | \
+        awk '{ gsub(",$","",$1); print $1 }'  # strip last comma
    fi
 }
 
@@ -117,27 +121,32 @@ mysql_exec() {
 
 # ########################################################################
 # A wrapper around lsof, which might not exist. The first argument is the
-# process ID to match.  Otherwise, the fallback of listing /proc/pid/fd
+# process IDs to match.  Otherwise, the fallback of listing /proc/pid/fd
 # will probably only work on Linux. For BSD, fstat will be used.
 # ########################################################################
 _lsof() {
+   local PIDS=$1
+   local PID=${PIDS%%,*}
+
    PATH="$PATH:/usr/sbin:/sbin"
-   if ! lsof -p $1 2>/dev/null; then
-      if ! /bin/ls -l /proc/$1/fd 2>/dev/null; then
-         fstat -p $1 2>/dev/null
+   if ! ${OPT_SUDO:+sudo }lsof -p $PIDS 2>/dev/null; then
+      # TODO: Support $PIDS for the alternatives
+      if ! ${OPT_SUDO:+sudo }/bin/ls -l /proc/$PID/fd 2>/dev/null; then
+         ${OPT_SUDO:+sudo }fstat -p $PID 2>/dev/null
       fi
    fi
 }
 
 # ########################################################################
 # Generate a list of file handles that MySQL has open, but which are deleted,
-# and are not temp files such as /tmp/ib* files (InnoDB) or /tmp/ML* files
-# (binary logging).  The first argument is a file containing the output of lsof
-# or ls -l for the open files.  The second argument is the server's tmpdir.
+# and are not in the exclude list, such as /tmp/ib* files (InnoDB) or /tmp/ML*
+# files (binary logging).  The first argument is a file containing the output
+# of lsof or ls -l for the open files.  The second argument is an exclude list,
+# which always includes the server's tmpdir.
 # ########################################################################
 check_deleted_files() {
-   awk -v tmpdir="${2}" '
-   /\(deleted\)/ { if ( index($0, tmpdir) == 0 ) {
+   awk -v exclude="${2}" '
+   /\(deleted\)/ { if ( $0 !~ exclude ) {
       if ( $NF ~ /deleted/ ) {
          lf=NF-1;
       }
@@ -196,6 +205,8 @@ pmp-check-mysql-deleted-files - Alert when MySQL's files are deleted.
     -p PASS         MySQL password.
     -P PORT         MySQL port.
     -S SOCKET       MySQL socket file.
+    --exclude PATTERN Exclude RegEx PATTERN from results.
+    --sudo          Run lsof/ls/fstat as root via sudo (requires NOPASSWD).
     -w WARN         Warning threshold; changes the alert to WARN instead of CRIT.
     --help          Print help and exit.
     --version       Print version and exit.
@@ -225,11 +236,11 @@ If you specify MySQL authentication options, the value will log into the
 specified MySQL instance and look at the C<tmpdir> variable to find the
 temporary directory.
 
-This plugin looks at the first running instance of MySQL, as found in the
-system process table, so it will not work on systems that have multiple
-instances running. It probably works best on Linux, though it might work on
+This plugin will look for all running instances of MySQL, as found in the
+system process table. It probably works best on Linux, though it might work on
 other operating systems. It relies on either lsof or fstat or the ability to
-list the files in the process's /proc/pid/fd directory.
+list the files in the process's /proc/pid/fd directory. The latter two methods
+only support single MySQL processes currently.
 
 =head1 PRIVILEGES
 
@@ -254,6 +265,9 @@ ps
 =item *
 
 C<lsof> or C<ls /proc/$pid/fd> (Linux), C<fstat> (BSD)
+
+If using the C<--sudo> option, this requires access to one of those commands
+in the user's sudo list, as root and using the C<NOPASSWD> tag.
 
 =back
 
