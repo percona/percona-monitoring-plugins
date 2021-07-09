@@ -380,7 +380,7 @@ class NagiosMongoChecks:
         critical_level = critical_level or self.get_default('check_connections', 'critical')
         connections = self.current_status['connections']
         connections['total'] = connections['available'] + connections['current']
-        used_percent = int((connections['current'] / connections['total']) * 100)
+        used_percent = int((float(connections['current']) / connections['total']) * 100)
         message = "%i%% connections used ( %d of %d )" % (used_percent, connections['current'], connections['total'])
         return self.check_levels(float(used_percent), int(warning_level), int(critical_level), message)
 
